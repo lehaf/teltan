@@ -5755,6 +5755,18 @@ $(document).ready(function () {
               listNew.appendChild(li);
           };*/
     }
+
+    let allRadioDateBtn = document.querySelectorAll('div#dateRadioSelector input[type="radio"]');
+    if (allRadioDateBtn.length > 1) {
+        allRadioDateBtn.forEach((dateBtn) => {
+            dateBtn.onclick = () => {
+                let allOptions = document.querySelectorAll('select#dateSelectSelector > option');
+                if (allOptions.length > 0) {
+                    allOptions[0].selected = true;
+                }
+            }
+        });
+    }
 });
 
 function resetActiveYears () {
