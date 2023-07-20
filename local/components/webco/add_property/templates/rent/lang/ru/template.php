@@ -57,3 +57,8 @@ $MESS ['studioLoft'] = "Студия/Лофт";
 //$MESS ['shops'] = "בכל עת";
 //$MESS ['restaurants'] = "מ";
 //$MESS ['warehouses'] = "ל";
+// Добавление фото
+$MESS ['photoMain'] = "Main";
+$MESS ['setPhotoMain'] = "Set as main";
+$MESS ['deletePhoto'] = "Delete";
+$MESS ['rotatePhoto'] = "Rotate";

@@ -320,9 +320,8 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                                            class="mb-2 p-0 btn text-center text-primary main-selector-photo">
                                                         <input type="radio" name="fileMain" value="Снимок.PNG"
                                                                class="d-none main-selector-photo">
-                                                        <div onclick="addActivePhoto(this)" id="213213"
-                                                             class="set-main-text">
-                                                            Main
+                                                        <div onclick="addActivePhoto(this)" id="213213" class="set-main-text">
+                                                            <?=Loc::getMessage('photoMain')?>
                                                         </div>
                                                     </label>
 
@@ -330,7 +329,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                                         <div class="mr-3 d-flex justify-content-center align-items-center element-control"
                                                              data-file-remove-id="<?= $arFields['PREVIEW_PICTURE'] ?>Снимок.PNG">
                                                             <i class="mr-2 icon-clear"></i>
-                                                            <span class="d-none d-lg-inline-block">Delete</span>
+                                                            <span class="d-none d-lg-inline-block"><?=Loc::getMessage('deletePhoto')?></span>
                                                         </div>
 
                                                         <div class="d-flex justify-content-center align-items-center element-control rotate-control">
@@ -339,7 +338,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                                                    value="0">
                                                             <i onclick="rotateThis(this)" class="mr-2 icon-replay"></i>
                                                             <span onclick="rotateThis(this)"
-                                                                  class="d-none d-lg-inline-block">Rotate</span>
+                                                                  class="d-none d-lg-inline-block"><?=Loc::getMessage('rotatePhoto')?></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -360,8 +359,8 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                                             <input type="radio" name="fileMain"
                                                                    value="<?= $PHOTO ?>.PNG"
                                                                    class="d-none main-selector-photo">
-                                                            <div onclick="addActivePhoto(this)" id="<?= $PHOTO ?>"
-                                                                 class="set-main-text">Set as main
+                                                            <div onclick="addActivePhoto(this)" id="<?= $PHOTO ?>" class="set-main-text">
+                                                                <?=Loc::getMessage('setPhotoMain')?>
                                                             </div>
                                                         </label>
 
@@ -369,7 +368,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                                             <div class="mr-3 d-flex justify-content-center align-items-center element-control"
                                                                  data-file-remove-id="<?= $PHOTO ?>.PNG">
                                                                 <i class="mr-2 icon-clear"></i>
-                                                                <span class="d-none d-lg-inline-block">Delete</span>
+                                                                <span class="d-none d-lg-inline-block"><?=Loc::getMessage('deletePhoto')?></span>
                                                             </div>
 
                                                             <div class="d-flex justify-content-center align-items-center element-control rotate-control">
@@ -378,7 +377,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                                                 <i onclick="rotateThis(this)"
                                                                    class="mr-2 icon-replay"></i>
                                                                 <span onclick="rotateThis(this)"
-                                                                      class="d-none d-lg-inline-block">Rotate</span>
+                                                                      class="d-none d-lg-inline-block"><?=Loc::getMessage('rotatePhoto')?></span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -562,7 +561,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                                 <? if ($count == 7) { ?>
                                                 <select data-req="Y" class="mr-3 custom-select" id="dateSelectSelector"
                                                         name="Year of issue" onchange="resetActiveYears()">
-                                                    <option id="older-option" value="no-value">Older</option>
+                                                    <option id="older-option" value="no-value"><?=Loc::getMessage('older')?></option>
                                                     <? } ?>
                                                     <? if ($count >= 7) { ?>
                                                         <option <?= ($item['UF_NAME'] == $arProps['PROP_YAERH_Left']['VALUE']) ? 'selected' : '' ?>
@@ -610,25 +609,26 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                             <div class="mb-0 form-group">
                                                 <input id="Modification" type="text" data-id_prop="120"
                                                        class="form-control" <?= ($arProps["PROP_MOD"]['VALUE']) ? 'value="' . $arProps["PROP_MOD"]['VALUE'] . '"' : '' ?>
-                                                       placeholder="Modification (optional):">
+                                                       placeholder="<?=Loc::getMessage('modifiPlaceholder');?>">
                                             </div>
                                         </div>
 
                                         <div class=" d-lg-block col-2">
-                                            <p class="m-0 font-weight-bold"><?= Loc::getMessage('Modification (optional):'); ?>
+                                            <p class="m-0 font-weight-bold"><?=Loc::getMessage('modification');?>
                                             </p>
                                         </div>
                                     </div>
                                     <?
                                     $entity_data_class = GetEntityDataClass(1);
-                                    $rsData = $entity_data_class::getList(array(
+                                    $elTipkuzova = $entity_data_class::getList(array(
                                         'order' => array('UF_NAME' => 'ASC'),
                                         'select' => array('*'),
-                                        'filter' => array('!UF_NAME' => false)
-                                    ));
-                                    while ($elTipkuzova[] = $rsData->fetch()) {
-                                        // print_r($elTipkuzova);
-                                    }
+                                        'filter' => array('!UF_NAME' => false),
+                                        'cache' => [
+                                            'ttl' => 360000,
+                                            'cache_joins' => true
+                                        ]
+                                    ))->fetchAll();
                                     require($_SERVER["DOCUMENT_ROOT"] . "/vendor/autoload.php");
                                     $detect = new Mobile_Detect;
                                     ?>
@@ -638,19 +638,16 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                                 <div id="bodyTypesCar"
                                                      class="row row-cols-3 d-lg-flex flex-wrap flex-row-reverse justify-content-between body-type-car div-req <?= ($prop_field[3]['IS_REQUIRED'] == 'Y') ? 'div-req' : '' ?> ">
                                                     <? foreach ($elTipkuzova as $key => $arItem) { ?>
-                                                        <? if ($arItem['UF_NAME'] != '') { ?>
-
+                                                        <? if (!empty($arItem['UF_NAME'])) { ?>
                                                             <div class="col form_radio_btn mb-4 <?= ($key > ADD_AUTO_BODY_TYPES_SHOW_COUNT) ? 'show-additionally' : '' ?>">
                                                                 <input data-id_prop="PROP_BODY_TYPE"
                                                                     <?= ($arProps["PROP_BODY_TYPE"]['VALUE'] == $arItem['UF_XML_ID']) ? 'checked' : '' ?>
                                                                        data-id-self="<?= $arItem['UF_XML_ID'] ?>"
-                                                                       id="<?= $arItem['UF_XML_ID'] ?>" type="radio"
+                                                                       id="<?=$key.$arItem['UF_XML_ID']?>" type="radio"
                                                                        name="Body type">
-                                                                <label class="d-flex flex-column position-relative"
-                                                                       for="<?= $arItem['UF_XML_ID'] ?>">
-                                                        <span class="body-type-car__icon"><i
-                                                                    class="<?= $arItem['UF_DESCRIPTION'] ?>"></i></span>
-                                                                    <span class="body-type-car__name"><?= $arItem['UF_NAME'] ?></span>
+                                                                <label class="d-flex flex-column position-relative" for="<?=$key.$arItem['UF_XML_ID']?>">
+                                                                    <span class="body-type-car__icon"><i class="<?= $arItem['UF_DESCRIPTION'] ?>"></i></span>
+                                                                    <span class="body-type-car__name"><?=Loc::getMessage($arItem['UF_XML_ID'])?></span>
                                                                 </label>
                                                             </div>
                                                             <? if ($key == ADD_AUTO_BODY_TYPES_SHOW_COUNT && count($elTipkuzova) > ADD_AUTO_BODY_TYPES_SHOW_COUNT) { ?>
@@ -674,7 +671,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                                     <? foreach ($elTipkuzova as $arItem) { ?>
                                                         <option data-id_prop="PROP_BODY_TYPE"
                                                                 data-id-self="<?= $arItem['UF_XML_ID'] ?>"
-                                                                value="<?= $arItem['UF_XML_ID'] ?>"><?= $arItem['UF_NAME'] ?></option>
+                                                                value="<?= $arItem['UF_XML_ID'] ?>"><?=Loc::getMessage($arItem['UF_XML_ID'])?></option>
                                                     <? } ?>
                                                     <option <?if(!$_GET['EDIT']){?>selected<?}?> value="Nothing selected"></option>
                                                 </select>
@@ -687,9 +684,8 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                     </div>
 
                                     <div class="mb-4 row __colum-reverse flex-lg-row select-w-100">
-                                        <div class="col col-lg-10"><?
-
-                                            $arProp = [];
+                                        <div class="col col-lg-10">
+                                        <?  $arProp = [];
                                             foreach ($prop_fields as $field) {
                                                 $needle = 'ROP';
                                                 $needle2 = '_S3';
@@ -711,14 +707,16 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                                 }
                                             }
                                             $entity_data_class = GetEntityDataClass(13);
-                                            $rsData = $entity_data_class::getList(array(
+                                            $elCol = $entity_data_class::getList(array(
                                                 'order' => array('UF_NAME' => 'ASC'),
                                                 'select' => array('*'),
-                                                'filter' => array('!UF_NAME' => false)
-                                            ));
-                                            while ($elCol[] = $rsData->fetch()) {
-                                                //print_r($el);
-                                            } ?>
+                                                'filter' => array('!UF_NAME' => false),
+                                                'cache' => [
+                                                    'ttl' => 360000,
+                                                    'cache_joins' => true
+                                                ]
+                                            ))->fetchAll();
+                                            ?>
                                             <div class="mr-2 mr-lg-3 d-flex flex-wrap auto-ad-step3__colors div-req"
                                                  style="justify-content: end !important;">
                                                 <? foreach ($elCol as $color) {
@@ -747,8 +745,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                         $id = array_reverse($id);
                                         ?>
                                         <? if ($arItem['PROPERTY_TYPE'] == 'L' && $arItem['ID'] != 31 && $arItem['ID'] != 168) { ?>
-                                            <? if ($arItem['MULTIPLE'] == 'Y' && $arItem['ID'] != 32 && $arItem['ID'] != 167) {
-                                                ?>
+                                            <? if ($arItem['MULTIPLE'] == 'Y' && $arItem['ID'] != 32 && $arItem['ID'] != 167) {?>
                                                 <div class="mb-4 row __colum-reverse flex-lg-row select-w-100">
                                                     <div class="col col-lg-10">
                                                         <div  style="flex-wrap: wrap;" class="fl-right d-lg-flex <?= ($arItem['IS_REQUIRED'] == 'Y') ? 'div-req' : '' ?> justify-content-end">
@@ -837,13 +834,13 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                                         <p class="mb-2 mb-lg-0 col col-lg-2 d-flex d-lg-block justify-content-end justify-content-lg-center"><p class="m-0 font-weight-bold"><?= $arItem['NAME'] ?></p> <?= ($arItem['IS_REQUIRED'] == 'Y') ? ' * ' : '' ?></p>
                                                     </div>
                                                 </div>
-                                            <? } else { ?>
+                                            <? } else {?>
                                                 <div class="mb-4 row __colum-reverse flex-lg-row select-w-100">
 
                                                     <div class="col col-lg-10">
                                                         <div  style="flex-wrap: wrap;" class="fl-right d-lg-flex  <?= ($arItem['IS_REQUIRED'] == 'Y') ? 'div-req' : '' ?>  justify-content-end">
                                                             <?if ($id){foreach ($id as $ids){drawElement($arProp[$ids] , $arLink ,$arProps);}}?>
-                                                            <? foreach ($arItem['PROP_ENUM_VAL'] as $val) { ?>
+                                                            <? foreach ($arItem['PROP_ENUM_VAL'] as $val) {?>
                                                                 <div class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn">
                                                                     <input data-req="<?= $arItem['IS_REQUIRED'] ?>"
                                                                            id="<?= $val['VALUE'] ?>" type="radio"
@@ -854,7 +851,9 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                                                         <? } ?>
                                                                            data-id_prop="<?= $val['PROPERTY_ID'] ?>"
                                                                            data-id-self="<?= $val['ID'] ?>">
-                                                                    <label for="<?= $val['VALUE'] ?>"><?= $val['VALUE'] ?> <?= ($arItem['IS_REQUIRED'] == 'Y') ? '' : '' ?></label>
+                                                                    <label for="<?= $val['VALUE'] ?>">
+                                                                        <?=!empty(Loc::getMessage($val['XML_ID'])) ? Loc::getMessage($val['XML_ID']) : $val['VALUE'] ?>
+                                                                    </label>
                                                                 </div>
                                                                 <?
                                                             } ?>
@@ -1430,12 +1429,12 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                 let mainText = document.querySelectorAll(".set-main-text");
 
                 mainText.forEach((el) => {
-                    el.innerText = "Set as main";
+                    el.innerText = "<?=Loc::getMessage('setPhotoMain')?>";
                     el.closest(".main-photo__item").querySelector(".rotate-img").removeAttribute("data-activePhoto");
                 })
                 item.closest(".main-photo__item").querySelector(".rotate-img").setAttribute("data-activePhoto", "isActive");
 
-                item.innerText = "Main";
+                item.innerText = "<?=Loc::getMessage('photoMain')?>";
             }
         }
 
@@ -1668,7 +1667,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                     let photoList = document.querySelectorAll(".main-selector-photo .set-main-text");
                     photoList.forEach((el) => {
                         let textItem = el.innerText;
-                        if (textItem === "Main") {
+                        if (textItem === "<?=Loc::getMessage('photoMain')?>") {
                             return flagPhoto = false
                         }
                     })
@@ -1678,7 +1677,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                             let photoItems = document.querySelectorAll(".main-photo__item")
                             let mainPhoto = photoItems[photoItems.length - 1]
                             mainPhoto.querySelector("img").setAttribute("data-activePhoto", "isActive");
-                            mainPhoto.querySelector(".set-main-text").innerText = "Main"
+                            mainPhoto.querySelector(".set-main-text").innerText = "<?=Loc::getMessage('photoMain')?>";
 
                             flagPhoto = false
                         }, 0);
@@ -1726,19 +1725,19 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
 
         <label id="main-selector-photo" class="mb-2 p-0 btn text-center text-primary main-selector-photo">
           <input type="radio" name="fileMain" value="{{name}}" class="d-none main-selector-photo" />
-           <div onclick="addActivePhoto(this)" id="213213" class="set-main-text">Set as main</div>
+           <div onclick="addActivePhoto(this)" id="213213" class="set-main-text"><?=Loc::getMessage('setPhotoMain')?></div>
         </label>
 
         <div class="d-flex justify-content-around">
           <div class="mr-3 d-flex justify-content-center align-items-center element-control" data-file-remove-id="{{name}}">
             <i class="mr-2 icon-clear"></i>
-            <span class="d-none d-lg-inline-block">Delete</span>
+            <span class="d-none d-lg-inline-block"><?=Loc::getMessage('deletePhoto')?></span>
           </div>
 
           <div class="d-flex justify-content-center align-items-center element-control rotate-control">
             <input  type="hidden" name="rotate[{{name}}]" value="0" />
             <i onclick="rotateThis(this)" class="mr-2 icon-replay"></i>
-            <span onclick="rotateThis(this)" class="d-none d-lg-inline-block">Rotate</span>
+            <span onclick="rotateThis(this)" class="d-none d-lg-inline-block"><?=Loc::getMessage('rotatePhoto')?></span>
           </div>
         </div>
       </div>

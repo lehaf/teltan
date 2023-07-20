@@ -1,4 +1,4 @@
-<?
+<?php
 $MESS['TODAY'] = 'Today';
 $MESS['YESTERDAY'] = 'Yesterday';
 $MESS['SEND'] = 'Sent';
@@ -53,4 +53,4 @@ $MESS['Make_pay'] = 'pay';
 $MESS['result'] = 'result:';
 $MESS['need_to_pay'] = 'need to pay:';
 $MESS['BALANCE'] = 'MY BALANCE:';
-?>
+$MESS['propPattern'] = 'Pack of #COUNT# ads';

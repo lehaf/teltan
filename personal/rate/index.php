@@ -1,20 +1,21 @@
-<?
-require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
-
+<?php require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 
 use Bitrix\Main\Localization\Loc;
-use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
 Loc::loadMessages(__FILE__);
 
 $entity_data_class = GetEntityDataClass(27);
 $rsData = $entity_data_class::getList(array(
-    'select' => array('*')
+    'select' => array('*'),
+    'cache' => [
+        'ttl' => 360000,
+        'cache_joins' => true
+    ],
 ));
 $arTypeFlea = [];
 $arTypeProp = [];
 $arTypeAuto = [];
-while ($arTypes = $rsData->fetch()) {
 
+while ($arTypes = $rsData->fetch()) {
     if ($arTypes['UF_SECTION'] == 'AUTO') {
         if ($arTypes['UF_CLASS_BUISNESS'] == 1) {
             $arTypeAuto['CLASSIC'][] = $arTypes;
@@ -37,7 +38,6 @@ while ($arTypes = $rsData->fetch()) {
         }
     }
 }
-
 ?>
 
     <div class="container">
@@ -86,7 +86,7 @@ while ($arTypes = $rsData->fetch()) {
 
                                                 <div class="d-flex">
                                                     <div class="mr-4 d-flex flex-column align-items-end">
-                                                        <p class="font-weight-bold title"><?= $arItem['UF_NAME'] ?></p>
+                                                        <p class="font-weight-bold title"><?=str_replace('#COUNT#',$arItem['UF_COUNT'] ,Loc::getMessage('propPattern'))?></p>
                                                         <p class="text-subtitle"><?=Loc::getMessage('paket_for')?><?= $arItem['UF_DAYS'] ?>
                                                             <?=Loc::getMessage('days')?></p>
                                                     </div>
@@ -120,7 +120,7 @@ while ($arTypes = $rsData->fetch()) {
 
                                                 <div class="d-flex">
                                                     <div class="mr-4 d-flex flex-column align-items-end">
-                                                        <p class="font-weight-bold title"><?= $arItem['UF_NAME'] ?></p>
+                                                        <p class="font-weight-bold title"><?= str_replace('#COUNT#',$arItem['UF_COUNT'] ,Loc::getMessage('propPattern'))?></p>
                                                         <p class="text-subtitle"><?=Loc::getMessage('paket_for')?><?= $arItem['UF_DAYS'] ?>
                                                             <?=Loc::getMessage('days')?></p>
                                                     </div>

@@ -1,4 +1,4 @@
-<?
+<?php
 $MESS["TODAY"] = "היום";
 $MESS["YESTERDAY"] = "אתמול";
 $MESS['SEND'] = 'Sent';
@@ -47,11 +47,11 @@ $MESS['Flea-market'] = 'יד שנייה';
 $MESS['Property'] = "נדל''ן";
 $MESS['Auto'] = "כלי רכב";
 
-$MESS['Business'] = 'עֵסֶק';
-$MESS['Classic'] = 'קלַאסִי';
+$MESS['Business'] = 'חבילת עסק';
+$MESS['Classic'] = 'חבילת סטנדרט';
 $MESS['paket_for'] = 'חבילה עבור';
 $MESS['days'] = '  ימים';
 
 $MESS['pay_tcoins'] = 'שלם עם Tcoins';
 $MESS['pay_shek'] = ' שלם בכרטיס';
-?>
+$MESS['propPattern'] = 'חבילה ל#COUNT# מודעות';

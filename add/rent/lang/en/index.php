@@ -1,4 +1,4 @@
-<?
+<?php
 $MESS ['Step1'] = "Step 1";
 $MESS ['Step2'] = "Step 2";
 $MESS ['Step3'] = "Step 3 ";
@@ -41,5 +41,3 @@ $MESS ['Call:'] = "Call:";
 $MESS ['Submit your ad'] = "Submit your ad";
 $MESS ['Next step'] = "Next step";
 $MESS ['Prev step'] = "Prev step";
-
-?>

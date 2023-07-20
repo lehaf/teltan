@@ -1,6 +1,6 @@
-<?
+<?php
 $MESS ['DRAWS'] = "הגרלות";
-$MESS ['YOU_AD'] = "Your Ad";
+$MESS ['YOU_AD'] = "מודעה שלך";
 $MESS ['FLEA_MARKET'] = "יד שנייה";
 $MESS ['PROPERTY'] = "נדל''ן";
 $MESS ['AUTO'] = "כלי רכב";
@@ -15,4 +15,12 @@ $MESS ['MY_TRACKED'] = "Отслеживания";
 $MESS ['VIP'] = "VIP";
 $MESS ['SETTINGS'] = "Настройки";
 $MESS ['CATALOG'] = "קטלוג";
-?>
+$MESS ['transport'] = "רכבים";
+$MESS ['auto'] = "רכבים";
+$MESS ['moto'] = "moto";
+$MESS ['scooters'] = "scooters";
+$MESS ['rent'] = "rent";
+$MESS ['buy'] = "Buy";
+$MESS ['realEstate'] = "נדל״ן";
+$MESS ['yourAds'] = "פרסם מודעה שלך";
+$MESS ['other'] = "שנייה";

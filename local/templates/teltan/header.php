@@ -1,4 +1,5 @@
 <?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
+
 use Bitrix\Main\Page\Asset;
 use Bitrix\Main\Localization\Loc;
 
@@ -301,46 +302,45 @@ else
                 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
                     <div class="col">
                         <p class="h6 font-weight-bold">
-                            שנייה
+                            <?=Loc::getMessage('other')?>
                         </p>
 
                         <div class="d-flex flex-column">
                             <a href="<?=$GLOBALS['arSetting'][SITE_ID]['href'];?>add/fm/" class="btn btn-primary text-uppercase font-weight-bold mb-4">
-                                Submit your ad
+                                <?=Loc::getMessage('yourAds')?>
                             </a>
                         </div>
                     </div>
                     <div class="col">
                         <p class="h6 font-weight-bold">
-                            נדל״ן
+                            <?=Loc::getMessage('realEstate')?>
                         </p>
 
                         <div class="d-flex flex-column">
                             <a href="<?=$GLOBALS['arSetting'][SITE_ID]['href'];?>add/rent/" class="btn btn-primary text-uppercase font-weight-bold mb-4">
-                                Rent
+                                <?=Loc::getMessage('rent')?>
                             </a>
 
                             <a href="<?=$GLOBALS['arSetting'][SITE_ID]['href'];?>add/buy/" class="btn btn-primary text-uppercase font-weight-bold mb-4">
-                                Buy
+                                <?=Loc::getMessage('buy')?>
                             </a>
                         </div>
                     </div>
                     <div class="col">
                         <p class="h6 font-weight-bold">
-                            רכבים
+                            <?=Loc::getMessage('transport')?>
                         </p>
-
                         <div class="d-flex flex-column">
                             <a href="<?=$GLOBALS['arSetting'][SITE_ID]['href'];?>add/auto/" class="btn btn-primary text-uppercase font-weight-bold mb-4">
-                                רכבים
+                                <?=Loc::getMessage('auto')?>
                             </a>
 
                             <a href="<?=$GLOBALS['arSetting'][SITE_ID]['href'];?>add/moto/" class="btn btn-primary text-uppercase font-weight-bold mb-4">
-                                Moto
+                                <?=Loc::getMessage('moto')?>
                             </a>
 
                             <a href="<?=$GLOBALS['arSetting'][SITE_ID]['href'];?>add/scooter/" class="btn btn-primary text-uppercase font-weight-bold mb-4">
-                                Scooters
+                                <?=Loc::getMessage('scooters')?>
                             </a>
                         </div>
                     </div>

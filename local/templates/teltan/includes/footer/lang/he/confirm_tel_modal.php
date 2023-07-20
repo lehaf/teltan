@@ -3,7 +3,7 @@ $MESS["CT_BNL_ELEMENT_DELETE_CONFIRM"] = "All the information linked to this rec
 $MESS["TODAY"] = "Today";
 $MESS["YESTERDAY"] = "Yesterday";
 $MESS["map"] = "Show ads on the map";
-$MESS["mess"] = "הזן את הקוד מהודעת ה-SMS";
+$MESS["mess"] = "הזן את הקוד מהודעת ה-אישור";
 
 $MESS["we"] = "שלחנו קוד אימות למספר הטלפון שלך, הזן את קוד האימות בחלון.";
 $MESS["new"] = "שלח קוד חדש";

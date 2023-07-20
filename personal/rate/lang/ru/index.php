@@ -1,4 +1,4 @@
-<?
+<?php
 $MESS['TODAY'] = 'Сегодня';
 $MESS['YESTERDAY'] = 'Вчера';
 $MESS['SEND'] = 'Отправлено';
@@ -55,4 +55,4 @@ $MESS['Make_pay'] = 'Оплатить';
 $MESS['result'] = 'Остаток:';
 $MESS['need_to_pay'] = 'К списанию:';
 $MESS['BALANCE'] = 'MY BALANCE:';
-?>
+$MESS['propPattern'] = 'пакет #COUNT# объявлений';

@@ -1,4 +1,4 @@
-<?
+<?php
 $MESS ['submit your ad'] = "פרסם מודעה";
 $MESS ['Step1'] = "שלב 1";
 $MESS ['Step2'] = "שלב 2";
@@ -10,6 +10,7 @@ $MESS ['Terms of sale'] = "תנאי מכירה";
 $MESS ['Detailed description'] = "תיאור מפורט";
 $MESS ['Apartment address'] = "כתובת הדירה";
 $MESS ['Uploading photos'] = "מעלה תמונות";
+$MESS ['older'] = "קודם";
 
 $MESS ['What to photograph?'] = "נא להעלות תמונות";
 $MESS ['Add photos - this'] = "הוספת תמונות למודעה שלך מעלה פי 3 את סיכויי הצלחה. (מוגבל עד 20 תמונות)";
@@ -22,12 +23,13 @@ $MESS ['Interior'] = "פנים המכונית";
 $MESS ['Add photo'] = "הוסף תמונה";
 $MESS ['Ads are published only with photos'] = "הוסף תמונה";
 
-$MESS ['Choose a brand'] = "בחרו מותג";
+$MESS ['Choose a brand'] = "בחרו דגם";
 $MESS ['Popular'] = "פופולרים";
 $MESS ['All'] = "כל המותגים";
 
 $MESS ['Year of issue'] = ":שנת ייצור";
-$MESS ['Modification (optional):'] = ":רמת גימור (אופציונלי)";
+$MESS ['modification'] = ":רמת גימור (אופציונלי)";
+$MESS ['modifiPlaceholder'] = "התאמה (אופציאונלי)";
 $MESS ['Body type:'] = ":סוגי גוף הרכב";
 $MESS ['Colour:'] = ":צבע";
 $MESS ['Audio system'] = "Audio system";
@@ -35,7 +37,11 @@ $MESS ['Comment (optional):'] = ":הערה(אופציונלי)";
 $MESS ['Choose a price'] = "בחר מותג";
 $MESS ['Price with VAT'] = "Price with VAT";
 $MESS ['Exchange is possible'] = "מוכן להחלפה";
-
+// Добавление фото
+$MESS ['photoMain'] = "ראשי";
+$MESS ['setPhotoMain'] = "קבע כראשי";
+$MESS ['deletePhoto'] = "מחק";
+$MESS ['rotatePhoto'] = "סובב";
 
 $MESS ['Rooms'] = "חדרים";
 $MESS ['Kitchen'] = "מטבח";
@@ -62,5 +68,21 @@ $MESS ['Call:'] = "שִׂיחָה:";
 $MESS ['Submit your ad'] = "שלח את המודעה שלך";
 $MESS ['Next step'] = "השלב הבא";
 $MESS ['Prev step'] = "שלב קודם";
-
-?>
+// Типы кузова
+$MESS ['suv'] = "רכב שטח";
+$MESS ['hatchback'] = "האצ'בק";
+$MESS ['sedan'] = "סדאן";
+$MESS ['minivan'] = "מיניוואן";
+$MESS ['stationWagon'] = "סטיישן";
+$MESS ['lemousine'] = "לימוזינה";
+$MESS ['coupe'] = "קופה";
+$MESS ['minibus'] = "מיניבוס";
+$MESS ['liftback'] = "ליפטבק";
+$MESS ['van'] = "וואן";
+$MESS ['pickup'] = "טנדר";
+$MESS ['cabriolet'] = "קבריולט";
+// Тип движка
+$MESS ['diesel'] = "דיזל";
+$MESS ['electro'] = "חשמלי";
+$MESS ['hybrid'] = "היברידי";
+$MESS ['petrol'] = "בנזין";

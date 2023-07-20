@@ -1,4 +1,4 @@
-<?
+<?php
 $MESS ['DRAWS'] = "Розыгрыши";
 $MESS ['YOU_AD'] = "Your Ad";
 $MESS ['FLEA_MARKET'] = "Flea Market";
@@ -15,4 +15,12 @@ $MESS ['MY_TRACKED'] = "Отслеживания";
 $MESS ['VIP'] = "VIP";
 $MESS ['SETTINGS'] = "Настройки";
 $MESS ['CATALOG'] = "Каталог";
-?>
+$MESS ['transport'] = "транспортные средства";
+$MESS ['auto'] = "авто";
+$MESS ['moto'] = "мото";
+$MESS ['scooters'] = "Скутеры";
+$MESS ['rent'] = "Аренда";
+$MESS ['buy'] = "Покупка";
+$MESS ['realEstate'] = "Недвижимость";
+$MESS ['yourAds'] = "Подать объявление";
+$MESS ['other'] = "Другое";
