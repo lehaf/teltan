@@ -1,4 +1,4 @@
-<?
+<?php
 $MESS["CT_BNL_ELEMENT_DELETE_CONFIRM"] = "?בטוח שברצנך לחמוק את המודעה";
 $MESS["TODAY"] = "היום";
 $MESS["YESTERDAY"] = "אתמול";
@@ -27,5 +27,5 @@ $MESS["PAY_CARD"] = ' תשלום בכרטיס אשראי';
 $MESS["PAY_CHOISE"] = ':בחר אמצעי תשלום';
 $MESS["DELETE"] = 'מחק';
 $MESS["DELETE_UN"] = 'הפעל';
-$MESS["BUY"] = "לִקְנוֹת";
-?>
+$MESS["BUY"] = "לקנייה";
+$MESS["OK_BTN"] = ' או-קיי';

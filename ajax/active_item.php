@@ -1,4 +1,7 @@
-<?require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
+<?php require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
+
+use Bitrix\Main\Localization\Loc;
+
 CModule::IncludeModule('iblock');
 use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
 CModule::IncludeModule('highloadblock');
@@ -236,7 +239,7 @@ $PRODUCT_ID = IntVal($_REQUEST['data']['itemId']);
                     }
                 break;
         }
-echo 'Успешно Деактивированно';
+echo Loc::getMessage('DEACTIVATE_ITEM');
     } else {
         if ($_REQUEST['value'] == 'red') {
             if (!$error) {
@@ -327,7 +330,7 @@ echo 'Успешно Деактивированно';
                         }
                         break;
                 }
-                echo 'Успешно Активированно';
+                echo Loc::getMessage('ACTIVATE_ITEM');
             }else{
                 echo'error';
             }

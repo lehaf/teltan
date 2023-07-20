@@ -1,7 +1,7 @@
-<?
+<?php require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 
-require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 use Bitrix\Main\Localization\Loc;
+
 Loc::loadMessages(__FILE__);
 $APPLICATION->SetTitle("Добавить объявление");
 global $arSetting;
@@ -27,10 +27,7 @@ $GLOBALS['MAP_EDIT_RESULT_CORDINATES'] = $arProps['MAP_LATLNG']['~VALUE'];
 $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 ?>
     <div class="container">
-        <h2 class="mb-5 d-flex justify-content-end subtitle">
-            submit your ad
-        </h2>
-
+        <h2 class="mb-5 d-flex justify-content-end subtitle"><?=Loc::getMessage('titleH2Main')?></h2>
         <div class="card">
             <div class="propert-sell-main">
                 <div id="wizard">
@@ -91,20 +88,16 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                         </div>
                     </div>
                     <?
-
-                    use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
-
-                    CModule::IncludeModule('highloadblock');
-
-
                     CModule::IncludeModule('highloadblock');
                     $entity_data_class = GetEntityDataClass(17);
-                    $rsData = $entity_data_class::getList(array(
-                        'select' => array('*')
-                    ));
-                    while ($arTypesRent[] = $rsData->fetch()) {
-                        // print_r($el);
-                    }
+                    $arTypesRent = $entity_data_class::getList(array(
+                        'select' => array('*'),
+                        'cache' => [
+                            'ttl' => 360000,
+                            'cache_joins' => true
+                        ]
+                    ))->fetchAll();
+
                     ?>
                     <form id="mainForm" action="/" onsubmit="submitForm(event)">
                         <div>
@@ -116,9 +109,9 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                         <div class="col-9 col-lg-10">
                                             <div class="d-flex justify-content-end flex-wrap">
                                                 <div class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn">
-                                                    <input <?=($arFields['IBLOCK_SECTION_ID'] == 34)? 'checked' : ''?> id="typeResidential" type="radio" name="type">
+                                                    <input <?=($arFields['IBLOCK_SECTION_ID'] == REAL_ESTATE_LIVE_RENT_SECTION_ID)? 'checked' : ''?> id="typeResidential" type="radio" name="type">
                                                     <label id="typeResidentialLable" onclick="hideModelBrand(27, this)" class="px-2 py-1" for="typeResidential"><?=Loc::getMessage('Residential');?></label>
-                                                    <?if($arFields['IBLOCK_SECTION_ID'] == 34){?>
+                                                    <?if($arFields['IBLOCK_SECTION_ID'] == REAL_ESTATE_LIVE_RENT_SECTION_ID){?>
                                                         <script>
                                                             $(document).ready(function(){
                                                                 $("#typeResidential").siblings('label').trigger("click");
@@ -163,8 +156,14 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                             <div class="d-flex justify-content-end flex-wrap data-property-req">
                                                 <?foreach($arTypesRent as $arItem){?>
                                                     <div data-parent-id="<?= $arItem['UF_PARENT_ID']?>" style="display: none" class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn ">
-                                                        <input required <?=($arProps['PROP_TYPE_APART']['VALUE'] == $arItem['UF_NAME']) ? 'checked' : ''?>  data-id-self="<?= $arItem['UF_XML_ID'] ?>"  data-id_prop="PROP_TYPE_APART" id="type<?=$arItem['UF_NAME']?>" type="radio" name="type1">
-                                                        <label class="px-2 py-1"  for="type<?=$arItem['UF_NAME']?>"><?=$arItem['UF_NAME']?></label>
+                                                        <input required <?=($arProps['PROP_TYPE_APART']['VALUE'] == $arItem['UF_NAME']) ? 'checked' : ''?>
+                                                               data-id-self="<?= $arItem['UF_XML_ID'] ?>"
+                                                               data-id_prop="PROP_TYPE_APART"
+                                                               id="type<?=$arItem['UF_XML_ID']?>"
+                                                               type="radio"
+                                                               name="type1"
+                                                        >
+                                                        <label class="px-2 py-1" for="type<?=$arItem['UF_XML_ID']?>"><?=Loc::getMessage($arItem['UF_XML_ID']);?></label>
                                                     </div>
                                                 <?}?>
                                             </div>
@@ -180,22 +179,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                             element = $("#mainForm").find(`[data-parent-id='${id}']`).show();
                                         }
                                     </script>
-                                    <h2 class="step-one__title"><?
-                                        $dir = $APPLICATION->GetCurDir();
-                                        $dirName = str_replace('/', '', $dir); // PHP код
-                                        $APPLICATION->IncludeComponent(
-                                            "bitrix:main.include",
-                                            "",
-                                            Array(
-                                                "AREA_FILE_SHOW" => "file",
-                                                "PATH" => "/include-area/".mb_strtolower($dirName)."-h2-ru.php",
-                                                "EDIT_TEMPLATE" => ""
-                                            )
-                                        );
-                                        // символы для удаления
-
-
-                                        ?></h2>
+                                    <h2 class="step-one__title"><?=Loc::getMessage('titleH2')?></h2>
                                     <script>
                                         $(document).ready(function(){
                                             setTimeout(() => {
@@ -205,23 +189,6 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
                                         });
                                     </script>
-                                    <p class="step-one__text"><?
-                                        $dir = $APPLICATION->GetCurDir();
-                                        $dirName = str_replace('/', '', $dir); // PHP код
-                                        $APPLICATION->IncludeComponent(
-                                            "bitrix:main.include",
-                                            "",
-                                            Array(
-                                                "AREA_FILE_SHOW" => "file",
-                                                "PATH" => "/include-area/".mb_strtolower($dirName)."-p2-ru.php",
-                                                "EDIT_TEMPLATE" => ""
-                                            )
-                                        );
-                                        // символы для удаления
-
-
-                                        ?></p>
-
                                     <div class="row row-cols-3 row-cols-lg-5 step-one__icons-line">
                                         <div class="col">
                                             <span class="icon"><i class="icon-bed"></i></span>
@@ -429,7 +396,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                         <?
                                         $pattern = '/ID(\d+)/';
                                         preg_match_all($pattern, $filterProp['CODE'], $matches);
-                                         $id = $matches[1];
+                                        $id = $matches[1];
                                         $id = array_reverse($id);
                                         ?>
                                         <?if($filterProp['PROPERTY_TYPE'] == 'L'){?>
@@ -441,7 +408,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                         <?foreach($filterProp['PROP_ENUM_VAL']  as $arItem){?>
                                                             <div class="mr-3 form_radio_btn">
                                                                 <input id="radio-<?= $arItem['ID'] ?>1"
-                                                                       <?=($arProps[$filterProp['CODE']]['VALUE'] == $arItem['VALUE'])? 'checked' : ''?>
+                                                                    <?=($arProps[$filterProp['CODE']]['VALUE'] == $arItem['VALUE'])? 'checked' : ''?>
                                                                        data-id_prop="<?= $arItem['PROPERTY_ID'] ?>"
                                                                        data-id-self="<?= $arItem['ID'] ?>"
                                                                        type="radio" name="<?=$filterProp['CODE']?>1" >
@@ -498,7 +465,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                         <?
                                         $pattern = '/ID(\d+)/';
                                         preg_match_all($pattern, $filterProp['CODE'], $matches);
-                                         $id = $matches[1];
+                                        $id = $matches[1];
                                         $id = array_reverse($id);
                                         ?>
                                         <?sort($filterProp['PROP_ENUM_VAL'])?>
@@ -511,7 +478,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
                                                             <div class="mr-3 form_radio_btn">
                                                                 <input id="radio-<?= $arItem['ID'] ?>2" type="radio" name="<?=$filterProp['CODE']?>2"
-                                                                       <?=($arProps[$filterProp['CODE']]['VALUE'] == $arItem['VALUE'])? 'checked' : ''?>
+                                                                    <?=($arProps[$filterProp['CODE']]['VALUE'] == $arItem['VALUE'])? 'checked' : ''?>
                                                                        data-id_prop="<?= $arItem['PROPERTY_ID'] ?>"
                                                                        data-id-self="<?= $arItem['ID'] ?>"
                                                                 >
@@ -568,7 +535,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                         <?
                                         $pattern = '/ID(\d+)/';
                                         preg_match_all($pattern, $filterProp['CODE'], $matches);
-                                         $id = $matches[1];
+                                        $id = $matches[1];
                                         $id = array_reverse($id);
                                         ?>
                                         <?sort($filterProp['PROP_ENUM_VAL'])?>
@@ -677,33 +644,14 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                             <div class="mr-2 mb-2 mr-md-4 mb-md-4 form_radio_btn">
                                                 <input id="checkbox-<?=$arItem['XML_ID']?>" type="checkbox" name="<?=$arItem['VALUE']?>"
                                                        data-id_prop="<?= $arItem['PROPERTY_ID'] ?>"
-                                                       <?=(in_array($arItem['VALUE'], $arProps['PROP_restrictions']['VALUE']))? 'checked' : ''?>
+                                                    <?=(in_array($arItem['VALUE'], $arProps['PROP_restrictions']['VALUE']))? 'checked' : ''?>
                                                        data-id-self="<?= $arItem['ID'] ?>">
-                                                <label for="checkbox-<?=$arItem['XML_ID']?>"><?=$arItem['VALUE']?></label>
+                                                <label for="checkbox-<?=$arItem['XML_ID']?>"><?=Loc::getMessage($arItem['XML_ID'])?></label>
                                             </div>
                                         <?}?>
                                     </div>
 
                                     <p class="mb-4 h2 text-center text-uppercase font-weight-bolder auto-step2__title"><?=Loc::getMessage('rent-price');?></p>
-
-                                    <p class="text-center">
-                                        <?
-                                        $dir = $APPLICATION->GetCurDir();
-                                        $dirName = str_replace('/', '', $dir); // PHP код
-                                        $APPLICATION->IncludeComponent(
-                                            "bitrix:main.include",
-                                            "",
-                                            Array(
-                                                "AREA_FILE_SHOW" => "file",
-                                                "PATH" => "/include-area/".mb_strtolower($dirName)."-p3-ru.php",
-                                                "EDIT_TEMPLATE" => ""
-                                            )
-                                        );
-                                        // символы для удаления
-
-
-                                        ?>
-                                    </p>
 
                                     <p class="mb-4 text-center"> <?
                                         $dir = $APPLICATION->GetCurDir();
@@ -798,7 +746,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                             </div>
                                         </div>
 
-                                       
+
 
                                         <div class="mb-4 row flex-column-reverse flex-lg-row property-step-contact__time">
                                             <div class="d-none d-lg-flex col-3">
@@ -1405,8 +1353,8 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
             var deferred = $.ajax({
                 type: "POST",
                 url: "/ajax/add_rent.php",
-               data: $data,
-               dataType: 'json'
+                data: $data,
+                dataType: 'json'
             });
             deferred.done(function (data) {
                 $('.preloader').css({"z-index": "0", "opacity": "100", "position": "fixed"});
@@ -1494,6 +1442,6 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
         .activeSection {
             color: #3fb465 !important;
         }
-        
+
     </style>
 <? require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php"); ?>

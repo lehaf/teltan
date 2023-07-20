@@ -1,4 +1,4 @@
-<?
+<?php
 $MESS["CT_BNL_ELEMENT_DELETE_CONFIRM"] = "?בטוח שברצנך לחמוק את המודעה";
 $MESS["TODAY"] = "today";
 $MESS["YESTERDAY"] = "yesterday";
@@ -28,4 +28,4 @@ $MESS["PAY_CHOISE"] = 'Select a Payment Method:';
 $MESS["DELETE"] = 'delete';
 $MESS["DELETE_UN"] = 'display';
 $MESS["BUY"] = "Buy";
-?>
+$MESS["OK_BTN"] = 'Ок';

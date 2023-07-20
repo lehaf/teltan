@@ -1,4 +1,4 @@
-<?
+<?php
 $MESS["CT_BNL_ELEMENT_DELETE_CONFIRM"] = "Вы действительно хотите удалить объявление?";
 $MESS["TODAY"] = "Сегодня";
 $MESS["YESTERDAY"] = "Вчера";
@@ -28,4 +28,4 @@ $MESS["PAY_CARD"] = 'оплатить картой';
 $MESS["PAY_CHOISE"] = 'Выберите способ оплаты:';
 $MESS["DELETE"] = 'удалить';
 $MESS["DELETE_UN"] = 'отображать';
-?>
+$MESS["OK_BTN"] = 'Ок';

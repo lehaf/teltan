@@ -1,4 +1,7 @@
 <?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
+
+use Bitrix\Main\Localization\Loc;
+
 /** @var array $arParams */
 /** @var array $arResult */
 /** @global CMain $APPLICATION */
@@ -10,8 +13,9 @@
 /** @var string $templateFolder */
 /** @var string $componentPath */
 /** @var CBitrixComponent $component */
-$this->setFrameMode(true);?>
-<?
+
+$this->setFrameMode(true);
+
 $INPUT_ID = trim($arParams["~INPUT_ID"]);
 if($INPUT_ID == '')
 	$INPUT_ID = "title-search-input";
@@ -23,15 +27,15 @@ if($CONTAINER_ID == '')
 $CONTAINER_ID = CUtil::JSEscape($CONTAINER_ID);
 
 if($arParams["SHOW_INPUT"] !== "N"):?>
-    <div class="mt-3 mt-xl-0 col-12 col-xl order-3 order-xl-2 search-input-main" id="<?echo $CONTAINER_ID?>">
-	<form class="mr-0 mr-xl-3" action="<?echo $arResult["FORM_ACTION"]?>">
+    <div class="mt-3 mt-xl-0 col-12 col-xl order-3 order-xl-2 search-input-main" id="<?=$CONTAINER_ID?>">
+	<form class="mr-0 mr-xl-3" action="<?=$arResult["FORM_ACTION"]?>">
         <div class="input-group">
             <div class="input-group-prepend">
                 <button class="btn btn-primary btn-on-search" type="submit" id="button-addon1">
                     <i class="icon-magnifying-glass-1"></i>
                 </button>
             </div>
-		    <input placeholder="Enter search words" class="form-control" id="<?echo $INPUT_ID?>" type="text" name="q" value="<?=$_GET['q'];?>" size="40" maxlength="50" autocomplete="off" />
+		    <input placeholder="<?=Loc::getMessage('CT_BST_SEARCH_BUTTON')?>" class="form-control" id="<?=$INPUT_ID?>" type="text" name="q" value="<?=$_GET['q'];?>" size="40" maxlength="50" autocomplete="off" />
         </div>
     </form>
 	</div>

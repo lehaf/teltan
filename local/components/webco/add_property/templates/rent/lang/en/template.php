@@ -1,10 +1,12 @@
-<?
+<?php
+$MESS ['titleH2Main'] = "SUBMIT YOUR AD";
 $MESS ['Step1'] = "Step 1";
 $MESS ['Step2'] = "Step 2";
 $MESS ['Step3'] = "Step 3 ";
 $MESS ['Step4'] = "Step 4";
 $MESS ['Step5'] = "Step 5";
 $MESS ['Contacts'] = "Contacts";
+$MESS ['titleH2'] = "WHAT TO PHOTOGRAPH?";
 $MESS ['Terms-of-sale'] = "Terms of sale";
 $MESS ['Detailed-description'] = "Detailed description";
 $MESS ['Apartment-address'] = "Apartment address";
@@ -41,5 +43,18 @@ $MESS ['Call:'] = "Call:";
 $MESS ['Submit your ad'] = "Submit your ad";
 $MESS ['Next step'] = "Next step";
 $MESS ['Prev step'] = "Prev step";
-
-?>
+$MESS ['notStudents'] = "Not students";
+$MESS ['withoutPets'] = "Without animals";
+$MESS ['notSmoke'] = "Non smoking";
+$MESS ['apartment'] = "Apartment";
+$MESS ['gardenApartment'] = "Garden apartment";
+$MESS ['cottage'] = "Cottage";
+$MESS ['penthouse'] = "Penthouse";
+$MESS ['townhouse'] = "Townhouse ";
+$MESS ['studioLoft'] = "Studio/Loft";
+//$MESS ['freeValue'] = "מדינה";
+//$MESS ['shoppingCenters'] = "בחר מדינה";
+//$MESS ['offices'] = "עִיר";
+//$MESS ['shops'] = "בכל עת";
+//$MESS ['restaurants'] = "מ";
+//$MESS ['warehouses'] = "ל";
