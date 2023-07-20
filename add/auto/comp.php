@@ -1,11 +1,14 @@
-<?php
-require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
+<?php require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 
 $APPLICATION->SetTitle("Добавить объявление");
 
 use Bitrix\Main\Localization\Loc;
+use Bitrix\Main\Page\Asset;
+
+Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . "/css/add-page.css");
 
 Loc::loadMessages(__FILE__);
+
 global $arSetting;
 
 // Если нет номера телефона, то редиректим на форму с его добавлением
@@ -546,7 +549,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                     }
                                     $elY = array_reverse($elY);
                                     ?>
-                                    <div class="mb-4 row">
+                                    <div class="mb-4 row __colum-reverse">
                                         <div class="col-12 col-lg-10">
                                             <div style="flex-direction: row-reverse;" id="dateRadioSelector"
                                                  class=" d-lg-flex justify-content-end align-items-center <?= ($prop_field[119]['IS_REQUIRED'] == 'Y') ? 'div-req' : '' ?>">
@@ -602,7 +605,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                     </div>
 
 
-                                    <div class="mb-4 row">
+                                    <div class="mb-4 row __colum-reverse">
                                         <div class="col-12 col-lg-10">
                                             <div class="mb-0 form-group">
                                                 <input id="Modification" type="text" data-id_prop="120"
@@ -629,7 +632,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                     require($_SERVER["DOCUMENT_ROOT"] . "/vendor/autoload.php");
                                     $detect = new Mobile_Detect;
                                     ?>
-                                    <div class="mb-4 row">
+                                    <div class="mb-4 row __colum-reverse">
                                         <div class="col-12 col-lg-10">
                                             <? if (!$detect->isMobile()) { ?>
                                                 <div id="bodyTypesCar"
@@ -683,7 +686,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                         </div>
                                     </div>
 
-                                    <div class="mb-4 row flex-column-reverse-d flex-lg-row select-w-100">
+                                    <div class="mb-4 row __colum-reverse flex-lg-row select-w-100">
                                         <div class="col col-lg-10"><?
 
                                             $arProp = [];
@@ -746,7 +749,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                         <? if ($arItem['PROPERTY_TYPE'] == 'L' && $arItem['ID'] != 31 && $arItem['ID'] != 168) { ?>
                                             <? if ($arItem['MULTIPLE'] == 'Y' && $arItem['ID'] != 32 && $arItem['ID'] != 167) {
                                                 ?>
-                                                <div class="mb-4 row flex-column-reverse-d flex-lg-row select-w-100">
+                                                <div class="mb-4 row __colum-reverse flex-lg-row select-w-100">
                                                     <div class="col col-lg-10">
                                                         <div  style="flex-wrap: wrap;" class="fl-right d-lg-flex <?= ($arItem['IS_REQUIRED'] == 'Y') ? 'div-req' : '' ?> justify-content-end">
                                                             <?if ($id){foreach ($id as $ids){drawElement($arProp[$ids] , $arLink ,$arProps);}}?>
@@ -796,7 +799,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                                 </div>
                                                 <?
                                             } elseif ($arLink[$arItem['ID']]['DISPLAY_TYPE'] == 'P') { ?>
-                                                <div class="mb-4 row flex-column-reverse flex-lg-row">
+                                                <div class="mb-4 row __colum-reverse flex-lg-row">
                                                     <div class="col col-lg-10">
                                                         <div class="d-flex justify-content-end">
                                                             <?if ($id){foreach ($id as $ids){drawElement($arProp[$ids] , $arLink ,$arProps);}}?>
@@ -835,7 +838,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                                     </div>
                                                 </div>
                                             <? } else { ?>
-                                                <div class="mb-4 row flex-column-reverse flex-lg-row select-w-100">
+                                                <div class="mb-4 row __colum-reverse flex-lg-row select-w-100">
 
                                                     <div class="col col-lg-10">
                                                         <div  style="flex-wrap: wrap;" class="fl-right d-lg-flex  <?= ($arItem['IS_REQUIRED'] == 'Y') ? 'div-req' : '' ?>  justify-content-end">
@@ -888,7 +891,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                                 <?
                                             }
                                         } elseif ($arItem['PROPERTY_TYPE'] == 'N' && $arItem['ID'] != 31 && $arItem['ID'] != 168) { ?>
-                                            <div class="mb-4 row">
+                                            <div class="mb-4 row __colum-reverse">
 
                                                 <div class="col-12 col-lg-10">
                                                     <div class="row d-flex justify-content-end mb-0 form-group">
@@ -952,7 +955,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                         $id = array_reverse($id);
                                         if ($arLink[$arItem['ID']]['DISPLAY_TYPE'] == 'P') {
                                             ?>
-                                            <div class="mb-4 row flex-column-reverse flex-lg-row">
+                                            <div class="mb-4 row __colum-reverse flex-lg-row">
                                                 <div class="col col-lg-10">
                                                     <div class="d-flex justify-content-end">
                                                         <?if ($id){foreach ($id as $ids){drawElement($arProp3[$ids] , $arLink ,$arProps);}}?>
@@ -990,7 +993,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
 
                                             </div>
                                         <? } elseif ($arItem['PROPERTY_TYPE'] == 'L') { ?>
-                                            <div class="mb-4 row flex-column-reverse flex-lg-row">
+                                            <div class="mb-4 row __colum-reverse flex-lg-row">
                                                 <div class="col col-lg-10 ">
 
                                                     <div class="d-flex flex-row-reverse justify-content-center justify-content-lg-start flex-wrap <?= ($arItem['IS_REQUIRED'] == 'Y') ? 'div-req' : '' ?>">
@@ -1015,7 +1018,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                                 </div>
                                             </div>
                                         <? } else { ?>
-                                            <div class="mb-4 row">
+                                            <div class="mb-4 row __colum-reverse">
                                                 <div class="col-12 col-lg-10">
                                                     <div class="row d-flex justify-content-end mb-0 form-group">
                                                         <?if ($id){foreach ($id as $ids){drawElement($arProp3[$ids] , $arLink ,$arProps);}}?>
@@ -1038,7 +1041,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                     <? }
                                     unset($id);
                                     ?>
-                                    <div class="mb-4 row flex-column-reverse flex-lg-row">
+                                    <div class="mb-4 row __colum-reverse flex-lg-row">
                                         <div class="col col-lg-10">
                                             <div class="d-flex flex-row-reverse flex-wrap">
                                                 <textarea class="p-2 mr-2 mr-lg-3 w-100" name="Comment"
@@ -1195,7 +1198,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                         ps($arProps);
                                         ?>
 
-                                        <div class="mb-4 row flex-column-reverse flex-lg-row property-step-contact__time">
+                                        <div class="mb-4 row __colum-reverse flex-lg-row property-step-contact__time">
                                             <div class="d-none d-lg-flex col-3">
                                                 <div class="form_radio_btn">
                                                     <input <?= ($arProps["UF_CALL_ANYTIME"]['VALUE'] != '' && $arProps["UF_CALL_ANYTIME"]['VALUE'] != '0' ) ? 'checked' : '' ?>
