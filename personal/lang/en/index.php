@@ -1,0 +1,31 @@
+<?
+$MESS["CT_BNL_ELEMENT_DELETE_CONFIRM"] = "?בטוח שברצנך לחמוק את המודעה";
+$MESS["TODAY"] = "today";
+$MESS["YESTERDAY"] = "yesterday";
+$MESS["TITl"] = "my announcements";
+$MESS["ACTIVE_COUNT"] = "Active ads:";
+$MESS["UNACTIVE_COUNT"] = "Inactive ads:";
+$MESS["BUY_TARIF"] = "buy";
+$MESS["BUY_NEW_TARIF"] = "Buy additional ads for placement";
+$MESS["OF_COUNT"] = "from";
+$MESS["FLEA"] = "FLEA";
+$MESS["AUTO"] = "AUTO";
+$MESS["PROPERTY"] = "PROPERTY";
+$MESS["FREE_ADS_1"] = "Free advertisements:";
+$MESS["To_add_an_advert"] = "To add an advert";
+$MESS["NO_ADS"] = 'YOU HAVE NO ADS YET';
+$MESS["UP_RISE"] = 'RISE';
+$MESS["UP_EDIT"] = 'EDIT';
+$MESS["UP_SPEED_SALE"] = 'Speed up the sale';
+$MESS["RISE_PAKET"] = 'RISE';
+$MESS["VIP_PAKET"] = 'VIP package';
+$MESS["LENT_PAKET"] = 'highlighting with tape';
+$MESS["COLOUR_PAKET"] = 'highlighting';
+$MESS["UP_COMPLEX"] = 'promotion package';
+$MESS["PAY_T_COINS"] = 'pay with t-coins';
+$MESS["PAY_CARD"] = 'pay by card';
+$MESS["PAY_CHOISE"] = 'Select a Payment Method:';
+$MESS["DELETE"] = 'delete';
+$MESS["DELETE_UN"] = 'display';
+$MESS["BUY"] = "Buy";
+?>
