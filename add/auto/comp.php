@@ -561,7 +561,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                                 <? if ($item['UF_NAME'] != ''){ ?>
                                                 <? if ($count == 7) { ?>
                                                 <select data-req="Y" class="mr-3 custom-select" id="dateSelectSelector"
-                                                        name="Year of issue">
+                                                        name="Year of issue" onchange="resetActiveYears()">
                                                     <option value="no-value">Older</option>
                                                     <? } ?>
                                                     <? if ($count >= 7) { ?>

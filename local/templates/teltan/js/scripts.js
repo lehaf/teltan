@@ -524,7 +524,6 @@ $(document).ready(function () {
                                                 errorsDiv--;
                                                 thisdiv = 0;
                                             }
-                                            let dateSelectSelectorVal = $('#dateSelectSelector').val()
                                             if (thisdiv > 0) {
                                                 if (dateSelectSelectorVal !== 'no-value') {
                                                     errorsDiv--;
@@ -5755,5 +5754,17 @@ $(document).ready(function () {
               listNew.appendChild(li);
           };*/
     }
+
 });
 
+/// additional functions
+function resetActiveYears () {
+    let allRadioDateBtn = document.querySelectorAll('div#dateRadioSelector input[type="radio"]');
+    if (allRadioDateBtn.length > 1) {
+        allRadioDateBtn.forEach((dateBtn) => {
+            if (dateBtn.checked) {
+                dateBtn.checked = false;
+            }
+        });
+    }
+}
