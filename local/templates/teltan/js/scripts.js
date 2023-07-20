@@ -524,6 +524,7 @@ $(document).ready(function () {
                                                 errorsDiv--;
                                                 thisdiv = 0;
                                             }
+                                            let dateSelectSelectorVal = $('#dateSelectSelector').val()
                                             if (thisdiv > 0) {
                                                 if (dateSelectSelectorVal !== 'no-value') {
                                                     errorsDiv--;
@@ -586,7 +587,7 @@ $(document).ready(function () {
                         }
                     })
 
-                     if (step === 3) {
+                    if (step === 3) {
 
                     }
                     if ($('#userItemPrice').val() == '' && step === 5) {
@@ -615,7 +616,7 @@ $(document).ready(function () {
                             this.selectStep(this.activeStep + 1);
                         }
                     } else {
-                       // this.selectStep(this.activeStep + 1);
+                        // this.selectStep(this.activeStep + 1);
                     }
                 }
 
@@ -5754,10 +5755,8 @@ $(document).ready(function () {
               listNew.appendChild(li);
           };*/
     }
-
 });
 
-/// additional functions
 function resetActiveYears () {
     let allRadioDateBtn = document.querySelectorAll('div#dateRadioSelector input[type="radio"]');
     if (allRadioDateBtn.length > 1) {

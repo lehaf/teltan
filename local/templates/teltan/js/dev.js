@@ -9,12 +9,12 @@ $(document).ready(function () {
     $('div.wizard-content *[id]').each(function() {
         var id = $(this).attr('id');
         var duplicates = $('div.wizard-content *[id="' + id + '"]');
-        // if (duplicates.length > 1) {
-        //     if ($(this).parents('.additional').length === 0 && $(this).attr('id') != 'bs-select-22' && $(this).attr('id') != 'main-selector-photo'){
-        //         console.log($(this).parents('.mb-4').remove())
-        //         console.log($(this).attr('id'))
-        //     }
-        // }
+        if (duplicates.length > 1) {
+            if ($(this).parents('.additional').length === 0 && $(this).attr('id') != 'bs-select-22' && $(this).attr('id') != 'main-selector-photo'){
+                $(this).parents('.mb-4').remove()
+                console.log($(this).attr('id'))
+            }
+        }
     });
     if( screen.width <= 480 ) {
         $('.m-0.font-weight-bold').each(function (index) {

@@ -561,7 +561,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                                 <? if ($item['UF_NAME'] != ''){ ?>
                                                 <? if ($count == 7) { ?>
                                                 <select data-req="Y" class="mr-3 custom-select" id="dateSelectSelector"
-                                                        name="Year of issue" onchange="resetActiveYears()">
+                                                        name="Year of issue" onselect="resetActiveYears()">
                                                     <option value="no-value">Older</option>
                                                     <? } ?>
                                                     <? if ($count >= 7) { ?>
@@ -616,7 +616,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
 
                                         <div class=" d-lg-block col-2">
                                             <p class="m-0 font-weight-bold"><?= Loc::getMessage('Modification (optional):'); ?>
-                                                </p>
+                                            </p>
                                         </div>
                                     </div>
                                     <?
@@ -743,7 +743,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                         <?
                                         $pattern = '/ID(\d+)/';
                                         preg_match_all($pattern, $arItem['CODE'], $matches);
-                                         $id = $matches[1];
+                                        $id = $matches[1];
                                         $id = array_reverse($id);
                                         ?>
                                         <? if ($arItem['PROPERTY_TYPE'] == 'L' && $arItem['ID'] != 31 && $arItem['ID'] != 168) { ?>
@@ -951,7 +951,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                     foreach ($arProp3 as $arItem) {
                                         $pattern = '/ID(\d+)/';
                                         preg_match_all($pattern, $arItem['CODE'], $matches);
-                                         $id = $matches[1];
+                                        $id = $matches[1];
                                         $id = array_reverse($id);
                                         if ($arLink[$arItem['ID']]['DISPLAY_TYPE'] == 'P') {
                                             ?>
