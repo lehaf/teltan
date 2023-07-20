@@ -1,0 +1,22 @@
+@media (max-width: 768px){
+  .__colum-reverse{
+    flex-direction: column-reverse;
+  }
+
+  .__colum-reverse .col-2{
+    max-width: 100%;
+    text-align: right;
+  }
+
+  .__colum-reverse .fl-right{
+    float: initial !important;
+  }
+  .__colum-reverse .d-lg-flex{
+    display: flex;
+  }
+
+  .__colum-reverse .d-lg-block{
+    margin-bottom: 10px;
+  }
+
+}
