@@ -1,15 +1,10 @@
-<?
+<?php require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 
 use Bitrix\Main\Localization\Loc;
 
-require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
-
 Loc::loadMessages(__FILE__);
-global $USER;
-
-$IDUser = $USER->GetID();
-if (!$IDUser)
-    LocalRedirect('/');
+global $USER, $APPLICATION;
+if (!$USER->GetID()) LocalRedirect('/');
 ?>
 
 <?
@@ -629,7 +624,7 @@ if (isset($_GET['id']) && isset($_GET['au']) && isset($_GET['ref'])) {
                 url: window.location.href,
                 type: 'GET',
                 success: function (data) {
-                    $('.card-soket').html($(data).find('.card-soket').html()); // обновляем содержимое страницы
+                    $('.chat__message-window').html($(data).find('.chat__message-window').html()); // обновляем содержимое страницы
                 }
             });
         }, 10000); // интервал в миллисекундах (30 секунд = 30000 миллисекунд)
