@@ -1,5 +1,4 @@
-<?
-require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
+<?php require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 use Bitrix\Main\Localization\Loc;
 Loc::loadMessages(__FILE__);
 $APPLICATION->SetTitle("Добавить объявление");
@@ -431,7 +430,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                            class="d-none main-selector-photo">
                                                     <div onclick="addActivePhoto(this)" id="213213"
                                                          class="set-main-text">
-                                                        Main
+                                                        <?=Loc::getMessage('photoMain')?>
                                                     </div>
                                                 </label>
 
@@ -439,7 +438,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                     <div class="mr-3 d-flex justify-content-center align-items-center element-control"
                                                          data-file-remove-id="<?= $arFields['PREVIEW_PICTURE'] ?>Снимок.PNG">
                                                         <i class="mr-2 icon-clear"></i>
-                                                        <span class="d-none d-lg-inline-block">Delete</span>
+                                                        <span class="d-none d-lg-inline-block"><?=Loc::getMessage('deletePhoto')?></span>
                                                     </div>
 
                                                     <div class="d-flex justify-content-center align-items-center element-control rotate-control">
@@ -448,7 +447,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                                value="0">
                                                         <i onclick="rotateThis(this)" class="mr-2 icon-replay"></i>
                                                         <span onclick="rotateThis(this)"
-                                                              class="d-none d-lg-inline-block">Rotate</span>
+                                                              class="d-none d-lg-inline-block"><?=Loc::getMessage('rotatePhoto')?></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -470,7 +469,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                                value="<?= $PHOTO ?>.PNG"
                                                                class="d-none main-selector-photo">
                                                         <div onclick="addActivePhoto(this)" id="<?= $PHOTO ?>"
-                                                             class="set-main-text">Set as main
+                                                             class="set-main-text"><?=Loc::getMessage('setPhotoMain')?>
                                                         </div>
                                                     </label>
 
@@ -478,7 +477,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                         <div class="mr-3 d-flex justify-content-center align-items-center element-control"
                                                              data-file-remove-id="<?= $PHOTO ?>.PNG">
                                                             <i class="mr-2 icon-clear"></i>
-                                                            <span class="d-none d-lg-inline-block">Delete</span>
+                                                            <span class="d-none d-lg-inline-block"><?=Loc::getMessage('deletePhoto')?></span>
                                                         </div>
 
                                                         <div class="d-flex justify-content-center align-items-center element-control rotate-control">
@@ -487,7 +486,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                             <i onclick="rotateThis(this)"
                                                                class="mr-2 icon-replay"></i>
                                                             <span onclick="rotateThis(this)"
-                                                                  class="d-none d-lg-inline-block">Rotate</span>
+                                                                  class="d-none d-lg-inline-block"><?=Loc::getMessage('rotatePhoto')?></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1280,12 +1279,12 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
             let mainText = document.querySelectorAll(".set-main-text");
 
             mainText.forEach((el)=>{
-                el.innerText = "Set as main";
+                el.innerText = "<?=Loc::getMessage('setPhotoMain');?>";
                 el.closest(".main-photo__item").querySelector(".rotate-img").removeAttribute("data-activePhoto");
             })
             item.closest(".main-photo__item").querySelector(".rotate-img").setAttribute("data-activePhoto", "isActive");
 
-            item.innerText = "Main";
+            item.innerText = "<?=Loc::getMessage('photoMain');?>";
         }
     }
 
@@ -1368,7 +1367,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                 let photoList = document.querySelectorAll(".main-selector-photo .set-main-text");
                 photoList.forEach((el) => {
                     let textItem = el.innerText;
-                    if (textItem === "Main") {
+                    if (textItem === "<?=Loc::getMessage('photoMain');?>") {
                         return flagPhoto = false
                     }
                 })
@@ -1378,7 +1377,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                         let photoItems = document.querySelectorAll(".main-photo__item")
                         let mainPhoto = photoItems[photoItems.length - 1]
                         mainPhoto.querySelector("img").setAttribute("data-activePhoto", "isActive");
-                        mainPhoto.querySelector(".set-main-text").innerText = "Main"
+                        mainPhoto.querySelector(".set-main-text").innerText = "<?=Loc::getMessage('photoMain');?>"
 
                         flagPhoto = false
                     }, 0);
@@ -1429,19 +1428,19 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
         <label id="main-selector-photo" class="mb-2 p-0 btn text-center text-primary main-selector-photo">
           <input type="radio" name="fileMain" value="{{name}}" class="d-none main-selector-photo" />
-           <div onclick="addActivePhoto(this)" id="213213" class="set-main-text">Set as main</div>
+           <div onclick="addActivePhoto(this)" id="213213" class="set-main-text"><?=Loc::getMessage('setPhotoMain');?></div>
         </label>
 
         <div class="d-flex justify-content-around">
           <div class="mr-3 d-flex justify-content-center align-items-center element-control" data-file-remove-id="{{name}}">
             <i class="mr-2 icon-clear"></i>
-            <span class="d-none d-lg-inline-block">Delete</span>
+            <span class="d-none d-lg-inline-block"><?=Loc::getMessage('deletePhoto');?></span>
           </div>
 
           <div class="d-flex justify-content-center align-items-center element-control rotate-control">
             <input  type="hidden" name="rotate[{{name}}]" value="0" />
             <i onclick="rotateThis(this)" class="mr-2 icon-replay"></i>
-            <span onclick="rotateThis(this)" class="d-none d-lg-inline-block">Rotate</span>
+            <span onclick="rotateThis(this)" class="d-none d-lg-inline-block"><?=Loc::getMessage('rotatePhoto');?></span>
           </div>
         </div>
       </div>

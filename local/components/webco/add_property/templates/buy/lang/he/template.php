@@ -1,4 +1,4 @@
-<?
+<?php
 $MESS ['Step1'] = "שלב 1";
 $MESS ['Step2'] = "שלב 2";
 $MESS ['Step3'] = "שלב 3";
@@ -41,5 +41,8 @@ $MESS ['Call:'] = "שִׂיחָה:";
 $MESS ['Submit your ad'] = "שלח את המודעה שלך";
 $MESS ['Next step'] = "השלב הבא";
 $MESS ['Prev step'] = "שלב קודם";
-
-?>
+// Добавление фото
+$MESS ['photoMain'] = "ראשי";
+$MESS ['setPhotoMain'] = "קבע כראשי";
+$MESS ['deletePhoto'] = "מחק";
+$MESS ['rotatePhoto'] = "סובב";
