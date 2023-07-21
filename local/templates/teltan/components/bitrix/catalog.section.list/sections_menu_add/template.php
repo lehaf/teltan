@@ -19,10 +19,11 @@ $this->setFrameMode(true);
             <div class="tab-content" id="v-pills-tabDescriptionContent">
                 <!-- mobile back menu btn -->
                 <button type="button" class="d-flex d-lg-none justify-content-end btn w-100 border-bottom btn-back">
-                    <span class="mr-5 btn-back-arrow"><svg width="5" height="9" viewBox="0 0 5 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M0.999999 8L4 4.5L1 1" stroke="#3FB465" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-</span>
+                    <span class="mr-5 btn-back-arrow">
+                        <svg width="5" height="9" viewBox="0 0 5 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0.999999 8L4 4.5L1 1" stroke="#3FB465" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
                     Назад
                 </button>
                 <!-- Flea market on click content link-->
@@ -121,6 +122,6 @@ $this->setFrameMode(true);
 </div>
 
 <div class="col-12 col-lg-2">
-    <p class="font-weight-bold label-name">Select section</p>
+    <p class="font-weight-bold label-name">:Select section</p>
 </div>
 </div>

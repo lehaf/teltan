@@ -44,3 +44,26 @@ function pr($o, $show = false, $die = false, $fullBackTrace = false)
         return false;
     }
 }
+
+
+//function getAllAutoProperties($cacheTtl = 360000) : array
+//{
+//    $cacheId = 'iblock_'.AUTO_IBLOCK_ID;
+//    $cache = \Bitrix\Main\Application::getInstance()->getManagedCache();
+//    if ($cache->read($cacheTtl, $cacheId)) {
+//        $properties = $cache->get($cacheId);
+//    } else {
+//        $props = CIBlockProperty::GetList(
+//            array("sort" => "asc", "name" => "asc"),
+//            array("ACTIVE" => "Y", "IBLOCK_ID" => AUTO_IBLOCK_ID)
+//        );
+//        $properties = [];
+//        while ($prop = $props->GetNext()) {
+//
+//            $prop_field[$prop["ID"]] = $prop;
+//            $properties[] = $prop;
+//        }
+//        $cache->set($cacheId, array("FIELDS" => )); // записываем в кеш
+//    }
+//    return $properties ?? [];
+//}

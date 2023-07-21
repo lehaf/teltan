@@ -1,19 +1,20 @@
-<?
+<?php
 
 use Bitrix\Main\Config\Option;
 use Bitrix\Highloadblock as HL;
-use Bitrix\Main\Entity;
 use Bitrix\Main\Loader;
 use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
+
+
+CModule::IncludeModule('highloadblock');
+require_once($_SERVER['DOCUMENT_ROOT'] . "/local/php_interface/const.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/local/php_interface/config.php");
 
 // Подключаем функции
 if (file_exists(__DIR__.'include/function.php')) {
     require __DIR__.'include/function.php';
 }
 
-CModule::IncludeModule('highloadblock');
-require_once($_SERVER['DOCUMENT_ROOT'] . "/local/php_interface/const.php");
-require_once($_SERVER['DOCUMENT_ROOT'] . "/local/php_interface/config.php");
 // Настройки сайта из админки
 $BXK_OPTIONS = Option::getForModule('bxk_setting');
 function GetEntityDataClass($HlBlockId)

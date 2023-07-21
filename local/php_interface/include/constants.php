@@ -1,2 +1,0 @@
-<?php
-const REAL_ESTATE_LIVE_RENT_SECTION_ID = 34;

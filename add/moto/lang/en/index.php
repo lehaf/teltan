@@ -28,11 +28,12 @@ $MESS ['Popular'] = "Popular";
 $MESS ['All'] = "All";
 
 $MESS ['Year of issue'] = "Year of issue";
-$MESS ['Modification (optional):'] = "Modification (optional):";
-$MESS ['Body type:'] = "Body type:";
-$MESS ['Colour:'] = "Colour:";
+$MESS ['modification'] = "Modification (optional)";
+$MESS ['modificationPlaceholder'] = "Modification (optional):";
+$MESS ['Body type'] = "Body type";
+$MESS ['Colour'] = "Colour";
 $MESS ['Audio system'] = "Audio system";
-$MESS ['Comment (optional):'] = "Comment (optional):";
+$MESS ['Comment (optional)'] = "Comment (optional)";
 $MESS ['Choose a price'] = "Choose a price";
 $MESS ['Price with VAT'] = "Price with VAT";
 $MESS ['Exchange is possible'] = "Exchange is possible";
@@ -48,7 +49,7 @@ $MESS ['Select country'] = "Select country";
 $MESS ['Anytime'] = "Anytime";
 $MESS ['from'] = "from";
 $MESS ['to'] = "to";
-$MESS ['Call:'] = "Call:";
+$MESS ['Call'] = "Call";
 
 $MESS ['Submit your ad'] = "Submit your ad";
 $MESS ['Next step'] = "Next step";

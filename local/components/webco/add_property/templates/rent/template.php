@@ -418,7 +418,9 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                 </div>
 
                                                 <div class="col-12 col-lg-2">
-                                                    <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold"><?=$filterProp['NAME']?>:</p>
+                                                    <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
+                                                        :<?=$filterProp['NAME']?>
+                                                    </p>
                                                 </div>
                                             </div>
                                         <? }else{?>
@@ -441,7 +443,9 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-lg-2">
-                                                        <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold"><?=$filterProp['NAME']?>:</p>
+                                                        <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
+                                                            :<?=$filterProp['NAME']?>
+                                                        </p>
                                                     </div>
                                                 </div>
                                             <?}else{?>
@@ -454,7 +458,9 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                     </div>
 
                                                     <div class="col-12 col-lg-2">
-                                                        <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold"><?=$filterProp['NAME']?>:</p>
+                                                        <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
+                                                            :<?=$filterProp['NAME']?>
+                                                        </p>
                                                     </div>
                                                 </div>
                                             <?}?>
@@ -472,7 +478,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                             <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row" data-parent-id="28" style="display: none">
                                                 <div class="col-12 col-lg-10">
                                                     <div class="d-flex justify-content-center justify-content-lg-end align-items-center">
-                                                        <<?if ($id){foreach ($id as $ids){drawElement($filterProps[2][$ids] , $arLink ,$arProps);}}?>
+                                                        <?if ($id){foreach ($id as $ids){drawElement($filterProps[2][$ids] , $arLink ,$arProps);}}?>
                                                         <?foreach($filterProp['PROP_ENUM_VAL']  as $arItem){?>
 
                                                             <div class="mr-3 form_radio_btn">
@@ -488,7 +494,9 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                 </div>
 
                                                 <div class="col-12 col-lg-2">
-                                                    <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold"><?=$filterProp['NAME']?>:</p>
+                                                    <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
+                                                        :<?=$filterProp['NAME']?>
+                                                    </p>
                                                 </div>
                                             </div>
                                         <? }else{?>
@@ -511,7 +519,9 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-lg-2">
-                                                        <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold"><?=$filterProp['NAME']?>:</p>
+                                                        <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
+                                                            :<?=$filterProp['NAME']?>
+                                                        </p>
                                                     </div>
                                                 </div>
                                             <?}else{?>
@@ -522,9 +532,10 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                             <input id="<?= $filterProp['ID'] ?>2"  data-id_prop="<?= $filterProp['CODE'] ?>" class="form-control" type="number" placeholder="" required="" value="<?=$arProps[$filterProp['CODE']]['VALUE']?>">
                                                         </div>
                                                     </div>
-
                                                     <div class="col-12 col-lg-2">
-                                                        <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold"><?=$filterProp['NAME']?>:</p>
+                                                        <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
+                                                            :<?=$filterProp['NAME']?>
+                                                        </p>
                                                     </div>
                                                 </div>
                                             <?}
@@ -557,13 +568,14 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                 </div>
 
                                                 <div class="col-12 col-lg-2">
-                                                    <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold"><?=$filterProp['NAME']?>:</p>
+                                                    <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
+                                                        :<?=$filterProp['NAME']?>
+                                                    </p>
                                                 </div>
                                             </div>
                                         <? }else{?>
                                             <?if($filterProp['ID'] == 174){?>
                                                 <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row" data-parent-id="29" style="display: none">
-
                                                     <div class="col-12 col-lg-10">
                                                         <div class="d-flex flex-wrap justify-content-center justify-content-lg-end">
                                                             <div class="mr-0 mr-lg-3 form-group">
@@ -580,7 +592,9 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-lg-2">
-                                                        <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold"><?=$filterProp['NAME']?>:</p>
+                                                        <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
+                                                            :<?=$filterProp['NAME']?>
+                                                        </p>
                                                     </div>
                                                 </div>
                                             <?}else{?>
@@ -591,9 +605,10 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                             <input id="<?= $filterProp['ID'] ?>3"  data-id_prop="<?= $filterProp['CODE'] ?>" class="form-control" type="number" placeholder="" required="" value="<?=$arProps[$filterProp['CODE']]['VALUE']?>">
                                                         </div>
                                                     </div>
-
                                                     <div class="col-12 col-lg-2">
-                                                        <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold"><?=$filterProp['NAME']?>:</p>
+                                                        <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
+                                                            :<?=$filterProp['NAME']?>
+                                                        </p>
                                                     </div>
                                                 </div>
                                             <?}?>
@@ -607,7 +622,9 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                    required>
                                         </div>
                                         <div class="col-12 col-lg-2">
-                                            <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold"><?=$arProps['PROP_Completion']['NAME']?>:</p>
+                                            <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
+                                                :<?=$arProps['PROP_Completion']['NAME']?>
+                                            </p>
                                         </div>
                                     </div>
                                     <div class="mb-5 d-flex flex-column">
@@ -663,12 +680,8 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                 "PATH" => "/include-area/".mb_strtolower($dirName)."-p4-ru.php",
                                                 "EDIT_TEMPLATE" => ""
                                             )
-                                        );
-                                        // символы для удаления
-
-
-                                        ?></p>
-
+                                        ); ?>
+                                    </p>
                                     <div class="d-flex justify-content-center align-items-center">
                                         <div class="d-flex">
                                             <p class="icon-currency-shek" style="font-size: 33px;

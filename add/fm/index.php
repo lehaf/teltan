@@ -94,7 +94,6 @@ ps($arProp);
         <div class="p-4 card user-add-item">
             <form id="mainForm" onsubmit="submitForm(event)">
                 <h2 class="mb-4 d-flex justify-content-center align-items-center section-title"> <?= Loc::getMessage('Description'); ?></h2>
-
                 <? $APPLICATION->IncludeComponent(
                     "bitrix:catalog.section.list",
                     "sections_menu_add",
@@ -119,14 +118,12 @@ ps($arProp);
                         "VIEW_MODE" => "LINE"
                     )
                 ); ?>
-
-
                 <div class="form-group row flex-column-reverse flex-lg-row">
                     <div class="col col-lg-10">
                         <input type="text" value="<?= $arFields['NAME'] ?>" class="form-control"
                                placeholder="Enter Title" id="itemTitle" data-req="Y">
                     </div>
-                    <label for="itemTitle" class="col col-lg-2 label-name"> כותרת *</label>
+                    <label for="itemTitle" class="col col-lg-2 label-name">:<?=Loc::getMessage('titleLabel')?>*</label>
                 </div>
                 <div class="form-group row flex-column-reverse flex-lg-row">
                     <div class="col col-lg-10">
@@ -134,8 +131,7 @@ ps($arProp);
                                   id="itemDescription"
                                   rows="4"><?= $arFields['PREVIEW_TEXT'] ?></textarea>
                     </div>
-                    <label for="itemDescription"
-                           class="col col-lg-2 label-name"><?= Loc::getMessage('Description'); ?> *</label>
+                    <label for="itemDescription" class="col col-lg-2 label-name">:<?=Loc::getMessage('Description')?> *</label>
                 </div>
                 <div class="form-group row flex-column-reverse flex-lg-row">
                     <div class="col col-lg-10">
@@ -143,7 +139,7 @@ ps($arProp);
                                placeholder="Enter Price"
                                class="form-control" id="itemPrice">
                     </div>
-                    <label for="itemPrice" class="col col-lg-2 label-name"><?= Loc::getMessage('Price'); ?> *</label>
+                    <label for="itemPrice" class="col col-lg-2 label-name">:<?=Loc::getMessage('Price')?> *</label>
                 </div>
                 <? require_once 'city.php' ?>
 
@@ -153,7 +149,7 @@ ps($arProp);
                                placeholder="<?= Loc::getMessage('Enter your phone number in international format'); ?>"
                                id="itemPhone1" data-req="Y">
                     </div>
-                    <label for="itemPhone1" class="col col-lg-2 label-name">טלפון 1 *</label>
+                    <label for="itemPhone1" class="col col-lg-2 label-name">:<?=Loc::getMessage('phoneLabel')?> 1 *</label>
                 </div>
                 <div class="form-group row flex-column-reverse flex-lg-row">
                     <div class="col col-lg-10">
@@ -161,7 +157,7 @@ ps($arProp);
                                placeholder="<?= Loc::getMessage('Enter your phone number in international format'); ?>"
                                id="itemPhone2">
                     </div>
-                    <label for="itemPhone2" class="col col-lg-2 label-name">טלפון 2</label>
+                    <label for="itemPhone2" class="col col-lg-2 label-name">:<?=Loc::getMessage('phoneLabel')?> 2</label>
                 </div>
                 <div class="form-group row flex-column-reverse flex-lg-row">
                     <div class="col col-lg-10">
@@ -169,17 +165,19 @@ ps($arProp);
                                placeholder="<?= Loc::getMessage('Enter your phone number in international format'); ?>"
                                id="itemPhone3">
                     </div>
-                    <label for="itemPhone3" class="col col-lg-2 label-name">טלפון 3</label>
+                    <label for="itemPhone3" class="col col-lg-2 label-name">:<?=Loc::getMessage('phoneLabel')?> 3</label>
                 </div>
 
                 <div class="mb-2 row flex-column-reverse flex-lg-row property-step-contact__time">
                     <div class="d-lg-flex col-3 btn-time">
                         <div style="max-width: none" class="form_radio_btn">
-                            <input <?= ($arProps['UF_CALL_ANYTIME']['VALUE'] == '1') ? 'checked' : '' ?> id="anytime"
-                                                                                                         type="checkbox"
-                                                                                                         name="anytime"
-                                                                                                         value="anytime">
-                            <label class="mr-3 mb-0" for="anytime"><?= Loc::getMessage('Anytime'); ?></label>
+                            <input <?= ($arProps['UF_CALL_ANYTIME']['VALUE'] == '1') ? 'checked' : '' ?>
+                                    id="anytime"
+                                    type="checkbox"
+                                    name="anytime"
+                                    value="anytime"
+                            >
+                            <label class="mr-3 mb-0" for="anytime">:<?=Loc::getMessage('Anytime')?></label>
                         </div>
                     </div>
 
@@ -295,16 +293,15 @@ ps($arProp);
 
                         </div>
                     </div>
-
                     <div class="col-12 col-lg-2 d-flex justify-content-end align-items-center">
-                        <p class="text-right mb-3 mb-lg-0 font-weight-bold"><?= Loc::getMessage('Call:'); ?></p>
+                        <p class="text-right mb-3 mb-lg-0 font-weight-bold">:<?=Loc::getMessage('Call:')?></p>
                     </div>
                 </div>
 
-
                 <? if ($arProp) { ?>
-
-                    <h2 class="mb-4 d-flex justify-content-center align-items-center section-title"><?= Loc::getMessage('DETAILED DESCRIPTION'); ?></h2>
+                    <h2 class="mb-4 d-flex justify-content-center align-items-center section-title">
+                        <?= Loc::getMessage('DETAILED DESCRIPTION'); ?>
+                    </h2>
                 <? } ?>
                 <?
 
@@ -333,7 +330,9 @@ ps($arProp);
                                 </div>
 
                                 <div class="col-12 col-lg-2 d-lg-block">
-                                    <p class="m-0 mb-2 mb-lg-0 font-weight-bold label-name"><?= $prop['NAME'] ?> <?= ($prop['IS_REQUIRED'] == 'Y') ? ' * ' : '' ?></p>
+                                    <p class="m-0 mb-2 mb-lg-0 font-weight-bold label-name">
+                                        :<?= $prop['NAME'] ?> <?= ($prop['IS_REQUIRED'] == 'Y') ? ' * ' : '' ?>
+                                    </p>
                                 </div>
                             </div>
                         <? }
@@ -371,7 +370,9 @@ ps($arProp);
                                     </div>
                                 </div>
                                 <div class="col-12 col-lg-2 d-lg-block">
-                                    <p class="m-0 mb-2 mb-lg-0 font-weight-bold label-name"><?= $prop['NAME'] ?> <?= ($prop['IS_REQUIRED'] == 'Y') ? ' * ' : '' ?></p>
+                                    <p class="m-0 mb-2 mb-lg-0 font-weight-bold label-name">
+                                        :<?= $prop['NAME'] ?> <?= ($prop['IS_REQUIRED'] == 'Y') ? ' * ' : '' ?>
+                                    </p>
                                 </div>
                             </div>
 
@@ -407,8 +408,9 @@ ps($arProp);
                                     </div>
                                 </div>
                                 <div class="col-12 col-lg-2  d-lg-block">
-                                    <p class="m-0 mb-2 mb-lg-0 font-weight-bold label-name"><?= $prop['NAME'] ?>
-                                        : <?= ($prop['IS_REQUIRED'] == 'Y') ? ' * ' : '' ?></p>
+                                    <p class="m-0 mb-2 mb-lg-0 font-weight-bold label-name">
+                                        :<?= $prop['NAME'] ?> <?= ($prop['IS_REQUIRED'] == 'Y') ? ' * ' : '' ?>
+                                    </p>
                                 </div>
                             </div>
                         <? }
@@ -434,8 +436,9 @@ ps($arProp);
                             </div>
 
                             <div class="col-12 col-lg-2 d-lg-block">
-                                <p class="m-0 mb-2 mb-lg-0 font-weight-bold label-name"><?= $prop['NAME'] ?>
-                                    : <?= ($prop['IS_REQUIRED'] == 'Y') ? ' * ' : '' ?></p>
+                                <p class="m-0 mb-2 mb-lg-0 font-weight-bold label-name">
+                                    :<?= $prop['NAME'] ?> <?= ($prop['IS_REQUIRED'] == 'Y') ? ' * ' : '' ?>
+                                </p>
                             </div>
                         </div>
                         <?
@@ -539,7 +542,7 @@ ps($arProp);
                         </div>
                     </div>
                     <div class="d-none d-lg-flex  col-2">
-                        <p class="label-name"><?= Loc::getMessage('Add photo'); ?></p>
+                        <p class="label-name">:<?= Loc::getMessage('Add photo'); ?></p>
                     </div>
                 </div>
 

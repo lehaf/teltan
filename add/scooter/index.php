@@ -561,7 +561,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                                                 <? if ($item['UF_NAME'] != ''){ ?>
                                                 <? if ($count == 7) { ?>
                                                 <select data-req="Y" class="mr-3 custom-select" id="dateSelectSelector"
-                                                        name="Year of issue">
+                                                        name="Year of issue" onchange="resetActiveYears()">
                                                     <option value="no-value">Older</option>
                                                     <? } ?>
                                                     <? if ($count >= 7) { ?>
@@ -576,14 +576,13 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                                                                    data-id_prop="PROP_YAERH"
                                                                    name="Year of issue"
                                                             >
-                                                            <label for="carYear<?= $item['UF_NAME'] ?>"><?= $item['UF_NAME'] ?></label>
+                                                            <label for="carYear<?= $item['UF_NAME'] ?>"><?=$item['UF_NAME']?></label>
                                                         </div>
                                                     <? } ?>
                                                     <? $count++; ?>
                                                     <? }
                                                     } ?>
                                                 </select>
-
                                             </div>
                                             <!--
                                             <div class="d-flex d-lg-none">
@@ -611,12 +610,12 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                                                 <input id="Modification" type="text" data-id_prop="PROP_MODIFICATION"
                                                        class="form-control"
                                                     <?= ($arProps["PROP_MODIFICATION"]['VALUE']) ? 'value="' . $arProps["PROP_MODIFICATION"]['VALUE'] . '"' : '' ?>
-                                                       placeholder="Modification (optional):" >
+                                                       placeholder="<?=Loc::getMessage('modificationPlaceholder')?>" >
                                             </div>
                                         </div>
 
                                         <div class="d-none d-lg-block col-2">
-                                            <p class="m-0 font-weight-bold"><?= Loc::getMessage('Modification (optional):'); ?> </p>
+                                            <p class="m-0 font-weight-bold">:<?=Loc::getMessage('modification')?></p>
                                         </div>
                                     </div>
                                     <?
@@ -685,7 +684,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                                         </div>
 
                                         <div class=" d-lg-block col-2">
-                                            <p class="m-0 font-weight-bold"><?= Loc::getMessage('Body type:'); ?>  *</p>
+                                            <p class="m-0 font-weight-bold">:<?=Loc::getMessage('Body type')?>  *</p>
                                         </div>
                                     </div>
 
@@ -749,7 +748,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                                         </div>
 
                                         <div class="col-2 d-none d-lg-block">
-                                            <p class="m-0 font-weight-bold"><?= Loc::getMessage('Colour:'); ?> *</p>
+                                            <p class="m-0 font-weight-bold">:<?=Loc::getMessage('Colour')?> *</p>
                                         </div>
                                     </div>
                                     <? foreach ($arProp as $arItem) { ?>
@@ -777,7 +776,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                                                                            name="prop<?= $arItem['CODE'] ?>"
                                                                            data-id_prop="<?= $val['PROPERTY_ID'] ?>"
                                                                            data-id-self="<?= $val['ID'] ?>">
-                                                                    <label for="<?= $val['VALUE'] ?>"><?= $val['VALUE'] ?> </label>
+                                                                    <label for="<?= $val['VALUE'] ?>"><?=$val['VALUE']?></label>
                                                                 </div>
                                                                 <?
                                                             } ?>
@@ -806,8 +805,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                                                         </div>
                                                     </div>
                                                     <div class="col-2  d-lg-block">
-                                                        <p class="m-0 font-weight-bold"><?= $arItem['NAME'] ?>
-                                                            : <?= ($arItem['IS_REQUIRED'] == 'Y') ? '*' : '' ?></p>
+                                                        <p class="m-0 font-weight-bold">:<?=$arItem['NAME']?> <?= ($arItem['IS_REQUIRED'] == 'Y') ? '*' : '' ?></p>
                                                     </div>
                                                 </div>
                                                 <?
@@ -847,7 +845,9 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-lg-2 d-lg-block">
-                                                        <p class="m-0 mb-2 mb-lg-0 font-weight-bold label-name"><?= $arItem['NAME'] ?> <?= ($arItem['IS_REQUIRED'] == 'Y') ? ' * ' : '' ?></p>
+                                                        <p class="m-0 mb-2 mb-lg-0 font-weight-bold label-name">
+                                                            :<?= $arItem['NAME'] ?> <?= ($arItem['IS_REQUIRED'] == 'Y') ? ' * ' : '' ?>
+                                                        </p>
                                                     </div>
                                                 </div>
                                             <? } else { ?>
@@ -867,7 +867,9 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                                                                         <? } ?>
                                                                            data-id_prop="<?= $val['PROPERTY_ID'] ?>"
                                                                            data-id-self="<?= $val['ID'] ?>">
-                                                                    <label for="<?= $val['VALUE'] ?>"><?= $val['VALUE'] ?> <?= ($arItem['IS_REQUIRED'] == 'Y') ? '' : '' ?></label>
+                                                                    <label for="<?= $val['VALUE'] ?>">
+                                                                        <?= $val['VALUE'] ?> <?= ($arItem['IS_REQUIRED'] == 'Y') ? '' : '' ?>
+                                                                    </label>
                                                                 </div>
                                                                 <?
                                                             } ?>
@@ -896,8 +898,8 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                                                     </div>
 
                                                     <div class="col-2 d-lg-block">
-                                                        <p class="m-0 font-weight-bold"><?= $arItem['NAME'] ?>
-                                                            : <?= ($arItem['IS_REQUIRED'] == 'Y') ? '*' : '' ?></p>
+                                                        <p class="m-0 font-weight-bold">:<?=$arItem['NAME']?>
+                                                            <?= ($arItem['IS_REQUIRED'] == 'Y') ? '*' : '' ?></p>
                                                     </div>
 
                                                 </div>
@@ -920,8 +922,8 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                                                 </div>
 
                                                 <div class="d-lg-block col-2">
-                                                    <p class="m-0 font-weight-bold"><?= $arItem['NAME'] ?>
-                                                        : <?= ($arItem['IS_REQUIRED'] == 'Y') ? '*' : '' ?></p>
+                                                    <p class="m-0 font-weight-bold">:<?= $arItem['NAME'] ?>
+                                                        <?= ($arItem['IS_REQUIRED'] == 'Y') ? '*' : '' ?></p>
                                                 </div>
                                             </div>
                                             <?
@@ -1009,7 +1011,9 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                                                     </div>
                                                 </div>
                                                 <div class="col-12 col-lg-2 d-lg-block">
-                                                    <p class="m-0 mb-2 mb-lg-0 font-weight-bold label-name"><?= $arItem['NAME'] ?> <?= ($arItem['IS_REQUIRED'] == 'Y') ? ' * ' : '' ?></p>
+                                                    <p class="m-0 mb-2 mb-lg-0 font-weight-bold label-name">
+                                                        :<?= $arItem['NAME'] ?> <?= ($arItem['IS_REQUIRED'] == 'Y') ? ' * ' : '' ?>
+                                                    </p>
                                                 </div>
                                             </div>
                                         <? } elseif ($arItem['PROPERTY_TYPE'] == 'L') { ?>
@@ -1033,8 +1037,9 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                                                 </div>
 
                                                 <div class="mb-2 mb-lg-0 col col-lg-2 d-flex d-lg-block justify-content-end justify-content-lg-center">
-                                                    <p class="m-0 font-weight-bold"><?= $arItem['NAME'] ?>
-                                                        : <?= ($arItem['IS_REQUIRED'] == 'Y') ? '*' : '' ?></p>
+                                                    <p class="m-0 font-weight-bold">
+                                                        :<?= $arItem['NAME'] ?> <?= ($arItem['IS_REQUIRED'] == 'Y') ? '*' : '' ?>
+                                                    </p>
                                                 </div>
                                             </div>
                                         <? } else { ?>
@@ -1053,8 +1058,9 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                                                 </div>
 
                                                 <div class=" d-lg-block col-2">
-                                                    <p class="m-0 font-weight-bold"><?= $arItem['NAME'] ?>
-                                                        : <?= ($arItem['IS_REQUIRED'] == 'Y') ? '*' : '' ?></p>
+                                                    <p class="m-0 font-weight-bold">
+                                                        :<?= $arItem['NAME'] ?> <?= ($arItem['IS_REQUIRED'] == 'Y') ? '*' : '' ?>
+                                                    </p>
                                                 </div>
                                             </div>
                                         <? } ?>
@@ -1064,14 +1070,14 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                                     <div class="mb-4 row flex-column-reverse flex-lg-row">
                                         <div class="col col-lg-10">
                                             <div class="d-flex flex-row-reverse flex-wrap">
-        <textarea class="p-2 mr-2 mr-lg-3 w-100" name="Comment" id="autoStepThreeComment"
-                  placeholder="תתארו את הרכב שלכם בפרטי פרטים, כולל תוספות, יתרונות וחסרונות"  <?= ($arFields['PREVIEW_TEXT']) ? 'value="' . $arFields['PREVIEW_TEXT'] . '"' : '' ?> rows="4">
-            <?= $arFields['PREVIEW_TEXT'] ?>
-        </textarea>
+                                                <textarea class="p-2 mr-2 mr-lg-3 w-100" name="Comment" id="autoStepThreeComment"
+                                                          placeholder="תתארו את הרכב שלכם בפרטי פרטים, כולל תוספות, יתרונות וחסרונות"  <?= ($arFields['PREVIEW_TEXT']) ? 'value="' . $arFields['PREVIEW_TEXT'] . '"' : '' ?> rows="4">
+                                                    <?= $arFields['PREVIEW_TEXT'] ?>
+                                                </textarea>
                                             </div>
                                         </div>
                                         <div class="mb-2 mb-lg-0 col col-lg-2 d-flex d-lg-block justify-content-end justify-content-lg-center">
-                                            <p class="m-0 font-weight-bold"><?= Loc::getMessage('Comment (optional):'); ?></p>
+                                            <p class="m-0 font-weight-bold">:<?=Loc::getMessage('Comment (optional)'); ?></p>
                                         </div>
                                     </div>
                                 </div>
@@ -1382,7 +1388,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                                             </div>
 
                                             <div class="col-12 col-lg-2 d-flex justify-content-end align-items-center">
-                                                <p class="text-right mb-3 mb-lg-0 font-weight-bold"><?= Loc::getMessage('Call:'); ?></p>
+                                                <p class="text-right mb-3 mb-lg-0 font-weight-bold">:<?=Loc::getMessage('Call')?></p>
                                             </div>
                                         </div>
                                     </div>

@@ -209,7 +209,6 @@ ps($arProps);
         <h2 class="mb-5 d-flex justify-content-end subtitle t">
             <?= Loc::getMessage('submit your ad'); ?>
         </h2>
-
         <div class="card">
             <div class="propert-sell-main">
                 <div id="wizard">
@@ -563,7 +562,7 @@ ps($arProps);
                                                 <? if ($item['UF_NAME'] != ''){ ?>
                                                 <? if ($count == 7) { ?>
                                                 <select data-req="Y" class="mr-3 custom-select" id="dateSelectSelector"
-                                                        name="Year of issue">
+                                                        name="Year of issue" onchange="resetActiveYears()">
                                                     <option value="no-value">Older</option>
                                                     <? } ?>
                                                     <? if ($count >= 7) { ?>
@@ -578,7 +577,7 @@ ps($arProps);
                                                                    data-id_prop="PROP_YAERH"
                                                                    name="Year of issue"
                                                             >
-                                                            <label for="carYear<?= $item['UF_NAME'] ?>"><?= $item['UF_NAME'] ?>  </label>
+                                                            <label for="carYear<?= $item['UF_NAME'] ?>"><?=$item['UF_NAME']?></label>
                                                         </div>
                                                     <? } ?>
                                                     <? $count++; ?>
@@ -602,8 +601,7 @@ ps($arProps);
                                         </div>
 
                                         <div class=" d-lg-block col-2">
-                                            <p class="m-0 font-weight-bold"><?= Loc::getMessage('Year of issue'); ?>
-                                                *</p>
+                                            <p class="m-0 font-weight-bold"><?=Loc::getMessage('Year of issue')?>*</p>
                                         </div>
                                     </div>
 
@@ -615,12 +613,12 @@ ps($arProps);
                                                        data-id_prop="PROP_MODIFICATION"
                                                        class="form-control"
                                                     <?= ($arProps["PROP_MODIFICATION"]['VALUE']) ? 'value="' . $arProps["PROP_MODIFICATION"]['VALUE'] . '"' : '' ?>
-                                                       placeholder="Modification (optional):">
+                                                       placeholder="<?=Loc::getMessage('modificationPlaceholder')?>">
                                             </div>
                                         </div>
 
                                         <div class="d-none d-lg-block col-2">
-                                            <p class="m-0 font-weight-bold"><?= Loc::getMessage('Modification (optional):'); ?>
+                                            <p class="m-0 font-weight-bold">:<?=Loc::getMessage('modification')?>
                                             </p>
                                         </div>
                                     </div>
@@ -660,7 +658,7 @@ ps($arProps);
                                         </div>
 
                                         <div class=" d-lg-block col-2">
-                                            <p class="m-0 font-weight-bold"><?= Loc::getMessage('Body type:'); ?> *</p>
+                                            <p class="m-0 font-weight-bold">:<?= Loc::getMessage('Body type')?> *</p>
                                         </div>
                                     </div>
 
@@ -724,7 +722,7 @@ ps($arProps);
                                         </div>
 
                                         <div class="col-2 d-none d-lg-block">
-                                            <p class="m-0 font-weight-bold"><?= Loc::getMessage('Colour:'); ?> *</p>
+                                            <p class="m-0 font-weight-bold">:<?=Loc::getMessage('Colour'); ?> *</p>
                                         </div>
                                     </div>
 
@@ -754,7 +752,7 @@ ps($arProps);
                                                                            name="prop<?= $arItem['CODE'] ?>"
                                                                            data-id_prop="<?= $val['PROPERTY_ID'] ?>"
                                                                            data-id-self="<?= $val['ID'] ?>">
-                                                                    <label for="<?= $val['VALUE'] ?>"><?= $val['VALUE'] ?> </label>
+                                                                    <label for="<?= $val['VALUE'] ?>">:<?= $val['VALUE'] ?> </label>
                                                                 </div>
                                                                 <?
                                                             } ?>
@@ -783,8 +781,8 @@ ps($arProps);
                                                         </div>
                                                     </div>
                                                     <div class="col-2  d-lg-block">
-                                                        <p class="m-0 font-weight-bold"><?= $arItem['NAME'] ?>
-                                                            : <?= ($arItem['IS_REQUIRED'] == 'Y') ? '*' : '' ?></p>
+                                                        <p class="m-0 font-weight-bold">:<?= $arItem['NAME'] ?>
+                                                            <?=$arItem['IS_REQUIRED'] == 'Y' ? '*' : '' ?></p>
                                                     </div>
                                                 </div>
                                                 <?
@@ -811,7 +809,6 @@ ps($arProps);
                                                                     <option <? if (!$_GET['EDIT']){ ?>selected<? } ?>
                                                                             value="Nothing selected"></option>
                                                                 </select>
-
                                                                 <div class="dropdown-menu ">
                                                                     <div class="inner show" role="listbox"
                                                                          id="bs-select-22" tabindex="-1">
@@ -825,7 +822,9 @@ ps($arProps);
                                                         </div>
                                                     </div>
                                                     <div class="d-lg-block col-2">
-                                                        <p class="m-0 mb-2 mb-lg-0 font-weight-bold label-name"><?= $arItem['NAME'] ?> <?= ($arItem['IS_REQUIRED'] == 'Y') ? ' * ' : '' ?></p>
+                                                        <p class="m-0 mb-2 mb-lg-0 font-weight-bold label-name">
+                                                            :<?= $arItem['NAME'] ?> <?= ($arItem['IS_REQUIRED'] == 'Y') ? ' * ' : '' ?>
+                                                        </p>
                                                     </div>
                                                 </div>
                                             <? } else { ?>
@@ -874,8 +873,8 @@ ps($arProps);
                                                     </div>
 
                                                     <div class="col-2 d-lg-block">
-                                                        <p class="m-0 font-weight-bold"><?= $arItem['NAME'] ?>
-                                                            : <?= ($arItem['IS_REQUIRED'] == 'Y') ? '*' : '' ?></p>
+                                                        <p class="m-0 font-weight-bold">:<?=$arItem['NAME']?>
+                                                            <?= ($arItem['IS_REQUIRED'] == 'Y') ? '*' : '' ?></p>
                                                     </div>
 
                                                 </div>
@@ -897,8 +896,8 @@ ps($arProps);
                                                 </div>
 
                                                 <div class="d-lg-block col-2">
-                                                    <p class="m-0 font-weight-bold"><?= $arItem['NAME'] ?>
-                                                        : <?= ($arItem['IS_REQUIRED'] == 'Y') ? '*' : '' ?></p>
+                                                    <p class="m-0 font-weight-bold">:<?= $arItem['NAME'] ?>
+                                                        <?= ($arItem['IS_REQUIRED'] == 'Y') ? '*' : '' ?></p>
                                                 </div>
                                             </div>
                                             <?
@@ -914,8 +913,6 @@ ps($arProps);
                                     <h2 class="mb-4 d-none d-lg-block text-center text-uppercase font-weight-bolder auto-step2__title">
                                         <?= Loc::getMessage('Detailed description'); ?>
                                     </h2>
-                                    <h2 class="mb-4 d-block d-lg-none text-center text-uppercase font-weight-bolder auto-step2__title">
-                                        <?= Loc::getMessage('Specifications'); ?></h2>
                                     <?
                                     $idsProp = [];
                                     foreach ($prop_fields as $field) {
@@ -987,7 +984,7 @@ ps($arProps);
                                                     </div>
                                                 </div>
                                                 <div class="col-12 col-lg-2 d-lg-block">
-                                                    <p class="m-0 mb-2 mb-lg-0 font-weight-bold label-name"><?= $arItem['NAME'] ?> <?= ($arItem['IS_REQUIRED'] == 'Y') ? ' * ' : '' ?></p>
+                                                    <p class="m-0 mb-2 mb-lg-0 font-weight-bold label-name">:<?=$arItem['NAME']?> <?= ($arItem['IS_REQUIRED'] == 'Y') ? ' * ' : '' ?></p>
                                                 </div>
                                             </div>
                                         <? } elseif ($arItem['PROPERTY_TYPE'] == 'L') { ?>
@@ -1011,8 +1008,8 @@ ps($arProps);
                                                 </div>
 
                                                 <div class="mb-2 mb-lg-0 col col-lg-2 d-flex d-lg-block justify-content-end justify-content-lg-center">
-                                                    <p class="m-0 font-weight-bold"><?= $arItem['NAME'] ?>
-                                                        : <?= ($arItem['IS_REQUIRED'] == 'Y') ? '*' : '' ?></p>
+                                                    <p class="m-0 font-weight-bold">:<?= $arItem['NAME'] ?>
+                                                        <?= ($arItem['IS_REQUIRED'] == 'Y') ? '*' : '' ?></p>
                                                 </div>
                                             </div>
                                         <? } else { ?>
@@ -1031,8 +1028,8 @@ ps($arProps);
                                                 </div>
 
                                                 <div class=" d-lg-block col-2">
-                                                    <p class="m-0 font-weight-bold"><?= $arItem['NAME'] ?>
-                                                        : <?= ($arItem['IS_REQUIRED'] == 'Y') ? '*' : '' ?></p>
+                                                    <p class="m-0 font-weight-bold">:<?= $arItem['NAME'] ?>
+                                                        <?= ($arItem['IS_REQUIRED'] == 'Y') ? '*' : '' ?></p>
                                                 </div>
                                             </div>
                                         <? } ?>
@@ -1042,14 +1039,14 @@ ps($arProps);
                                     <div class="mb-4 row __colum-reverse flex-lg-row">
                                         <div class="col col-lg-10">
                                             <div class="d-flex flex-row-reverse flex-wrap">
-        <textarea class="p-2 mr-2 mr-lg-3 w-100" name="Comment" id="autoStepThreeComment"
-                  placeholder="תתארו את הרכב שלכם בפרטי פרטים, כולל תוספות, יתרונות וחסרונות"  <?= ($arFields['PREVIEW_TEXT']) ? 'value="' . $arFields['PREVIEW_TEXT'] . '"' : '' ?> rows="4">
-            <?= $arFields['PREVIEW_TEXT'] ?>
-        </textarea>
+                                                <textarea class="p-2 mr-2 mr-lg-3 w-100" name="Comment" id="autoStepThreeComment"
+                                                          placeholder="תתארו את הרכב שלכם בפרטי פרטים, כולל תוספות, יתרונות וחסרונות"  <?= ($arFields['PREVIEW_TEXT']) ? 'value="' . $arFields['PREVIEW_TEXT'] . '"' : '' ?> rows="4">
+                                                    <?= $arFields['PREVIEW_TEXT'] ?>
+                                                </textarea>
                                             </div>
                                         </div>
                                         <div class="mb-2 mb-lg-0 col col-lg-2 d-flex d-lg-block justify-content-end justify-content-lg-center">
-                                            <p class="m-0 font-weight-bold"><?= Loc::getMessage('Comment (optional):'); ?></p>
+                                            <p class="m-0 font-weight-bold">:<?=Loc::getMessage('Comment (optional)')?></p>
                                         </div>
                                     </div>
                                 </div>
@@ -1057,8 +1054,8 @@ ps($arProps);
                             <div class="wizard-content" data-wizard-content="5">
                                 <div class="auto-ad-step4">
                                     <h2 class="mb-4 text-center text-uppercase font-weight-bolder auto-step2__title">
-                                        <?= Loc::getMessage('Choose a price'); ?></h2>
-
+                                        <?= Loc::getMessage('Choose a price')?>
+                                    </h2>
                                     <div class="d-flex flex-column flex-lg-row justify-content-center align-items-center">
                                         <div class="d-flex mb-4 mb-lg-0">
                                             <div class="mr-3 d-flex justify-content-center align-items-center">
@@ -1361,7 +1358,7 @@ ps($arProps);
                                             </div>
 
                                             <div class="col-12 col-lg-2 d-flex justify-content-end align-items-center">
-                                                <p class="text-right mb-3 mb-lg-0 font-weight-bold"><?= Loc::getMessage('Call:'); ?></p>
+                                                <p class="text-right mb-3 mb-lg-0 font-weight-bold">:<?=Loc::getMessage('Call')?></p>
                                             </div>
                                         </div>
                                     </div>

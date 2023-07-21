@@ -72,3 +72,6 @@ $MESS ['photoMain'] = "ראשי";
 $MESS ['setPhotoMain'] = "קבע כראשי";
 $MESS ['deletePhoto'] = "מחק";
 $MESS ['rotatePhoto'] = "סובב";
+// Заголовки полей
+$MESS ['titleLabel'] = "כותרת";
+$MESS ['phoneLabel'] = "טלפון";
