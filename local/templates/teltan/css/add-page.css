@@ -13,10 +13,27 @@
   }
   .__colum-reverse .d-lg-flex{
     display: flex;
+    flex-wrap: wrap;
+    gap: 10px 5px;
+  }
+
+  .__colum-reverse .d-lg-flex .custom-select{
+    margin-right: 0;
   }
 
   .__colum-reverse .d-lg-block{
     margin-bottom: 10px;
   }
 
+  .auto-ad-step2-3 .__colum-reverse .form_radio_btn label{
+    padding: 0 10px !important;
+  }
+
+  .__colum-reverse .form_radio_btn{
+    margin: 0 0 0.5rem 0 !important;
+  }
+
+  .dependens-dropdon button{
+    width: 157px !important;
+  }
 }
