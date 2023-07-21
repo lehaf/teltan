@@ -25,7 +25,7 @@ if(isset($_POST) && !empty($_POST) && check_bitrix_sessid()) {
         if($curEmail != $user_email)
         {
             $error['TYPE'] = 'ERROR';
-            $strError .= 'Для подтверждения смены e-mail вам на почту было отправлено уведомление';
+            $strError = 'שלחנו הודעה לדואר אלקטרוני שלך כדי לאשר את הפעולה';
             $arEventFields = array(
                 "EMAIL"  => $curEmail,
                 "URL" => 'http://650739-cm41399.tmweb.ru/personal/edit/?update_email=Y&email='.$user_email.'&str='.md5('54h7ghrt'.$USER->GetID().$user_email),

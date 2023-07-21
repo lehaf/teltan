@@ -1,4 +1,4 @@
-<?
+<?php
 $MESS["TODAY"] = "today";
 $MESS["YESTERDAY"] = "Yesterday";
 $MESS['SELLER'] = 'seller';
@@ -51,5 +51,6 @@ $MESS['sended'] = 'Message sent';
 
 $MESS['error_ajax'] = 'insufficient funds';
 $MESS['type_item'] = 'Choose type:';
-?>
+$MESS['textareaPlaceholder'] = "Text message";
+$MESS['modalCloseBtn'] = "Close";
 

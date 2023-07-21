@@ -1,4 +1,4 @@
-<?
+<?php
 $MESS["TODAY"] = "Сегодня";
 $MESS["YESTERDAY"] = "Вчера";
 $MESS['SELLER'] = 'Продавец';
@@ -50,5 +50,6 @@ $MESS['sended'] = 'Сообщение отправленно';
 
 $MESS['error_ajax'] = 'недостаточно средств';
 $MESS['type_item'] = 'Выберите тип:';
-?>
+$MESS['textareaPlaceholder'] = "Текст сообщения";
+$MESS['modalCloseBtn'] = "Закрыть";
 

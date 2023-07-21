@@ -1,6 +1,5 @@
-<?
-$sSectionName = "favorites";
+<?php
+$sSectionName = "אהוב עליי";
 $arDirProperties = Array(
-   "title" => "favorites"
+   "title" => "אהוב עליי"
 );
-?>

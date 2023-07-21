@@ -951,16 +951,13 @@ if ($_GET['TEST'] == 'Y') { ?>
                 <div class="mb-5 card mainCardMobile">
                     <div class="about-auto">
                         <div class="mb-4 text-right seller-comment">
-                            <? if (!empty($arResult['~PREVIEW_TEXT']) && (int)strlen(trim($arResult['~PREVIEW_TEXT'])) > 0) { ?>
-                                <h4 class="mb-5 font-weight-bold text-uppercase">Seller comment</h4>
-
-                                <p>
-                                    <?= $arResult['~PREVIEW_TEXT']; ?>
-                                </p>
+                            <? if (!empty($arResult['PREVIEW_TEXT'])) { ?>
+                                <h4 class="mb-5 font-weight-bold text-uppercase"><?=Loc::getMessage('sellerComment')?></h4>
+                                <p><?= $arResult['PREVIEW_TEXT']; ?></p>
                             <? } ?>
                         </div>
 
-                        <h5 class="mb-4 text-right font-weight-bolder text-uppercase">Equipment</h5>
+                        <h5 class="mb-4 text-right font-weight-bolder text-uppercase"><?=Loc::getMessage('equipment')?></h5>
                         <? foreach ($arResult['PROPERTIES'] as $PROPERTY) {
                             if ($PROPERTY['MULTIPLE'] == 'Y' && $PROPERTY['ID'] != '53' && $PROPERTY['CODE'] != 'PHOTOS' && $PROPERTY['VALUE'] != null && strpos($PROPERTY['CODE'], "_Left") === false) {
                                 ?>
@@ -2895,7 +2892,7 @@ if ($_GET['TEST'] == 'Y') { ?>
                 <div class="about-auto">
                     <div class="mb-4 text-right seller-comment">
                         <? if (!empty($arResult['~PREVIEW_TEXT']) && (int)strlen(trim($arResult['~PREVIEW_TEXT'])) > 0) { ?>
-                            <h4 class="mb-5 font-weight-bold text-uppercase">Seller comment</h4>
+                            <h4 class="mb-5 font-weight-bold text-uppercase"><?=Loc::getMessage('sellerComment')?></h4>
 
                             <p>
                                 <?= $arResult['~PREVIEW_TEXT']; ?>
@@ -2911,7 +2908,7 @@ if ($_GET['TEST'] == 'Y') { ?>
                     }
                     if ($count > 0){
                         ?>
-                        <h5 class="mb-4 text-right font-weight-bolder text-uppercase">Equipment</h5>
+                        <h5 class="mb-4 text-right font-weight-bolder text-uppercase"><?=Loc::getMessage('equipment')?></h5>
                         <?
                     }
                     unset($count);
@@ -3110,7 +3107,7 @@ if ($_GET['TEST'] == 'Y') { ?>
                     <?= bitrix_sessid_post() ?>
                     <input type="hidden" value="<?= $arResult['ID']; ?>" name="IDAd" id="idAd">
                     <textarea name="message" class="mb-4 form-control" id="messageContent" rows="5"
-                              placeholder="Text message" required></textarea>
+                              placeholder="<?=Loc::getMessage('textareaPlaceholder')?>" required></textarea>
 
                     <!-- BOX add upload file -->
                     <div id="fileUploaderRenderMessageContainer"
@@ -3128,7 +3125,7 @@ if ($_GET['TEST'] == 'Y') { ?>
                         <!-- BUTTON add upload file END-->
 
                         <div>
-                            <button type="button" class="btn btn-transparent" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-transparent" data-dismiss="modal"><?=Loc::getMessage('modalCloseBtn')?></button>
                             <button type="submit"
                                     class="py-2 px-4 btn btn-primary btn-rm-data"><?= Loc::getMessage('SEND_MESSAGE'); ?></button>
                         </div>

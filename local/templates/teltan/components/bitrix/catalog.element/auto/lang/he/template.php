@@ -1,4 +1,4 @@
-<?
+<?php
 $MESS["TODAY"] = "Сегодня";
 $MESS["YESTERDAY"] = "Вчера";
 $MESS['SELLER'] = 'המוכר';
@@ -52,5 +52,9 @@ $MESS['sended'] = 'הודעה נשלחה';
 
 $MESS['error_ajax'] = 'אין מספיק כספים';
 $MESS['type_item'] = 'בחר סוג:';
-?>
+$MESS['sellerComment'] = "מידע ממוכר";
+$MESS['equipment'] = "ציוד";
+$MESS['textareaPlaceholder'] = "טקסט ההודעה";
+$MESS['modalCloseBtn'] = "סגור";
+
 

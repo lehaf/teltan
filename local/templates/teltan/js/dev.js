@@ -295,7 +295,7 @@ $(document).ready(function () {
             success: function (msg) {
                 if (msg['TYPE'] == "ERROR") {
                     $('span.error_auth_mess').empty().append(msg['MESSAGE']);
-                    $('.allert__text').html('успешно изменено </br>' + msg['MESSAGE']);
+                    $('.allert__text').html('השינויים התבצעו בהצלחה  </br>' + msg['MESSAGE']);
 
                     $('.del_all_in_chat').html('ok');
                     $('.alert-confirmation').addClass('show');
@@ -331,7 +331,7 @@ $(document).ready(function () {
                 }
                 if (msg['TYPE'] == "OK") {
                     $('.pop-up').addClass('active');
-                    $('.pop-up__text').html('Your password has been successfully changed');
+                    $('.pop-up__text').html('שינוי הסיסמה יתבצע בהצלחה');
                 }
 
             }

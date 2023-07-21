@@ -79,7 +79,9 @@ if(!$user)
                 </button>
                 <div class="d-flex justify-content-center allert__text"></div>
                 <div class="d-flex justify-content-center mt-4">
-                    <button onclick="window.location.reload();" class="btn_confirm btn border-primary text-uppercase font-weight-bold text-primary py-3 px-5">ok</button>
+                    <button onclick="window.location.reload();" class="btn_confirm btn border-primary text-uppercase font-weight-bold text-primary py-3 px-5">
+                        <?=Loc::getMessage('ok')?>
+                    </button>
                 </div>
             </div>
                         <?include $_SERVER['DOCUMENT_ROOT'].'/personal/left.php'?>
