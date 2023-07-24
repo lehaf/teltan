@@ -2,6 +2,9 @@
 $APPLICATION->SetTitle("Добавить объявление");
 
 use Bitrix\Main\Localization\Loc;
+use Bitrix\Main\Page\Asset;
+
+Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . "/css/add-page.css");
 
 Loc::loadMessages(__FILE__);
 global $arSetting;
