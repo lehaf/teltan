@@ -1,11 +1,9 @@
-<?
-require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
+<?php require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
+
 use Bitrix\Main\Localization\Loc;
 
-Loc::loadMessages(__FILE__);
 $APPLICATION->SetPageProperty("title", "Teltan");
-
-$APPLICATION->SetTitle("Главная страница");
+$APPLICATION->SetTitle("Teltan - main");
 ?>
         <div class="container-fluid mb-4 mb-lg-5">
             <div class="container">
@@ -120,7 +118,7 @@ $APPLICATION->SetTitle("Главная страница");
                             "AJAX_OPTION_HISTORY" => "N",
                             "AJAX_OPTION_JUMP" => "N",
                             "AJAX_OPTION_STYLE" => "N",
-                            "CACHE_FILTER" => "N",
+                            "CACHE_FILTER" => "Y",
                             "CACHE_GROUPS" => "N",
                             "CACHE_TIME" => "360",
                             "CACHE_TYPE" => "A",
@@ -187,7 +185,7 @@ $APPLICATION->SetTitle("Главная страница");
                             "AJAX_OPTION_HISTORY" => "N",
                             "AJAX_OPTION_JUMP" => "N",
                             "AJAX_OPTION_STYLE" => "N",
-                            "CACHE_FILTER" => "N",
+                            "CACHE_FILTER" => "Y",
                             "CACHE_GROUPS" => "N",
                             "CACHE_TIME" => "360",
                             "CACHE_TYPE" => "A",
@@ -259,7 +257,7 @@ $APPLICATION->SetTitle("Главная страница");
                             "AJAX_OPTION_HISTORY" => "N",
                             "AJAX_OPTION_JUMP" => "N",
                             "AJAX_OPTION_STYLE" => "N",
-                            "CACHE_FILTER" => "N",
+                            "CACHE_FILTER" => "Y",
                             "CACHE_GROUPS" => "N",
                             "CACHE_TIME" => "360",
                             "CACHE_TYPE" => "A",
@@ -326,7 +324,7 @@ $APPLICATION->SetTitle("Главная страница");
                             "AJAX_OPTION_HISTORY" => "N",
                             "AJAX_OPTION_JUMP" => "N",
                             "AJAX_OPTION_STYLE" => "N",
-                            "CACHE_FILTER" => "N",
+                            "CACHE_FILTER" => "Y",
                             "CACHE_GROUPS" => "N",
                             "CACHE_TIME" => "360",
                             "CACHE_TYPE" => "A",
@@ -400,7 +398,7 @@ $APPLICATION->SetTitle("Главная страница");
                             "AJAX_OPTION_HISTORY" => "N",
                             "AJAX_OPTION_JUMP" => "N",
                             "AJAX_OPTION_STYLE" => "N",
-                            "CACHE_FILTER" => "N",
+                            "CACHE_FILTER" => "Y",
                             "CACHE_GROUPS" => "N",
                             "CACHE_TIME" => "360",
                             "CACHE_TYPE" => "A",
@@ -467,7 +465,7 @@ $APPLICATION->SetTitle("Главная страница");
                             "AJAX_OPTION_HISTORY" => "N",
                             "AJAX_OPTION_JUMP" => "N",
                             "AJAX_OPTION_STYLE" => "N",
-                            "CACHE_FILTER" => "N",
+                            "CACHE_FILTER" => "Y",
                             "CACHE_GROUPS" => "N",
                             "CACHE_TIME" => "360",
                             "CACHE_TYPE" => "A",
@@ -542,7 +540,7 @@ $APPLICATION->SetTitle("Главная страница");
                             "AJAX_OPTION_HISTORY" => "N",
                             "AJAX_OPTION_JUMP" => "N",
                             "AJAX_OPTION_STYLE" => "N",
-                            "CACHE_FILTER" => "N",
+                            "CACHE_FILTER" => "Y",
                             "CACHE_GROUPS" => "N",
                             "CACHE_TIME" => "360",
                             "CACHE_TYPE" => "A",
@@ -609,7 +607,7 @@ $APPLICATION->SetTitle("Главная страница");
                             "AJAX_OPTION_HISTORY" => "N",
                             "AJAX_OPTION_JUMP" => "N",
                             "AJAX_OPTION_STYLE" => "N",
-                            "CACHE_FILTER" => "N",
+                            "CACHE_FILTER" => "Y",
                             "CACHE_GROUPS" => "N",
                             "CACHE_TIME" => "360",
                             "CACHE_TYPE" => "A",
@@ -682,7 +680,7 @@ $APPLICATION->SetTitle("Главная страница");
                             "AJAX_OPTION_HISTORY" => "N",
                             "AJAX_OPTION_JUMP" => "N",
                             "AJAX_OPTION_STYLE" => "N",
-                            "CACHE_FILTER" => "N",
+                            "CACHE_FILTER" => "Y",
                             "CACHE_GROUPS" => "N",
                             "CACHE_TIME" => "360",
                             "CACHE_TYPE" => "A",
@@ -749,7 +747,7 @@ $APPLICATION->SetTitle("Главная страница");
                             "AJAX_OPTION_HISTORY" => "N",
                             "AJAX_OPTION_JUMP" => "N",
                             "AJAX_OPTION_STYLE" => "N",
-                            "CACHE_FILTER" => "N",
+                            "CACHE_FILTER" => "Y",
                             "CACHE_GROUPS" => "N",
                             "CACHE_TIME" => "360",
                             "CACHE_TYPE" => "A",
