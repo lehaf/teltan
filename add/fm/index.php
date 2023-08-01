@@ -172,7 +172,7 @@ ps($arProp);
                 </div>
 
                 <div class="mb-2 row flex-column-reverse flex-lg-row property-step-contact__time">
-                    <div class="d-lg-flex col-3 btn-time">
+                    <div class="d-lg-flex col-3 btn-time col-lg-2">
                         <div style="max-width: none" class="form_radio_btn">
                             <input <?= ($arProps['UF_CALL_ANYTIME']['VALUE'] == '1') ? 'checked' : '' ?>
                                     id="anytime"
@@ -184,9 +184,9 @@ ps($arProp);
                         </div>
                     </div>
 
-                    <div class="col-12 col-lg-6 ">
+                    <div class="col-12 col-lg-8">
                         <div class="row row-select-time">
-                            <div class="col">
+                            <div class="col _mobile-g">
                                 <select id="callTo" class="selectpicker"
                                         data-style-base="form-control form-control-select" data-style="">
                                     <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '00:00') ? 'selected' : '' ?>
@@ -239,7 +239,7 @@ ps($arProp);
                                             value="23"><?= Loc::getMessage('to'); ?> <span>23:00</span></option>
                                 </select>
                             </div>
-                            <div class="col">
+                            <div class="col _mobile-g">
                                 <select id="callFrom" class="selectpicker"
                                         data-style-base="form-control form-control-select" data-style="">
                                     <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '00:00') ? 'selected' : '' ?>
@@ -343,7 +343,7 @@ ps($arProp);
                     if ($prop['PROPERTY_TYPE'] == 'L') {
                         if ($arLink[$prop['ID']]['DISPLAY_TYPE'] == 'P') {
                             ?>
-                            <div class="mb-4 row flex-column-reverse flex-lg-row">
+                            <div class="mb-4 row flex-column-reverse flex-lg-row _dropdown-block">
                                 <div class="col col-lg-10">
                                     <div class="d-flex justify-content-end">
                                         <?if ($id){drawElement($arProp[$id] , $arLink ,$arProps);}?>
@@ -385,7 +385,7 @@ ps($arProp);
 
                         } else {
                             ?>
-                            <div class="mb-4 row flex-column-reverse flex-lg-row">
+                            <div class="mb-4 row flex-column-reverse flex-lg-row _radio-btn">
                                 <div class="col col-lg-10">
                                     <div class="d-flex flex-wrap justify-content-end <?= ($prop['IS_REQUIRED'] == 'Y') ? 'div-req' : '' ?>">
                                         <?if ($id){drawElement($arProp[$id] , $arLink ,$arProps);}?>

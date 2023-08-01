@@ -45,7 +45,7 @@ Loc::loadMessages(__FILE__);
     </script>
 <div class="form-group row flex-column-reverse flex-lg-row">
     <div class="col col-lg-10 d-flex justify-content-end">
-        <div class="dependens-dropdon">
+        <div class="dependens-dropdon d-flex gap-1 w-100">
 
             <div class="dependens-dropdon-block dependens-dropdon-after">
                 <button type="button" class="dep-select second-drop"><?= ($arParams['PROPS']['UF_CITY']['VALUE'] != '' || $arParams['PROPS']['UF_REGION']['VALUE'] != '')? $arParams['PROPS']['UF_CITY']['VALUE']: Loc::getMessage('City'); ?></button>

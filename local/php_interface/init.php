@@ -869,7 +869,7 @@ function drawElement($arItem, $arLink, $arProps)
         if ($arItem['MULTIPLE'] == 'Y' && $arItem['ID'] != 32 && $arItem['ID'] != 167) {
             ?>
             <div class="additional">
-                <div class="fl-right d-lg-flex <?= ($arItem['IS_REQUIRED'] == 'Y') ? 'div-req' : '' ?> justify-content-end">
+                <div class="flex-wrap fl-right d-lg-flex <?= ($arItem['IS_REQUIRED'] == 'Y') ? 'div-req' : '' ?> justify-content-end">
                     <? foreach ($arItem['PROP_ENUM_VAL'] as $val) { ?>
                         <div class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn">
                             <input data-req="<?= $arItem['IS_REQUIRED'] ?>"

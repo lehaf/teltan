@@ -1,3 +1,85 @@
+.user-add-item .property-step-contact__time .dropdown.bootstrap-select{
+  width: 100% !important;
+  margin-left: 0;
+}
+
+.user-add-item ._dropdown-block .dropdown.bootstrap-select{
+  width: 100% !important;
+  margin: 0;
+}
+
+.user-add-item .property-step-contact__time .form_radio_btn label{
+  margin-left: 0;
+  width: 100%;
+}
+
+.user-add-item ._radio-btn .form_radio_btn label{
+  margin: 0;
+  width: 100%;
+}
+
+.user-add-item ._radio-btn .form_radio_btn{
+ flex-grow: 1;
+}
+
+.user-add-item ._radio-btn .form_radio_btn label{
+  margin: 0;
+}
+
+.user-add-item ._radio-btn .div-req{
+  gap: 10px;
+}
+
+.wizard-content .div-req{
+  gap: 10px;
+}
+
+.wizard-content .form_radio_btn{
+  margin: 0 !important;
+}
+
+.user-add-item .dependens-dropdon{
+  width: 100%;
+  gap: 10px;
+}
+
+.dependens-dropdon-block.dependens-dropdon-after{
+  flex-grow: 1;
+}
+
+.dependens-dropdon-block.dependens-dropdon-after button{
+  width: 100% !important;
+  min-width: initial;
+  max-width: initial;
+  margin: 0;
+}
+
+.gap-1{
+  gap: 10px;
+}
+
+.auto-ad-step3 .dropdown{
+  margin: 0 !important;
+  padding-right: 0!important;
+}
+
+.auto-ad-step3 textarea{
+  margin-right: 0!important;
+}
+
+.auto-ad-step3 .additional > div{
+  gap: 10px;
+}
+
+.auto-ad-step2-3 .body-type-car .form_radio_btn label,
+.auto-ad-step2-3 .body-type-car .show-more-types{
+  width: 100% !important;
+}
+
+._car__item{
+  width: calc(50% - 5px);
+}
+
 @media (max-width: 768px){
   .__colum-reverse{
     flex-direction: column-reverse;
@@ -35,5 +117,23 @@
 
   .dependens-dropdon button{
     width: 157px !important;
+  }
+
+  ._mobile-g{
+    flex-grow: 1;
+  }
+
+  .row-select-time ._mobile-g {
+    flex-grow: 1 !important;
+  }
+
+  ._car__item .auto-ad-step2-3 .form_radio_btn label{
+   height: 120px !important;
+  }
+}
+
+@media (min-width: 790px) {
+  .auto-step2 .row.m_15{
+    margin: 0 -15px;
   }
 }
