@@ -408,7 +408,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                         <?= Loc::getMessage('Choose a brand'); ?></h2>
 
                                     <div id="brandFilter">
-                                        <div class="mb-4 d-flex justify-content-center align-items-center brand-filter">
+                                        <div class="mb-4 d-flex justify-content-center align-items-center brand-filter gap-1">
                                             <div class="mr-3 form_radio_btn">
                                                 <input id="popularCar" type="radio" name="category" value="popular">
                                                 <label for="popularCar"><?= Loc::getMessage('Popular'); ?></label>
@@ -426,7 +426,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                         </div>
                                     </div>
 
-                                    <div class="mb-4 mb-lg-5 row row-cols-lg-5 wrapper-brand-items div-req">
+                                    <div class="mb-4 mb-lg-5 row row-cols-lg-5 wrapper-brand-items m_15">
                                         <?
                                         $res = CIBlockSection::GetList(
                                             array('sort' => 'asc'),
@@ -489,7 +489,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                                    placeholder="חפש מותג. למשל פולקסווגן">
                                         </div>
                                     </div>
-                                    <div id="row-cols-lg-6" class="mb-4 additional mb-lg-5 row row-cols-lg-6 div-req">
+                                    <div id="row-cols-lg-6" class="mb-4 additional mb-lg-5 row row-cols-lg-6 m_15">
 
                                         <? foreach ($arSubSections as $arItem) { ?>
                                             <? if ($arItem['CODE'] != '') { ?>
@@ -636,10 +636,10 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                         <div class="col-12 col-lg-10">
                                             <? if (!$detect->isMobile()) { ?>
                                                 <div id="bodyTypesCar"
-                                                     class="row row-cols-3 d-lg-flex flex-wrap flex-row-reverse justify-content-between body-type-car div-req <?= ($prop_field[3]['IS_REQUIRED'] == 'Y') ? 'div-req' : '' ?> ">
+                                                     class="d-lg-flex flex-wrap flex-row-reverse justify-content-between body-type-car div-req <?= ($prop_field[3]['IS_REQUIRED'] == 'Y') ? 'div-req' : '' ?> ">
                                                     <? foreach ($elTipkuzova as $key => $arItem) { ?>
                                                         <? if (!empty($arItem['UF_NAME'])) { ?>
-                                                            <div class="col form_radio_btn mb-4 <?= ($key > ADD_AUTO_BODY_TYPES_SHOW_COUNT) ? 'show-additionally' : '' ?>">
+                                                            <div class="form_radio_btn mb-4 <?= ($key > ADD_AUTO_BODY_TYPES_SHOW_COUNT) ? 'show-additionally' : '' ?> _car__item">
                                                                 <input data-id_prop="PROP_BODY_TYPE"
                                                                     <?= ($arProps["PROP_BODY_TYPE"]['VALUE'] == $arItem['UF_XML_ID']) ? 'checked' : '' ?>
                                                                        data-id-self="<?= $arItem['UF_XML_ID'] ?>"
@@ -651,7 +651,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                                                 </label>
                                                             </div>
                                                             <? if ($key == ADD_AUTO_BODY_TYPES_SHOW_COUNT && count($elTipkuzova) > ADD_AUTO_BODY_TYPES_SHOW_COUNT) { ?>
-                                                                <div class="col" id="btnShowMoreBodyTypes">
+                                                                <div id="btnShowMoreBodyTypes" class="_car__item">
                                                                     <a type="button"
                                                                        class="rounded border show-more-types">
                                                                         <span class="font-weight-bold">Show all</span>
@@ -748,7 +748,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                             <? if ($arItem['MULTIPLE'] == 'Y' && $arItem['ID'] != 32 && $arItem['ID'] != 167) {?>
                                                 <div class="mb-4 row __colum-reverse flex-lg-row select-w-100">
                                                     <div class="col col-lg-10">
-                                                        <div  style="flex-wrap: wrap;" class="fl-right d-lg-flex <?= ($arItem['IS_REQUIRED'] == 'Y') ? 'div-req' : '' ?> justify-content-end">
+                                                        <div  style="flex-wrap: wrap;" class="fl-right d-lg-flex <?= ($arItem['IS_REQUIRED'] == 'Y') ? 'div-req' : '' ?> justify-content-end gap-1">
                                                             <?if ($id){foreach ($id as $ids){drawElement($arProp[$ids] , $arLink ,$arProps);}}?>
                                                             <? foreach ($arItem['PROP_ENUM_VAL'] as $val) { ?>
                                                                 <div class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn">
@@ -988,7 +988,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                             <div class="mb-4 row __colum-reverse flex-lg-row">
                                                 <div class="col col-lg-10 ">
 
-                                                    <div class="d-flex flex-row-reverse justify-content-center justify-content-lg-start flex-wrap <?= ($arItem['IS_REQUIRED'] == 'Y') ? 'div-req' : '' ?>">
+                                                    <div class="d-flex flex-row-reverse justify-content-center justify-content-lg-start flex-wrap <?= ($arItem['IS_REQUIRED'] == 'Y') ? 'div-req' : '' ?> gap-1">
                                                         <?if ($id){foreach ($id as $ids){drawElement($arProp3[$ids] , $arLink ,$arProps);}}?>
                                                         <? foreach ($arItem['PROP_ENUM_VAL'] as $prop) { ?>
                                                             <div class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn">

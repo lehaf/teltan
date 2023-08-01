@@ -110,7 +110,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
                                     <div class="mb-4 row">
                                         <div class="col-9 col-lg-10">
-                                            <div class="d-flex justify-content-end flex-wrap">
+                                            <div class="d-flex justify-content-end flex-wrap gap-1">
                                                 <div class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn">
                                                     <input <?=($arFields['IBLOCK_SECTION_ID'] == REAL_ESTATE_LIVE_RENT_SECTION_ID)? 'checked' : ''?> id="typeResidential" type="radio" name="type">
                                                     <label id="typeResidentialLable" onclick="hideModelBrand(27, this)" class="px-2 py-1" for="typeResidential"><?=Loc::getMessage('Residential');?></label>
@@ -156,7 +156,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
                                     <div class="mb-4 row">
                                         <div class="col-9 col-lg-10">
-                                            <div class="d-flex justify-content-end flex-wrap data-property-req">
+                                            <div class="d-flex justify-content-end flex-wrap data-property-req gap-1">
                                                 <?foreach($arTypesRent as $arItem){?>
                                                     <div data-parent-id="<?= $arItem['UF_PARENT_ID']?>" style="display: none" class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn ">
                                                         <input required <?=($arProps['PROP_TYPE_APART']['VALUE'] == $arItem['UF_NAME']) ? 'checked' : ''?>
@@ -402,9 +402,9 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                         $id = array_reverse($id);
                                         ?>
                                         <?if($filterProp['PROPERTY_TYPE'] == 'L'){?>
-                                            <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row" data-parent-id="27" style="display: none">
+                                            <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row " data-parent-id="27" style="display: none">
                                                 <div class="col-12 col-lg-10">
-                                                    <div class="d-flex justify-content-center justify-content-lg-end align-items-center">
+                                                    <div class="d-flex justify-content-center justify-content-lg-end align-items-center gap-1">
                                                         <?if ($id){foreach ($id as $ids){drawElement($filterProps[1][$ids] , $arLink ,$arProps);}}?>
                                                         <?sort($filterProp['PROP_ENUM_VAL'])?>
                                                         <?foreach($filterProp['PROP_ENUM_VAL']  as $arItem){?>
@@ -440,7 +440,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                                 <input id="1731"  data-id_prop="173" class="form-control" type="text" placeholder="שטח מגורים" required="" value="<?=$arProps['PROP_AREA_2']['VALUE']?>">
                                                             </div>
 
-                                                            <div class="mr-3 form-group">
+                                                            <div class="form-group">
                                                                 <input id="1741"  data-id_prop="174" class="form-control" type="text" placeholder=" שטח הכולל" required="" value="<?=$arProps['PROP_AREA_3']['VALUE']?>">
                                                             </div>
                                                         </div>
@@ -455,7 +455,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                 <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row" data-parent-id="27" style="display: none">
                                                     <div class="col-12 col-lg-10">
                                                         <?if ($id){foreach ($id as $ids){drawElement($filterProps[1][$ids] , $arLink ,$arProps);}}?>
-                                                        <div class="mr-3 d-flex justify-content-center justify-content-lg-end form-group">
+                                                        <div class="d-flex justify-content-center justify-content-lg-end form-group">
                                                             <input id="<?= $filterProp['ID'] ?>1"  data-id_prop="<?= $filterProp['CODE'] ?>" class="form-control" type="number" placeholder="" value="<?=$arProps[$filterProp['CODE']]['VALUE']?>" required="">
                                                         </div>
                                                     </div>
@@ -617,8 +617,8 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                             <?}?>
                                         <?}?>
                                     <? }?>
-                                    <div class="col-12 col-lg-10">
-                                        <div class="mr-3 d-flex justify-content-center justify-content-lg-end form-group">
+                                    <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row">
+                                        <div class="d-flex justify-content-center justify-content-lg-end form-group col-12 col-lg-10">
                                             <input id="PROP_Completion" class="form-control"  data-id_prop="113"
                                                    type="date"
                                                    placeholder="<?=$arProps['PROP_Completion']['NAME']?>"
@@ -658,7 +658,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                 <div class="property-step-price">
                                     <p class="mb-4 h2 text-center text-uppercase font-weight-bolder auto-step2__title"><?=Loc::getMessage('rent-terms');?></p>
 
-                                    <div class="d-flex flex-wrap justify-content-end justify-content-lg-center">
+                                    <div class="d-flex flex-wrap justify-content-end justify-content-lg-center gap-1">
                                         <?foreach ($restrictions['PROP_ENUM_VAL'] as $arItem){?>
                                             <div class="mr-2 mb-2 mr-md-4 mb-md-4 form_radio_btn">
                                                 <input id="checkbox-<?=$arItem['XML_ID']?>" type="checkbox" name="<?=$arItem['VALUE']?>"
