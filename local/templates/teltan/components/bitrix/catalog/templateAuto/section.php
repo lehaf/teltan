@@ -279,7 +279,8 @@ $dirName = str_replace('/', '', $dir); // PHP код
                     "SEF_RULE" => "/flea/#SECTION_CODE_PATH#/filter/#SMART_FILTER_PATH#/apply/",
                     "SECTION_CODE_PATH" => "",
                     "SMART_FILTER_PATH" => '#SECTION_CODE_PATH#/filter/#SMART_FILTER_PATH#/apply/',
-                    "CURRENCY_ID" => "RUB"
+                    "CURRENCY_ID" => "RUB",
+                    "SECTION_ID" => $arResult['VARIABLES']['SECTION_ID']
                 ),
                 false
             );

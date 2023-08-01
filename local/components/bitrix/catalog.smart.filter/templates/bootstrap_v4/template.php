@@ -17,31 +17,33 @@ $detect = new Mobile_Detect;
 $templateData = array(
     'TEMPLATE_CLASS' => 'bx-' . $arParams['TEMPLATE_THEME']
 );
-function in_array_r($needle, $haystack, $strict = false)
-{
-    foreach ($haystack as $item) {
-        if (($strict ? $item === $needle : $item == $needle) || (is_array($item) && in_array_r($needle, $item, $strict))) {
-            return true;
-        }
-    }
 
-    return false;
-}
+//$iblockSectionEntity= \Bitrix\Iblock\Model\Section::compileEntityByIblock($arParams['IBLOCK_ID']);
+//$sections = $iblockSectionEntity::getList(array(
+//    "filter" => array('ACTIVE' => 'Y'),
+//    "select" => array("*","UF_*"),
+//    "cache" => [
+//        'ttl' => 3600000,
+//        "cache_joins" => true
+//    ]
+//))->fetchAll();
 
 $res = CIBlockSection::GetList(
-    array('sort' => 'asc'),
-    array('IBLOCK_ID' => $arParams['IBLOCK_ID'], 'ACTIVE' => 'Y'),
-    false,
+    array(),
+    array(
+        'IBLOCK_ID' => $arParams['IBLOCK_ID'],
+        'ACTIVE' => 'Y',
+        "CNT_ACTIVE" => "Y"
+    ),
+    true,
     array('UF_*')
 );
 $sectionParent = 'BRAND';
 $modelName = 'MODEL';
-//$searchId = $arParams['SECTION_ID'];
 while ($row = $res->GetNext()) {
-
-    $count = CIBlockSection::GetSectionElementsCount($row['ID'], array("CNT_ACTIVE" => "Y"));
+    $count = $row['ELEMENT_CNT'];
     if ($count > 0) {
-        if ($row['IBLOCK_SECTION_ID'] == null) {
+        if (empty($row['IBLOCK_SECTION_ID'])) {
             $arSections[$row['NAME']] = $row;
             if ($row['ID'] == $arParams['SECTION_ID']) {
                 $sectonParant = $row['~NAME'];
@@ -50,27 +52,33 @@ while ($row = $res->GetNext()) {
         } else {
             if ($row['ID'] == $arParams['SECTION_ID']) {
                 $searchId = $row['IBLOCK_SECTION_ID'];
-
             }
         }
 
         $rsParentSection = CIBlockSection::GetByID($searchId);
         if ($arParentSection = $rsParentSection->GetNext()) {
-            $arFilter = array('IBLOCK_ID' => $arParentSection['IBLOCK_ID'], '>LEFT_MARGIN' => $arParentSection['LEFT_MARGIN'], '<RIGHT_MARGIN' => $arParentSection['RIGHT_MARGIN'], '>DEPTH_LEVEL' => $arParentSection['DEPTH_LEVEL']); // выберет потомков без учета активности
-            $rsSect = CIBlockSection::GetList(array('left_margin' => 'asc'), $arFilter);
+            $arFilter = array(
+                'IBLOCK_ID' => $arParentSection['IBLOCK_ID'],
+                '>LEFT_MARGIN' => $arParentSection['LEFT_MARGIN'], '<RIGHT_MARGIN' => $arParentSection['RIGHT_MARGIN'],
+                '>DEPTH_LEVEL' => $arParentSection['DEPTH_LEVEL'],
+                "CNT_ACTIVE" => "Y"
+            ); // выберет потомков без учета активности
+            $rsSect = CIBlockSection::GetList(array('left_margin' => 'asc'), $arFilter, true);
             while ($arSect = $rsSect->GetNext()) {
+                if ($arSect['ELEMENT_CNT'] > 0) {
 
-                if ($row['IBLOCK_SECTION_ID'] == null) {
-                    $arSections[$row['NAME']]['SUB_SECTIONS'][$arSect['NAME']] = $arSect;
-                }
-                $arSubSections[$arSect['NAME']] = $arSect;
-                if ($arSect['ID'] == $arParams['SECTION_ID']) {
-                    $res = CIBlockSection::GetByID($arSect["IBLOCK_SECTION_ID"]);
-                    if ($ar_res = $res->GetNext())
-                        $sectonParant = $ar_res['NAME'];
-                    $modelName = $arSect['NAME'];
-                }
+                    if (empty($row['IBLOCK_SECTION_ID'])) {
+                        $arSections[$row['NAME']]['SUB_SECTIONS'][$arSect['NAME']] = $arSect;
+                    }
 
+                    $arSubSections[$arSect['NAME']] = $arSect;
+                    if ($arSect['ID'] == $arParams['SECTION_ID']) {
+                        $res = CIBlockSection::GetByID($arSect["IBLOCK_SECTION_ID"]);
+                        if ($ar_res = $res->GetNext())
+                            $sectonParant = $ar_res['NAME'];
+                        $modelName = $arSect['NAME'];
+                    }
+                }
             }
         }
     }
