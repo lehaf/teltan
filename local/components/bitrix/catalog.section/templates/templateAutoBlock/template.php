@@ -147,10 +147,15 @@ foreach($arResult['VIPS'] as $arItem){?>
                                 </p>
                             </div>
                             <div class="col-12 col-xl-4">
-                                <?if($arItem['PROPERTIES']['PROP_PROBEG_Left']['VALUE'] != null){?>
+                                <?if(!empty($arItem['PROPERTIES']['PROP_PROBEG_Left']['VALUE'])){?>
                                     <p class="mileage"><span><?=number_format($arItem['PROPERTIES']['PROP_PROBEG_Left']['VALUE'], 0, '.', ' ');?> <?=$arItem['PROPERTIES']['PROP_KM_ML']['VALUE']?></span><i class="ml-2 icon-download-speed"></i></p>
                                 <?}?>
-                                <p class="d-none d-xl-inline-block transmission"><span><?=$arItem['PROPERTIES']['PROP_TRANSMISION']['VALUE']?></span> <i class="ml-2 icon-manual-transmission"></i></p>
+                                <?if(!empty($arItem['PROPERTIES']['PROP_TRANSMISION_Left']['VALUE'])):?>
+                                    <p class="d-none d-xl-inline-block transmission">
+                                        <span><?=$arItem['PROPERTIES']['PROP_TRANSMISION_Left']['VALUE']?></span>
+                                        <i class="ml-2 icon-manual-transmission"></i>
+                                    </p>
+                                <?endif;?>
                             </div>
                         </div>
                     </div>

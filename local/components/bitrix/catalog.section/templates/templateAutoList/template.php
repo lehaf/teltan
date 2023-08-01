@@ -1,7 +1,6 @@
 <?php if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 
 use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
-
 ps($arResult);
 ?><?php if ($_GET['TEST'] == 'Y') { ?>
     <pre>
@@ -59,6 +58,7 @@ ps($arResult);
         </div>
     </div>
 </div>
+
 <div class="row row-cols-1 row-cols-lg-1">
     <? if (count($arResult['ITEMS']) < 1){ ?>
         <h1 class="h2 mb-4 subtitle">המדור ריק</h1>
@@ -177,9 +177,12 @@ ps($arResult);
                                                 <span><?= number_format($arItem['PROPERTIES']['PROP_PROBEG_Left']['VALUE'], 0, '.', ' '); ?> <?= $arItem['PROPERTIES']['PROP_KM_ML']['VALUE'] ?></span><i
                                                         class="ml-2 icon-download-speed"></i></p>
                                         <?php } ?>
-                                        <p class="d-none d-xl-inline-block transmission">
-                                            <span><?= $arItem['PROPERTIES']['PROP_TRANSMISION']['VALUE'] ?></span> <i
-                                                    class="ml-2 icon-manual-transmission"></i></p>
+                                        <?if (!empty($arItem['PROPERTIES']['PROP_TRANSMISION_Left']['VALUE'])):?>
+                                            <p class="d-none d-xl-inline-block transmission">
+                                                <span><?= $arItem['PROPERTIES']['PROP_TRANSMISION_Left']['VALUE'] ?></span>
+                                                <i class="ml-2 icon-manual-transmission"></i>
+                                            </p>
+                                        <?endif;?>
                                     </div>
                                 </div>
                             </div>
@@ -352,9 +355,12 @@ ps($arResult);
                                                 <span><?= number_format($arItem['PROPERTIES']['PROP_PROBEG_Left']['VALUE'], 0, '.', ' '); ?> <?= $arItem['PROPERTIES']['PROP_KM_ML']['VALUE'] ?></span><i
                                                         class="ml-2 icon-download-speed"></i></p>
                                         <?php } ?>
-                                        <p class="d-none d-xl-inline-block transmission">
-                                            <span><?= $arItem['PROPERTIES']['PROP_TRANSMISION']['VALUE'] ?></span> <i
-                                                    class="ml-2 icon-manual-transmission"></i></p>
+                                        <?if (!empty($arItem['PROPERTIES']['PROP_TRANSMISION_Left']['VALUE'])):?>
+                                            <p class="d-none d-xl-inline-block transmission">
+                                                <span><?= $arItem['PROPERTIES']['PROP_TRANSMISION_Left']['VALUE'] ?></span> <i
+                                                        class="ml-2 icon-manual-transmission"></i>
+                                            </p>
+                                        <?endif;?>
                                     </div>
                                 </div>
                             </div>
