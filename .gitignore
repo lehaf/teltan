@@ -55,6 +55,7 @@ ai-bolit.php
 AI-BOLIT-*
 
 # core
+vendor/*
 bitrix/*
 !bitrix/license_key.php
 !bitrix/templates/

@@ -1,5 +1,4 @@
-<?php
-require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
+<?php require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 $APPLICATION->SetTitle("Недвижимость");
 
 CModule::IncludeModule('highloadblock');
@@ -11,7 +10,9 @@ if($_GET['SORT'] != '' && $_GET['ORDER'] != ''){
     $secondSort['SORT'] = $_GET['SORT'];
     $secondSort['ORDER'] = $_GET['ORDER'];
 }
-$APPLICATION->IncludeComponent("bitrix:catalog", "templatePropertyNew",
+$APPLICATION->IncludeComponent(
+    "bitrix:catalog",
+    "templatePropertyNew",
     Array(
         "ACTION_VARIABLE" => "action",
         "ADD_ELEMENT_CHAIN" => "Y",
@@ -167,4 +168,6 @@ $APPLICATION->IncludeComponent("bitrix:catalog", "templatePropertyNew",
         "USE_STORE" => "N"
     ),
     false
-); ?><?php require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php"); ?>
+); ?>
+
+<?php require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php")?>

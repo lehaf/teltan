@@ -23,7 +23,7 @@ switch ($arParams['SECTION_ID']) {
         LocalRedirect('/property_new/novostroyki/snyat/');
         break;
 }
-
+//pr($arResult['ITEMS'])
 $arFilter = array('IBLOCK_ID' => 2);
 $arSelect = array('IBLOCK_ID', 'ID', 'NAME', 'IBLOCK_SECTION_ID', 'SECTION_PAGE_URL', 'DETAIL_PICTURE', 'DEPTH_LEVEL', 'UF_*');
 $rsSect = CIBlockSection::GetList(
