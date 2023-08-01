@@ -23,17 +23,21 @@ if ( $arResult['IBLOCK_SECTION_ID']) {
     }
     if (CSite::InDir('/flea/')) {
         $IBLOCK_ID = 1;
+        $path = '/flea/';
     } elseif (CSite::InDir('/auto/')) {
         $IBLOCK_ID = 3;
+        $path = '/auto/';
     } elseif (CSite::InDir('/moto/')) {
         $IBLOCK_ID = 7;
+        $path = '/moto/';
     } elseif (CSite::InDir('/scooters/')) {
         $IBLOCK_ID = 8;
+        $path = '/scooters/';
     } elseif (CSite::InDir('/property_new/')) {
         $IBLOCK_ID = 2;
+        $path = '/property_new/';
     }
 
-    $path = '/catalog/'; // Начальный путь к Каталогу
     while ($sectionPath = $navChain->GetNext()) {
         if ($langId) {
             $arFilter = array('IBLOCK_ID' => $IBLOCK_ID, 'CODE' => $sectionPath['CODE'], 'GLOBAL_ACTIVE' => 'Y');

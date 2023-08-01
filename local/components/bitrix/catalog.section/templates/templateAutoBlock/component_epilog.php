@@ -20,19 +20,22 @@ switch (LANGUAGE_ID) {
     default:
         $langId = false;
 }
-if (CSite::InDir('/flea/')){
+if (CSite::InDir('/flea/')) {
     $IBLOCK_ID = 1;
-}elseif (CSite::InDir('/auto/')){
+    $path = '/flea/';
+} elseif (CSite::InDir('/auto/')) {
     $IBLOCK_ID = 3;
-}elseif (CSite::InDir('/moto/')){
+    $path = '/auto/';
+} elseif (CSite::InDir('/moto/')) {
     $IBLOCK_ID = 7;
-}elseif (CSite::InDir('/scooters/')){
+    $path = '/moto/';
+} elseif (CSite::InDir('/scooters/')) {
     $IBLOCK_ID = 8;
-}elseif (CSite::InDir('/property_new/')){
+    $path = '/scooters/';
+} elseif (CSite::InDir('/property_new/')) {
     $IBLOCK_ID = 2;
+    $path = '/property_new/';
 }
-
-$path = '/catalog/'; // Начальный путь к Каталогу
 while ($sectionPath = $navChain->GetNext()) {
     if ($langId) {
         $arFilter = array('IBLOCK_ID' => $IBLOCK_ID, 'CODE' => $sectionPath['CODE'], 'GLOBAL_ACTIVE' => 'Y');
