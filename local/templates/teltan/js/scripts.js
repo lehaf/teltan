@@ -379,14 +379,16 @@ $(document).ready(function () {
             const $items = $(`[data-filter-for="${formSelector}"]`)
 
             $form.on('keyup change paste', 'input, select, textarea', (e) => {
+
+
                 this.filterData = {...this.filterData, [e.target.name]: e.target.value}
 
                 $items.each((_, el) => {
                     const $el = $(el);
                     let isFind = true;
-
                     Object.entries(this.filterData).map(([name, value]) => value).forEach((filterDataItem) => {
-                        if (!$el.data('filter').includes(filterDataItem)) isFind = false
+                        let filterData = typeof $el.data('filter') === 'string' ? $el.data('filter') : $el.data('filter')+'';
+                        if (!filterData.includes(filterDataItem)) isFind = false
                     })
 
                     $el.toggleClass('d-none', !isFind);
