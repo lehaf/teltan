@@ -17,8 +17,11 @@ global $arSetting;
 if ($arResult['ITEMS']) {
     ?>
     <div class="row row-cols-2 row-cols-lg-4">
-        <? foreach ($arResult['ITEMS'] as $arItem) { ?>
-            <div class="mb-3 col">
+        <? foreach ($arResult['ITEMS'] as $arItem) {
+            $this->AddEditAction($arItem['ID'], $arItem['EDIT_LINK'], $arItem["EDIT_LINK_TEXT"]);
+            $this->AddDeleteAction($arItem['ID'], $arItem['DELETE_LINK'], $arItem["DELETE_LINK_TEXT"], array("CONFIRM" => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM')));
+            ?>
+            <div class="mb-3 col" id="<?=$this->GetEditAreaID($arItem['ID'])?>">
                 <?
                 $color = '';
                 if ($arItem['PROPERTIES']['COLOR_DATE']['VALUE'] && strtotime($arItem['PROPERTIES']['COLOR_DATE']['VALUE']) > time())

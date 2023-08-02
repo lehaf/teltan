@@ -18,8 +18,10 @@ if ($arResult['ITEMS']) {
     ?>
     <div class="row row-cols-1 row-cols-lg-2">
         <? foreach ($arResult['ITEMS'] as $arItem) {
+            $this->AddEditAction($arItem['ID'], $arItem['EDIT_LINK'], $arItem["EDIT_LINK_TEXT"]);
+            $this->AddDeleteAction($arItem['ID'], $arItem['DELETE_LINK'], $arItem["DELETE_LINK_TEXT"], array("CONFIRM" => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM')));
             ?>
-            <div class="mb-4 col">
+            <div class="mb-4 col" id="<?=$this->GetEditAreaID($arItem['ID'])?>">
                 <div class="big-card-product">
                     <a href="<?= $arItem['DETAIL_PAGE_URL']; ?>" class="fake-link-card"></a>
                     <div class="p-3 p-lg-0 image-box">
