@@ -565,15 +565,15 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                                                     <option value="no-value">Older</option>
                                                     <? } ?>
                                                     <? if ($count >= 7) { ?>
-                                                        <option <?= ($item['UF_NAME'] == $arProps['PROP_YAERH']['VALUE']) ? 'selected' : '' ?>
+                                                        <option <?= ($item['UF_NAME'] == $arProps['PROP_YAERH_Left']['VALUE']) ? 'selected' : '' ?>
                                                                 value="<?= $item['UF_NAME'] ?>"><?= $item['UF_NAME'] ?></option>
                                                     <? } else { ?>
                                                         <div class="mr-3 form_radio_btn">
                                                             <input data-cc="dateRadioSelector"
                                                                    id="carYear<?= $item['UF_NAME'] ?>" type="radio"
-                                                                <?= ($item['UF_NAME'] == $arProps['PROP_YAERH']['VALUE']) ? 'checked' : '' ?>
+                                                                <?= ($item['UF_NAME'] == $arProps['PROP_YAERH_Left']['VALUE']) ? 'checked' : '' ?>
                                                                    data-id-self="<?= $item['UF_NAME'] ?>"
-                                                                   data-id_prop="PROP_YAERH"
+                                                                   data-id_prop="PROP_YAERH_Left"
                                                                    name="Year of issue"
                                                             >
                                                             <label for="carYear<?= $item['UF_NAME'] ?>"><?=$item['UF_NAME']?></label>

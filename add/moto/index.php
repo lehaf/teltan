@@ -14,9 +14,7 @@ if (CModule::IncludeModule("iblock"))
     $IBLOCK_ID = 7;
 $properties = CIBlockProperty::GetList(array("sort" => "asc", "name" => "asc"), array("ACTIVE" => "Y", "IBLOCK_ID" => $IBLOCK_ID));
 $prop_fields = [];
-while ($prop_fiel = $properties->GetNext()) { ?>
-
-    <?php
+while ($prop_fiel = $properties->GetNext()) {
     $prop_field[$prop_fiel["ID"]] = $prop_fiel;
     $prop_fields[] = $prop_fiel;
 }
@@ -46,159 +44,6 @@ if ($_GET['EDIT'] == 'Y' && $_GET['ID']) {
 $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 94);
 ps($arProps);
 ?>
-
-<? /*?> <div class="container">
-        <h2 class="d-block mb-4 subtitle">
-            <?$APPLICATION->ShowTitle();?>
-        </h2>
-
-        <div class="p-4 card user-add-item">
-            <form name="add_ad">
-                <?=bitrix_sessid_post()?>
-                <input type="hidden" name="section_id" value="">
-                <input type="hidden" name="c_country" value="">
-                <input type="hidden" name="c_city" value="">
-                <h2 class="mb-4 d-flex justify-content-center align-items-center section-title">Описание</h2>
-
-                <?$APPLICATION->IncludeComponent(
-                    "bitrix:catalog.section.list",
-                    "sections_menu_add",
-                    Array(
-                        "ADD_SECTIONS_CHAIN" => "N",
-                        "CACHE_FILTER" => "N",
-                        "CACHE_GROUPS" => "N",
-                        "CACHE_TIME" => "36000000",
-                        "CACHE_TYPE" => "A",
-                        "COUNT_ELEMENTS" => "N",
-                        "COUNT_ELEMENTS_FILTER" => "CNT_ACTIVE",
-                        "FILTER_NAME" => "sectionsFilter",
-                        "IBLOCK_ID" => "1",
-                        "IBLOCK_TYPE" => "announcements",
-                        "SECTION_CODE" => "",
-                        "SECTION_FIELDS" => array("", ""),
-                        "SECTION_ID" => $_REQUEST["SECTION_ID"],
-                        "SECTION_URL" => "",
-                        "SECTION_USER_FIELDS" => array("", ""),
-                        "SHOW_PARENT_NAME" => "Y",
-                        "TOP_DEPTH" => "2",
-                        "VIEW_MODE" => "LINE"
-                    )
-                );?>
-
-
-
-
-                <div class="form-group row flex-column-reverse flex-lg-row">
-                    <div class="col col-lg-10">
-                        <input type="text" class="form-control" name="itemTitle" placeholder="Enter Title" id="itemTitle">
-                    </div>
-                    <label for="itemTitle" class="col col-lg-2 label-name">Название</label>
-                </div>
-
-                <div class="form-group row flex-column-reverse flex-lg-row">
-                    <div class="col col-lg-10">
-                        <textarea type="text" placeholder="Enter Description" name="itemDescription" class="form-control" id="itemDescription" rows="4"></textarea>
-                    </div>
-                    <label for="itemDescription" class="col col-lg-2 label-name">Описание</label>
-                </div>
-
-                <div class="form-group row flex-column-reverse flex-lg-row">
-                    <div class="col col-lg-10">
-                        <input type="text" placeholder="Enter Short Description" name="itemShortDescription" class="form-control" id="itemShortDescription">
-                    </div>
-                    <label for="itemShortDescription" class="col col-lg-2 label-name">Краткое описание</label>
-                </div>
-
-                <div class="form-group row flex-column-reverse flex-lg-row">
-                    <div class="col col-lg-10">
-                        <input type="text" placeholder="Enter Price" name="itemPrice" class="form-control" id="itemPrice">
-                    </div>
-                    <label for="itemPrice" class="col col-lg-2 label-name">Цена</label>
-                </div>
-
-                <?
-                // Получаем список стран и городов
-
-                $countries = getCountriesHL();
-                $cities = getCitiesHL();
-                $arr_city =array();
-
-                foreach($cities as $city)
-                {
-                    $arr_city['c_'.$countries[$city['UF_ID_COUNTRY']]['ID']][] = $city['UF_NAME_'.strtoupper($arSetting[SITE_ID]['lang'])];
-                }
-
-                //print_r($arr_city);
-
-                ?>
-                <script>
-                    const placesList = <?=json_encode($arr_city, JSON_UNESCAPED_UNICODE)?>;
-                </script>
-
-                <div class="form-group row flex-column-reverse flex-lg-row">
-                    <div class="col col-lg-10 d-flex justify-content-end">
-                        <div class="dependens-dropdon">
-                            <div class="dependens-dropdon-block">
-                                <button type="button" class="dep-select first-drop">Страна</button>
-
-                                <ul class="show-country">
-                                    <?foreach($countries as $item){?>
-                                        <li>
-                                            <label>
-                                                <input name="country" value="<?='c_'.$item['ID'];?>" type="radio" />
-                                                <?=$item['UF_NAME_'.strtoupper($arSetting[SITE_ID]['lang'])]?>
-                                            </label>
-                                        </li>
-                                    <?}?>
-                                </ul>
-                            </div>
-
-                            <div class="dependens-dropdon-block">
-                                <button type="button" class="dep-select second-drop">Город</button>
-
-                                <ul class="show-city">
-                                    <li><label for="city"><input name="city" value="" type="radio">Select country</label></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <label for="userSelectSection" class="col col-lg-2 label-name">
-                        Sity / <br>
-                        Region
-                    </label>
-                </div>
-
-                <div class="section_props_user">
-                    <h2 class="mb-4 d-flex justify-content-center align-items-center section-title">Фото товара</h2>
-
-                    <div class="mb-5 row">
-                        <div class="col">
-                            <div class="step-photos">
-                                <div id="fileUploaderRenderContainer" class="mb-3 mb-lg-5 row row-cols-2 row-cols-lg-4 row-cols-xl-5 flex-row-reverse">
-                                    <input id="fileUploaderFiles" class="d-none" type="file" name="files[]" multiple>
-
-                                    <div class="col">
-                                        <div class="d-flex align-items-center justify-content-center">
-                                            <label for="fileUploaderFiles" class="mb-0 label-add-photo">
-                                                <p class="mb-2"><i class="icon-camera-1"></i></p>
-                                                <p class="mb-0 label-add-photo__text ">Add photo</p>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-none d-lg-flex  col-2">
-                            <p class="label-name">Add Photo</p>
-                        </div>
-                    </div>
-                </div>
-
-            </form>
-
-        </div>
-    </div>
-<?*/ ?>
     <div class="container">
         <div class="preloader">
             <div class="preloader__row">
@@ -566,15 +411,15 @@ ps($arProps);
                                                     <option value="no-value">Older</option>
                                                     <? } ?>
                                                     <? if ($count >= 7) { ?>
-                                                        <option <?= ($item['UF_NAME'] == $arProps['PROP_YAERH']['VALUE']) ? 'selected' : '' ?>
+                                                        <option <?= ($item['UF_NAME'] == $arProps['PROP_YAERH_Left']['VALUE']) ? 'selected' : '' ?>
                                                                 value="<?= $item['UF_NAME'] ?>"><?= $item['UF_NAME'] ?></option>
                                                     <? } else { ?>
                                                         <div class="mr-3 form_radio_btn">
                                                             <input data-cc="dateRadioSelector"
                                                                    id="carYear<?= $item['UF_NAME'] ?>" type="radio"
-                                                                <?= ($item['UF_NAME'] == $arProps['PROP_YAERH']['VALUE']) ? 'checked' : '' ?>
+                                                                <?= ($item['UF_NAME'] == $arProps['PROP_YAERH_Left']['VALUE']) ? 'checked' : '' ?>
                                                                    data-id-self="<?= $item['UF_NAME'] ?>"
-                                                                   data-id_prop="PROP_YAERH"
+                                                                   data-id_prop="PROP_YAERH_Left"
                                                                    name="Year of issue"
                                                             >
                                                             <label for="carYear<?= $item['UF_NAME'] ?>"><?=$item['UF_NAME']?></label>

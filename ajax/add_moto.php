@@ -1,11 +1,15 @@
-<? require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
-use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
+<?php require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
+
 CModule::IncludeModule('highloadblock');
 
 $entity_data_class = GetEntityDataClass(28);
 $rsData = $entity_data_class::getList(array(
     'select' => array('*'),
-    'filter' => array('UF_USER_ID'=> $USER->GetID(), 'UF_TYPE'=> 'AUTO')
+    'filter' => array('UF_USER_ID'=> $USER->GetID(), 'UF_TYPE'=> 'AUTO'),
+    'cache' => [
+        'ttl' => 360000,
+        'cache_joins' => true
+    ]
 ));
 while ($arPaket[] = $rsData->fetch()) {
 
@@ -20,6 +24,7 @@ foreach($arPaket as $arItem){
         $b = true;
     }
 }
+
 if($arUser['UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUEST['EDIT'] == 'Y') {
     $el = new CIBlockElement;
     $checkedVaue = [];
@@ -50,14 +55,11 @@ if($arUser['UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUEST['E
         $PROP[$arItem["data"]["id_prop"]] = $arItem["data"]["idSelf"];
     }
 
-//var_dump($stringValue);
     $FILENAME = $USER->GetID();
-
     $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $_POST["img-base64"]));
-
     file_put_contents($_SERVER["DOCUMENT_ROOT"] . '/imgbs64.png', $data);
-
     $arFile = CFile::MakeFileArray($_SERVER["DOCUMENT_ROOT"] . "/imgbs64.png");
+
     if($_REQUEST['anytime']['val'] == 'true'){
         $PROP['UF_CALL_ANYTIME'] = 1;
     }else{
@@ -94,7 +96,7 @@ if($arUser['UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUEST['E
     if($ar_res = $res->GetNext())
         $PROP['PROP_MODEL'] = $ar_res['NAME'];
     $NAME = $PROP['PROP_BRAND'] . ' ' . $PROP['PROP_MODEL'] . ' ' . $_POST['Modification']['val'] . ' ' . $PROP['PROP_YAERH'];
-//$PROP[146] = $_POST['phone3']['val'];
+
     $PROP['ID_USER'] = $USER->GetID();
     $arParams = array("replace_space" => "-", "replace_other" => "-");
     $translit = Cutil::translit($NAME, "ru", $arParams).  $USER->GetID(). randString(10);;
@@ -105,6 +107,7 @@ if($arUser['UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUEST['E
             $PROP['PROP_BODY_TYPE'] = $data[1];
         }
     }
+
     if ($_REQUEST['EDIT'] != 'Y') {
         $arLoadProductArray = array(
             'MODIFIED_BY' => $GLOBALS['USER']->GetID(),
@@ -141,6 +144,7 @@ if($arUser['UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUEST['E
     }else{
         unset($arLoadProductArray['PREVIEW_PICTURE']);
     }
+
     if ($_REQUEST['EDIT'] != 'Y') {
         if ($PRODUCT_ID = $el->Add($arLoadProductArray)) {
             foreach ($_REQUEST as $value) {
@@ -148,6 +152,7 @@ if($arUser['UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUEST['E
                     $multiselect[$value['data']['id_prop']][] = $value['data']['idSelf'];
                 }
             }
+
             $arLoadProductProp['UF_REGION'] = $_POST['region'];
             $arLoadProductProp['UF_CITY'] = $_POST['city'];
             $arLoadProductProp['PROP_BODY_TYPE'] =  $_REQUEST['PROP_BODY_TYPE'];
@@ -226,7 +231,6 @@ if($arUser['UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUEST['E
 
 
     } else {
-        
 
         if($PROP['PROP_BRAND'] == null || $PROP['PROP_MODEL'] == null || $PROP['Modification']['val'] == null ){
             unset($arLoadProductArray['NAME']);
@@ -239,6 +243,7 @@ if($arUser['UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUEST['E
 
         }
         $arLoadProductProp = [];
+
         foreach ($arLoadProductArray['PROPERTY_VALUES'] as $key => $value){
             if($value == ''){
                 unset($arLoadProductArray['PROPERTY_VALUES'][$key]);
@@ -248,7 +253,7 @@ if($arUser['UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUEST['E
 
         }
         unset($arLoadProductArray['PROPERTY_VALUES']);
-        if(  $res = $el->Update(intval($_REQUEST['EDIT_ID']), $arLoadProductArray)){
+        if($res = $el->Update(intval($_REQUEST['EDIT_ID']), $arLoadProductArray)){
             foreach ($_REQUEST as $value) {
                 if ($value['val'] == 'true') {
                     $multiselect[$value['data']['id_prop']][] = $value['data']['idSelf'];
