@@ -30,7 +30,7 @@
   gap: 10px;
 }
 
-.wizard-content .div-req{
+.wizard-content .div-req:not(.wrapper-brand-items){
   gap: 10px;
 }
 
