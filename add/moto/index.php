@@ -752,7 +752,7 @@ ps($arProps);
                                                                            name="prop<?= $arItem['CODE'] ?>"
                                                                            data-id_prop="<?= $val['PROPERTY_ID'] ?>"
                                                                            data-id-self="<?= $val['ID'] ?>">
-                                                                    <label for="<?= $val['VALUE'] ?>">:<?= $val['VALUE'] ?> </label>
+                                                                    <label for="<?=$val['VALUE']?>"><?=$val['VALUE']?></label>
                                                                 </div>
                                                                 <?
                                                             } ?>
