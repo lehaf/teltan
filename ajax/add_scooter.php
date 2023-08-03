@@ -1,5 +1,5 @@
-<? require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
-use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
+<?php require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
+
 CModule::IncludeModule('highloadblock');
 
 $entity_data_class = GetEntityDataClass(28);
@@ -108,7 +108,7 @@ $translit = Cutil::translit($NAME,"ru",$arParams) . $USER->GetID(). randString(1
         $arLoadProductArray = array(
             'MODIFIED_BY' => $GLOBALS['USER']->GetID(),
             // 'IBLOCK_SECTION_ID' => (int)$_POST['section_id']['id_section'],
-            'IBLOCK_ID' => 8,
+            'IBLOCK_ID' => SCOOTER_IBLOCK_ID,
             'IBLOCK_SECTION_ID' => $SECTION_ID,
             'CODE' => $translit,
             'PROPERTY_VALUES' => $PROP,
@@ -123,7 +123,7 @@ $translit = Cutil::translit($NAME,"ru",$arParams) . $USER->GetID(). randString(1
         $arLoadProductArray = array(
             'MODIFIED_BY' => $GLOBALS['USER']->GetID(),
             // 'IBLOCK_SECTION_ID' => (int)$_POST['section_id']['id_section'],
-            'IBLOCK_ID' => 8,
+            'IBLOCK_ID' => SCOOTER_IBLOCK_ID,
             'IBLOCK_SECTION_ID' => $SECTION_ID,
             'CODE' => $translit,
             'PROPERTY_VALUES' => $PROP,
@@ -139,102 +139,102 @@ $translit = Cutil::translit($NAME,"ru",$arParams) . $USER->GetID(). randString(1
     }else{
         unset($arLoadProductArray['PREVIEW_PICTURE']);
     }
+
+    // Создание элемента
     if ($_REQUEST['EDIT'] != 'Y') {
-if($PRODUCT_ID = $el->Add($arLoadProductArray)) {
-    foreach ($_REQUEST as $value) {
-        if ($value['val'] == 'true') {
-            $multiselect[$value['data']['id_prop']][] = $value['data']['idSelf'];
-        }
-    }
-    $arLoadProductProp['PROP_BODY_TYPE'] =  $_REQUEST['PROP_BODY_TYPE'];
-    $arLoadProductProp['UF_REGION'] = $_POST['region'];
-    $arLoadProductProp['UF_CITY'] = $_POST['city'];
-    CIBlockElement::SetPropertyValueCode($PRODUCT_ID, "VIP_FLAG", 0);
-    foreach ($multiselect as $key => $value) {
-        if (!is_string($key) && !empty($key)) {
-            CIBlockElement::SetPropertyValueCode($PRODUCT_ID, $key, $value);
-        }
-    }
-    if ($arUser['UF_UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0) {
-        print_r(++$arUser['UF_COUNT_AUTO']);
-        $user = new CUser;
-        $arUser['UF_COUNT_ITEM_AUTO'][]= intval($PRODUCT_ID);
-        $fields = array(
-            'UF_COUNT_AUTO' => ++$arUser['UF_COUNT_AUTO'],
-            'UF_COUNT_ITEM_AUTO' =>  $arUser['UF_COUNT_ITEM_AUTO']
-        );
-        $user->Update($USER->GetID(), $fields);
-    } else {
-
-        foreach ($arPaket as $arItem) {
-            $a = $arItem['UF_COUNT_REMAIN'] - $arItem['UF_COUNT_LESS'];
-            if ($a > 0 || date("d.m.Y H:i:s") < date("d.m.Y H:i:s", strtotime('+ ' . $arItem['UF_DAYS_REMAIN'] . ' days'))) {
-                $idForUpdate = $arItem['ID'];
-                $arItem['UF_ID_ANONC'][] = intval($PRODUCT_ID);
-                $entity_data_class = GetEntityDataClass(28);
-                $result = $entity_data_class::update($idForUpdate, array(
-                    'UF_COUNT_LESS' => ++$arItem['UF_COUNT_LESS'],
-                    'UF_ID_ANONC' => $arItem['UF_ID_ANONC']
-                ));
-                break;
+        if($PRODUCT_ID = $el->Add($arLoadProductArray)) {
+            foreach ($_REQUEST as $value) {
+                if ($value['val'] == 'true') {
+                    $multiselect[$value['data']['id_prop']][] = $value['data']['idSelf'];
+                }
             }
-        }
-        $mainPhoto = 0;
 
-        $i = 1;
-        foreach ($_POST['img'] as $item) {
-            $FILENAME = rand();
-
-            $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $item[0]));
-
-            file_put_contents($_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png', $data);
-
-            $arFile = CFile::MakeFileArray($_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png');
-            if ($item[5] > 0){
-                $rotate = (int)$item[5] * 90 * 3;
-                RotateJpg($item[0], $rotate , $_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png' , $arFile['type']);
+            if ($_POST['dateSelectSelector'] !== 'no-value') {
+                CIBlockElement::SetPropertyValueCode($PRODUCT_ID, 'PROP_YAERH_Left', $_POST['dateSelectSelector']);
             }
-            $arFile["MODULE_ID"] = "iblock";
-            if ($item[4] == 'isActive'){
-                $arLoadProductArray = array(
-                    'PREVIEW_PICTURE' => $arFile,
-                    'DETAIL_PICTURE' => $arFile
+
+            $arLoadProductProp['VIP_FLAG'] = 0; // по стандарту объявления не VIP
+            if (!empty($_REQUEST['PROP_BODY_TYPE'])) $arLoadProductProp['PROP_BODY_TYPE'] =  $_REQUEST['PROP_BODY_TYPE'];
+            if (!empty($_POST['region'])) $arLoadProductProp['UF_REGION'] = $_POST['region'];
+            if (!empty($_POST['city'])) $arLoadProductProp['UF_CITY'] = $_POST['city'];
+            foreach ($arLoadProductProp as $propCode => $propValue) {
+                CIBlockElement::SetPropertyValueCode($PRODUCT_ID, $propCode, $propValue);
+            }
+
+            foreach ($multiselect as $key => $value) {
+                if (!is_string($key) && !empty($key)) {
+                    CIBlockElement::SetPropertyValueCode($PRODUCT_ID, $key, $value);
+                }
+            }
+
+            if ($arUser['UF_UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0) {
+                print_r(++$arUser['UF_COUNT_AUTO']);
+                $user = new CUser;
+                $arUser['UF_COUNT_ITEM_AUTO'][]= intval($PRODUCT_ID);
+                $fields = array(
+                    'UF_COUNT_AUTO' => ++$arUser['UF_COUNT_AUTO'],
+                    'UF_COUNT_ITEM_AUTO' =>  $arUser['UF_COUNT_ITEM_AUTO']
                 );
-                $el->Update($PRODUCT_ID, $arLoadProductArray);
-                $mainPhoto++;
-            }elseif(count($_POST['img']) == $i && $mainPhoto == 0){
-                $arLoadProductArray = array(
-                    'PREVIEW_PICTURE' => $arFile,
-                    'DETAIL_PICTURE' => $arFile
-                );
-                $el->Update($PRODUCT_ID, $arLoadProductArray);
-                $mainPhoto++;
-            }else{
-                CIBlockElement::SetPropertyValueCode($PRODUCT_ID, "PHOTOS", array("VALUE" => $arFile));
+                $user->Update($USER->GetID(), $fields);
+            } else {
+
+                foreach ($arPaket as $arItem) {
+                    $a = $arItem['UF_COUNT_REMAIN'] - $arItem['UF_COUNT_LESS'];
+                    if ($a > 0 || date("d.m.Y H:i:s") < date("d.m.Y H:i:s", strtotime('+ ' . $arItem['UF_DAYS_REMAIN'] . ' days'))) {
+                        $idForUpdate = $arItem['ID'];
+                        $arItem['UF_ID_ANONC'][] = intval($PRODUCT_ID);
+                        $entity_data_class = GetEntityDataClass(28);
+                        $result = $entity_data_class::update($idForUpdate, array(
+                            'UF_COUNT_LESS' => ++$arItem['UF_COUNT_LESS'],
+                            'UF_ID_ANONC' => $arItem['UF_ID_ANONC']
+                        ));
+                        break;
+                    }
+                }
+                $mainPhoto = 0;
+
+                $i = 1;
+                foreach ($_POST['img'] as $item) {
+                    $FILENAME = rand();
+                    $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $item[0]));
+                    file_put_contents($_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png', $data);
+                    $arFile = CFile::MakeFileArray($_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png');
+
+                    if ($item[5] > 0){
+                        $rotate = (int)$item[5] * 90 * 3;
+                        RotateJpg($item[0], $rotate , $_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png' , $arFile['type']);
+                    }
+
+                    $arFile["MODULE_ID"] = "iblock";
+
+                    if ($item[4] == 'isActive'){
+                        $arLoadProductArray = array(
+                            'PREVIEW_PICTURE' => $arFile,
+                            'DETAIL_PICTURE' => $arFile
+                        );
+                        $el->Update($PRODUCT_ID, $arLoadProductArray);
+                        $mainPhoto++;
+                    }elseif(count($_POST['img']) == $i && $mainPhoto == 0){
+                        $arLoadProductArray = array(
+                            'PREVIEW_PICTURE' => $arFile,
+                            'DETAIL_PICTURE' => $arFile
+                        );
+                        $el->Update($PRODUCT_ID, $arLoadProductArray);
+                        $mainPhoto++;
+                    }else{
+                        CIBlockElement::SetPropertyValueCode($PRODUCT_ID, "PHOTOS", array("VALUE" => $arFile));
+                    }
+                    unlink($_SERVER["DOCUMENT_ROOT"].'/' . $FILENAME . '.png');
+                    $i++;
+                }
             }
-            unlink('/' . $FILENAME . '.png');
-            $i++;
+            echo json_encode(array('success' => 1));
+        } else {
+            echo json_encode(array('success' => 0, 'responseBitrix' => $el->LAST_ERROR), JSON_UNESCAPED_UNICODE);
         }
-    }
-    echo json_encode(array('success' => 1));
 
-} else {
-
-    echo json_encode(array('success' => 0, 'responseBitrix' => $el->LAST_ERROR), JSON_UNESCAPED_UNICODE);
-}
-
-foreach ($_POST['img'] as $item) {
-    $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $item));
-
-    file_put_contents($_SERVER["DOCUMENT_ROOT"].'/'.$FILENAME.'.png', $data);
-
-    $arFile = CFile::MakeFileArray($_SERVER["DOCUMENT_ROOT"].'/'.$FILENAME.'.png');
-
-    $arFile["MODULE_ID"] = "iblock";
-    CIBlockElement::SetPropertyValueCode($PRODUCT_ID, "PHOTOS", Array("VALUE"=>$arFile)  );
-    unlink('/'.$FILENAME.'.png');  }
+    // Редактирование элемента
     } else {
-
 
         if($PROP['PROP_BRAND'] == null || $PROP['PROP_MODEL'] == null || $PROP['Modification']['val'] == null ){
             unset($arLoadProductArray['NAME']);
@@ -256,12 +256,17 @@ foreach ($_POST['img'] as $item) {
 
         }
         unset($arLoadProductArray['PROPERTY_VALUES']);
-        if(  $res = $el->Update(intval($_REQUEST['EDIT_ID']), $arLoadProductArray)){
+        if($res = $el->Update(intval($_REQUEST['EDIT_ID']), $arLoadProductArray)){
             foreach ($_REQUEST as $value) {
                 if ($value['val'] == 'true') {
                     $multiselect[$value['data']['id_prop']][] = $value['data']['idSelf'];
                 }
             }
+
+            if ($_POST['dateSelectSelector'] !== 'no-value') {
+                CIBlockElement::SetPropertyValueCode($_REQUEST['EDIT_ID'], 'PROP_YAERH_Left', $_POST['dateSelectSelector']);
+            }
+
             $arLoadProductProp['PROP_MODIFICATION'] = $_POST['Modification']['val'];
             $arLoadProductProp['UF_REGION'] = $_POST['region'];
             $arLoadProductProp['UF_CITY'] = $_POST['city'];
@@ -383,10 +388,9 @@ foreach ($_POST['img'] as $item) {
 
                         }
                     } else {
-
                         CIBlockElement::SetPropertyValueCode(intval($_REQUEST['EDIT_ID']), "PHOTOS", array("VALUE" => $arFile));
                     }
-                    unlink($_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png');
+                    unlink($_SERVER["DOCUMENT_ROOT"].'/'.$FILENAME.'.png');
                 };
             }
 

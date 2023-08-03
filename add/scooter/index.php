@@ -10,12 +10,10 @@ Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . "/css/add-page.css");
 Loc::loadMessages(__FILE__);
 global $arSetting;
 if (CModule::IncludeModule("iblock"))
-    $IBLOCK_ID = 8;
-$properties = CIBlockProperty::GetList(array("sort" => "asc", "name" => "asc"), array("ACTIVE" => "Y", "IBLOCK_ID" => $IBLOCK_ID));
-$prop_fields = [];
-while ($prop_fiel = $properties->GetNext()) { ?>
 
-    <?php
+$properties = CIBlockProperty::GetList(array("sort" => "asc", "name" => "asc"), array("ACTIVE" => "Y", "IBLOCK_ID" => SCOOTER_IBLOCK_ID));
+$prop_fields = [];
+while ($prop_fiel = $properties->GetNext()) {
     $prop_field[$prop_fiel["ID"]] = $prop_fiel;
     $prop_fields[] = $prop_fiel;
 }
@@ -24,7 +22,7 @@ $userPhone = getUserInfoByID()['PERSONAL_PHONE'];
 if (!$userPhone)
     LocalRedirect($GLOBALS['arSetting'][SITE_ID]['href'] . 'personal/edit/');
 
-$properties = CIBlockProperty::GetList(array("sort" => "asc", "name" => "asc"), array("ACTIVE" => "Y", "IBLOCK_ID" => $IBLOCK_ID));
+$properties = CIBlockProperty::GetList(array("sort" => "asc", "name" => "asc"), array("ACTIVE" => "Y", "IBLOCK_ID" => SCOOTER_IBLOCK_ID));
 $prop_fields = [];
 while ($prop_fiel = $properties->GetNext()) {
     $prop_field[$prop_fiel["ID"]] = $prop_fiel;
@@ -34,7 +32,7 @@ while ($prop_fiel = $properties->GetNext()) {
 
 if ($_GET['EDIT'] == 'Y' && $_GET['ID']) {
     $arSelect = array("ID", "IBLOCK_ID", "IBLOCK_SECTION_ID", "NAME", "DATE_ACTIVE_FROM", "PROPERTY_*", "PREVIEW_TEXT", "PREVIEW_PICTURE");
-    $arFilter = array("IBLOCK_ID" => $IBLOCK_ID, 'ID' => $_GET['ID'], "ACTIVE" => "Y");
+    $arFilter = array("IBLOCK_ID" => SCOOTER_IBLOCK_ID, 'ID' => $_GET['ID'], "ACTIVE" => "Y");
     $res = CIBlockElement::GetList(array(), $arFilter, false, array("nPageSize" => 1), $arSelect);
     while ($ob = $res->GetNextElement()) {
         $arFields = $ob->GetFields();
@@ -42,7 +40,7 @@ if ($_GET['EDIT'] == 'Y' && $_GET['ID']) {
     }
 }
 ps($arProps);
-$arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
+$arLink = CIBlockSectionPropertyLink::GetArray(SCOOTER_IBLOCK_ID, 90);
 ?>
 
 <? /*?> <div class="container">
@@ -434,7 +432,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                                         <?
                                         $res = CIBlockSection::GetList(
                                             array('sort' => 'asc'),
-                                            array('IBLOCK_ID' => '8', 'ACTIVE' => 'Y'),
+                                            array('IBLOCK_ID' => SCOOTER_IBLOCK_ID, 'ACTIVE' => 'Y'),
                                             false,
                                             array('UF_*')
                                         );
@@ -555,9 +553,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                                                  class=" d-lg-flex justify-content-end align-items-center <?= ($prop_field[158]['IS_REQUIRED'] == 'Y') ? 'div-req' : '' ?>">
                                                 <? $count = 0; ?>
 
-                                                <? foreach ($elY
-
-                                                as $item) { ?>
+                                                <? foreach ($elY as $item) { ?>
                                                 <? if ($item['UF_NAME'] != ''){ ?>
                                                 <? if ($count == 7) { ?>
                                                 <select data-req="Y" class="mr-3 custom-select" id="dateSelectSelector"
@@ -691,8 +687,10 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                                     <div class="mb-4 row __colum-reverse flex-lg-row select-w-100">
                                         <div class="col col-lg-10"><?
                                             if (CModule::IncludeModule("iblock"))
-                                                $IBLOCK_ID = 8;
-                                            $properties = CIBlockProperty::GetList(array("sort" => "asc", "name" => "asc"), array("ACTIVE" => "Y", "IBLOCK_ID" => $IBLOCK_ID));
+                                            $properties = CIBlockProperty::GetList(
+                                                    array("sort" => "asc", "name" => "asc"),
+                                                    array("ACTIVE" => "Y", "IBLOCK_ID" => SCOOTER_IBLOCK_ID)
+                                            );
                                             while ($prop_fields[] = $properties->GetNext()) {
                                                 //echo $prop_fields["ID"]." - ".$prop_fields["NAME"]."<br>";
                                             }
@@ -1702,15 +1700,10 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
             });
             $(this).toggleClass('activeSection')
         })
-        $('#main-selector-photo').click(function () {
-            //  alert('main');
-        })
+
         $('.property-step-contact').click(function () {
-
-
             let errors = 0;
             let errorsDiv = 0;
-            let skip = false;
             $(this).find('input').each(function () {
                 let inputData = $(this).data()
                 let value = $(this).val()
@@ -1726,9 +1719,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                 }
 
                 if (inputData.req === 'Y') {
-                    if ($(this).attr('type') == 'radio') {
-
-                    } else {
+                    if ($(this).attr('type') !== 'radio') {
                         if (value === '') {
 
                             errors++;
@@ -1848,11 +1839,8 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
         }
 
         $('.property-step-contact').click(function () {
-
-
             let errors = 0;
             let errorsDiv = 0;
-            let skip = false;
             $(this).find('input').each(function () {
                 let inputData = $(this).data()
                 inputData.req = $(this).attr('data-req')
@@ -1865,7 +1853,6 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
 
                     } else {
                         if (value === '') {
-
                             errors++;
                         }
                     }
@@ -1896,11 +1883,12 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                 $('.wizard-control-final').removeClass('active');
             }
         })
+
+        let currentUrl = window.location.href;
+        let isEdit = currentUrl.indexOf("EDIT=Y") !== -1;
         $('.wizard-control-next').click(function () {
             $(document).ready(function () {
-                let selectedSellerTypeAgency = $('#forAutohouse').is(':checked')
                 let selectedSellerTypeOwner = $('#forOwner').is(':checked')
-
                 if (selectedSellerTypeOwner) {
                     $('#Legalname').hide();
                     $('#Legalname').attr('data-req', 'N');
@@ -1908,20 +1896,26 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
                     $('#Legalname').show();
                     $('#Legalname').attr('data-req', 'Y');
                 }
-                let currentUrl = window.location.href;
-                let isEdit = currentUrl.indexOf("EDIT=Y") !== -1;
+
                 if (!isEdit) {
                     setTimeout(() => $('.wizard-control-final').removeClass('active'), 500);
                 }
-                let toClickId = <?=json_encode($arToClick)?>;
-
-                toClickId.forEach(function (index) {
-                    let selector = '#' + index;
-                    console.log($(selector).siblings('label').trigger('click'))
-                })
-
             })
-        })
+        });
+
+        addEventListener('DOMContentLoaded', () => {
+            // Если это режим редактирования, то устанавливаем значения по умолчанию
+            if (isEdit) {
+                let standardBrandAndModel = <?=json_encode($arToClick)?>;
+                if (standardBrandAndModel) {
+                    standardBrandAndModel.forEach((defaultValueId) => {
+                        let selector = '#' + defaultValueId;
+                        $(selector).siblings('label').trigger('click');
+                    });
+                }
+            }
+        });
+
         $('.wizard-control-final').removeClass('active');
     </script>
     <style>
@@ -1930,15 +1924,12 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 90);
         }
 
         @media (max-width: 768px) {
-
             .mb-4.row {
                 justify-content: flex-end;
             }
-
             .flex-column-reverse-d {
                 flex-direction: inherit !important;
             }
-
             .propert-sell-main .form_radio_btn label {
                 font-size: 12px;
                 height: 29px;

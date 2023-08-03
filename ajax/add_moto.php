@@ -158,10 +158,14 @@ if($arUser['UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUEST['E
                 CIBlockElement::SetPropertyValueCode($PRODUCT_ID, 'PROP_YAERH_Left', $_POST['dateSelectSelector']);
             }
 
-            $arLoadProductProp['UF_REGION'] = $_POST['region'];
-            $arLoadProductProp['UF_CITY'] = $_POST['city'];
-            $arLoadProductProp['PROP_BODY_TYPE'] =  $_REQUEST['PROP_BODY_TYPE'];
-            CIBlockElement::SetPropertyValueCode($PRODUCT_ID, "VIP_FLAG", 0);
+            $arLoadProductProp['VIP_FLAG'] = 0; // по стандарту объявления не VIP
+            if (!empty($_REQUEST['PROP_BODY_TYPE'])) $arLoadProductProp['PROP_BODY_TYPE'] =  $_REQUEST['PROP_BODY_TYPE'];
+            if (!empty($_POST['region'])) $arLoadProductProp['UF_REGION'] = $_POST['region'];
+            if (!empty($_POST['city'])) $arLoadProductProp['UF_CITY'] = $_POST['city'];
+            foreach ($arLoadProductProp as $propCode => $propValue) {
+                CIBlockElement::SetPropertyValueCode($PRODUCT_ID, $propCode, $propValue);
+            }
+
             foreach ($multiselect as $key => $value) {
                 if (!is_string($key) && !empty($key)) {
                     CIBlockElement::SetPropertyValueCode($PRODUCT_ID, $key, $value);
