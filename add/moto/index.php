@@ -1334,7 +1334,6 @@ ps($arProps);
 
                 newFilesArr.forEach(async (file) => {
                     const dataUrl = await this.readFileAsync(file);
-                    console.log(allFiles);
                     let photoList = document.querySelectorAll(".main-selector-photo .set-main-text");
                     photoList.forEach((el) => {
                         let textItem = el.innerText;

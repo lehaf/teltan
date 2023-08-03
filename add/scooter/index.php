@@ -1466,7 +1466,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray(SCOOTER_IBLOCK_ID, 90);
             $(this).find('input').each(function () {
                 let inputData = $(this).data()
                 let value = $(this).val()
-                console.log($(this).attr('id'))
+                $(this).attr('id')
                 if (inputData.req === 'Y') {
                     if ($(this).attr('type') == 'radio') {
 
@@ -1497,7 +1497,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray(SCOOTER_IBLOCK_ID, 90);
                     $(this).css('border-block-color', 'red')
                 }
             });
-            console.log($('.first-drop').html().trim())
+            $('.first-drop').html().trim();
             if ($('.first-drop').html().trim() === 'אזור') {
                 errors = errors + 1;
                 $('.first-drop').css('border-block-color', 'red')
@@ -1599,7 +1599,6 @@ $arLink = CIBlockSectionPropertyLink::GetArray(SCOOTER_IBLOCK_ID, 90);
 
                 newFilesArr.forEach(async (file) => {
                     const dataUrl = await this.readFileAsync(file);
-                    console.log(allFiles);
                     let photoList = document.querySelectorAll(".main-selector-photo .set-main-text");
                     photoList.forEach((el) => {
                         let textItem = el.innerText;

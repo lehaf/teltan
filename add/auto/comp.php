@@ -14,12 +14,9 @@ global $arSetting;
 // Если нет номера телефона, то редиректим на форму с его добавлением
 $userPhone = getUserInfoByID()['PERSONAL_PHONE'];
 if (CModule::IncludeModule("iblock"))
-    $IBLOCK_ID = 3;
-$properties = CIBlockProperty::GetList(array("sort" => "asc", "name" => "asc"), array("ACTIVE" => "Y", "IBLOCK_ID" => $IBLOCK_ID));
+$properties = CIBlockProperty::GetList(array("sort" => "asc", "name" => "asc"), array("ACTIVE" => "Y", "IBLOCK_ID" => AUTO_IBLOCK_ID));
 $prop_fields = [];
-while ($prop_fiel = $properties->GetNext()) { ?>
-
-    <?php
+while ($prop_fiel = $properties->GetNext()) {
     $prop_field[$prop_fiel["ID"]] = $prop_fiel;
     $prop_fields[] = $prop_fiel;
 }
@@ -29,7 +26,7 @@ if (!$userPhone)
 
 if ($_GET['EDIT'] == 'Y' && $_GET['ID']) {
     $arSelect = array("ID", "IBLOCK_ID", "IBLOCK_SECTION_ID", "NAME", "DATE_ACTIVE_FROM", "PROPERTY_*", "PREVIEW_TEXT", "PREVIEW_PICTURE");
-    $arFilter = array("IBLOCK_ID" => $IBLOCK_ID, 'ID' => $_GET['ID'], "ACTIVE_DATE" => "Y", "ACTIVE" => "Y");
+    $arFilter = array("IBLOCK_ID" => AUTO_IBLOCK_ID, 'ID' => $_GET['ID'], "ACTIVE_DATE" => "Y", "ACTIVE" => "Y");
     $res = CIBlockElement::GetList(array(), $arFilter, false, array("nPageSize" => 1), $arSelect);
     while ($ob = $res->GetNextElement()) {
         $arFields = $ob->GetFields();
@@ -38,7 +35,7 @@ if ($_GET['EDIT'] == 'Y' && $_GET['ID']) {
         // pr($arProps);
     }
 }
-$arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
+$arLink = CIBlockSectionPropertyLink::GetArray(AUTO_IBLOCK_ID, 80);
 
 ?>
 
@@ -430,7 +427,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                                         <?
                                         $res = CIBlockSection::GetList(
                                             array('sort' => 'asc'),
-                                            array('IBLOCK_ID' => '3', 'ACTIVE' => 'Y'),
+                                            array('IBLOCK_ID' => AUTO_IBLOCK_ID, 'ACTIVE' => 'Y'),
                                             false,
                                             array('UF_*')
                                         );
@@ -1579,10 +1576,9 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
         let flagPhoto = true;
 
         class FileUploader {
+
             fileList = null
-
             template = ''
-
             templateOptions = {
                 name: 'name',
             }
@@ -1596,7 +1592,6 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
 
                 $(fileListId).on('change', (e) => {
                     this.addFiles(e.target.files)
-
                     e.target.value = ''
                 })
 
@@ -1653,7 +1648,6 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
 
                 newFilesArr.forEach(async (file) => {
                     const dataUrl = await this.readFileAsync(file);
-                    console.log(allFiles);
                     let photoList = document.querySelectorAll(".main-selector-photo .set-main-text");
                     photoList.forEach((el) => {
                         let textItem = el.innerText;
@@ -1701,7 +1695,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
 
         function rotateThis(item) {
             let count_rotate = $(item).parents('.main-photo__item').find('img').attr('data-rotate');
-            console.log($(item).parents('.main-photo__item').find('img').attr('data-rotate'))
+            $(item).parents('.main-photo__item').find('img').attr('data-rotate')
             count_rotate = parseInt(count_rotate) + 1;
             $(item).closest('.main-photo__item').find('img').attr('data-rotate', count_rotate);
         }
@@ -1745,12 +1739,11 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
             $(this).toggleClass('activeSection')
         })
 
+        let currentUrl = window.location.href;
+        let isEdit = currentUrl.indexOf("EDIT=Y") !== -1;
         $('.wizard-control-next').click(function () {
             $(document).ready(function () {
-                let selectedSellerTypeAgency = $('#forAutohouse').is(':checked')
                 let selectedSellerTypeOwner = $('#forOwner').is(':checked')
-                console.log(selectedSellerTypeAgency)
-                console.log(selectedSellerTypeOwner)
                 if (selectedSellerTypeOwner) {
                     $('#Legalname').hide();
                     $('#Legalname').attr('data-req', 'N');
@@ -1758,21 +1751,25 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
                     $('#Legalname').show();
                     $('#Legalname').attr('data-req', 'Y');
                 }
-                let currentUrl = window.location.href;
-                let isEdit = currentUrl.indexOf("EDIT=Y") !== -1;
+
                 if (!isEdit) {
                     setTimeout(() => $('.wizard-control-final').removeClass('active'), 500);
                 }
-                let toClickId = <?=json_encode($arToClick)?>;
-                console.log(toClickId);
-                toClickId.forEach(function (index) {
-                    let selector = '#' + index;
-                    console.log($(selector).siblings('label').trigger('click'))
-                })
-
             })
-        })
+        });
 
+        addEventListener('DOMContentLoaded', () => {
+            // Если это режим редактирования, то устанавливаем значения по умолчанию
+            if (isEdit) {
+                let standardBrandAndModel = <?=json_encode($arToClick)?>;
+                if (standardBrandAndModel) {
+                    standardBrandAndModel.forEach((defaultValueId) => {
+                        let selector = '#' + defaultValueId;
+                        $(selector).siblings('label').trigger('click');
+                    });
+                }
+            }
+        });
 
     </script>
     <style>
@@ -1785,11 +1782,9 @@ $arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 80);
             .mb-4.row {
                 justify-content: flex-end;
             }
-
             .flex-column-reverse-d {
                 flex-direction: inherit !important;
             }
-
             .propert-sell-main .form_radio_btn label {
                 font-size: 12px;
                 height: 29px;
