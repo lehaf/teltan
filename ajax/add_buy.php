@@ -249,7 +249,7 @@ if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0 || $b || $_REQUEST[
                 } else {
                     CIBlockElement::SetPropertyValueCode($PRODUCT_ID, "PHOTOS", array("VALUE" => $arFile));
                 }
-                unlink('/' . $FILENAME . '.png');
+                unlink($_SERVER["DOCUMENT_ROOT"].'/' . $FILENAME . '.png');
                 $i++;
             }
             echo json_encode(array('success' => 1));

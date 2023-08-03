@@ -1,5 +1,6 @@
 <?php
 // IBLOCKS
+const SIMPLE_ADS_IBLOCK_ID = 1;
 const AUTO_IBLOCK_ID = 3;
 const MOTO_IBLOCK_ID = 7;
 const SCOOTER_IBLOCK_ID = 8;

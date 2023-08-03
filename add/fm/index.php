@@ -10,8 +10,10 @@ Loc::loadMessages(__FILE__);
 global $arSetting;
 
 CModule::IncludeModule("iblock");
-$IBLOCK_ID = 1;
-$properties = CIBlockProperty::GetList(array("sort" => "asc", "name" => "asc"), array("ACTIVE" => "Y", "IBLOCK_ID" => $IBLOCK_ID));
+$properties = CIBlockProperty::GetList(
+        array("sort" => "asc", "name" => "asc"),
+        array("ACTIVE" => "Y", "IBLOCK_ID" => SIMPLE_ADS_IBLOCK_ID)
+);
 while ($prop_fields[] = $properties->GetNext()) {
 }
 $arProp = [];
@@ -19,7 +21,7 @@ $arProp = [];
 $rsSections = CIBlockSection::GetList(
     array(),
     array(
-        "IBLOCK_ID" => $IBLOCK_ID,
+        "IBLOCK_ID" => SIMPLE_ADS_IBLOCK_ID,
         "ID" => $_GET['ids']
     ),
     false,
@@ -77,7 +79,7 @@ if ($_GET['EDIT'] == 'Y' && $_GET['ID']) {
         // pr($arProps);
     }
 }
-$arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, $_GET['ids']);
+$arLink = CIBlockSectionPropertyLink::GetArray(SIMPLE_ADS_IBLOCK_ID, $_GET['ids']);
 
 ps($arProp);
 ?>
@@ -130,22 +132,47 @@ ps($arProp);
                 </div>
                 <div class="form-group row flex-column-reverse flex-lg-row">
                     <div class="col col-lg-10">
-                        <textarea data-req="Y" type="text" placeholder="Enter Description" class="form-control"
+                        <textarea data-req="Y"
+                                  type="text"
+                                  placeholder="Enter Description"
+                                  class="form-control"
                                   id="itemDescription"
-                                  rows="4"><?= $arFields['PREVIEW_TEXT'] ?></textarea>
+                                  rows="4"
+                        ><?=strip_tags($arFields['PREVIEW_TEXT'])?></textarea>
                     </div>
                     <label for="itemDescription" class="col col-lg-2 label-name">:<?=Loc::getMessage('Description')?> *</label>
                 </div>
                 <div class="form-group row flex-column-reverse flex-lg-row">
                     <div class="col col-lg-10">
-                        <input data-req="Y" value="<?= $arProps['PRICE']['VALUE'] ?>" type="text"
+                        <input data-req="Y" value="<?=$arProps['PRICE']['VALUE'] ?>" type="text"
                                placeholder="Enter Price"
                                class="form-control" id="itemPrice">
                     </div>
                     <label for="itemPrice" class="col col-lg-2 label-name">:<?=Loc::getMessage('Price')?> *</label>
                 </div>
-                <? require_once 'city.php' ?>
-
+                <?$APPLICATION->IncludeComponent(
+                        "bitrix:catalog.section.list",
+                        "add_city",
+                    Array(
+                        "VIEW_MODE" => "TEXT",
+                        "SHOW_PARENT_NAME" => "Y",
+                        "IBLOCK_TYPE" => "settings",
+                        "IBLOCK_ID" => "9",
+                        "PROPS" => $arProps,
+                        "SECTION_ID" => $_REQUEST["SECTION_ID"],
+                        "SECTION_CODE" => "",
+                        "SECTION_URL" => "",
+                        "COUNT_ELEMENTS" => "N",
+                        "TOP_DEPTH" => "2",
+                        "SECTION_FIELDS" => "",
+                        "SECTION_USER_FIELDS" => "",
+                        "ADD_SECTIONS_CHAIN" => "N",
+                        "CACHE_TYPE" => "A",
+                        "CACHE_TIME" => "36000000",
+                        "CACHE_NOTES" => "",
+                        "CACHE_GROUPS" => "Y"
+                    )
+                );?>
                 <div class="form-group row flex-column-reverse flex-lg-row">
                     <div class="col col-lg-10">
                         <input type="text" value="<?= $arProps['UF_PHONE_1']['VALUE'] ?>" class="form-control"
@@ -180,7 +207,7 @@ ps($arProp);
                                     name="anytime"
                                     value="anytime"
                             >
-                            <label class="mr-3 mb-0" for="anytime">:<?=Loc::getMessage('Anytime')?></label>
+                            <label class="mr-3 mb-0" for="anytime"><?=Loc::getMessage('Anytime')?></label>
                         </div>
                     </div>
 
@@ -296,8 +323,8 @@ ps($arProp);
 
                         </div>
                     </div>
-                    <div class="col-12 col-lg-2 d-flex justify-content-end align-items-center">
-                        <p class="text-right mb-3 mb-lg-0 font-weight-bold">:<?=Loc::getMessage('Call:')?></p>
+                    <div id="callContainer" class="col-12 col-lg-2 d-flex justify-content-end align-items-center">
+                        <p class="text-right mb-3 mb-lg-0 font-weight-bold">:<?=Loc::getMessage('call')?></p>
                     </div>
                 </div>
 

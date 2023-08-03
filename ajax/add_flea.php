@@ -1,7 +1,5 @@
 <? require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_before.php");
 
-use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
-
 CModule::IncludeModule('highloadblock');
 
 $entity_data_class = GetEntityDataClass(28);
@@ -82,7 +80,7 @@ if ($arUser['UF_DAYS_FREE1'] - $arUser['UF_COUNT_FLEA'] > 0 || $b || $_REQUEST['
             $arLoadProductArray = array(
                 'MODIFIED_BY' => $GLOBALS['USER']->GetID(),
                 'IBLOCK_SECTION_ID' => (int)$_POST['section_id'],
-                'IBLOCK_ID' => 1,
+                'IBLOCK_ID' => SIMPLE_ADS_IBLOCK_ID,
                 'CODE' => $translit,
                 'PROPERTY_VALUES' => $PROP,
                 'NAME' => $_POST['itemTitle']['val'],
@@ -96,7 +94,7 @@ if ($arUser['UF_DAYS_FREE1'] - $arUser['UF_COUNT_FLEA'] > 0 || $b || $_REQUEST['
         $arLoadProductArray = array(
             'MODIFIED_BY' => $GLOBALS['USER']->GetID(),
             //  'IBLOCK_SECTION_ID' => (int)$_POST['section_id']['id_section'],
-            'IBLOCK_ID' => 1,
+            'IBLOCK_ID' => SIMPLE_ADS_IBLOCK_ID,
             'CODE' => $translit,
             'PROPERTY_VALUES' => $PROP,
             'NAME' => $_POST['itemTitle']['val'],
@@ -115,6 +113,8 @@ if ($arUser['UF_DAYS_FREE1'] - $arUser['UF_COUNT_FLEA'] > 0 || $b || $_REQUEST['
     $arLoadProductArray['PROPERTY_VALUES']['UF_PHONE_1'] = $_POST['itemPhone1']['val'];
     $arLoadProductArray['PROPERTY_VALUES']['UF_PHONE_2'] = $_POST['itemPhone2']['val'];
     $arLoadProductArray['PROPERTY_VALUES']['UF_PHONE_3'] = $_POST['itemPhone3']['val'];
+
+    // Создание элемента
     if ($_REQUEST['EDIT'] != 'Y') {
         if ($_POST['section_id'] != null) {
 
@@ -200,12 +200,11 @@ if ($arUser['UF_DAYS_FREE1'] - $arUser['UF_COUNT_FLEA'] > 0 || $b || $_REQUEST['
             } else {
                 CIBlockElement::SetPropertyValueCode($PRODUCT_ID, "PHOTOS", array("VALUE" => $arFile));
             }
-            unlink('/' . $FILENAME . '.png');
+            unlink($_SERVER["DOCUMENT_ROOT"].'/' . $FILENAME . '.png');
             $i++;
         }
-
+    // Редактирование элемента
     } else {
-
 
         foreach ($arLoadProductArray as $key => $value) {
             if ($value == '') {
@@ -213,9 +212,8 @@ if ($arUser['UF_DAYS_FREE1'] - $arUser['UF_COUNT_FLEA'] > 0 || $b || $_REQUEST['
             }
 
         }
+
         $arLoadProductProp = [];
-        $log = date('Y-m-d H:i:s') . ' ' . print_r($arLoadProductArray['PROPERTY_VALUES'], true);
-        file_put_contents(__DIR__ . '/log.txt', $log . PHP_EOL, FILE_APPEND);
         foreach ($arLoadProductArray['PROPERTY_VALUES'] as $key => $value) {
             $arLoadProductProp[$key] = $value;
         }
@@ -224,17 +222,15 @@ if ($arUser['UF_DAYS_FREE1'] - $arUser['UF_COUNT_FLEA'] > 0 || $b || $_REQUEST['
         $arLoadProductArray['PROPERTY_VALUES']['UF_PHONE_2'] = $_POST['itemPhone2']['val'];
         $arLoadProductArray['PROPERTY_VALUES']['UF_PHONE_3'] = $_POST['itemPhone3']['val'];
         unset($arLoadProductArray['PROPERTY_VALUES']);
-        $log = date('Y-m-d H:i:s') . ' ' . print_r($arLoadProductArray, true);
-        file_put_contents(__DIR__ . '/log.txt', $log . PHP_EOL, FILE_APPEND);
+
         if ($res = $el->Update(intval($_REQUEST['EDIT_ID']), $arLoadProductArray)) {
 
             unset($arLoadProductArray);
             foreach ($arLoadProductProp as $key => $value) {
-                $log = date('Y-m-d H:i:s') . ' ' . print_r(array($key => $value), true);
-                file_put_contents(__DIR__ . '/log.txt', $log . PHP_EOL, FILE_APPEND);
-
-                CIBlockElement::SetPropertyValuesEx($_REQUEST['EDIT_ID'], false, array($key => $value));
+                CIBlockElement::SetPropertyValuesEx($_REQUEST['EDIT_ID'], SIMPLE_ADS_IBLOCK_ID, array($key => $value));
             }
+
+
             foreach ($_REQUEST as $value) {
                 if ($value['val'] == 'true') {
                     $multiselect[$value['data']['id_prop']][] = $value['data']['idSelf'];

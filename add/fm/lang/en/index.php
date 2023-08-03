@@ -48,7 +48,7 @@ $MESS ['Select country'] = "Select country";
 $MESS ['Anytime'] = "Anytime";
 $MESS ['from'] = "from";
 $MESS ['to'] = "to";
-$MESS ['Call:'] = "Call:";
+$MESS ['call'] = "Call";
 
 $MESS ['Submit your ad'] = "Submit your ad";
 $MESS ['Next step'] = "Next step";

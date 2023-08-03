@@ -250,7 +250,7 @@ $PROP['PROP_Completion'] = date("d.m.Y H:i:s", strtotime($_POST['PROP_Completion
                 } else {
                     CIBlockElement::SetPropertyValueCode($PRODUCT_ID, "PHOTOS", array("VALUE" => $arFile));
                 }
-                unlink('/' . $FILENAME . '.png');
+                unlink($_SERVER["DOCUMENT_ROOT"].'/' . $FILENAME . '.png');
                 $i++;
             }
             echo json_encode(array('success' => 1));

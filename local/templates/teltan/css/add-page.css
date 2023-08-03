@@ -81,6 +81,7 @@
 }
 
 @media (max-width: 768px){
+
   .__colum-reverse{
     flex-direction: column-reverse;
   }
@@ -135,5 +136,9 @@
 @media (min-width: 790px) {
   .auto-step2 .row.m_15{
     margin: 0 -15px;
+  }
+
+  #callContainer {
+    justify-content: start !important;
   }
 }

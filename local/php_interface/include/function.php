@@ -26,11 +26,7 @@ function pr($o, $show = false, $die = false, $fullBackTrace = false)
                         $value["file"] = str_replace($dRoot, "", $value["file"]);
                         $dRoot = str_replace("\\", "/", $dRoot);
                         $value["file"] = str_replace($dRoot, "", $value["file"]);
-//                        echo '<pre>';
-//                        print_r($value);
-//                        echo '</pre>';
                         ?>
-
                         File: <b><?= $value["file"] ?></b> [line: <?= $value["line"] ?>] <?= $value['class'] . '->'.$value['function'].'()'?><br>
                     <? endforeach ?>
                 <?endif; ?>
