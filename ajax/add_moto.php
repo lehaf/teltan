@@ -154,7 +154,7 @@ if($arUser['UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUEST['E
                 }
             }
 
-            if ($_POST['dateSelectSelector'] !== 'no-value') {
+            if (!empty($_POST['dateSelectSelector']) && $_POST['dateSelectSelector'] !== 'no-value') {
                 CIBlockElement::SetPropertyValueCode($PRODUCT_ID, 'PROP_YAERH_Left', $_POST['dateSelectSelector']);
             }
 
@@ -285,7 +285,7 @@ if($arUser['UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUEST['E
                 }
             }
 
-            if ($_POST['dateSelectSelector'] !== 'no-value') {
+            if (!empty($_POST['dateSelectSelector']) && $_POST['dateSelectSelector'] !== 'no-value') {
                 CIBlockElement::SetPropertyValueCode($_REQUEST['EDIT_ID'], 'PROP_YAERH_Left', $_POST['dateSelectSelector']);
             }
 

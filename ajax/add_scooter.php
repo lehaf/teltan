@@ -149,7 +149,7 @@ $translit = Cutil::translit($NAME,"ru",$arParams) . $USER->GetID(). randString(1
                 }
             }
 
-            if ($_POST['dateSelectSelector'] !== 'no-value') {
+            if (!empty($_POST['dateSelectSelector']) && $_POST['dateSelectSelector'] !== 'no-value') {
                 CIBlockElement::SetPropertyValueCode($PRODUCT_ID, 'PROP_YAERH_Left', $_POST['dateSelectSelector']);
             }
 
@@ -263,7 +263,7 @@ $translit = Cutil::translit($NAME,"ru",$arParams) . $USER->GetID(). randString(1
                 }
             }
 
-            if ($_POST['dateSelectSelector'] !== 'no-value') {
+            if (!empty($_POST['dateSelectSelector']) && $_POST['dateSelectSelector'] !== 'no-value') {
                 CIBlockElement::SetPropertyValueCode($_REQUEST['EDIT_ID'], 'PROP_YAERH_Left', $_POST['dateSelectSelector']);
             }
 

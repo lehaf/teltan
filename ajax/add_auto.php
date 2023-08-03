@@ -87,7 +87,7 @@ if ($arUser['UF_UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUES
     $res = CIBlockSection::GetByID($PROP['PROP_MODEL']);
     if ($ar_res = $res->GetNext())
         $PROP['PROP_MODEL'] = $ar_res['NAME'];
-    $NAME = $PROP['PROP_BRAND'] . ' ' . $PROP['PROP_MODEL'] . ' ' . $_POST['Modification']['val'] . ' ' . $PROP['PROP_YAERH'];
+    $NAME = $PROP['PROP_BRAND'] . ' ' . $PROP['PROP_MODEL'] . ' ' . $_POST['Modification']['val'] . ' ' . $PROP['PROP_YAERH_Left'];
     $PROP['ID_USER'] = $USER->GetID();
 
     $arParams = array("replace_space" => "-", "replace_other" => "-");
@@ -98,7 +98,6 @@ if ($arUser['UF_UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUES
         }
     }
 
-    $arLoadProductProp['PROP_BODY_TYPE'] =  $PROP['PROP_BODY_TYPE'];
     if ($_REQUEST['EDIT'] != 'Y') {
         $arLoadProductArray = array(
             'MODIFIED_BY' => $GLOBALS['USER']->GetID(),
@@ -143,11 +142,18 @@ if ($arUser['UF_UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUES
                     $multiselect[$value['data']['id_prop']][] = $value['data']['idSelf'];
                 }
             }
-            $arLoadProductProp['UF_REGION'] = $_POST['region'];
-            $arLoadProductProp['UF_CITY'] = $_POST['city'];
-            CIBlockElement::SetPropertyValueCode($PRODUCT_ID, "VIP_FLAG", 0);
-            $log = date('Y-m-d H:i:s') . ' ' . print_r($multiselect, true);
-            file_put_contents(__DIR__ . '/log.txt', $log . PHP_EOL, FILE_APPEND);
+
+            if ($_POST['dateSelectSelector'] !== 'no-value') {
+                CIBlockElement::SetPropertyValueCode($PRODUCT_ID, 'PROP_YAERH_Left', $_POST['dateSelectSelector']);
+            }
+
+            $arLoadProductProp['VIP_FLAG'] = 0; // по стандарту объявления не VIP
+            if (!empty($_REQUEST['PROP_BODY_TYPE'])) $arLoadProductProp['PROP_BODY_TYPE'] =  $_REQUEST['PROP_BODY_TYPE'];
+            if (!empty($_POST['region'])) $arLoadProductProp['UF_REGION'] = $_POST['region'];
+            if (!empty($_POST['city'])) $arLoadProductProp['UF_CITY'] = $_POST['city'];
+            foreach ($arLoadProductProp as $propCode => $propValue) {
+                CIBlockElement::SetPropertyValueCode($PRODUCT_ID, $propCode, $propValue);
+            }
 
             foreach ($multiselect as $key => $value) {
                 if (!is_string($key) && !empty($key)) {
@@ -216,7 +222,7 @@ if ($arUser['UF_UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUES
                 } else {
                     CIBlockElement::SetPropertyValueCode($PRODUCT_ID, "PHOTOS", array("VALUE" => $arFile));
                 }
-                unlink('/' . $FILENAME . '.png');
+                unlink($_SERVER['DOCUMENT_ROOT'].'/' . $FILENAME . '.png');
                 $i++;
             }
         } else {
@@ -224,10 +230,8 @@ if ($arUser['UF_UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUES
             echo json_encode(array('success' => 0, 'responseBitrix' => $el->LAST_ERROR), JSON_UNESCAPED_UNICODE);
         }
 
-
+    // Редактирование элемента
     } else {
-
-
         if ($PROP['PROP_BRAND'] == null || $PROP['PROP_MODEL'] == null || $PROP['Modification']['val'] == null) {
             unset($arLoadProductArray['NAME']);
         }
@@ -263,9 +267,12 @@ if ($arUser['UF_UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUES
             }
             foreach ($multiselect as $key => $value) {
                 if (!is_string($key) && !empty($key)) {
-
                     CIBlockElement::SetPropertyValueCode($_REQUEST['EDIT_ID'], $key, $value);
                 }
+            }
+
+            if (!empty($_POST['dateSelectSelector']) && $_POST['dateSelectSelector'] !== 'no-value') {
+                CIBlockElement::SetPropertyValueCode($_REQUEST['EDIT_ID'], 'PROP_YAERH_Left', $_POST['dateSelectSelector']);
             }
 
 
