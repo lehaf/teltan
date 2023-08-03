@@ -1449,8 +1449,78 @@ $arLink = CIBlockSectionPropertyLink::GetArray(SCOOTER_IBLOCK_ID, 90);
             }
         }
 
+        function checkFinalFields() {
+            let errors = 0;
+            let errorsDiv = 0;
+            $(this).find('input').each(function () {
+                let inputData = $(this).data()
+                inputData.req = $(this).attr('data-req')
+                let value = $(this).val()
+
+                if (inputData.req === 'Y') {
+                    if ($(this).attr('type') == 'radio') {
+
+                    } else {
+                        if (value === '') {
+                            errors++;
+                            $(this).css('border-block-color', 'red')
+                        } else {
+                            $(this).css('border-block-color', '')
+                        }
+                    }
+                }
+
+            });
+
+            $(this).find('.div-req').each(function () {
+                errorsDiv++;
+                $(this).find('input').each(function (index) {
+                    if ($(this).is(':checked') != false)
+                        errorsDiv--;
+                })
+            });
+
+            $('.property-step-contact input[data-req="Y"].form-control').each(function () {
+                if ($(this).val().length <= 0) errors++;
+            });
+
+            $(this).find('select').each(function () {
+                let selectData = $(this).data()
+                if (selectData.req === 'Y' && $(this).val() == '') {
+                    errors++;
+                    $(this).css('border-block-color', 'red')
+                }
+            });
+
+            if ($('.first-drop').html().trim() === 'אזור') {
+                errors = errors + 1;
+                $('.first-drop').css('border-block-color', 'red')
+            } else {
+                $(this).css('border-block-color', '')
+            }
+
+            if (errors > 0) {
+                $('.wizard-control-final').removeClass('active');
+            } else {
+                $('.wizard-control-final').addClass('active');
+                if (errorsDiv > 0) {
+                    ('.wizard-control-final').removeClass('active');
+                } else {
+                    $('.wizard-control-final').addClass('active');
+                }
+            }
+        }
+
+        $(document).ready(() => {
+            $('.property-step-contact input[data-req="Y"].form-control').each(function () {
+                $(this).on("keyup", () => {
+                    checkFinalFields();
+                });
+            });
+
+        });
+
         $('.property-step-contact').click(function () {
-            let selectedSellerTypeAgency = $('#forAutohouse').is(':checked')
             let selectedSellerTypeOwner = $('#forOwner').is(':checked')
             if (selectedSellerTypeOwner) {
                 $('#Legalname').hide();
@@ -1462,7 +1532,6 @@ $arLink = CIBlockSectionPropertyLink::GetArray(SCOOTER_IBLOCK_ID, 90);
 
             let errors = 0;
             let errorsDiv = 0;
-            let skip = false;
             $(this).find('input').each(function () {
                 let inputData = $(this).data()
                 let value = $(this).val()
