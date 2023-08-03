@@ -71,115 +71,31 @@ function convertImage($originalImage, $outputImage, $quality)
     return 1;
 }
 
-function RotateJpg2($filename = '', $angle = 0, $savename = false, $type = 'image/jpeg', $matches = array(), $rerun = 0)
-{
-
-    if ($matches[0]) {
-        $type = str_replace('data:', "", $matches[0]);
-    }
-    if ($rerun > 4)
-        die('photo error');
-
-    $rerun = $rerun + 1;
-
-    if ($type == 'image/png' && $rerun < 4) {
-        imagepng(imagecreatefromstring(file_get_contents($filename)), $filename);
-        $source = imagecreatefrompng($filename);
-        if (!$source) {
-            RotateJpg($filename, $angle, $savename, 'image/jpeg', $rerun);
-            $log = date('Y-m-d H:i:s') . 'не получилось создать изображение из фото строка 34 $filename ';
-            file_put_contents(__DIR__ . '/log.txt', $log . PHP_EOL, FILE_APPEND);
-        }
-
-        $bgColor = imagecolorallocatealpha($source, 255, 255, 255, 127);
-        if (!$bgColor) {
-            $log = date('Y-m-d H:i:s') . 'не получилось создать изображение из фото строка 40 ';
-            file_put_contents(__DIR__ . '/log.txt', $log . PHP_EOL, FILE_APPEND);
-        }
-        $rotate = imagerotate($source, $angle, $bgColor);
-
-        if (!$rotate) {
-            $log = date('Y-m-d H:i:s') . 'не получилось создать изображение из фото строка 45 ';
-            file_put_contents(__DIR__ . '/log.txt', $log . PHP_EOL, FILE_APPEND);
-        }
-
-        $imagesavealpha = imagesavealpha($rotate, true);
-        if (!$imagesavealpha) {
-            $log = date('Y-m-d H:i:s') . 'не получилось создать изображение из фото строка 54 ';
-            file_put_contents(__DIR__ . '/log.txt', $log . PHP_EOL, FILE_APPEND);
-        }
-        $imagepng = imagepng($rotate, $savename);
-        if (!$imagepng) {
-            $log = date('Y-m-d H:i:s') . 'не получилось создать изображение из фото строка 59 $rotate ' . $rotate;
-            file_put_contents(__DIR__ . '/log.txt', $log . PHP_EOL, FILE_APPEND);
-        }
-
-    } else {
-
-        if ($rerun < 4) {
-            $imageTmp = imagecreatefromjpeg($filename);
-            imagejpeg($imageTmp, $filename, 100);
-            imagedestroy($imageTmp);
-
-            $original = imagecreatefromjpeg($filename);
-            if (!$original) {
-                RotateJpg($filename, $angle, $savename, 'image/png', $rerun);
-                $log = date('Y-m-d H:i:s') . 'не получилось создать изображение из фото строка 65 $filename ';
-                file_put_contents(__DIR__ . '/log.txt', $log . PHP_EOL, FILE_APPEND);
-            }
-            $rotated = imagerotate($original, $angle, 0);
-            if (!$rotated) {
-                $log = date('Y-m-d H:i:s') . 'не получилось создать изображение из фото строка 70 ';
-                file_put_contents(__DIR__ . '/log.txt', $log . PHP_EOL, FILE_APPEND);
-            }
-            $imagejpeg = imagejpeg($rotated, $savename);
-            if (!$imagejpeg) {
-                $log = date('Y-m-d H:i:s') . 'не получилось создать изображение из фото строка 75 $savename ';
-                file_put_contents(__DIR__ . '/log.txt', $log . PHP_EOL, FILE_APPEND);
-            }
-            $imagedestroy = imagedestroy($rotated);
-            if (!$imagedestroy) {
-                $log = date('Y-m-d H:i:s') . 'не получилось создать изображение из фото строка 80 ';
-                file_put_contents(__DIR__ . '/log.txt', $log . PHP_EOL, FILE_APPEND);
-            }
-        }
-
-    }
-}
-
 function RotateJpg($filename = '', $angle = 0, $savename = false, $type = 'image/jpeg', $matches = array(), $rerun = 0)
 {
-    if ($rerun > 3) {
-        die('photo error');
-    }
+    if ($rerun > 3) die('photo error');
 
     $rerun++;
-
     if ($matches[0]) {
         $type = str_replace('data:', "", $matches[0]);
     }
-
     if ($type == 'image/png') {
         $source = imagecreatefrompng($filename);
-
         if (!$source) {
             RotateJpg($filename, $angle, $savename, 'image/jpeg', $rerun);
         }
 
         $bgColor = imagecolorallocatealpha($source, 255, 255, 255, 127);
-
         if (!$bgColor) {
             RotateJpg($filename, $angle, $savename, 'image/jpeg', $rerun);
         }
 
         $rotate = imagerotate($source, $angle, $bgColor);
-
         if (!$rotate) {
             RotateJpg($filename, $angle, $savename, 'image/jpeg', $rerun);
         }
 
         imagesavealpha($rotate, true);
-
         if (!imagepng($rotate, $savename)) {
             RotateJpg($filename, $angle, $savename, 'image/jpeg', $rerun);
         }
@@ -191,13 +107,11 @@ function RotateJpg($filename = '', $angle = 0, $savename = false, $type = 'image
         imagedestroy($imageTmp);
 
         $original = imagecreatefromjpeg($filename);
-
         if (!$original) {
             RotateJpg($filename, $angle, $savename, 'image/png', $rerun);
         }
 
         $rotated = imagerotate($original, $angle, 0);
-
         if (!$rotated) {
             RotateJpg($filename, $angle, $savename, 'image/png', $rerun);
         }
@@ -205,7 +119,6 @@ function RotateJpg($filename = '', $angle = 0, $savename = false, $type = 'image
         if (!imagejpeg($rotated, $savename)) {
             RotateJpg($filename, $angle, $savename, 'image/png', $rerun);
         }
-
         imagedestroy($rotated);
     }
 }

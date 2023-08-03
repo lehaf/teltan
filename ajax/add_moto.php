@@ -145,12 +145,17 @@ if($arUser['UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUEST['E
         unset($arLoadProductArray['PREVIEW_PICTURE']);
     }
 
+    // Создание элемента
     if ($_REQUEST['EDIT'] != 'Y') {
         if ($PRODUCT_ID = $el->Add($arLoadProductArray)) {
             foreach ($_REQUEST as $value) {
                 if ($value['val'] == 'true') {
                     $multiselect[$value['data']['id_prop']][] = $value['data']['idSelf'];
                 }
+            }
+
+            if ($_POST['dateSelectSelector'] !== 'no-value') {
+                CIBlockElement::SetPropertyValueCode($PRODUCT_ID, 'PROP_YAERH_Left', $_POST['dateSelectSelector']);
             }
 
             $arLoadProductProp['UF_REGION'] = $_POST['region'];
@@ -221,7 +226,7 @@ if($arUser['UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUEST['E
                 }else{
                     CIBlockElement::SetPropertyValueCode($PRODUCT_ID, "PHOTOS", array("VALUE" => $arFile));
                 }
-                unlink('/' . $FILENAME . '.png');
+                unlink($_SERVER["DOCUMENT_ROOT"].'/'.$FILENAME.'.png');
                 $i++;
             }
         } else {
@@ -229,10 +234,10 @@ if($arUser['UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUEST['E
             echo json_encode(array('success' => 0, 'responseBitrix' => $el->LAST_ERROR), JSON_UNESCAPED_UNICODE);
         }
 
-
+    // Редактирование элемента
     } else {
 
-        if($PROP['PROP_BRAND'] == null || $PROP['PROP_MODEL'] == null || $PROP['Modification']['val'] == null ){
+        if($PROP['PROP_BRAND'] == null || $PROP['PROP_MODEL'] == null || $PROP['Modification']['val'] == null ) {
             unset($arLoadProductArray['NAME']);
         }
 
@@ -240,10 +245,9 @@ if($arUser['UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUEST['E
             if($value == ''){
                 unset($arLoadProductArray[$key]);
             }
-
         }
-        $arLoadProductProp = [];
 
+        $arLoadProductProp = [];
         foreach ($arLoadProductArray['PROPERTY_VALUES'] as $key => $value){
             if($value == ''){
                 unset($arLoadProductArray['PROPERTY_VALUES'][$key]);
@@ -252,6 +256,7 @@ if($arUser['UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUEST['E
             }
 
         }
+
         unset($arLoadProductArray['PROPERTY_VALUES']);
         if($res = $el->Update(intval($_REQUEST['EDIT_ID']), $arLoadProductArray)){
             foreach ($_REQUEST as $value) {
@@ -275,6 +280,11 @@ if($arUser['UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUEST['E
                     CIBlockElement::SetPropertyValueCode($_REQUEST['EDIT_ID'], $key, $value);
                 }
             }
+
+            if ($_POST['dateSelectSelector'] !== 'no-value') {
+                CIBlockElement::SetPropertyValueCode($_REQUEST['EDIT_ID'], 'PROP_YAERH_Left', $_POST['dateSelectSelector']);
+            }
+
             $dbElements = \CIBlockElement::GetList([], ["ACTIVE" => "Y", "IBLOCK_ID" => 7, "ID" => intval($_REQUEST['EDIT_ID']),], false, false, ['IBLOCK_ID', 'ID', 'PROPERTY_PHOTOS',]);
             $neddAddMain = true;
             $index = 0;

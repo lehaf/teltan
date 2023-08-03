@@ -1,6 +1,7 @@
 <?php
 // IBLOCKS
 const AUTO_IBLOCK_ID = 3;
+const MOTO_IBLOCK_ID = 7;
 const REAL_ESTATE_LIVE_RENT_SECTION_ID = 34;
 const SITE_DOMAIN = 'http://650739-cm41399.tmweb.ru';
 const FILTER_EXTRA_SHOW_COUNT = 3; //отвечает за то сколько свойств будет показано перед фильтром (минимум 2)

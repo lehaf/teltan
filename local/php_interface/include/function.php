@@ -1,4 +1,5 @@
 <?php
+
 function pr($o, $show = false, $die = false, $fullBackTrace = false)
 {
     global $USER;
@@ -77,3 +78,46 @@ function in_array_r($needle, $haystack, $strict = false)
 //    }
 //    return $properties ?? [];
 //}
+function getMotoSections() : array
+{
+    $cache = \Bitrix\Main\Application::getInstance()->getManagedCache();
+    $cacheTtl = 3600000;
+    $cacheId = 'iblock_moto_'.MOTO_IBLOCK_ID;
+
+    if ($cache->read($cacheTtl, $cacheId)) {
+        $motoSections = $cache->get($cacheId);
+    } else {
+        $res = CIBlockSection::GetList(
+            array('sort' => 'asc'),
+            array('IBLOCK_ID' => MOTO_IBLOCK_ID, 'ACTIVE' => 'Y'),
+            false,
+            array('UF_*')
+        );
+        while ($row = $res->GetNext()) {
+            if ($row['IBLOCK_SECTION_ID'] == null) {
+                $arSections[$row['NAME']] = $row;
+            }
+            $rsParentSection = CIBlockSection::GetByID($row['ID']);
+            if ($arParentSection = $rsParentSection->GetNext()) {
+                $arFilter = array(
+                    'IBLOCK_ID' => $arParentSection['IBLOCK_ID'],
+                    '>LEFT_MARGIN' => $arParentSection['LEFT_MARGIN'],
+                    '<RIGHT_MARGIN' => $arParentSection['RIGHT_MARGIN'],
+                    '>DEPTH_LEVEL' => $arParentSection['DEPTH_LEVEL']
+                ); // выберет потомков без учета активности
+                $rsSect = CIBlockSection::GetList(array('left_margin' => 'asc'), $arFilter);
+                while ($arSect = $rsSect->GetNext()) {
+                    $arSections[$row['NAME']]['SUB_SECTIONS'][$arSect['NAME']] = $arSect;
+                    $arSubSections[$arSect['NAME'].$arSect['ID']] = $arSect;
+                    $arSubSections[$arSect['NAME'].$arSect['ID']]['PARENT_SECTION'] = $row;
+
+                }
+            }
+        }
+        $motoSections['SECTIONS'] = $arSections;
+        $motoSections['SUBSECTIONS'] = $arSubSections;
+        $cache->set($cacheId, $motoSections);
+    }
+
+    return $motoSections;
+}

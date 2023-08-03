@@ -255,32 +255,29 @@ ps($arProps);
                             <div class="wizard-content" data-wizard-content="1">
                                 <div class="auto-step2">
                                     <h2 class="mb-4 text-center text-uppercase font-weight-bolder auto-step2__title">
-                                        <?= Loc::getMessage('Choose a brand'); ?></h2>
-
+                                        <?= Loc::getMessage('Choose a brand');?>
+                                    </h2>
                                     <div id="brandFilter">
                                         <div class="mb-4 d-flex justify-content-center align-items-center brand-filter gap-1">
                                             <div class="mr-3 form_radio_btn">
                                                 <input id="popularCar" type="radio" name="category" value="popular">
-                                                <label for="popularCar"><?= Loc::getMessage('Popular'); ?></label>
+                                                <label for="popularCar"><?= Loc::getMessage('Popular');?></label>
                                             </div>
-
                                             <div class="form_radio_btn">
                                                 <input id="allCar" type="radio" name="category" value="" checked>
                                                 <label for="allCar"><?= Loc::getMessage('All'); ?></label>
                                             </div>
                                         </div>
-
                                         <div class="mb-4 form-group">
                                             <input name="search" type="text" class="form-control"
                                                    placeholder="חפש מותג. למשל פולקסווגן">
                                         </div>
                                     </div>
-
                                     <div class="mb-4 mb-lg-5 row row-cols-lg-5 wrapper-brand-items div-req m_15">
                                         <?
                                         $res = CIBlockSection::GetList(
                                             array('sort' => 'asc'),
-                                            array('IBLOCK_ID' => '7', 'ACTIVE' => 'Y'),
+                                            array('IBLOCK_ID' => MOTO_IBLOCK_ID, 'ACTIVE' => 'Y'),
                                             false,
                                             array('UF_*')
                                         );
@@ -316,7 +313,8 @@ ps($arProps);
                                                            id="<?= $arSection['CODE'] ?>" name="brandFilter">
                                                     <label for="<?= $arSection['CODE'] ?>"
                                                            onclick="hideModelBrand('<?= $arSection['CODE'] ?>', this)"
-                                                           class="m-0 d-flex justify-content-end align-items-center border auto-brand">
+                                                           class="m-0 d-flex justify-content-end align-items-center border auto-brand"
+                                                    >
                                                         <span class="pl-2 mr-2 text-right"><?= $arSection['NAME'] ?></span>
                                                         <span><img src="<?= CFile::GetPath($arSection['DETAIL_PICTURE']); ?>"></span>
                                                     </label>
@@ -400,19 +398,16 @@ ps($arProps);
                                             <div style="flex-direction: row-reverse;" id="dateRadioSelector"
                                                  class=" d-lg-flex justify-content-end align-items-center <?= ($prop_field[156]['IS_REQUIRED'] == 'Y') ? 'div-req' : '' ?>">
                                                 <? $count = 0; ?>
-
-                                                <? foreach ($elY
-
-                                                as $item) { ?>
+                                                <? foreach ($elY as $item) { ?>
                                                 <? if ($item['UF_NAME'] != ''){ ?>
                                                 <? if ($count == 7) { ?>
                                                 <select data-req="Y" class="mr-3 custom-select" id="dateSelectSelector"
-                                                        name="Year of issue" onchange="resetActiveYears()">
+                                                        name="PROP_YAERH_Left" onchange="resetActiveYears()">
                                                     <option value="no-value">Older</option>
                                                     <? } ?>
                                                     <? if ($count >= 7) { ?>
-                                                        <option <?= ($item['UF_NAME'] == $arProps['PROP_YAERH_Left']['VALUE']) ? 'selected' : '' ?>
-                                                                value="<?= $item['UF_NAME'] ?>"><?= $item['UF_NAME'] ?></option>
+                                                        <option <?=$item['UF_NAME'] == $arProps['PROP_YAERH_Left']['VALUE'] ? 'selected' : '' ?>
+                                                                value="<?=$item['UF_NAME']?>"><?=$item['UF_NAME']?></option>
                                                     <? } else { ?>
                                                         <div class="mr-3 form_radio_btn">
                                                             <input data-cc="dateRadioSelector"
@@ -1244,9 +1239,7 @@ ps($arProps);
             $('#Legalname').hide();
         })
 
-        if (window.location.href.indexOf("EDIT") > -1) {
-
-        } else {
+        if (window.location.href.indexOf("EDIT") <= -1) {
             $('#forOwner').prop('checked', true);
             $('#Legalname').hide();
         }
@@ -1268,10 +1261,9 @@ ps($arProps);
         let flagPhoto = true;
 
         class FileUploader {
+
             fileList = null
-
             template = ''
-
             templateOptions = {
                 name: 'name',
             }
@@ -1443,11 +1435,8 @@ ps($arProps);
             });
             $(this).toggleClass('activeSection')
         })
-        $('#main-selector-photo').click(function () {
-            //  alert('main');
-        })
+
         $('.property-step-contact').click(function () {
-            let selectedSellerTypeAgency = $('#forAutohouse').is(':checked')
             let selectedSellerTypeOwner = $('#forOwner').is(':checked')
             if (selectedSellerTypeOwner) {
                 $('#Legalname').hide();
@@ -1459,12 +1448,12 @@ ps($arProps);
 
             let errors = 0;
             let errorsDiv = 0;
-            let skip = false;
+
             $(this).find('input').each(function () {
                 let inputData = $(this).data()
                 inputData.req = $(this).attr('data-req')
                 let value = $(this).val()
-                console.log($(this).attr('id'))
+
                 if (inputData.req === 'Y') {
                     if ($(this).attr('type') == 'radio') {
 
@@ -1495,13 +1484,14 @@ ps($arProps);
                     $(this).css('border-block-color', 'red')
                 }
             });
-            console.log($('.first-drop').html().trim())
+
             if ($('.first-drop').html().trim() === 'אזור') {
                 errors = errors + 1;
                 $('.first-drop').css('border-block-color', 'red')
             } else {
                 $(this).css('border-block-color', '')
             }
+
             if (errors < 1) {
                 $('.wizard-control-final').addClass('active');
                 if (errorsDiv < 1) {
@@ -1529,19 +1519,19 @@ ps($arProps);
                 $('.first-drop').removeClass('error');
             }
             event.preventDefault();
-            var $data = {};
+            let $data = {};
             if ($('.show-country ').hasClass('selected')) {
                 $('.preloader').css({"z-index": "1", "opacity": "100", "position": "fixed"});
                 $('#mainForm').find('input').each(function () {
                     if (this.checked) {
                         //alert("checked");
-                        var object = {}
+                        let object = {}
                         object.val = this.checked;
                         object.data = $(this).data();
                         $data[this.id] = object
 
                     } else {
-                        var object = {}
+                        let object = {}
                         object.val = $(this).val();
                         object.data = $(this).data();
                         $data[this.id] = object;
@@ -1550,10 +1540,10 @@ ps($arProps);
                 $('#mainForm').find('select').each(function () {
                     $data[this.id] = $(this).val();
                 });
-                var a = 0;
-                var $imgobject = {};
+                let a = 0;
+                let $imgobject = {};
                 $('#mainForm').find('.rotate-img').each(function () {
-                    var dataMain = $(this).data();
+                    let dataMain = $(this).data();
                     if (dataMain.activephoto == 'isActive') {
                         $data['img-base64'] = $(this).prop('src');
                     }
@@ -1582,7 +1572,7 @@ ps($arProps);
                     $data2[this.id] = [data.code_prop, dataVal];
                 });
                 $data['$data2'] = $data2;
-                var deferred = $.ajax({
+                let deferred = $.ajax({
                     type: "POST",
                     url: "/ajax/add_moto.php",
                     data: $data,
@@ -1602,12 +1592,11 @@ ps($arProps);
             }
         }
 
-
+        let currentUrl = window.location.href;
+        let isEdit = currentUrl.indexOf("EDIT=Y") !== -1;
         $('.wizard-control-next').click(function () {
             $(document).ready(function () {
-                let selectedSellerTypeAgency = $('#forAutohouse').is(':checked')
                 let selectedSellerTypeOwner = $('#forOwner').is(':checked')
-
                 if (selectedSellerTypeOwner) {
                     $('#Legalname').hide();
                     $('#Legalname').attr('data-req', 'N');
@@ -1615,20 +1604,25 @@ ps($arProps);
                     $('#Legalname').show();
                     $('#Legalname').attr('data-req', 'Y');
                 }
-                let currentUrl = window.location.href;
-                let isEdit = currentUrl.indexOf("EDIT=Y") !== -1;
+
                 if (!isEdit) {
                     setTimeout(() => $('.wizard-control-final').removeClass('active'), 500);
                 }
-                let toClickId = <?=json_encode($arToClick)?>;
-
-                toClickId.forEach(function (index) {
-                    let selector = '#' + index;
-                    console.log($(selector).siblings('label').trigger('click'))
-                })
-
             })
         })
+
+        addEventListener('DOMContentLoaded', () => {
+            // Если это режим редактирования, то устанавливаем значения по умолчанию
+            if (isEdit) {
+                let standardBrandAndModel = <?=json_encode($arToClick)?>;
+                if (standardBrandAndModel) {
+                    standardBrandAndModel.forEach((defaultValueId) => {
+                        let selector = '#' + defaultValueId;
+                        $(selector).siblings('label').trigger('click');
+                    });
+                }
+            }
+        });
 
         $('.wizard-control-final').removeClass('active');
     </script>
@@ -1636,17 +1630,13 @@ ps($arProps);
         .activeSection {
             color: #3fb465 !important;
         }
-
         @media (max-width: 768px) {
-
             .mb-4.row {
                 justify-content: flex-end;
             }
-
             .flex-column-reverse-d {
                 flex-direction: inherit !important;
             }
-
             .propert-sell-main .form_radio_btn label {
                 font-size: 12px;
                 height: 29px;
