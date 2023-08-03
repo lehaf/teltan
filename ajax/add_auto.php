@@ -102,7 +102,7 @@ if ($arUser['UF_UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUES
         $arLoadProductArray = array(
             'MODIFIED_BY' => $GLOBALS['USER']->GetID(),
             // 'IBLOCK_SECTION_ID' => (int)$_POST['section_id']['id_section'],
-            'IBLOCK_ID' => 3,
+            'IBLOCK_ID' => AUTO_IBLOCK_ID,
             'IBLOCK_SECTION_ID' => $SECTION_ID,
             'CODE' => $translit,
             'PROPERTY_VALUES' => $PROP,
@@ -117,7 +117,7 @@ if ($arUser['UF_UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUES
         $arLoadProductArray = array(
             'MODIFIED_BY' => $GLOBALS['USER']->GetID(),
             // 'IBLOCK_SECTION_ID' => (int)$_POST['section_id']['id_section'],
-            'IBLOCK_ID' => 3,
+            'IBLOCK_ID' => AUTO_IBLOCK_ID,
             'IBLOCK_SECTION_ID' => $SECTION_ID,
             'CODE' => $translit,
             'PROPERTY_VALUES' => $PROP,
