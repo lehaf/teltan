@@ -478,7 +478,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray(AUTO_IBLOCK_ID, 80);
                                     ?>
                                     <div class="mb-4 row __colum-reverse">
                                         <div class="col-12 col-lg-10">
-                                            <? if (!$detect->isMobile()) { ?>
+                                            <? if (!$detect->isMobile()):?>
                                                 <div id="bodyTypesCar"
                                                      class="d-lg-flex flex-wrap flex-row-reverse justify-content-between body-type-car div-req <?= ($prop_field[3]['IS_REQUIRED'] == 'Y') ? 'div-req' : '' ?> ">
                                                     <? foreach ($elTipkuzova as $key => $arItem) { ?>
@@ -506,22 +506,21 @@ $arLink = CIBlockSectionPropertyLink::GetArray(AUTO_IBLOCK_ID, 80);
                                                         <? }
                                                     } ?>
                                                 </div>
-                                            <? } ?>
-
-                                            <div class="d-flex desc-none">
-                                                <select data-req="Y" class="selectpicker"
-                                                        data-style-base="form-control form-control-select" data-style=""
-                                                        name="Body type">
-                                                    <? foreach ($elTipkuzova as $arItem) { ?>
-                                                        <option data-id_prop="PROP_BODY_TYPE"
-                                                                data-id-self="<?= $arItem['UF_XML_ID'] ?>"
-                                                                value="<?= $arItem['UF_XML_ID'] ?>"><?=Loc::getMessage($arItem['UF_XML_ID'])?></option>
-                                                    <? } ?>
-                                                    <option <?if(!$_GET['EDIT']):?>selected<?endif?> value="Nothing selected"></option>
-                                                </select>
-                                            </div>
+                                            <?else:?>
+                                                <div class="d-flex desc-none">
+                                                    <select data-req="Y" class="selectpicker"
+                                                            data-style-base="form-control form-control-select" data-style=""
+                                                            name="Body type">
+                                                        <? foreach ($elTipkuzova as $arItem) { ?>
+                                                            <option data-id_prop="PROP_BODY_TYPE"
+                                                                    data-id-self="<?= $arItem['UF_XML_ID'] ?>"
+                                                                    value="<?= $arItem['UF_XML_ID'] ?>"><?=Loc::getMessage($arItem['UF_XML_ID'])?></option>
+                                                        <? } ?>
+                                                        <option <?if(!$_GET['EDIT']):?>selected<?endif?> value="Nothing selected"></option>
+                                                    </select>
+                                                </div>
+                                            <?endif;?>
                                         </div>
-
                                         <div class=" d-lg-block col-2">
                                             <p class="m-0 font-weight-bold">:<?=Loc::getMessage('Body type')?> <?=$prop_field[3]['IS_REQUIRED'] == 'Y' ? '*' : ''?></p>
                                         </div>
