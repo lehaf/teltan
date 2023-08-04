@@ -453,11 +453,7 @@ $(document).ready(function () {
 
                     inputElements.forEach(input => {
                         if (input.hasAttribute('required') && !$(input).parent('div').is(':hidden')) {
-
-                            console.log(input)
                             if ($(input).is(':checked') == false) {
-
-
                                 $(input).addClass('error');
                                 $(input).siblings('label').addClass('error');
                             } else {
@@ -467,7 +463,7 @@ $(document).ready(function () {
                             }
                         }
                     });
-                    console.log(errors)
+
                     if (errors < 1) {
                         if (this.activeStep === 0) {
                             $('.wizard-control-next').attr('disabled', 'disabled');
@@ -496,10 +492,8 @@ $(document).ready(function () {
                                     if ($(this).attr('type') == 'radio') {
 
                                     } else {
-                                        console.log(value)
                                         if (value === '') {
                                             errors++;
-
                                             $(this).addClass('error');
                                             $(this).parent('label').addClass('error');
                                         } else {
@@ -555,14 +549,13 @@ $(document).ready(function () {
                                 let inputData = $(this).data()
                                 let value = $(this).val()
                                 if (inputData.req === 'Y') {
-
-                                    if (value === '') {
+                                    if (value === '' || value === 'Nothing selected') {
                                         errors++;
                                         $(this).addClass('error');
-                                        $(this).parent('div').addClass('error');
+                                        $(this).parent('div').children('button').addClass('error');
                                     } else {
                                         $(this).removeClass('error');
-                                        $(this).parent('div').removeClass('error');
+                                        $(this).parent('div').children('button').removeClass('error');
                                     }
 
                                 }

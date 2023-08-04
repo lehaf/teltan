@@ -517,7 +517,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray(AUTO_IBLOCK_ID, 80);
                                                                 data-id-self="<?= $arItem['UF_XML_ID'] ?>"
                                                                 value="<?= $arItem['UF_XML_ID'] ?>"><?=Loc::getMessage($arItem['UF_XML_ID'])?></option>
                                                     <? } ?>
-                                                    <option <?if(!$_GET['EDIT']){?>selected<?}?> value="Nothing selected"></option>
+                                                    <option <?if(!$_GET['EDIT']):?>selected<?endif?> value="Nothing selected"></option>
                                                 </select>
                                             </div>
                                         </div>
@@ -1340,7 +1340,6 @@ $arLink = CIBlockSectionPropertyLink::GetArray(AUTO_IBLOCK_ID, 80);
                     checkFinalFields();
                 });
             });
-
         });
 
         $('.property-step-contact').click(function () {
@@ -1355,7 +1354,6 @@ $arLink = CIBlockSectionPropertyLink::GetArray(AUTO_IBLOCK_ID, 80);
 
             let errors = 0;
             let errorsDiv = 0;
-            let skip = false;
             $(this).find('input').each(function () {
                 let inputData = $(this).data()
                 inputData.req = $(this).attr('data-req')
@@ -1374,8 +1372,8 @@ $arLink = CIBlockSectionPropertyLink::GetArray(AUTO_IBLOCK_ID, 80);
                         }
                     }
                 }
-
             });
+
             $(this).find('.div-req').each(function () {
                 errorsDiv++;
                 $(this).find('input').each(function (index) {
@@ -1383,6 +1381,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray(AUTO_IBLOCK_ID, 80);
                         errorsDiv--;
                 })
             });
+
             $(this).find('select').each(function () {
                 let selectData = $(this).data()
                 if (selectData.req === 'Y' && $(this).val() == '') {
@@ -1390,7 +1389,6 @@ $arLink = CIBlockSectionPropertyLink::GetArray(AUTO_IBLOCK_ID, 80);
                     $(this).css('border-block-color', 'red')
                 }
             });
-
 
             if (errors < 1) {
                 $('.wizard-control-final').addClass('active');
@@ -1415,13 +1413,14 @@ $arLink = CIBlockSectionPropertyLink::GetArray(AUTO_IBLOCK_ID, 80);
 
         function submitForm(event) {
             event.preventDefault();
-            var $data = {};
+            let $data = {};
 
             if (!$('.show-country ').hasClass('selected')) {
                 $('.first-drop').addClass('error');
             } else {
                 $('.first-drop').removeClass('error');
             }
+
             if ($('.show-country ').hasClass('selected')) {
                 $('.preloader').css({"z-index": "1", "opacity": "100", "position": "fixed"});
                 $('#mainForm').find('input').each(function () {
