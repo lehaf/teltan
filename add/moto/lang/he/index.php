@@ -26,7 +26,7 @@ $MESS ['Choose a brand'] = "בחרו מותג";
 $MESS ['Popular'] = "פופולרים";
 $MESS ['All'] = "כל המותגים";
 
-$MESS ['Year of issue'] = ":שנת ייצור";
+$MESS ['year'] = "שנת ייצור";
 $MESS ['modification'] = "רמת גימור (אופציונלי)";
 $MESS ['modificationPlaceholder'] = ":רמת גימור (אופציונלי)";
 $MESS ['Body type'] = "סוגי גוף הרכב";

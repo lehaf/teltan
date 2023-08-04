@@ -69,7 +69,9 @@ Loc::loadMessages(__FILE__);
             </div>
         </div>
     </div>
-    <label for="userSelectSection" class="col col-lg-2 label-name">:<?=Loc::getMessage('Country');?>*</label>
+    <div class="col-12 col-lg-2 d-flex justify-content-end align-items-center">
+        <p class="text-right mb-3 mb-lg-0 font-weight-bold">:<?=Loc::getMessage('Country');?>*</p>
+    </div>
 </div>
 
 <?if (!empty($arParams['PROPS']['UF_REGION']['VALUE'])):?>

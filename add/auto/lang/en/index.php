@@ -28,7 +28,7 @@ $MESS ['Choose a brand'] = "Choose a brand";
 $MESS ['Popular'] = "Popular";
 $MESS ['All'] = "All";
 
-$MESS ['Year of issue'] = "Year of issue";
+$MESS ['year'] = "Year of issue";
 $MESS ['modification'] = "Modification (optional)";
 $MESS ['modifiPlaceholder'] = "Modification (optional)";
 $MESS ['Body type'] = "Body type";

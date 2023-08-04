@@ -442,7 +442,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray(SCOOTER_IBLOCK_ID, 90);
                                         </div>
 
                                         <div class=" d-lg-block col-2">
-                                            <p class="m-0 font-weight-bold"><?= Loc::getMessage('Year of issue'); ?>  *</p>
+                                            <p class="m-0 font-weight-bold">:<?=Loc::getMessage('year')?> *</p>
                                         </div>
                                     </div>
 

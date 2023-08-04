@@ -11,8 +11,7 @@ Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . "/css/add-page.css");
 
 global $arSetting;
 if (CModule::IncludeModule("iblock"))
-    $IBLOCK_ID = 7;
-$properties = CIBlockProperty::GetList(array("sort" => "asc", "name" => "asc"), array("ACTIVE" => "Y", "IBLOCK_ID" => $IBLOCK_ID));
+$properties = CIBlockProperty::GetList(array("sort" => "asc", "name" => "asc"), array("ACTIVE" => "Y", "IBLOCK_ID" => MOTO_IBLOCK_ID));
 $prop_fields = [];
 while ($prop_fiel = $properties->GetNext()) {
     $prop_field[$prop_fiel["ID"]] = $prop_fiel;
@@ -23,7 +22,7 @@ $userPhone = getUserInfoByID()['PERSONAL_PHONE'];
 if (!$userPhone)
     LocalRedirect($GLOBALS['arSetting'][SITE_ID]['href'] . 'personal/edit/');
 
-$properties = CIBlockProperty::GetList(array("sort" => "asc", "name" => "asc"), array("ACTIVE" => "Y", "IBLOCK_ID" => $IBLOCK_ID));
+$properties = CIBlockProperty::GetList(array("sort" => "asc", "name" => "asc"), array("ACTIVE" => "Y", "IBLOCK_ID" => MOTO_IBLOCK_ID));
 $prop_fields = [];
 while ($prop_fiel = $properties->GetNext()) {
     $prop_field[$prop_fiel["ID"]] = $prop_fiel;
@@ -33,7 +32,7 @@ while ($prop_fiel = $properties->GetNext()) {
 
 if ($_GET['EDIT'] == 'Y' && $_GET['ID']) {
     $arSelect = array("ID", "IBLOCK_ID", "IBLOCK_SECTION_ID", "NAME", "DATE_ACTIVE_FROM", "PROPERTY_*", "PREVIEW_TEXT", "PREVIEW_PICTURE");
-    $arFilter = array("IBLOCK_ID" => $IBLOCK_ID, 'ID' => $_GET['ID'], "ACTIVE_DATE" => "Y", "ACTIVE" => "Y");
+    $arFilter = array("IBLOCK_ID" => MOTO_IBLOCK_ID, 'ID' => $_GET['ID'], "ACTIVE_DATE" => "Y", "ACTIVE" => "Y");
     $res = CIBlockElement::GetList(array(), $arFilter, false, array("nPageSize" => 1), $arSelect);
     while ($ob = $res->GetNextElement()) {
         $arFields = $ob->GetFields();
@@ -41,7 +40,7 @@ if ($_GET['EDIT'] == 'Y' && $_GET['ID']) {
     }
 }
 
-$arLink = CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 94);
+$arLink = CIBlockSectionPropertyLink::GetArray(MOTO_IBLOCK_ID, 94);
 ps($arProps);
 ?>
     <div class="container">
@@ -441,7 +440,7 @@ ps($arProps);
                                         </div>
 
                                         <div class=" d-lg-block col-2">
-                                            <p class="m-0 font-weight-bold"><?=Loc::getMessage('Year of issue')?>*</p>
+                                            <p class="m-0 font-weight-bold">:<?=Loc::getMessage('year')?>*</p>
                                         </div>
                                     </div>
 
@@ -505,8 +504,7 @@ ps($arProps);
                                     <div class="mb-4 row __colum-reverse flex-lg-row select-w-100">
                                         <div class="col col-lg-10"><?
                                             if (CModule::IncludeModule("iblock"))
-                                                $IBLOCK_ID = 7;
-                                            $properties = CIBlockProperty::GetList(array("sort" => "asc", "name" => "asc"), array("ACTIVE" => "Y", "IBLOCK_ID" => $IBLOCK_ID));
+                                            $properties = CIBlockProperty::GetList(array("sort" => "asc", "name" => "asc"), array("ACTIVE" => "Y", "IBLOCK_ID" => MOTO_IBLOCK_ID));
                                             while ($prop_fields[] = $properties->GetNext()) {
                                                 //echo $prop_fields["ID"]." - ".$prop_fields["NAME"]."<br>";
                                             }

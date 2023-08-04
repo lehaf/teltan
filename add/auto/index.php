@@ -426,24 +426,10 @@ $arLink = CIBlockSectionPropertyLink::GetArray(AUTO_IBLOCK_ID, 80);
                                                     <? }
                                                     } ?>
                                                 </select>
-
                                             </div>
-                                            <!--
-                                            <div class="d-flex d-lg-none">
-                                                <select data-req="Y" class="selectpicker"
-                                                        data-style-base="form-control form-control-select" data-style=""
-                                                        name="Year of issue">
-
-                                                    <option value="0"><? /*= Loc::getMessage('Year of issue'); */ ?></option>
-                                                    <? /* foreach ($elY as $el) { */ ?>
-                                                        <option value="<? /*= $el['UF_NAME'] */ ?>"><? /*= $el['UF_NAME'] */ ?></option>
-                                                    <? /* } */ ?>
-                                                </select>
-                                            </div>-->
                                         </div>
-
                                         <div class=" d-lg-block col-2">
-                                            <p class="m-0 font-weight-bold"><?= Loc::getMessage('Year of issue'); ?>  <?= ($prop_field[119]['IS_REQUIRED'] == 'Y') ? '*' : '' ?></p>
+                                            <p class="m-0 font-weight-bold">:<?=Loc::getMessage('year')?> <?= ($prop_field[119]['IS_REQUIRED'] == 'Y') ? '*' : '' ?></p>
                                         </div>
                                     </div>
 
