@@ -381,8 +381,7 @@ $(document).ready(function () {
             $form.on('keyup change paste', 'input, select, textarea', (e) => {
 
 
-                this.filterData = {...this.filterData, [e.target.name]: e.target.value}
-
+                this.filterData = {...this.filterData, [e.target.name]: e.target.value.toLowerCase()}
                 $items.each((_, el) => {
                     const $el = $(el);
                     let isFind = true;

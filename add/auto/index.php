@@ -298,7 +298,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray(AUTO_IBLOCK_ID, 80);
                                         ?>
                                         <? foreach ($arSections as $arSection) { ?>
                                             <div class="mb-3 mb-lg-4 col" data-filter-for="#brandFilter"
-                                                 data-filter="<?= $arSection['CODE'] ?> <? if ($arSection['UF_POPULAR'] == 1) { ?>popular<? } ?>">
+                                                 data-filter="<?=mb_strtolower($arSection['CODE'])?> <? if ($arSection['UF_POPULAR'] == 1) { ?>popular<? } ?>">
                                                 <div class="form_radio_btn">
                                                     <input data-req="Y" type="radio" class="d-none"
                                                         <? if ($arSection['NAME'] == $arProps['PROP_BRAND']['VALUE']) {
@@ -345,7 +345,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray(AUTO_IBLOCK_ID, 80);
 
                                                      data-parent-id="<?= $arItem['PARENT_SECTION']['CODE'] ?>"
                                                      data-filter-for="#nameFilter"
-                                                     data-filter="<?= $arItem['NAME'] ?>">
+                                                     data-filter="<?=mb_strtolower($arItem['NAME'])?>">
                                                     <div class="form_radio_btn">
                                                         <input data-req="Y" data-id_prop="PROP_MODEL"
                                                             <?= ($arItem['ID'] == $arFields['IBLOCK_SECTION_ID']) ? 'checked' : '' ?>
