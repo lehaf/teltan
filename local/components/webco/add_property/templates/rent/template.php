@@ -1089,14 +1089,6 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                 if ($(this).val().length <= 0) errors++;
             });
 
-            $(this).find('select').each(function () {
-                let selectData = $(this).data()
-                if (selectData.req === 'Y' && $(this).val() == '') {
-                    errors++;
-                    $(this).css('border-block-color', 'red')
-                }
-            });
-
             if (errors > 0) {
                 $('.wizard-control-final').removeClass('active');
             } else {
@@ -1110,6 +1102,21 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
         }
 
         $(document).ready(() => {
+            $('.property-step-contact .div-req .form_radio_btn').each(function () {
+                $(this).click(() => {
+                    let selectedSellerTypeOwner = $('#forOwner').is(':checked')
+                    if (selectedSellerTypeOwner) {
+                        $('#Legalname').hide();
+                        $('#Legalname').attr('data-req', 'N');
+                    } else {
+                        $('#Legalname').show();
+                        $('#Legalname').attr('data-req', 'Y');
+                    }
+
+                    checkFinalFields();
+                });
+            });
+
             $('.property-step-contact input[data-req="Y"].form-control').each(function () {
                 $(this).on("keyup", () => {
                     checkFinalFields();
@@ -1117,29 +1124,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
             });
         });
 
-        $('.wizard-control-next').click(function () {
-            $(document).ready(function () {
-                let selectedSellerTypeOwner = $('#forOwner').is(':checked')
-                if (selectedSellerTypeOwner) {
-                    $('#Legalname').hide();
-                    $('#Legalname').attr('data-req', 'N');
-                } else {
-                    $('#Legalname').show();
-                    $('#Legalname').attr('data-req', 'Y');
-                }
-                let currentUrl = window.location.href;
-                let isEdit = currentUrl.indexOf("EDIT=Y") !== -1;
-                if (!isEdit) {
-                    setTimeout(() => $('.wizard-control-final').removeClass('active'), 500);
-                }
-                let toClickId = <?=json_encode($arToClick)?>;
-                toClickId.forEach(function (index) {
-                    let selector = '#' + index;
-                    $(selector).siblings('label').trigger('click');
-                })
 
-            })
-        })
 
         let flagPhoto = true;
         function addActivePhoto(item){

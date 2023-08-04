@@ -1481,6 +1481,21 @@ ps($arProps);
         }
 
         $(document).ready(() => {
+            $('.property-step-contact .div-req .form_radio_btn').each(function () {
+                $(this).click(() => {
+                    let selectedSellerTypeOwner = $('#forOwner').is(':checked')
+                    if (selectedSellerTypeOwner) {
+                        $('#Legalname').hide();
+                        $('#Legalname').attr('data-req', 'N');
+                    } else {
+                        $('#Legalname').show();
+                        $('#Legalname').attr('data-req', 'Y');
+                    }
+
+                    checkFinalFields();
+                });
+            });
+
             $('.property-step-contact input[data-req="Y"].form-control').each(function () {
                 $(this).on("keyup", () => {
                     checkFinalFields();
