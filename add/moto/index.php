@@ -1468,21 +1468,6 @@ ps($arProps);
                 if ($(this).val().length <= 0) errors++;
             });
 
-            $(this).find('select').each(function () {
-                let selectData = $(this).data()
-                if (selectData.req === 'Y' && $(this).val() == '') {
-                    errors++;
-                    $(this).css('border-block-color', 'red')
-                }
-            });
-
-            if ($('.first-drop').html().trim() === 'אזור') {
-                errors = errors + 1;
-                $('.first-drop').css('border-block-color', 'red')
-            } else {
-                $(this).css('border-block-color', '')
-            }
-
             if (errors > 0) {
                 $('.wizard-control-final').removeClass('active');
             } else {
@@ -1501,82 +1486,13 @@ ps($arProps);
                     checkFinalFields();
                 });
             });
-
         });
-
-        $('.property-step-contact').click(function () {
-            let selectedSellerTypeOwner = $('#forOwner').is(':checked')
-            if (selectedSellerTypeOwner) {
-                $('#Legalname').hide();
-                $('#Legalname').attr('data-req', 'N');
-            } else {
-                $('#Legalname').show();
-                $('#Legalname').attr('data-req', 'Y');
-            }
-
-            let errors = 0;
-            let errorsDiv = 0;
-
-            $(this).find('input').each(function () {
-                let inputData = $(this).data()
-                inputData.req = $(this).attr('data-req')
-                let value = $(this).val()
-
-                if (inputData.req === 'Y') {
-                    if ($(this).attr('type') == 'radio') {
-
-                    } else {
-                        if (value === '') {
-                            errors++;
-                            $(this).css('border-block-color', 'red')
-                        } else {
-                            $(this).css('border-block-color', '')
-                        }
-                    }
-                }
-
-            });
-            $(this).find('.div-req').each(function () {
-                errorsDiv++;
-                $(this).find('input').each(function (index) {
-                    if ($(this).is(':checked') != false)
-                        errorsDiv--;
-                })
-            });
-            $(this).find('select').each(function () {
-                let selectData = $(this).data()
-                if (selectData.req === 'Y' && $(this).val() == '') {
-                    errors++;
-                    $(this).css('border-block-color', 'red')
-                }
-            });
-
-            if ($('.first-drop').html().trim() === 'אזור') {
-                errors = errors + 1;
-                $('.first-drop').css('border-block-color', 'red')
-            } else {
-                $(this).css('border-block-color', '')
-            }
-
-            if (errors < 1) {
-                $('.wizard-control-final').addClass('active');
-                if (errorsDiv < 1) {
-                    $('.wizard-control-final').addClass('active');
-                } else {
-                    $('.wizard-control-final').removeClass('active');
-                }
-            } else {
-                $('.wizard-control-final').removeClass('active');
-            }
-        })
-
-        $('.wizard-control-final').removeClass('active');
 
         $('wizard-control-next').click(function () {
             let currentUrl = window.location.href;
             let isEdit = currentUrl.indexOf("EDIT=Y") !== -1;
             if (!isEdit) {
-                setTimeout(() => $('.wizard-control-final').removeClass('active'), 500);
+                setTimeout(() => $('.wizard-control-final').removeClass('active'), 200);
             }
         })
 
