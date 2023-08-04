@@ -95,9 +95,14 @@ if ($arResult['ITEMS']) {
                             <div class="text-right">
                                 <a href="<?= $arItem['DETAIL_PAGE_URL']; ?>"
                                    class="title text-uppercase"><?= $arItem['NAME']; ?></a>
-                                <?if (!empty($arItem['PROPERTIES']['UF_REGION']['VALUE']) && !empty($arItem['PROPERTIES']['UF_CITY']['VALUE'])):?>
+                                <?if (!empty($arItem['PROPERTIES']['UF_REGION']['VALUE']) || !empty($arItem['PROPERTIES']['UF_CITY']['VALUE'])):?>
+                                    <?
+                                    if (!empty($arItem['PROPERTIES']['UF_REGION']['VALUE'])) $region = $arItem['PROPERTIES']['UF_REGION']['VALUE'];
+                                    if (!empty($arItem['PROPERTIES']['UF_CITY']['VALUE'])) $city = $arItem['PROPERTIES']['UF_CITY']['VALUE'];
+                                    $location = isset($city) ? $city.', '.$region : $region;
+                                    ?>
                                     <p class="text-with-icon">
-                                        <span class="addres"><?=$arItem['PROPERTIES']['UF_CITY']['VALUE'].', '.$arItem['PROPERTIES']['UF_REGION']['VALUE']?></span>
+                                        <span class="addres"><?=$location?></span>
                                         <svg class="icon-local" version="1.1" id="Capa_1"
                                              xmlns="http://www.w3.org/2000/svg"
                                              xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
