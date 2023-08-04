@@ -84,7 +84,6 @@ if ($arResult['ITEMS']) {
                                     </a>
                                     <?
                                 } ?>
-
                                 <div class="price"><?= ICON_CURRENCY; ?> <?= number_format($arItem['PROPERTIES']['PRICE']['VALUE'], 0, '.', ' '); ?></div>
                             </div>
                         </div>
@@ -102,10 +101,9 @@ if ($arResult['ITEMS']) {
                                     <? } ?>
                                 </p>
 
-                                <? if ($arItem['PROPERTIES']['LOCATION']['VALUE']) {
-                                    ?>
+                                <?if (!empty($arItem['PROPERTIES']['UF_REGION']['VALUE']) && !empty($arItem['PROPERTIES']['UF_CITY']['VALUE'])):?>
                                     <p class="text-with-icon">
-                                        <span class="addres"><?=$arItem['PROPERTIES']['LOCATION']['VALUE'];?></span>
+                                        <span class="addres"><?=$arItem['PROPERTIES']['UF_CITY']['VALUE'].', '.$arItem['PROPERTIES']['UF_REGION']['VALUE']?></span>
                                         <svg class="icon-local" version="1.1" id="Capa_1"
                                              xmlns="http://www.w3.org/2000/svg"
                                              xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -116,9 +114,9 @@ if ($arResult['ITEMS']) {
                                                   C456.331,108.387,374.776,3.866,263.278,0.107z M256.923,279.773c-53.113,0-96.171-43.059-96.171-96.171
                                                   s43.059-96.171,96.171-96.171c53.113,0,96.172,43.059,96.172,96.171S310.036,279.773,256.923,279.773z"/>
                                                 </g>
-                                              </svg>
+                                        </svg>
                                     </p>
-                                <? } ?>
+                                <?endif;?>
                             </div>
                         </div>
                     </div>
