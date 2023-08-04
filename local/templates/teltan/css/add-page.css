@@ -139,6 +139,10 @@
   body .wizard-content .bootstrap-select .dropdown-menu li a span.text {
     display: block;
   }
+
+  body div[data-wizard-content="4"] .additional {
+    width: 100%;
+  }
 }
 
 @media (min-width: 790px) {
