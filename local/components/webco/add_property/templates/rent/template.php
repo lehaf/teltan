@@ -1054,6 +1054,69 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
             $('#Legalname').hide();
         }
 
+        function checkFinalFields() {
+            let errors = 0;
+            let errorsDiv = 0;
+            $(this).find('input').each(function () {
+                let inputData = $(this).data()
+                inputData.req = $(this).attr('data-req')
+                let value = $(this).val()
+
+                if (inputData.req === 'Y') {
+                    if ($(this).attr('type') == 'radio') {
+
+                    } else {
+                        if (value === '') {
+                            errors++;
+                            $(this).css('border-block-color', 'red')
+                        } else {
+                            $(this).css('border-block-color', '')
+                        }
+                    }
+                }
+
+            });
+
+            $(this).find('.div-req').each(function () {
+                errorsDiv++;
+                $(this).find('input').each(function (index) {
+                    if ($(this).is(':checked') != false)
+                        errorsDiv--;
+                })
+            });
+
+            $('.property-step-contact input[data-req="Y"].form-control').each(function () {
+                if ($(this).val().length <= 0) errors++;
+            });
+
+            $(this).find('select').each(function () {
+                let selectData = $(this).data()
+                if (selectData.req === 'Y' && $(this).val() == '') {
+                    errors++;
+                    $(this).css('border-block-color', 'red')
+                }
+            });
+
+            if (errors > 0) {
+                $('.wizard-control-final').removeClass('active');
+            } else {
+                $('.wizard-control-final').addClass('active');
+                if (errorsDiv > 0) {
+                    ('.wizard-control-final').removeClass('active');
+                } else {
+                    $('.wizard-control-final').addClass('active');
+                }
+            }
+        }
+
+        $(document).ready(() => {
+            $('.property-step-contact input[data-req="Y"].form-control').each(function () {
+                $(this).on("keyup", () => {
+                    checkFinalFields();
+                });
+            });
+        });
+
         $('.wizard-control-next').click(function () {
             $(document).ready(function () {
                 let selectedSellerTypeAgency = $('#forAgency').is(':checked')
