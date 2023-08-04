@@ -275,7 +275,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray(SCOOTER_IBLOCK_ID, 90);
                                         </div>
                                     </div>
 
-                                    <div class="mb-4 mb-lg-5 row row-cols-lg-5 wrapper-brand-items m_15">
+                                    <div class="mb-4 mb-lg-5 row row-cols-lg-5 wrapper-brand-items m_15 div-req">
                                         <?
                                         $res = CIBlockSection::GetList(
                                             array('sort' => 'asc'),
@@ -337,7 +337,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray(SCOOTER_IBLOCK_ID, 90);
                                                    placeholder="חפש מותג. למשל פולקסווגן">
                                         </div>
                                     </div>
-                                    <div id="row-cols-lg-6" class="mb-4 mb-lg-5 row row-cols-lg-6 m_15">
+                                    <div id="row-cols-lg-6" class="mb-4 mb-lg-5 row row-cols-lg-6 m_15 wrapper-model-items div-req">
 
                                         <? foreach ($arSubSections as $arItem) { ?>
                                             <? if ($arItem['CODE'] != '') { ?>

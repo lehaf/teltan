@@ -270,7 +270,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray(AUTO_IBLOCK_ID, 80);
                                         </div>
                                     </div>
 
-                                    <div class="mb-4 mb-lg-5 row row-cols-lg-5 wrapper-brand-items m_15">
+                                    <div class="mb-4 mb-lg-5 row row-cols-lg-5 wrapper-brand-items m_15 div-req">
                                         <?
                                         $res = CIBlockSection::GetList(
                                             array('sort' => 'asc'),
@@ -304,7 +304,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray(AUTO_IBLOCK_ID, 80);
                                                         <? if ($arSection['NAME'] == $arProps['PROP_BRAND']['VALUE']) {
                                                             $arToClick[] = $arSection['CODE'];
                                                         } ?>
-                                                        <?= ($arSection['CODE'] == $arProps['PROP_BRAND']['VALUE']) ? 'checked' : '' ?>
+                                                        <?=$arSection['CODE'] == $arProps['PROP_BRAND']['VALUE'] ? 'checked' : '' ?>
                                                            data-id_prop="PROP_BRAND"
                                                            data-id-self="<?= $arSection['ID'] ?>"
                                                            value="<?= $arSection['ID'] ?>"
@@ -333,7 +333,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray(AUTO_IBLOCK_ID, 80);
                                                    placeholder="חפש מותג. למשל פולקסווגן">
                                         </div>
                                     </div>
-                                    <div id="row-cols-lg-6" class="mb-4 additional mb-lg-5 row row-cols-lg-6 m_15">
+                                    <div id="row-cols-lg-6" class="mb-4 additional mb-lg-5 row row-cols-lg-6 m_15 wrapper-model-items div-req">
 
                                         <? foreach ($arSubSections as $arItem) { ?>
                                             <? if ($arItem['CODE'] != '') { ?>

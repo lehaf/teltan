@@ -335,7 +335,7 @@ ps($arProps);
                                                    placeholder="חפש מותג. למשל פולקסווגן">
                                         </div>
                                     </div>
-                                    <div id="row-cols-lg-6" class="mb-4 mb-lg-5 row row-cols-lg-6 m_15">
+                                    <div id="row-cols-lg-6" class="mb-4 mb-lg-5 row row-cols-lg-6 m_15 wrapper-model-items div-req">
                                         <?ps($arSubSections);?>
                                         <? foreach ($arSubSections as $arItem) { ?>
                                             <? if ($arItem['CODE'] != '') { ?>

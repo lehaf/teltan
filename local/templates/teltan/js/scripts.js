@@ -472,8 +472,8 @@ $(document).ready(function () {
 
                     }
                 }
-                let step = this.activeStep;
 
+                let step = this.activeStep;
                 if (document.location.pathname === '/add/auto/' || document.location.pathname === '/add/moto/' || document.location.pathname === '/add/scooter/') {
                     let errors = 0;
                     let errorsDiv = 0;
@@ -483,10 +483,7 @@ $(document).ready(function () {
                             $(this).find('input').each(function () {
                                 let inputData = $(this).data()
                                 inputData.req = $(this).attr('data-req')
-                                let value = $(this).val()
-                                if (inputData.req === 'Y') {
-
-                                }
+                                let value = $(this).val();
                                 if (inputData.req === 'Y') {
                                     if ($(this).attr('type') == 'radio') {
 
@@ -514,26 +511,26 @@ $(document).ready(function () {
                                 errorsDiv++;
                                 thisdiv++;
                                 $(this).find('input').each(function (index) {
-                                        if ($(this).attr('data-cc') === 'dateRadioSelector') {
-                                            if ($(this).is(':checked') != false) {
-                                                errorsDiv--;
-                                                thisdiv = 0;
-                                            }
-                                            let dateSelectSelectorVal = $('#dateSelectSelector').val()
-                                            if (thisdiv > 0) {
-                                                if (dateSelectSelectorVal !== 'no-value') {
-                                                    errorsDiv--;
-                                                    thisdiv = 0;
-                                                }
-                                            }
-                                        } else {
-                                            if ($(this).is(':checked') != false) {
+                                    if ($(this).attr('data-cc') === 'dateRadioSelector') {
+                                        if ($(this).is(':checked') != false) {
+                                            errorsDiv--;
+                                            thisdiv = 0;
+                                        }
+                                        let dateSelectSelectorVal = $('#dateSelectSelector').val()
+                                        if (thisdiv > 0) {
+                                            if (dateSelectSelectorVal !== 'no-value') {
                                                 errorsDiv--;
                                                 thisdiv = 0;
                                             }
                                         }
+                                    } else {
+                                        if ($(this).is(':checked') != false) {
+                                            errorsDiv--;
+                                            thisdiv = 0;
+                                        }
                                     }
-                                )
+                                });
+
                                 if (thisdiv > 0) {
                                     $(this).find('label').each(function (index) {
                                         $(this).addClass('error')
@@ -559,6 +556,7 @@ $(document).ready(function () {
 
                                 }
                             });
+
 
                             if ($('#PROP_ENGIEN_NEW').val() == 0 && step === 3) {
 
@@ -594,9 +592,6 @@ $(document).ready(function () {
                     } else if (step === 5) {
 
                     }
-                    console.log(skip)
-                    console.log(step)
-                    console.log(errors)
                     if (errors < 1 || skip === true) {
                         if (errorsDiv < 1) {
                             this.selectStep(this.activeStep + 1);
