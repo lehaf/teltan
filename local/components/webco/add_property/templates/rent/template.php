@@ -1119,10 +1119,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
         $('.wizard-control-next').click(function () {
             $(document).ready(function () {
-                let selectedSellerTypeAgency = $('#forAgency').is(':checked')
                 let selectedSellerTypeOwner = $('#forOwner').is(':checked')
-                console.log(selectedSellerTypeAgency)
-                console.log(selectedSellerTypeOwner)
                 if (selectedSellerTypeOwner) {
                     $('#Legalname').hide();
                     $('#Legalname').attr('data-req', 'N');
@@ -1136,10 +1133,9 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                     setTimeout(() => $('.wizard-control-final').removeClass('active'), 500);
                 }
                 let toClickId = <?=json_encode($arToClick)?>;
-                console.log(toClickId);
                 toClickId.forEach(function (index) {
                     let selector = '#' + index;
-                    console.log($(selector).siblings('label').trigger('click'))
+                    $(selector).siblings('label').trigger('click');
                 })
 
             })
