@@ -1,6 +1,20 @@
-<? if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
+<?php if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 $dir = $APPLICATION->GetCurDir();
 $dirName = str_replace('/', '', $dir); // PHP код
+
+if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
+    $sectionData = getSectionData($arResult["VARIABLES"]["SECTION_ID"], $arParams['IBLOCK_ID']);
+    switch (LANGUAGE_ID) {
+        case 'he':
+            $sectionName = $sectionData['UF_NAME_HEB'];
+            break;
+        case 'en':
+            $sectionName = $sectionData['UF_NAME_EN'];
+            break;
+        default:
+            $sectionName = $sectionData['NAME'];
+    }
+}
 ?>
 <script> class RangeSlider {
         constructor(elementId) {
@@ -62,7 +76,8 @@ $dirName = str_replace('/', '', $dir); // PHP код
                 })
             }
         }
-    }</script>
+    }
+</script>
 <div class="container">
     <div class="preloader">
         <div class="preloader__row">
@@ -187,39 +202,7 @@ $dirName = str_replace('/', '', $dir); // PHP код
     }
 
     ?>
-
-
-    <h1 class="h2 mb-4 subtitle">
-        <?
-        switch (LANGUAGE_ID) {
-            case 'he':
-                $langId = 'HEB';
-                break;
-            case 'en':
-                $langId = 'EN';
-                break;
-            default:
-                $langId = false;
-        }
-        if ($langId) {
-            $arFilter = array('IBLOCK_ID' => $arParams['IBLOCK_ID'], 'ID' => $arResult["VARIABLES"]["SECTION_ID"], 'GLOBAL_ACTIVE' => 'Y');
-
-            $db_list = CIBlockSection::GetList(array("timestamp_x" => "DESC"), $arFilter, false, array("UF_NAME_$langId"));
-
-            if ($uf_value = $db_list->GetNext()) {
-                $ar_res['NAME'] = $uf_value["UF_NAME_$langId"];
-            }
-
-        }else{
-            $res = CIBlockSection::GetByID($arResult["VARIABLES"]["SECTION_ID"]);
-            $ar_res = $res->GetNext();
-        }
-
-
-        echo $ar_res['NAME'];
-        ?>
-    </h1>
-
+    <h1 class="h2 mb-4 subtitle"><?=$sectionName?></h1>
     <div class="row row-cols-1 row-cols-lg-2">
         <div id="target_container"  class="col col-lg-9">
             <?/* $APPLICATION->IncludeComponent(

@@ -11,8 +11,8 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/local/php_interface/const.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/local/php_interface/config.php");
 
 // Подключаем функции
-if (file_exists(__DIR__.'include/function.php')) {
-    require __DIR__.'include/function.php';
+if (file_exists(__DIR__.'/include/function.php')) {
+    require __DIR__.'/include/function.php';
 }
 
 // Настройки сайта из админки
@@ -131,30 +131,30 @@ function getFileIdBySrc($strFilename)
     return \Bitrix\Main\Application::getConnection()->query($strSql)->fetch()['ID'];
 }
 
-function pr($o, $die = false, $forAll = false)
-{
-    global $USER, $APPLICATION;
-    if ($USER->isAdmin() || $forAll) {
-//		if ($die) $APPLICATION->RestartBuffer();
-        $bt = debug_backtrace();
-        $bt = $bt[0];
-        $dRoot = $_SERVER["DOCUMENT_ROOT"];
-        $dRoot = str_replace("/", "\\", $dRoot);
-        $bt["file"] = str_replace($dRoot, "", $bt["file"]);
-        $dRoot = str_replace("\\", "/", $dRoot);
-        $bt["file"] = str_replace($dRoot, "", $bt["file"]);
-        ?>
-        <div style='font-size:14px; color:#000; background:#fff; border:1px dashed #000; text-transform: none;'>
-            <div style='padding:3px 5px; background:#99CCFF; font-weight:bold;'>File: <?= $bt["file"] ?>
-                [<?= $bt["line"] ?>]
-            </div>
-            <pre style='padding:10px;text-align: left;'><? print_r($o) ?></pre>
-        </div>
-        <div class='clear'></div>
-        <?
-        if ($die) die();
-    }
-}
+//function pr($o, $die = false, $forAll = false)
+//{
+//    global $USER, $APPLICATION;
+//    if ($USER->isAdmin() || $forAll) {
+////		if ($die) $APPLICATION->RestartBuffer();
+//        $bt = debug_backtrace();
+//        $bt = $bt[0];
+//        $dRoot = $_SERVER["DOCUMENT_ROOT"];
+//        $dRoot = str_replace("/", "\\", $dRoot);
+//        $bt["file"] = str_replace($dRoot, "", $bt["file"]);
+//        $dRoot = str_replace("\\", "/", $dRoot);
+//        $bt["file"] = str_replace($dRoot, "", $bt["file"]);
+//        ?>
+<!--        <div style='font-size:14px; color:#000; background:#fff; border:1px dashed #000; text-transform: none;'>-->
+<!--            <div style='padding:3px 5px; background:#99CCFF; font-weight:bold;'>File: --><?php //= $bt["file"] ?>
+<!--                [--><?php //= $bt["line"] ?><!--]-->
+<!--            </div>-->
+<!--            <pre style='padding:10px;text-align: left;'>--><?// print_r($o) ?><!--</pre>-->
+<!--        </div>-->
+<!--        <div class='clear'></div>-->
+<!--        --><?//
+//        if ($die) die();
+//    }
+//}
 
 function ps($array)
 {

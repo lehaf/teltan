@@ -117,3 +117,24 @@ function getMotoSections() : array
 
     return $motoSections;
 }
+
+function getSectionData(int $sectionId, int $iblockId) : ?array
+{
+
+    if (!empty($sectionId) && !empty($iblockId)) {
+        $entity = \Bitrix\Iblock\Model\Section::compileEntityByIblock($iblockId);
+        $section = $entity::getList(array(
+            'filter' => array('ID' => $sectionId, 'IBLOCK_ID' => $iblockId),
+            'select' =>  array("*","UF_*",'SECTION_PAGE_URL' => 'IBLOCK.SECTION_PAGE_URL'),
+            'cache' => [
+                'ttl' => 3600000,
+                'cache_joins' => true
+            ]
+        ))->fetch();
+
+        if (!empty($section['SECTION_PAGE_URL'])) {
+            $section['SECTION_PAGE_URL'] = \CIBlock::ReplaceDetailUrl($section['SECTION_PAGE_URL'], $section, true, 'S');
+        }
+    }
+    return $section ?? NULL;
+}
