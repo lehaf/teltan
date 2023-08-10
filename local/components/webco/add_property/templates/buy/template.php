@@ -270,83 +270,64 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                     <div class="col-9 col-lg-10">
                                         <div class="d-flex justify-content-end flex-wrap gap-1">
                                             <div class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn">
-                                                <input  <?=($arFields['IBLOCK_SECTION_ID'] == 35)? 'checked' : ''?> id="typeResidential" type="radio" name="type">
-                                                <label id="typeResidentialLable" onclick="hideModelBrand(27, this)" class="px-2 py-1" for="typeResidential"><?=Loc::getMessage('Residential');?></label>
-                                                <?if($arFields['IBLOCK_SECTION_ID'] == 35){?>
-                                                    <script>
-                                                        $(document).ready(function(){
-                                                            $("#typeResidential").siblings('label').trigger("click");
-                                                        });
-                                                    </script>
-                                                    <script>
-                                                        setTimeout(() => {
-                                                            $("#typeПентхаус").siblings('label').trigger("click");
-                                                            console.log("Delayed for 1 second.");
-                                                        }, 1000);
-
-                                                    </script>
-                                                <?}?>
+                                                <input  <?=$arFields['IBLOCK_SECTION_ID'] == 35 ? 'checked' : ''?>
+                                                        id="typeResidential"
+                                                        type="radio"
+                                                        name="type"
+                                                >
+                                                <label id="typeResidentialLable" onclick="hideModelBrand(27, this)" class="px-2 py-1" for="typeResidential">
+                                                    <?=Loc::getMessage('Residential');?>
+                                                </label>
                                             </div>
 
                                             <div class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn">
-                                                <input  <?=($arFields['IBLOCK_SECTION_ID'] == 31)? 'checked' : ''?>  id="typeNewBuildings" type="radio" name="type">
-                                                <label onclick="hideModelBrand(29, this)" class="px-2 py-1" for="typeNewBuildings"><?=Loc::getMessage('New-buildings');?></label>
-                                                <?if($arFields['IBLOCK_SECTION_ID'] == 31){?>
-                                                    <script>
-                                                        $(document).ready(function(){
-                                                            $("#typeNewBuildings").siblings('label').trigger("click");
-
-                                                            setTimeout(() => {
-                                                                $("#typeПентхаус").siblings('label').trigger("click");
-                                                                console.log("Delayed for 1 second.");
-                                                            }, 1000);
-
-                                                        });
-                                                    </script>
-                                                <?}?>
+                                                <input  <?=($arFields['IBLOCK_SECTION_ID'] == 31) ? 'checked' : ''?>
+                                                        id="typeNewBuildings"
+                                                        type="radio"
+                                                        name="type"
+                                                >
+                                                <label onclick="hideModelBrand(29, this)" class="px-2 py-1" for="typeNewBuildings">
+                                                    <?=Loc::getMessage('New-buildings');?>
+                                                </label>
                                             </div>
 
                                             <div class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn">
-                                                <input <?=($arFields['IBLOCK_SECTION_ID'] == 33)? 'checked' : ''?> id="typeCommercial" type="radio" name="type">
-                                                <label onclick="hideModelBrand(28, this)" class="px-2 py-1" for="typeCommercial"><?=Loc::getMessage('Commercial');?></label>
-                                                <?if($arFields['IBLOCK_SECTION_ID'] == 33){?>
-                                                    <script>
-                                                        $(document).ready(function(){
-                                                            $("#typeCommercial").siblings('label').trigger("click");
-                                                            setTimeout(() => {
-                                                                $("#typeПентхаус").siblings('label').trigger("click");
-                                                                console.log("Delayed for 1 second.");
-                                                            }, 1000);
-
-                                                        });
-                                                    </script>
-                                                <?}?>
+                                                <input <?=($arFields['IBLOCK_SECTION_ID'] == 33) ? 'checked' : ''?>
+                                                        id="typeCommercial"
+                                                        type="radio"
+                                                        name="type"
+                                                >
+                                                <label onclick="hideModelBrand(28, this)" class="px-2 py-1" for="typeCommercial">
+                                                    <?=Loc::getMessage('Commercial');?>
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="col d-flex font-weight-bold">
                                         <p class="m-0 text-left w-100 font-weight-bold"><?=Loc::getMessage('Type');?></p>
                                     </div>
                                 </div>
-                                <script>
-                                    $(document).ready(function(){
-                                        setTimeout(() => {
-                                            $("#typeПентхаус").siblings('label').trigger("click");
-                                            console.log("Delayed for 1 second.");
-                                        }, 1000);
-
-                                    });
-                                </script>
                                 <div class="mb-4 row">
                                     <div class="col-9 col-lg-10">
-                                        <div class="d-flex justify-content-end flex-wrap gap-1">
-                                            <?foreach($arTypesRent as $arItem){?>
-                                                <div data-parent-id="<?= $arItem['UF_PARENT_ID']?>" style="display: none" class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn">
-                                                    <input <?=($arProps['PROP_TYPE_APART']['VALUE'] == $arItem['UF_NAME']) ? 'checked' : ''?>   data-id-self="<?= $arItem['UF_XML_ID'] ?>"  data-id_prop="PROP_TYPE_APART" id="type<?=$arItem['UF_NAME']?>" type="radio" name="type1">
-                                                    <label class="px-2 py-1"  for="type<?=$arItem['UF_NAME']?>"><?=$arItem['UF_NAME']?></label>
+                                        <div class="d-flex justify-content-end flex-wrap div-req gap-1">
+                                            <?foreach($arTypesRent as $arItem):?>
+                                                <div data-parent-id="<?= $arItem['UF_PARENT_ID']?>"
+                                                     style="display: none"
+                                                     class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn"
+                                                >
+                                                    <input <?=$arProps['PROP_TYPE_APART']['VALUE'] == $arItem['UF_NAME'] ? 'checked' : ''?>
+                                                            data-id-self="<?=$arItem['UF_XML_ID']?>"
+                                                            data-id_prop="PROP_TYPE_APART"
+                                                            id="type<?=$arItem['UF_NAME']?>"
+                                                            type="radio"
+                                                            name="type1"
+                                                            required
+                                                    >
+                                                    <label class="px-2 py-1" for="type<?=$arItem['UF_NAME']?>">
+                                                        <?=$arItem['UF_NAME']?>
+                                                    </label>
                                                 </div>
-                                            <?}?>
+                                            <?endforeach;?>
                                         </div>
                                     </div>
 
@@ -982,7 +963,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                     <div class="mb-4 row flex-column-reverse flex-lg-row property-step-contact__time">
                                         <div class="d-none d-lg-flex col-3">
                                             <div class="form_radio_btn">
-                                                <input  <?= ($arProps["UF_CALL_ANYTIME"]['VALUE'] > 0) ? 'checked' : '' ?> id="anytime" type="checkbox" name="anytime" value="anytime" data-id_prop="UF_CALL_ANYTIME" data-id-self="1">
+                                                <input  <?=$arProps["UF_CALL_ANYTIME"]['VALUE'] > 0 ? 'checked' : '' ?> id="anytime" type="checkbox" name="anytime" value="anytime" data-id_prop="UF_CALL_ANYTIME" data-id-self="1">
                                                 <label class="mr-3 mb-0" for="anytime"><?=Loc::getMessage('Anytime');?></label>
                                             </div>
                                         </div>
@@ -1200,7 +1181,6 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
         }
     })
     $('.property-step-contact').click(function () {
-        let selectedSellerTypeAgency = $('#forAutohouse').is(':checked')
         let selectedSellerTypeOwner = $('#forOwner').is(':checked')
         if (selectedSellerTypeOwner) {
             $('#Legalname').hide();
@@ -1212,7 +1192,6 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
         let errors = 0;
         let errorsDiv = 0;
-        let skip = false;
         $(this).find('input').each(function () {
             let inputData = $(this).data()
             inputData.req = $(this).attr('data-req')

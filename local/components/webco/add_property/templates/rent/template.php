@@ -156,12 +156,16 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
                                     <div class="mb-4 row">
                                         <div class="col-9 col-lg-10">
-                                            <div class="d-flex justify-content-end flex-wrap data-property-req gap-1">
+                                            <div class="d-flex justify-content-end flex-wrap data-property-req div-req gap-1">
                                                 <?foreach($arTypesRent as $arItem){?>
-                                                    <div data-parent-id="<?= $arItem['UF_PARENT_ID']?>" style="display: none" class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn ">
+                                                    <div data-parent-id="<?= $arItem['UF_PARENT_ID']?>"
+                                                         style="display: none"
+                                                         class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn "
+                                                    >
                                                         <input required <?=($arProps['PROP_TYPE_APART']['VALUE'] == $arItem['UF_NAME']) ? 'checked' : ''?>
                                                                data-id-self="<?= $arItem['UF_XML_ID'] ?>"
                                                                data-id_prop="PROP_TYPE_APART"
+                                                               data-req="Y"
                                                                id="type<?=$arItem['UF_XML_ID']?>"
                                                                type="radio"
                                                                name="type1"

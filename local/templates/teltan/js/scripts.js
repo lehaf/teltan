@@ -436,42 +436,58 @@ $(document).ready(function () {
             this.finalControl = $(`${this.options.wrapperSelector} ${this.options.controlFinalSelector}`);
 
             this.nextControl.on('click', () => {
-                let rowSkip = false;
-                var elements = document.querySelectorAll('.d-flex.flex-row-reverse.justify-content-center.justify-content-lg-start.flex-wrap ');
-                for (var i = 0; i < elements.length; i++) {
-                    var element = elements[i];
-                    var hasAdditional = element.querySelector('.additional');
+                let elements = document.querySelectorAll('.d-flex.flex-row-reverse.justify-content-center.justify-content-lg-start.flex-wrap');
+                for (let i = 0; i < elements.length; i++) {
+                    let element = elements[i];
+                    let hasAdditional = element.querySelector('.additional');
                     if (hasAdditional) {
                         element.classList.remove('flex-row-reverse');
                     }
                 }
                 if (document.location.pathname === '/add/rent/' || document.location.pathname === '/add/buy/') {
+                    let typeNewBuildings = document.querySelector('#typeNewBuildings').checked === true;
+                    let errors = 0;
+                    if (!typeNewBuildings) {
+                        let inputElements = document.querySelectorAll(`div[data-wizard-content="${this.activeStep}"] .div-req input[type="radio"]`);
+                        if (inputElements.length > 0) {
+                            errors = 1;
+                            inputElements.forEach(input => {
+                                if (input.hasAttribute('required') && !$(input).parent('div').is(':hidden')) {
+                                    if ($(input).is(':checked') == false) {
+                                        $(input).addClass('error');
+                                        $(input).siblings('label').addClass('error');
+                                    } else {
+                                        errors = 0;
+                                    }
+                                }
+                            });
 
-                    let inputElements = document.querySelectorAll('.data-property-req input');
-                    let errors = 1;
-
-                    inputElements.forEach(input => {
-                        if (input.hasAttribute('required') && !$(input).parent('div').is(':hidden')) {
-                            if ($(input).is(':checked') == false) {
-                                $(input).addClass('error');
-                                $(input).siblings('label').addClass('error');
-                            } else {
-                                errors = 0;
-                                $(input).removeClass('error');
-                                $(input).siblings('label').removeClass('error');
+                            // Удаляем красную окантовку полей
+                            if (errors === 0) {
+                                inputElements.forEach(input => {
+                                    if (input.hasAttribute('required') && !$(input).parent('div').is(':hidden')) {
+                                        $(input).removeClass('error');
+                                        $(input).siblings('label').removeClass('error');
+                                    }
+                                });
                             }
                         }
-                    });
+                    }
 
-                    if (errors < 1) {
+                    if (errors === 0) {
+
                         if (this.activeStep === 0) {
                             $('.wizard-control-next').attr('disabled', 'disabled');
                         }
-                        rowSkip = true;
                         this.selectStep(this.activeStep + 1);
+                        $('.wizard-control-next').attr('disabled', false);
 
                     }
+
+                    console.log(errors);
+
                 }
+
 
                 let step = this.activeStep;
                 if (document.location.pathname === '/add/auto/' || document.location.pathname === '/add/moto/' || document.location.pathname === '/add/scooter/') {
@@ -598,15 +614,16 @@ $(document).ready(function () {
                         }
                     }
                 } else {
-                    if (document.location.pathname === '/add/rent/' || document.location.pathname === '/add/buy/') {
-                        if (rowSkip === true) {
-
-                        } else {
-                            this.selectStep(this.activeStep + 1);
-                        }
-                    } else {
-                        // this.selectStep(this.activeStep + 1);
-                    }
+                    // if (document.location.pathname === '/add/rent/' || document.location.pathname === '/add/buy/') {
+                    //     // if (rowSkip === true) {
+                    //     //
+                    //     // } else {
+                    //     //     // this.selectStep(this.activeStep + 1);
+                    //     //
+                    //     // }
+                    // } else {
+                    //     // this.selectStep(this.activeStep + 1);
+                    // }
                 }
 
             })
