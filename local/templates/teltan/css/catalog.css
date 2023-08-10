@@ -1,0 +1,4 @@
+.smart-filter-dropdown-popup > ul{
+  max-height: 350px;
+  overflow: auto;
+}
