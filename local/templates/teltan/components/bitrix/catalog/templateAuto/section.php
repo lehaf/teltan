@@ -1,4 +1,6 @@
 <?php if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
+
+global $APPLICATION;
 $dir = $APPLICATION->GetCurDir();
 $dirName = str_replace('/', '', $dir); // PHP код
 
@@ -15,6 +17,10 @@ if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
             $sectionName = $sectionData['NAME'];
     }
 }
+
+$adsViewTemplate = 'templateAutoList';
+if ($_SESSION['view'] == 'block') $adsViewTemplate = 'templateAutoBlock';
+
 ?>
 <script> class RangeSlider {
         constructor(elementId) {
@@ -202,33 +208,11 @@ if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
     }
 
     ?>
-    <h1 class="h2 mb-4 subtitle"><?=$sectionName?></h1>
+    <?if (!empty($sectionName)):?>
+        <h1 class="h2 mb-4 subtitle"><?=$sectionName?></h1>
+    <?endif;?>
     <div class="row row-cols-1 row-cols-lg-2">
         <div id="target_container"  class="col col-lg-9">
-            <?/* $APPLICATION->IncludeComponent(
-                "bitrix:catalog.section.list",
-                "sections_brand_auto",
-                array(
-                    "ADD_SECTIONS_CHAIN" => "N",
-                    "CACHE_FILTER" => "N",
-                    "CACHE_GROUPS" => "N",
-                    "CACHE_TIME" => "36000000",
-                    "CACHE_TYPE" => "A",
-                    "COUNT_ELEMENTS" => "N",
-                    "COUNT_ELEMENTS_FILTER" => "CNT_ACTIVE",
-                    "FILTER_NAME" => "sectionsFilter",
-                    "IBLOCK_ID" => $arParams["IBLOCK_ID"],
-                    "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
-                    "SECTION_CODE" => $arResult["VARIABLES"]["SECTION_CODE"],
-                    "SECTION_FIELDS" => "",
-                    "SECTION_ID" => $arResult["VARIABLES"]["SECTION_ID"],
-                    "SECTION_URL" => "",
-                    "SECTION_USER_FIELDS" => array("", ""),
-                    "SHOW_PARENT_NAME" => "Y",
-                    "TOP_DEPTH" => "2",
-                    "VIEW_MODE" => "LINE"
-                )
-            ); */?>
             <?
             $APPLICATION->IncludeComponent(
                 "bitrix:catalog.smart.filter",
@@ -267,11 +251,11 @@ if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
                 ),
                 false
             );
-            $template = 'templateAutoList';
-            if ($_SESSION['view'] == 'block') {
-                $template = 'templateAutoBlock';
-            }
-            $APPLICATION->IncludeComponent("bitrix:catalog.section", $template, array(
+
+            $APPLICATION->IncludeComponent(
+                "bitrix:catalog.section",
+                $adsViewTemplate,
+                    array(
                 "ACTION_VARIABLE" => "action",    // Название переменной, в которой передается действие
                 "ADD_PROPERTIES_TO_BASKET" => "Y",    // Добавлять в корзину свойства товаров и предложений
                 "ADD_SECTIONS_CHAIN" => "N",    // Включать раздел в цепочку навигации

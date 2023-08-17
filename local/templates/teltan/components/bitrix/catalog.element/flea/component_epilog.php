@@ -63,6 +63,4 @@ if ($arResult['IBLOCK_SECTION_ID']) {
         }
 
     }
-    $APPLICATION->AddChainItem($arResult['META_TAGS']['TITLE']); // Последний элемент
-//
 }
