@@ -24,10 +24,10 @@ $APPLICATION->IncludeComponent("bitrix:catalog", "templateProperty",
         "AJAX_OPTION_JUMP" => "N",
         "AJAX_OPTION_STYLE" => "Y",
         "BASKET_URL" => "/personal/basket.php",
-        "CACHE_FILTER" => "N",
+        "CACHE_FILTER" => "Y",
         "CACHE_GROUPS" => "Y",
         "CACHE_TIME" => "36000000",
-        "CACHE_TYPE" => "N",
+        "CACHE_TYPE" => "A",
         "COMPATIBLE_MODE" => "Y",
         "DETAIL_ADD_DETAIL_TO_SLIDER" => "N",
         "DETAIL_BACKGROUND_IMAGE" => "-",
@@ -54,9 +54,9 @@ $APPLICATION->IncludeComponent("bitrix:catalog", "templateProperty",
         "DISPLAY_BOTTOM_PAGER" => "Y",
         "DISPLAY_TOP_PAGER" => "N",
         "ELEMENT_SORT_FIELD" =>"PROPERTY_VIP_FLAG",    // По какому полю сортируем элементы
-        "ELEMENT_SORT_FIELD2" => 'DATE_CREATE',    // Поле для второй сортировки элементов
+        "ELEMENT_SORT_FIELD2" => $secondSort['SORT'],    // Поле для второй сортировки элементов
         "ELEMENT_SORT_ORDER" => "desc,nulls",    // Порядок сортировки элементов
-        "ELEMENT_SORT_ORDER2" => 'desc,nulls',
+        "ELEMENT_SORT_ORDER2" => $secondSort['ORDER'],
         "FILTER_FIELD_CODE" => array("",""),
         "DETAIL_FIELD_CODE" => array(
             0 => "SHOW_COUNTER",

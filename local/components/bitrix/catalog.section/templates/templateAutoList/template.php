@@ -32,13 +32,13 @@ ps($arResult);
             </div>
             <?
             $text = 'Date: High to Low';
-            if ($_GET['SORT'] == 'property_PRICE' and $_GET['ORDER'] == 'ASC')
+            if ($_GET['SORT'] == 'PROPERTY_PRICE' and $_GET['ORDER'] == 'ASC')
                 $text = 'Price: Low to High';
-            if ($_GET['SORT'] == 'property_PRICE' and $_GET['ORDER'] == 'DESC')
+            if ($_GET['SORT'] == 'PROPERTY_PRICE' and $_GET['ORDER'] == 'DESC')
                 $text = 'Price: High to Low';
-            if ($_GET['SORT'] == 'property_TIME_RAISE' and $_GET['ORDER'] == 'ASC')
+            if ($_GET['SORT'] == 'PROPERTY_TIME_RAISE' and $_GET['ORDER'] == 'ASC')
                 $text = 'Date: Low to High';
-            if ($_GET['SORT'] == 'property_TIME_RAISE' and $_GET['ORDER'] == 'DESC')
+            if ($_GET['SORT'] == 'PROPERTY_TIME_RAISE' and $_GET['ORDER'] == 'DESC')
                 $text = 'Date: High to Low';
             ?>
 
