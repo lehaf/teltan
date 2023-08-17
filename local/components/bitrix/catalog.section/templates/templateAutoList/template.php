@@ -75,6 +75,8 @@ ps($arResult);
     });*/
     foreach ($arResult['VIPS'] as $arItem) { ?>
         <?php
+        $this->AddEditAction($arItem['ID'], $arItem['EDIT_LINK'], $arItem["EDIT_LINK_TEXT"]);
+        $this->AddDeleteAction($arItem['ID'], $arItem['DELETE_LINK'], $arItem["DELETE_LINK_TEXT"], array("CONFIRM" => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM')));
         $color = '';
         $vip = '';
         if ($arItem['PROPERTIES']['COLOR_DATE']['VALUE'] && strtotime($arItem['PROPERTIES']['COLOR_DATE']['VALUE']) > time()) {
@@ -85,7 +87,7 @@ ps($arResult);
         }
         if ($vip != '') {
             ?>
-            <div class="mb-3 col">
+            <div class="mb-3 col" id="<?=$this->GetEditAreaID($arItem['ID'])?>">
                 <div class="card product-card product-line <?= $vip; ?>" style="background-color: <?= $color; ?>">
                     <div class="card-link">
                         <div class="image-block">

@@ -64,10 +64,10 @@ if ($_GET['SORT'] != '' && $_GET['ORDER'] != '') {
         // "ELEMENT_SORT_FIELD2" => $secondSort['SORT'],	// Поле для второй сортировки элементов
         //"ELEMENT_SORT_ORDER" => "desc",	// Порядок сортировки элементов
         // "ELEMENT_SORT_ORDER2" => $secondSort['ORDER'],
-        "ELEMENT_SORT_FIELD" =>"property_VIP_FLAG",    // По какому полю сортируем элементы
-        "ELEMENT_SORT_FIELD2" => $secondSort['SORT'],    // Поле для второй сортировки элементов
+        "ELEMENT_SORT_FIELD" =>"PROPERTY_VIP_FLAG",    // По какому полю сортируем элементы
+        "ELEMENT_SORT_FIELD2" => 'DATE_CREATE',    // Поле для второй сортировки элементов
         "ELEMENT_SORT_ORDER" => "desc,nulls",    // Порядок сортировки элементов
-        "ELEMENT_SORT_ORDER2" => $secondSort['ORDER'],
+        "ELEMENT_SORT_ORDER2" => 'desc,nulls',
         "FILTER_FIELD_CODE" => array("", ""),
         "DETAIL_FIELD_CODE" => array(
             0 => "SHOW_COUNTER",
