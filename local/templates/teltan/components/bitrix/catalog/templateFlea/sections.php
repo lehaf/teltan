@@ -186,26 +186,26 @@ $dirName = str_replace('/', '', $dir); // PHP код
         false
     );
     //костыль для сортировки
-    $arSelect = Array("ID", "IBLOCK_ID", "NAME", "PROPERTY_VIP_DATE");
-    $arFilter = Array("IBLOCK_ID"=>1);
-    $res = CIblockElement::GetList(Array("DATE_CREATE" => "DESC"), $arFilter, false, false, $arSelect);
-    while($ob = $res->GetNextElement()){
-        $arFields = $ob->GetFields();
-        if($arFields['PROPERTY_VIP_DATE_VALUE'] != null && strtotime($arFields['PROPERTY_VIP_DATE_VALUE']) < time() ){
-            $el = new CIBlockElement;
-            $PROP = array();
-            $PROP['VIP_DATE'] = "";
-            $arLoadProductArray = Array(
-                "IBLOCK_SECTION" => false,
-                "PROPERTY_VALUES"=> $PROP,
-            );
-            $PRODUCT_ID = $arFields['ID'];
-          //  $res = $el->Update($PRODUCT_ID, $arLoadProductArray);
-            CIBlockElement::SetPropertyValueCode($PRODUCT_ID, "VIP_FLAG", 0);
-            CIBlockElement::SetPropertyValues($PRODUCT_ID, $arParams["IBLOCK_ID"], '', 'VIP_DATE');
-
-        }
-    }
+//    $arSelect = Array("ID", "IBLOCK_ID", "NAME", "PROPERTY_VIP_DATE");
+//    $arFilter = Array("IBLOCK_ID"=>1);
+//    $res = CIblockElement::GetList(Array("DATE_CREATE" => "DESC"), $arFilter, false, false, $arSelect);
+//    while($ob = $res->GetNextElement()){
+//        $arFields = $ob->GetFields();
+//        if($arFields['PROPERTY_VIP_DATE_VALUE'] != null && strtotime($arFields['PROPERTY_VIP_DATE_VALUE']) < time() ){
+//            $el = new CIBlockElement;
+//            $PROP = array();
+//            $PROP['VIP_DATE'] = "";
+//            $arLoadProductArray = Array(
+//                "IBLOCK_SECTION" => false,
+//                "PROPERTY_VALUES"=> $PROP,
+//            );
+//            $PRODUCT_ID = $arFields['ID'];
+//          //  $res = $el->Update($PRODUCT_ID, $arLoadProductArray);
+//            CIBlockElement::SetPropertyValueCode($PRODUCT_ID, "VIP_FLAG", 0);
+//            CIBlockElement::SetPropertyValues($PRODUCT_ID, $arParams["IBLOCK_ID"], '', 'VIP_DATE');
+//
+//        }
+//    }
 
     ?>
 
