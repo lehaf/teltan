@@ -11,23 +11,24 @@ $dirName = str_replace('/', '', $dir); // PHP код
     </div>
     <script>
         class RangeSlider {
+
             constructor(elementId) {
                 this.elementId = elementId;
-
                 const element = document.getElementById(this.elementId);
-
-
                 this.element = element;
-
                 this.init();
-
             }
 
             init() {
-                const { rangeMin = 0, rangeMax = 100 } = this.element.dataset;
+                const {rangeMin = 0, rangeMax = 100} = this.element.dataset;
+                const minInput = document.querySelector(`[data-range-min-connected="${this.elementId}"]`);
+                const maxInput = document.querySelector(`[data-range-max-connected="${this.elementId}"]`);
 
                 this.slider = noUiSlider.create(this.element, {
-                    start: [Number(rangeMin), localStorage.getItem('FilterMax') ?? Number(rangeMax)],
+                    start: [
+                        Number(minInput.value),
+                        Number(maxInput.value)
+                    ],
                     connect: true,
                     step: 1,
                     direction: 'rtl',
@@ -41,15 +42,11 @@ $dirName = str_replace('/', '', $dir); // PHP код
                     },
                 });
 
-                const minInput = document.querySelector(`[data-range-min-connected="${this.elementId}"]`);
-                const maxInput = document.querySelector(`[data-range-max-connected="${this.elementId}"]`);
-
                 if (minInput && maxInput) {
                     this.slider.on('update', () => {
                         const [minValue, maxValue] = this.slider.get();
                         minInput.value = minValue;
                         maxInput.value = maxValue;
-                        localStorage.setItem('FilterMax', maxValue);
                     })
 
                     minInput.addEventListener('change', (e) => {
@@ -72,22 +69,6 @@ $dirName = str_replace('/', '', $dir); // PHP код
                 }
             }
         }
-
-        $(document).ready(function() {
-            const maxInput = document.querySelector("#arrFilter_15_MAX");
-
-            function setDataRange(){
-                let FilterMax = $("#arrFilter_15_MAX").val();
-                localStorage.setItem('FilterMax', FilterMax);
-            }
-
-            maxInput.addEventListener('input', (e) => {
-
-                setDataRange();
-            })
-            localStorage.getItem('FilterMax')
-
-        });
     </script>
     <? $APPLICATION->IncludeComponent("bitrix:catalog.section", "templateFleaSliderList", array(
         "ACTION_VARIABLE" => "action",    // Название переменной, в которой передается действие
