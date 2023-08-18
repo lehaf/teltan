@@ -3436,7 +3436,7 @@ $mapArray['features'][] = [
                 dataType: 'json',
                 async: false,
                 data: {
-                    url: 'http://650739-cm41399.tmweb.ru/ajax/buy_item_paket.php',
+                    url: window.location.origin + '/ajax/buy_item_paket.php',
                     idItem: id,
                     count: count,
                     iblock: eltrigger,
@@ -3474,7 +3474,7 @@ $mapArray['features'][] = [
                 dataType: 'json',
                 async: false,
                 data: {
-                    url: 'http://650739-cm41399.tmweb.ru/ajax/buy_item_lenta.php',
+                    url: window.location.origin + '/ajax/buy_item_lenta.php',
                     idItem: id,
                     count: count,
                     iblock: eltrigger,
@@ -3508,7 +3508,7 @@ $mapArray['features'][] = [
                 dataType: 'json',
                 async: false,
                 data: {
-                    url: 'http://650739-cm41399.tmweb.ru/ajax/buy_item_colour.php',
+                    url: window.location.origin + '/ajax/buy_item_colour.php',
                     idItem: id,
                     count: count,
                     iblock: eltrigger,
@@ -3541,7 +3541,7 @@ $mapArray['features'][] = [
                 dataType: 'json',
                 async: false,
                 data: {
-                    url: 'http://650739-cm41399.tmweb.ru/ajax/buy_item_vip.php',
+                    url: window.location.origin + '/ajax/buy_item_vip.php',
                     idItem: id,
                     count: count,
                     iblock: eltrigger,
@@ -3573,7 +3573,7 @@ $mapArray['features'][] = [
                 dataType: 'json',
                 async: false,
                 data: {
-                    url: 'http://650739-cm41399.tmweb.ru/ajax/buy_item.php',
+                    url: window.location.origin + '/ajax/buy_item.php',
                     idItem: id,
                     count: count,
                     iblock: eltrigger,

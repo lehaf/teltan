@@ -351,7 +351,8 @@ if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0 || $b || $_REQUEST[
                         $arFile = CFile::MakeFileArray($_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png');
                         $arFile["MODULE_ID"] = "iblock";
                         $rotate = (int)$item[5] * 90 * 3;
-                        RotateJpg($item[0], $rotate, $_SERVER["DOCUMENT_ROOT"] . str_replace(SITE_DOMAIN, '', $item[0]), $arFile['type']);
+                        $siteDomain = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'];
+                        RotateJpg($item[0], $rotate, $_SERVER["DOCUMENT_ROOT"] . str_replace($siteDomain, '', $item[0]), $arFile['type']);
                         unlink($_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png');
                     }
 
