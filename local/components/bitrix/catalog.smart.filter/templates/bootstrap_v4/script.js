@@ -234,7 +234,6 @@ JCSmartFilter.prototype.postHandler = function (result, fromCache)
     }
     this.cacheKey = '';
     let ajax_url = result.FILTER_URL;
-    console.log(result);
     ajax_url = ajax_url.replace(/&amp;/g, "&");
     history.pushState(null, null, ajax_url);
     $.ajax({
@@ -247,11 +246,10 @@ JCSmartFilter.prototype.postHandler = function (result, fromCache)
                 $(this).attr('href' , ajax_url)
             });
             $('#target_container').find('.pagination').find('a').each(function (index) {
-                console.log($(this).attr('href'))
                 if($(this).attr('href') !== undefined){
                     let url = $(this).attr('href');
                     let params = ajax_url;
-                    let urlObj = new URL(url, "http://650739-cm41399.tmweb.ru"+ window.location.pathname);
+                    let urlObj = new URL(url, window.location.origin + window.location.pathname);
                     let paramsObj = new URLSearchParams(params);
                     for (let [key, value] of paramsObj) {
                         let index = key.indexOf('?')
@@ -264,14 +262,14 @@ JCSmartFilter.prototype.postHandler = function (result, fromCache)
                 }
 
             })
-            console.log(ajax_url)
+
             $('.dropdown-menu').find('.dropdown-item').each(function(){
 
                 if (!$(this).hasClass('border-bottom')) {
                     if($(this).attr('href') !== undefined){
                         let url = $(this).attr('href');
                         let params = ajax_url;
-                        let urlObj = new URL(url, "http://650739-cm41399.tmweb.ru" + window.location.pathname);
+                        let urlObj = new URL(url, window.location.origin + window.location.pathname);
                         let paramsObj = new URLSearchParams(params);
 
                         for (let [key, value] of paramsObj) {

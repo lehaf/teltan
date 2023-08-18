@@ -12,6 +12,7 @@ $this->SetViewTarget("smart_filter_HTML");
 /** @var string $componentPath */
 /** @var CBitrixComponent $component */
 $this->setFrameMode(true);
+if (isset($templateData['TEMPLATE_THEME'])) $this->addExternalCss($templateData['TEMPLATE_THEME']);
 require($_SERVER["DOCUMENT_ROOT"] . "/vendor/autoload.php");
 $detect = new Mobile_Detect;
 $templateData = array(
@@ -83,13 +84,7 @@ while ($row = $res->GetNext()) {
         }
     }
 }
-
-
-if (isset($templateData['TEMPLATE_THEME'])) {
-    $this->addExternalCss($templateData['TEMPLATE_THEME']);
-}
 ?>
-
 
     <form name="<? echo $arResult["FILTER_NAME"] . "_form" ?>" action="<? echo $arResult["FORM_ACTION"] ?>" method="get"
           class="smart-filter-form">
@@ -216,58 +211,59 @@ if (isset($templateData['TEMPLATE_THEME'])) {
                                         class="icone-filter-title icon-arrow-down-sign-to-navigate-3"></i><? echo $arItem['FILTER_HINT'] ?></span>
                             </p>
                             <p class="filter-select__collapse-title h5 d-none d-lg-block text-uppercase"><? echo $arItem['FILTER_HINT'] ?></p>
-
                             <div id="collapse<?= $arItem['CODE'] ?>" class="collapse show">
                                 <? if ($arItem['CODE'] == 'PRICE' && !CSite::InDir('/flea/')) {
                                     ?>
                                     <ul>
-
                                         <li>
-                                            <span onclick=" triggerKeyup()" data-range-set="0,250"
+                                            <span onclick="triggerKeyup()" data-range-set="0,250"
                                                   data-range-connected="rangeSlider<?= $arItem['CODE'] ?>">Under $250</span>
                                         </li>
 
                                         <li>
-                                            <span onclick=" triggerKeyup()" data-range-set="250,500"
+                                            <span onclick="triggerKeyup()" data-range-set="250,500"
                                                   data-range-connected="rangeSlider<?= $arItem['CODE'] ?>">$250 to $500</span>
                                         </li>
 
                                         <li>
-                                            <span onclick=" triggerKeyup()" data-range-set="500,1000"
+                                            <span onclick="triggerKeyup()" data-range-set="500,1000"
                                                   data-range-connected="rangeSlider<?= $arItem['CODE'] ?>">$500 to $1000</span>
                                         </li>
 
                                         <li>
-                                            <span onclick=" triggerKeyup()" data-range-set="1000,2000"
+                                            <span onclick="triggerKeyup()" data-range-set="1000,2000"
                                                   data-range-connected="rangeSlider<?= $arItem['CODE'] ?>">$1000 to $2000</span>
                                         </li>
 
                                         <li>
-                                            <span onclick=" triggerKeyup()" data-range-set="2000,10000"
+                                            <span onclick="triggerKeyup()" data-range-set="2000,10000"
                                                   data-range-connected="rangeSlider<?= $arItem['CODE'] ?>">$2000 &amp; Above</span>
                                         </li>
-
                                     </ul>
                                 <?
-                                } ?>
+                                }?>
                                 <div class="form-group">
                                     <div class="mb-4 form-row">
                                         <div class="col">
-                                            <input type="text" onkeyup="smartFilter.keyup(this)"
-                                                   name="<? echo $arItem["VALUES"]["MAX"]["CONTROL_NAME"] ?>"
-                                                   value="<? echo $arItem["VALUES"]["MAX"]["HTML_VALUE"] ?>"
-                                                   id="<? echo $arItem["VALUES"]["MAX"]["CONTROL_ID"] ?>"
-                                                   class="form-control" placeholder="Max"
-                                                   data-range-max-connected="rangeSlider<?= $arItem['CODE'] ?>">
+                                            <input type="text"
+                                                   onkeyup="smartFilter.keyup(this)"
+                                                   class="form-control"
+                                                   name="<?=$arItem["VALUES"]["MAX"]["CONTROL_NAME"]?>"
+                                                   value="<?=!empty($arItem["VALUES"]["MAX"]["HTML_VALUE"]) ? $arItem["VALUES"]["MAX"]["HTML_VALUE"] : $arItem["VALUES"]["MAX"]["VALUE"]?>"
+                                                   id="<?=$arItem["VALUES"]["MAX"]["CONTROL_ID"]?>"
+                                                   placeholder="Max"
+                                                   data-range-max-connected="rangeSlider<?=$arItem['CODE']?>">
                                         </div>
 
                                         <div class="col">
-                                            <input type="text" onkeyup="smartFilter.keyup(this)" class="form-control"
-                                                   name="<? echo $arItem["VALUES"]["MIN"]["CONTROL_NAME"] ?>"
-                                                   value="<? echo $arItem["VALUES"]["MIN"]["HTML_VALUE"] ?>"
-                                                   id="<? echo $arItem["VALUES"]["MIN"]["CONTROL_ID"] ?>"
+                                            <input type="text"
+                                                   onkeyup="smartFilter.keyup(this)"
+                                                   class="form-control"
+                                                   name="<?=$arItem["VALUES"]["MIN"]["CONTROL_NAME"]?>"
+                                                   value="<?=!empty($arItem["VALUES"]["MIN"]["HTML_VALUE"]) ? $arItem["VALUES"]["MIN"]["HTML_VALUE"] : $arItem["VALUES"]["MIN"]["VALUE"]?>"
+                                                   id="<?=$arItem["VALUES"]["MIN"]["CONTROL_ID"]?>"
                                                    placeholder="Min"
-                                                   data-range-min-connected="rangeSlider<?= $arItem['CODE'] ?>">
+                                                   data-range-min-connected="rangeSlider<?=$arItem['CODE']?>">
                                         </div>
                                     </div>
                                     <?
@@ -276,10 +272,13 @@ if (isset($templateData['TEMPLATE_THEME'])) {
                                     // $arItem["VALUES"]["MIN"]["VALUE"] минимальное что есть
                                     // $arItem["VALUES"]["MAX"]["VALUE"] максимальное что есть
                                     ?>
-                                    <div class="mb-3" id="rangeSlider<?= $arItem['CODE'] ?>"
-                                         data-range-min="<?= $arItem["VALUES"]["MIN"]["VALUE"] ?>"
-                                         data-range-max="<?= $arItem["VALUES"]["MAX"]["VALUE"] ?>"></div>
-                                    <script>new RangeSlider('rangeSlider<?=$arItem['CODE']?>');</script>
+                                    <div class="mb-3" id="rangeSlider<?=$arItem['CODE']?>"
+                                         data-range-min="<?=$arItem["VALUES"]["MIN"]["VALUE"]?>"
+                                         data-range-max="<?=$arItem["VALUES"]["MAX"]["VALUE"]?>"
+                                    ></div>
+                                    <script>
+                                        new RangeSlider('rangeSlider<?=$arItem['CODE']?>');
+                                    </script>
                                     <div class="row px-2 d-flex justify-content-between">
                                         <span><?= $arItem["VALUES"]["MAX"]["VALUE"] ?></span>
                                         <span><?= $arItem["VALUES"]["MIN"]["VALUE"] ?></span>
@@ -298,7 +297,6 @@ if (isset($templateData['TEMPLATE_THEME'])) {
                                         }
                                     </script>
                                 </div>
-
                             </div>
                         </div>
 
@@ -829,11 +827,8 @@ if (isset($templateData['TEMPLATE_THEME'])) {
                                     class="icone-filter-title icon-arrow-down-sign-to-navigate-3"></i><?= $arItem['FILTER_HINT'] ?></span>
                             </p>
                             <p class="filter-select__collapse-title h5 d-none d-lg-block text-uppercase"><?= $arItem['FILTER_HINT'] ?></p>
-
                             <div class="collapse show" id="collapse<?= $arItem['CODE'] ?>">
                                 <ul>
-
-
                                     <? foreach ($arItem["VALUES"] as $val => $ar): ?>
                                         <li class="mb-0 checkbox">
                                             <label>
@@ -845,14 +840,9 @@ if (isset($templateData['TEMPLATE_THEME'])) {
                                                     <? echo $ar["CHECKED"] ? 'checked="checked"' : '' ?>
                                                         onclick="smartFilter.click(this);"
                                                 />
-                                                <span data-role="label_<?= $ar["CONTROL_ID"] ?>" class="mr-2"
-                                                      for="<? echo $ar["CONTROL_ID"] ?>">
-                                                        <?= $ar["VALUE"];
-                                                        if ($arParams["DISPLAY_ELEMENT_COUNT"] !== "N" && isset($ar["ELEMENT_COUNT"])):
-                                                            ?>&nbsp;(<span
-                                                                data-role="count_<?= $ar["CONTROL_ID"] ?>"><? echo $ar["ELEMENT_COUNT"]; ?></span>)<?
-                                                        endif; ?>
-                                                    </span>
+                                                <span data-role="label_<?= $ar["CONTROL_ID"] ?>" class="mr-2" for="<? echo $ar["CONTROL_ID"] ?>">
+                                                    <?=$ar["VALUE"];?>
+                                                </span>
                                                 <span class="cr"></span>
                                             </label>
                                         </li>

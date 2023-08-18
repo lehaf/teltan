@@ -1,4 +1,6 @@
-<? if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
+<?php if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
+
+/** @global $APPLICATION  */
 
 $dir = $APPLICATION->GetCurDir();
 $dirName = str_replace('/', '', $dir); // PHP код
@@ -6,23 +8,24 @@ $dirName = str_replace('/', '', $dir); // PHP код
 ?>
 <script>
     class RangeSlider {
+
         constructor(elementId) {
             this.elementId = elementId;
-
             const element = document.getElementById(this.elementId);
-
-
             this.element = element;
-
             this.init();
-
         }
 
         init() {
             const {rangeMin = 0, rangeMax = 100} = this.element.dataset;
+            const minInput = document.querySelector(`[data-range-min-connected="${this.elementId}"]`);
+            const maxInput = document.querySelector(`[data-range-max-connected="${this.elementId}"]`);
 
             this.slider = noUiSlider.create(this.element, {
-                start: [Number(rangeMin), Number(rangeMax)],
+                start: [
+                     Number(minInput.value),
+                     Number(maxInput.value)
+                ],
                 connect: true,
                 step: 1,
                 direction: 'rtl',
@@ -35,9 +38,6 @@ $dirName = str_replace('/', '', $dir); // PHP код
                     from: (value) => Number(value) || 0,
                 },
             });
-
-            const minInput = document.querySelector(`[data-range-min-connected="${this.elementId}"]`);
-            const maxInput = document.querySelector(`[data-range-max-connected="${this.elementId}"]`);
 
             if (minInput && maxInput) {
                 this.slider.on('update', () => {
