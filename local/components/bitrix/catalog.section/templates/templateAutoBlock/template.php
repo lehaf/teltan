@@ -129,24 +129,27 @@ foreach($arResult['VIPS'] as $arItem){?>
                         <div class="row">
                             <div class="col-12 col-xl">
                                 <p class="d-none d-xl-inline-block engin">
-                                    <span><?if($arItem['PROPERTIES']['PROP_ENGIEN_NEW']['VALUE'] != null){
-                                            echo $arItem['PROPERTIES']['PROP_ENGIEN_NEW']['VALUE'] . $arItem['PROPERTIES']['PROP_KM_ML_ENGIE']['VALUE'] ;
-                                        }else{
-                                            echo $arItem['PROPERTIES']['PROP_ENGIEN_NEW']['VALUE'] . $arItem['PROPERTIES']['PROP_KM_ML_ENGIE']['VALUE'];
-                                        }?> <?=$arItem['PROPERTIES']['PROP_ENGINE']['VALUE']?>, </br> <?=$arItem['PROPERTIES']['PROP_ENGIEN_LITERS']['VALUE']?> l.</span>
+                                    <span>
+                                        <?= $arItem['PROPERTIES']['PROP_ENGIEN_NEW_Left']['VALUE'] ?>
+                                        <?= $arItem['PROPERTIES']['PROP_KM_ML_ENGIE']['VALUE'] ?>
+                                          <span dir><?= $arItem['PROPERTIES']['PROP_ENGINE']['VALUE'] ?></span>
+                                        ,
+                                        <span> <?= $arItem['PROPERTIES']['PROP_ENGIEN_LITERS_Left']['VALUE'] ?> l.</span>
+                                        </span>
                                     <i class="icon-engine"></i>
                                 </p>
                                 <br>
                                 <p class="mb-2 mb-lg-3 location">
                                     <span class="addres"><?=$arItem['PROPERTIES']['UF_CITY']['VALUE'];?> <?=(!empty($arItem['PROPERTIES']['UF_CITY']['VALUE']))? ',' : ''?> <?=$arItem['PROPERTIES']['UF_REGION']['VALUE'];?></span>
                                     <svg class="icon-local" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 513.597 513.597" xml:space="preserve">
-                <g>
-                    <path d="M263.278,0.107C158.977-3.408,73.323,80.095,73.323,183.602c0,117.469,112.73,202.72,175.915,325.322
-                  c3.208,6.225,12.169,6.233,15.388,0.009c57.16-110.317,154.854-184.291,172.959-290.569
-                  C456.331,108.387,374.776,3.866,263.278,0.107z M256.923,279.773c-53.113,0-96.171-43.059-96.171-96.171
-                  s43.059-96.171,96.171-96.171c53.113,0,96.172,43.059,96.172,96.171S310.036,279.773,256.923,279.773z"></path>
-                </g>
-              </svg>
+                                        <g>
+                                            <path d="M263.278,0.107C158.977-3.408,73.323,80.095,73.323,183.602c0,117.469,112.73,202.72,175.915,325.322
+                                                  c3.208,6.225,12.169,6.233,15.388,0.009c57.16-110.317,154.854-184.291,172.959-290.569
+                                                  C456.331,108.387,374.776,3.866,263.278,0.107z M256.923,279.773c-53.113,0-96.171-43.059-96.171-96.171
+                                                  s43.059-96.171,96.171-96.171c53.113,0,96.172,43.059,96.172,96.171S310.036,279.773,256.923,279.773z">
+                                            </path>
+                                        </g>
+                                    </svg>
                                 </p>
                             </div>
                             <div class="col-12 col-xl-4">
