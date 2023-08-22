@@ -2,7 +2,6 @@
 
     $(document).ready(function () {
         // MAPS START
-
         mapboxgl.accessToken = 'pk.eyJ1Ijoicm9vdHRlc3QxMjMiLCJhIjoiY2w0ZHppeGJzMDczZDNndGc2eWR0M2R5aSJ9.wz6xj8AGc7s6Ivd09tOZrA';
         let mapCoordinate = [34.886226654052734, 31.95340028021316] //default coordinate map
 
@@ -13,6 +12,7 @@
                 center: mapCoordinate,
                 zoom: 7
             });
+
             let hoveredStateId = null;
             let hoveredStateId2 = null;
             let hoveredStateId3 = null;
@@ -204,8 +204,13 @@
             $(".wizard-control-next").on("click",()=>{
                 map.resize();
             })
-            
+
+            $(".wizard-control-prev").on("click",()=>{
+                map.resize();
+            })
+
             map.on('load', () => {
+                window.mapError = 'Выберите метку на карте!';
                 map.resize();
                 let markerData;
                 map.addSource('earthquakes', {
@@ -898,8 +903,10 @@
                     accessToken: mapboxgl.accessToken,
                     marker: false
                 })
+
                 let marker;
                 geocoder.on('result', e => {
+                    // Удаляем предыдущий маркер
                     if (marker) {
                         marker.remove();
                     }
@@ -907,51 +914,53 @@
                         draggable: true
                     }).setLngLat(e.result.center).addTo(map)
 
-                    var geocoder_point = map.project([e.result.center[0], e.result.center[1]]);
-                    const features = map.queryRenderedFeatures(geocoder_point);
-                    const displayProperties = [
-                        'type',
-                        'properties',
-                        'id',
-                        'layer',
-                        'source',
-                        'sourceLayer',
-                        'state'
-                    ];
-                    const displayFeatures = features.map((feat) => {
-                        const displayFeat = {};
-                        displayProperties.forEach((prop) => {
-                            displayFeat[prop] = feat[prop];
-                        });
-                        return displayFeat;
-                    });
-                    markerData = displayFeatures;
+                    map.on('zoomend', function() {
+                        let geocoder_point = map.project([e.result.center[0], e.result.center[1]]);
+                        const features = map.queryRenderedFeatures(geocoder_point);
+                        const displayProperties = [
+                            'type',
+                            'properties',
+                            'id',
+                            'layer',
+                            'source',
+                            'sourceLayer',
+                            'state'
+                        ];
 
-                    markerData.forEach(function (item, i, mapResult) {
-                        if (item.sourceLayer == "abu_gosh") {
-                            dataFor = item;
-                        } else {
-                            if (item.sourceLayer != "building" && item.sourceLayer != "road") {
-                                if (item.properties.MUN_HE != undefined) {
-                                    dataFor = item;
+                        const displayFeatures = features.map((feat) => {
+                            const displayFeat = {};
+                            displayProperties.forEach((prop) => {
+                                displayFeat[prop] = feat[prop];
+                            });
+                            return displayFeat;
+                        });
+                        markerData = displayFeatures;
+
+                        markerData.forEach(function (item, i, mapResult) {
+                            if (item.sourceLayer == "abu_gosh") {
+                                let dataFor = item;
+                            } else {
+                                if (item.sourceLayer != "building" && item.sourceLayer != "road") {
+                                    if (item.properties.MUN_HE != undefined) {
+                                        let dataFor = item;
+                                    }
                                 }
                             }
+                        });
+                        let layer = markerData[1];
+
+                        if (layer !== undefined && layer.sourceLayer === "abu_gosh") {
+                            window.mapError = false;
+                        } else {
+                            window.mapError = 'Вы выбрали метку за пределами разрешенных зон страны Израиль';
                         }
+
+                        $('.wizard-control-next').removeAttr('disabled'); // снимаем блокировку с кнопки что бы пользователь мог проверить ошибку
+                        localStorage.setItem('markerData', JSON.stringify(markerData))
+                        localStorage.setItem('locationDataPosition', JSON.stringify(geocoder_point))
+                        localStorage.setItem('locationDataLatLng', JSON.stringify(e.result.center))
                     });
-                    let layer = markerData[1];
 
-                    if (layer == undefined) {
-                        $('.wizard-control-next').attr('disabled', 'disabled');
-                    } else if (layer.sourceLayer === "abu_gosh" && layer !== undefined) {
-                        $('.wizard-control-next').removeAttr('disabled');
-
-                    } else {
-
-                        $('.wizard-control-next').attr('disabled', 'disabled');
-                    }
-                    localStorage.setItem('markerData', JSON.stringify(markerData))
-                    localStorage.setItem('locationDataPosition', JSON.stringify(geocoder_point))
-                    localStorage.setItem('locationDataLatLng', JSON.stringify(e.result.center))
 
                     marker.on('dragend', function (e) {
                         const features = map.queryRenderedFeatures(e.target._pos);
@@ -984,23 +993,17 @@
                             }
                         });
                         let layer = markerData[0];
-                        //console.log(markerData)
-                        if (layer == undefined) {
-                            $('.wizard-control-next').attr('disabled', 'disabled');
-                        } else if (layer.sourceLayer === "abu_gosh" && layer !== undefined) {
-                            $('.wizard-control-next').removeAttr('disabled');
 
+                        if (layer !== undefined && layer.sourceLayer === "abu_gosh") {
+                            window.mapError = false;
                         } else {
-
-                            $('.wizard-control-next').attr('disabled', 'disabled');
+                            window.mapError = 'Вы выбрали метку за пределами разрешенных зон страны Израиль';
                         }
-                        console.log(displayFeatures)
-                        console.log(markerData)
-                        console.log(features)
+
+                        $('.wizard-control-next').removeAttr('disabled'); // снимаем блокировку с кнопки что бы пользователь мог проверить ошибку
                         localStorage.setItem('markerData', JSON.stringify(markerData))
                         localStorage.setItem('locationDataPosition', JSON.stringify(e.target._pos))
                         localStorage.setItem('locationDataLatLng', JSON.stringify(e.target._lngLat))
-
                     })
                 })
                 <?if(!empty($_GET['ID']) && $_GET['EDIT'] == 'Y'){?>
@@ -1339,28 +1342,6 @@
             )
         }*/
 
-        if ($('#mapMini').length > 0) {
-            const map = new mapboxgl.Map({
-                container: 'mapMini',
-                style: 'mapbox://styles/mapbox/streets-v11',
-            });
-
-            map.on('load', () => {
-                console.log('123')
-                map.resize();
-            })
-        }
-
-   //     if ($('#mapFullSize').length > 0) {
-    //        const map = new mapboxgl.Map({
-     //           container: 'mapFullSize',
-     //           style: 'mapbox://styles/mapbox/streets-v11',
-     //       })
-
-       //     $("#itemMapFullSize").on('shown.bs.modal', function () {
-       ///         map.resize();
-     //       })
-                //  }
     });
     // MAPS END
 </script>

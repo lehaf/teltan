@@ -1330,6 +1330,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
         function submitForm(event) {
             event.preventDefault();
+
             var $data = {};
             $('#mainForm').find('input').each(function () {
                 if (this.checked) {
@@ -1384,17 +1385,17 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
             //get marker data from localStorage
             $data['section_id'] = $('.activeSection').data();
             $data['PROP_Completion'] = $('#PROP_Completion').val()
-            var map = localStorage.getItem('markerData');
-            var locationPosition = localStorage.getItem('locationDataPosition');
-            var locationLatLng = localStorage.getItem('locationDataLatLng');
-            var dataForAjax = '';
-            var dataForAjax2 = '';
-            var mapResult = JSON.parse(map);
+            let map = localStorage.getItem('markerData');
+            let locationPosition = localStorage.getItem('locationDataPosition');
+            let locationLatLng = localStorage.getItem('locationDataLatLng');
+            let dataForAjax = '';
+            let dataForAjax2 = '';
+            let mapResult = JSON.parse(map);
             mapResult.forEach(function(item, i, mapResult) {
-                console.log(item)
-                if(item.sourceLayer == "abu_gosh"){
+
+                if (item.sourceLayer == "abu_gosh"){
                     dataForAjax = item.properties.MUN_ENG;
-                }else{
+                } else {
                     if(item.sourceLayer !="building" && item.sourceLayer !="road"){
                         if(item.properties.MUN_HE != undefined) {
                             dataForAjax2 = item.properties.MUN_HE;

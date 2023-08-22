@@ -3,6 +3,12 @@
   margin-left: 0;
 }
 
+.map-error-message {
+  text-align: center;
+  color: red;
+  margin-bottom: 15px;
+}
+
 .user-add-item ._dropdown-block .dropdown.bootstrap-select{
   width: 100% !important;
   margin: 0;

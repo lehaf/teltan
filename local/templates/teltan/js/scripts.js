@@ -474,6 +474,25 @@ $(document).ready(function () {
                         }
                     }
 
+                    if (this.activeStep === 1 &&  window.mapError !== false) {
+                        errors = 1;
+                        $('.wizard-control-next').attr('disabled', 'disabled');
+                        let errorContainer = document.querySelector('#mainForm div.map-error-message');
+                        if (errorContainer) {
+                            errorContainer.innerText = window.mapError;
+                        } else {
+                            errorContainer = document.createElement('div');
+                            errorContainer.classList.add('map-error-message');
+                            errorContainer.innerText = window.mapError;
+                            const h2Title = document.querySelector('#mainForm div.step-two h2');
+                            h2Title.after(errorContainer);
+                        }
+                    } else {
+                        if (document.querySelector('#mainForm div.map-error-message')) {
+                            document.querySelector('#mainForm div.map-error-message').remove();
+                        }
+                    }
+
                     if (errors === 0) {
 
                         if (this.activeStep === 0) {
@@ -629,10 +648,10 @@ $(document).ready(function () {
             })
 
             this.prevControl.on('click', () => {
+                this.selectStep(this.activeStep - 1);
                 if (document.location.pathname === '/add/rent/' || document.location.pathname === '/add/buy/') {
                     $('.wizard-control-next').removeAttr('disabled');
                 }
-                this.selectStep(this.activeStep - 1);
             })
 
             this.selectStep(this.activeStep);
@@ -689,8 +708,9 @@ $(document).ready(function () {
     mapboxgl.accessToken = 'pk.eyJ1Ijoicm9vdHRlc3QxMjMiLCJhIjoiY2w0ZHppeGJzMDczZDNndGc2eWR0M2R5aSJ9.wz6xj8AGc7s6Ivd09tOZrA';
 
     let mapCoordinate = [34.886226654052734, 31.95340028021316] //default coordinate map
-    var markerData = [];
-    if ($('#map').length > 0) {
+    let markerData = [];
+
+    if ($('#map').length > 0 && (document.location.pathname !== '/add/rent/' || document.location.pathname !== '/add/buy/')) {
         const map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/roottest123/cl4dzlo1n004u14midfqcmla4',
@@ -698,12 +718,9 @@ $(document).ready(function () {
             zoom: 8
         });
 
-
-        map.on('load', () => {
+        map.on('load', (eventLoad) => {
             map.resize();
             let hoveredStateId = null;
-
-
             const stateDataLayer = map.getLayer('abu-gosh');
 
             map.addSource('1_source-1', {
@@ -993,14 +1010,14 @@ $(document).ready(function () {
             })
 
             geocoder.on('result', e => {
+
                 const marker = new mapboxgl.Marker({
                     draggable: true
                 })
-                    .setLngLat(e.result.center)
-                    .addTo(map)
+                .setLngLat(e.result.center)
+                .addTo(map)
 
-
-                var geocoder_point = map.project([e.result.center[0], e.result.center[1]]);
+                let geocoder_point = map.project([e.result.center[0], e.result.center[1]]);
                 const features = map.queryRenderedFeatures(geocoder_point);
                 const displayProperties = [
                     'type',
@@ -1022,11 +1039,11 @@ $(document).ready(function () {
 
                 markerData.forEach(function (item, i, mapResult) {
                     if (item.sourceLayer == "abu_gosh") {
-                        dataFor = item;
+                        let dataFor = item;
                     } else {
                         if (item.sourceLayer != "building" && item.sourceLayer != "road") {
                             if (item.properties.MUN_HE != undefined) {
-                                dataFor = item;
+                                let dataFor = item;
                             }
                         }
                     }
@@ -1042,12 +1059,14 @@ $(document).ready(function () {
 
                     $('.wizard-control-next').attr('disabled', 'disabled');
                 }
+
+
                 localStorage.setItem('markerData', JSON.stringify(markerData))
                 localStorage.setItem('locationDataPosition', JSON.stringify(geocoder_point))
                 localStorage.setItem('locationDataLatLng', JSON.stringify(e.result.center))
 
-
                 marker.on('dragend', function (e) {
+
                     const features = map.queryRenderedFeatures(e.target._pos);
                     const displayProperties = [
                         'type',
@@ -1088,6 +1107,7 @@ $(document).ready(function () {
 
                         $('.wizard-control-next').attr('disabled', 'disabled');
                     }
+
                     localStorage.setItem('markerData', JSON.stringify(markerData))
                     localStorage.setItem('locationDataPosition', JSON.stringify(e.target._pos))
                     localStorage.setItem('locationDataLatLng', JSON.stringify(e.target._lngLat))
@@ -1096,6 +1116,7 @@ $(document).ready(function () {
             })
 
             map.addControl(geocoder)
+
 
 
             map.on('click', 'unclustered-point', (e) => {
@@ -1158,16 +1179,16 @@ $(document).ready(function () {
             map.on('mouseenter', 'unclustered-point', (e) => {
                 const coordinates = e.features[0].geometry.coordinates.slice();
                 const description = `
-        <div class="d-flex popup-content">
-          <div class="w-75 pr-3">
-            <img src="${e.features[0].properties.image}">
-          </div>
+                    <div class="d-flex popup-content">
+                      <div class="w-75 pr-3">
+                        <img src="${e.features[0].properties.image}">
+                      </div>
 
-          <div class="d-flex flex-column text-right">
-            <p class="font-weight-bold">${e.features[0].properties.title}</p>
-            <p class="p-0 text-primary font-weight-bold">${e.features[0].properties.price}</p>
-          </div>
-        </div>`;
+                      <div class="d-flex flex-column text-right">
+                        <p class="font-weight-bold">${e.features[0].properties.title}</p>
+                        <p class="p-0 text-primary font-weight-bold">${e.features[0].properties.price}</p>
+                      </div>
+                    </div>`;
 
                 while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
@@ -1176,6 +1197,7 @@ $(document).ready(function () {
                 popup.setLngLat(coordinates).setHTML(description).addTo(map);
             });
         });
+
         const mapItemRenderPlace = $('#rendorMapItemCard');
 
         const clearMapItemPLace = () => {
