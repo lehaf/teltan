@@ -690,8 +690,10 @@ if(name.length > 4){
     // Избранное
     if (typeof favorites !== "undefined") {
         if (favorites.length) {
+            console.log(123);
             $(favorites).each(function (e, i) {
                 $('.like[data-ad_id="' + i + '"]').addClass('active');
+                $('.product-line__like[data-ad_id="' + i + '"]').addClass('active');
                 $('.like_f[data-ad_id="' + i + '"]').addClass('active');
             })
         }

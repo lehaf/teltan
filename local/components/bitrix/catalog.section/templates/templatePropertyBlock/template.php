@@ -203,8 +203,7 @@ foreach($arResult['VIPS'] as $arItem){?>
                                 </svg>
                             </p>
                         </a>
-                        <?
-                    } ?>
+                    <?} ?>
                     <?if($arItem['PROPERTIES']['PRICE']['VALUE'] != null){?>
                     <p class="mb-0 price"><?=ICON_CURRENCY;?> <?=number_format($arItem['PROPERTIES']['PRICE']['VALUE'], 0, '.', ' ');?></p>
                     <?}?>
