@@ -1180,65 +1180,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
             setTimeout(() => $('.wizard-control-final').removeClass('active'), 500);
         }
     })
-    $('.property-step-contact').click(function () {
-        let selectedSellerTypeOwner = $('#forOwner').is(':checked')
-        if (selectedSellerTypeOwner) {
-            $('#Legalname').hide();
-            $('#Legalname').attr('data-req', 'N');
-        } else {
-            $('#Legalname').show();
-            $('#Legalname').attr('data-req', 'Y');
-        }
 
-        let errors = 0;
-        let errorsDiv = 0;
-        $(this).find('input').each(function () {
-            let inputData = $(this).data()
-            inputData.req = $(this).attr('data-req')
-            let value = $(this).val()
-            if (inputData.req === 'Y') {
-                if ($(this).attr('type') == 'radio') {
-
-                } else {
-
-                    if (value === '') {
-
-                        errors++;
-                        $(this).css('border-block-color', 'red')
-                    } else {
-                        $(this).css('border-block-color', '')
-                    }
-                }
-            }
-
-        });
-        $(this).find('.div-req').each(function () {
-            errorsDiv++;
-            $(this).find('input').each(function (index) {
-                if ($(this).is(':checked') != false)
-                    errorsDiv--;
-            })
-        });
-        $(this).find('select').each(function () {
-            let selectData = $(this).data()
-            if (selectData.req === 'Y' && $(this).val() == '') {
-                errors++;
-                $(this).css('border-block-color', 'red')
-            }
-        });
-
-
-        if (errors < 1) {
-            $('.wizard-control-final').addClass('active');
-            if (errorsDiv < 1) {
-                $('.wizard-control-final').addClass('active');
-            } else {
-                $('.wizard-control-final').removeClass('active');
-            }
-        } else {
-            $('.wizard-control-final').removeClass('active');
-        }
-    })
     if (window.location.href.indexOf("EDIT") > -1) {
 
     } else {
@@ -1303,6 +1245,9 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                 } else {
                     $('#Legalname').show();
                     $('#Legalname').attr('data-req', 'Y');
+                    $('#Legalname').on("keyup", () => {
+                        checkFinalFields();
+                    });
                 }
 
                 checkFinalFields();
@@ -1314,6 +1259,15 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                 checkFinalFields();
             });
         });
+
+
+        $('.wizard-control-next').click(function () {
+            let currentUrl = window.location.href;
+            let isEdit = currentUrl.indexOf("EDIT=Y") !== -1;
+            if (!isEdit) {
+                setTimeout(() => $('.wizard-control-final').removeClass('active'), 100);
+            }
+        })
     });
 
     let flagPhoto = true;
@@ -1499,6 +1453,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
         });
         $(this).toggleClass('activeSection')
     })
+
     function submitForm(event) {
         event.preventDefault();
         // get main form data
@@ -1606,13 +1561,6 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
         });
     }
 
-    $('wizard-control-next').click(function () {
-        let currentUrl = window.location.href;
-        let isEdit = currentUrl.indexOf("EDIT=Y") !== -1;
-        if (!isEdit) {
-            setTimeout(() => $('.wizard-control-final').removeClass('active'), 500);
-        }
-    })
 </script>
 <style>
     .activeSection {
