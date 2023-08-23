@@ -89,7 +89,6 @@ foreach ($arResult['ITEMS'] as $arItem) {
             ]
         ];
     }
-
 }
 ?>
 <div class="property-map">
@@ -99,9 +98,7 @@ foreach ($arResult['ITEMS'] as $arItem) {
 </div>
 <? require_once $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . '/map2.php'; ?>
 <div class="mb-5 row d-flex align-items-center">
-
     <?= $arResult['NAV_STRING'] ?>
-
     <div class="col">
         <div class="d-flex justify-content-between justify-content-xl-end products-sort">
             <div class="d-flex">
@@ -144,10 +141,9 @@ foreach ($arResult['ITEMS'] as $arItem) {
 </div>
 <div class="mb-5 flex-column">
     <div class="row row-cols-1 row-cols-lg-1">
-        <?if(count($arResult['ITEMS']) < 1){?>
+        <?if(empty($arResult['ITEMS'])){?>
             <h1 style="font-size: xxx-large;" class="h2 mb-4 subtitle">המדור ריק</h1>
-        <?}else{?>
-        <?
+        <?}else{
         foreach ($arResult['ITEMS'] as $arItem){
             if ($arItem['PROPERTIES']['VIP_DATE']['VALUE'] && strtotime($arItem['PROPERTIES']['VIP_DATE']['VALUE']) > time()) {
                 $arResult['VIPS'][] = $arItem;
@@ -157,8 +153,9 @@ foreach ($arResult['ITEMS'] as $arItem) {
         /*usort($arResult['VIPS'], function ($arr1, $arr2) {
             return $arr1['PROPERTIES']['TIME_RAISE']['VALUE'] < $arr2['PROPERTIES']['TIME_RAISE']['VALUE'];
         });*/
-        foreach ($arResult['VIPS'] as $arItem) { ?>
-            <?
+        foreach ($arResult['VIPS'] as $arItem) {
+            $this->AddEditAction($arItem['ID'], $arItem['EDIT_LINK'], $arItem["EDIT_LINK_TEXT"]);
+            $this->AddDeleteAction($arItem['ID'], $arItem['DELETE_LINK'], $arItem["DELETE_LINK_TEXT"], array("CONFIRM" => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM')));
             $color = '';
             $vip = '';
             if ($arItem['PROPERTIES']['COLOR_DATE']['VALUE'] && strtotime($arItem['PROPERTIES']['COLOR_DATE']['VALUE']) > time()) {
@@ -169,7 +166,7 @@ foreach ($arResult['ITEMS'] as $arItem) {
             }
             if ($vip != '') {
                 ?>
-                <div class="mb-3 col">
+                <div class="mb-3 col" id="<?=$this->GetEditAreaID($arItem['ID'])?>">
                     <div class="card product-card product-line <?= $vip; ?>" style="background-color: <?= $color; ?>">
                         <div class="card-link">
                             <div class="image-block">
@@ -305,6 +302,8 @@ foreach ($arResult['ITEMS'] as $arItem) {
     <div class="row row-cols-2 row-cols-lg-1">
         <? foreach ($arResult['ITEMS'] as $arItem) { ?>
             <?
+            $this->AddEditAction($arItem['ID'], $arItem['EDIT_LINK'], $arItem["EDIT_LINK_TEXT"]);
+            $this->AddDeleteAction($arItem['ID'], $arItem['DELETE_LINK'], $arItem["DELETE_LINK_TEXT"], array("CONFIRM" => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM')));
             $color = '';
             $vip = '';
             if ($arItem['PROPERTIES']['COLOR_DATE']['VALUE'] && strtotime($arItem['PROPERTIES']['COLOR_DATE']['VALUE']) > time()) {
@@ -315,7 +314,7 @@ foreach ($arResult['ITEMS'] as $arItem) {
             }
             if ($vip == '') {
                 ?>
-                <div class="mb-3 col">
+                <div class="mb-3 col" id="<?=$this->GetEditAreaID($arItem['ID'])?>">
                     <div class="card product-card product-line <?= $vip; ?>" style="background-color: <?= $color; ?>">
                         <div class="card-link">
                             <div class="image-block">

@@ -24,6 +24,7 @@ $MESS ['View-from-the-window'] = "נוף מהחלון";
 $MESS ['Add-photo'] = "הוסף תמונות";
 $MESS ['Ads-are-published-only-with-photos'] = "מודעות מתפרסמות רק עם תמונות";
 $MESS ['Citystreet'] = "עיר, רחוב, מספר בית";
+$MESS ['completion'] = "תאריך הגעה";
 $MESS ['Whatapartment'] = "איזו דירה אתה שוכר?";
 $MESS ['rent-terms'] = "תנאי השכרה";
 $MESS ['rent-price'] = "מחיר";

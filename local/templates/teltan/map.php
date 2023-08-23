@@ -209,6 +209,51 @@
                 map.resize();
             })
 
+            function getMapMark (features, locationDataPosition, locationDataLatLng) {
+                if (features) {
+                    const displayProperties = [
+                        'type',
+                        'properties',
+                        'id',
+                        'layer',
+                        'source',
+                        'sourceLayer',
+                        'state'
+                    ];
+                    const displayFeatures = features.map((feat) => {
+                        const displayFeat = {};
+                        displayProperties.forEach((prop) => {
+                            displayFeat[prop] = feat[prop];
+                        });
+                        return displayFeat;
+                    });
+                    markerData = displayFeatures;
+                    markerData.forEach(function (item, i, mapResult) {
+                        if (item.sourceLayer == "abu_gosh") {
+                            dataFor = item;
+                        } else {
+                            if (item.sourceLayer != "building" && item.sourceLayer != "road") {
+                                if (item.properties.MUN_HE != undefined) {
+                                    dataFor = item;
+                                }
+                            }
+                        }
+                    });
+                    let layer = markerData[0];
+
+                    if (layer !== undefined && layer.sourceLayer === "abu_gosh") {
+                        window.mapError = false;
+                    } else {
+                        window.mapError = 'Вы выбрали метку за пределами разрешенных зон страны Израиль';
+                    }
+
+                    $('.wizard-control-next').removeAttr('disabled'); // снимаем блокировку с кнопки что бы пользователь мог проверить ошибку
+                    localStorage.setItem('markerData', JSON.stringify(markerData))
+                    localStorage.setItem('locationDataPosition', JSON.stringify(locationDataLatLng))
+                    localStorage.setItem('locationDataLatLng', JSON.stringify(locationDataLatLng))
+                }
+            }
+
             map.on('load', () => {
                 window.mapError = 'Выберите метку на карте!';
                 map.resize();
@@ -910,100 +955,25 @@
                     if (marker) {
                         marker.remove();
                     }
+
                     marker = new mapboxgl.Marker({
                         draggable: true
                     }).setLngLat(e.result.center).addTo(map)
 
+                    // Получаем метку если камера не двигается
+                    let geocoder_point = map.project([e.result.center[0], e.result.center[1]]);
+                    const features = map.queryRenderedFeatures(geocoder_point);
+                    getMapMark(features,geocoder_point,e.result.center);
+                    // Получаем метку если камера двигается
                     map.on('zoomend', function() {
                         let geocoder_point = map.project([e.result.center[0], e.result.center[1]]);
                         const features = map.queryRenderedFeatures(geocoder_point);
-                        const displayProperties = [
-                            'type',
-                            'properties',
-                            'id',
-                            'layer',
-                            'source',
-                            'sourceLayer',
-                            'state'
-                        ];
-
-                        const displayFeatures = features.map((feat) => {
-                            const displayFeat = {};
-                            displayProperties.forEach((prop) => {
-                                displayFeat[prop] = feat[prop];
-                            });
-                            return displayFeat;
-                        });
-                        markerData = displayFeatures;
-
-                        markerData.forEach(function (item, i, mapResult) {
-                            if (item.sourceLayer == "abu_gosh") {
-                                let dataFor = item;
-                            } else {
-                                if (item.sourceLayer != "building" && item.sourceLayer != "road") {
-                                    if (item.properties.MUN_HE != undefined) {
-                                        let dataFor = item;
-                                    }
-                                }
-                            }
-                        });
-                        let layer = markerData[1];
-
-                        if (layer !== undefined && layer.sourceLayer === "abu_gosh") {
-                            window.mapError = false;
-                        } else {
-                            window.mapError = 'Вы выбрали метку за пределами разрешенных зон страны Израиль';
-                        }
-
-                        $('.wizard-control-next').removeAttr('disabled'); // снимаем блокировку с кнопки что бы пользователь мог проверить ошибку
-                        localStorage.setItem('markerData', JSON.stringify(markerData))
-                        localStorage.setItem('locationDataPosition', JSON.stringify(geocoder_point))
-                        localStorage.setItem('locationDataLatLng', JSON.stringify(e.result.center))
+                        getMapMark(features,geocoder_point,e.result.center);
                     });
-
-
+                    // Получаем метку если пользователь ее перенес вручную
                     marker.on('dragend', function (e) {
                         const features = map.queryRenderedFeatures(e.target._pos);
-                        const displayProperties = [
-                            'type',
-                            'properties',
-                            'id',
-                            'layer',
-                            'source',
-                            'sourceLayer',
-                            'state'
-                        ];
-                        const displayFeatures = features.map((feat) => {
-                            const displayFeat = {};
-                            displayProperties.forEach((prop) => {
-                                displayFeat[prop] = feat[prop];
-                            });
-                            return displayFeat;
-                        });
-                        markerData = displayFeatures;
-                        markerData.forEach(function (item, i, mapResult) {
-                            if (item.sourceLayer == "abu_gosh") {
-                                dataFor = item;
-                            } else {
-                                if (item.sourceLayer != "building" && item.sourceLayer != "road") {
-                                    if (item.properties.MUN_HE != undefined) {
-                                        dataFor = item;
-                                    }
-                                }
-                            }
-                        });
-                        let layer = markerData[0];
-
-                        if (layer !== undefined && layer.sourceLayer === "abu_gosh") {
-                            window.mapError = false;
-                        } else {
-                            window.mapError = 'Вы выбрали метку за пределами разрешенных зон страны Израиль';
-                        }
-
-                        $('.wizard-control-next').removeAttr('disabled'); // снимаем блокировку с кнопки что бы пользователь мог проверить ошибку
-                        localStorage.setItem('markerData', JSON.stringify(markerData))
-                        localStorage.setItem('locationDataPosition', JSON.stringify(e.target._pos))
-                        localStorage.setItem('locationDataLatLng', JSON.stringify(e.target._lngLat))
+                        getMapMark(features, e.target._pos, e.target._lngLat);
                     })
                 })
                 <?if(!empty($_GET['ID']) && $_GET['EDIT'] == 'Y'){?>
@@ -1075,7 +1045,7 @@
                         }
                     });
                     let layer = markerData[1];
-                    console.log(layer)
+
                     if (layer == undefined) {
                         $('.wizard-control-next').attr('disabled', 'disabled');
                     }else {
@@ -1110,7 +1080,6 @@
                                 });
                                 return displayFeat;
                             });
-                            //console.log(displayFeatures)
 
                         });*/
                 map.addControl(geocoder)

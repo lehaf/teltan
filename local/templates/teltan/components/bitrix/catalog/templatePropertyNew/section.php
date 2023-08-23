@@ -78,7 +78,7 @@ if(CSite::InDir('/property_new/')) {
             "FILTER_VIEW_MODE" => "horizontal",
             "DISPLAY_ELEMENT_COUNT" => "Y",
             "SEF_MODE" => "N",
-            "CACHE_TYPE" => "N",
+            "CACHE_TYPE" => "A",
             "CACHE_TIME" => "36000000",
             "CACHE_GROUPS" => "Y",
             "SAVE_IN_SESSION" => "Y",
@@ -128,7 +128,7 @@ if(CSite::InDir('/property_new/')) {
             "FILTER_VIEW_MODE" => "horizontal",
             "DISPLAY_ELEMENT_COUNT" => "Y",
             "SEF_MODE" => "N",
-            "CACHE_TYPE" => "N",
+            "CACHE_TYPE" => "A",
             "CACHE_TIME" => "36000000",
             "CACHE_GROUPS" => "Y",
             "SAVE_IN_SESSION" => "Y",
@@ -175,7 +175,7 @@ if($_GET['view'] == 'maplist'){?>
         "CACHE_FILTER" => "N",    // Кешировать при установленном фильтре
         "CACHE_GROUPS" => "Y",    // Учитывать права доступа
         "CACHE_TIME" => "36000000",    // Время кеширования (сек.)
-        "CACHE_TYPE" => "N",    // Тип кеширования
+        "CACHE_TYPE" => "A",    // Тип кеширования
         "COMPATIBLE_MODE" => "Y",    // Включить режим совместимости
         "DETAIL_URL" => "",    // URL, ведущий на страницу с содержимым элемента раздела
         "DISABLE_INIT_JS_IN_COMPONENT" => "N",    // Не подключать js-библиотеки в компоненте
@@ -276,7 +276,7 @@ if($_GET['view'] == 'maplist'){?>
             "CACHE_FILTER" => "N",    // Кешировать при установленном фильтре
             "CACHE_GROUPS" => "Y",    // Учитывать права доступа
             "CACHE_TIME" => "36000000",    // Время кеширования (сек.)
-            "CACHE_TYPE" => "N",    // Тип кеширования
+            "CACHE_TYPE" => "A",    // Тип кеширования
             "COMPATIBLE_MODE" => "Y",    // Включить режим совместимости
             "DETAIL_URL" => "",    // URL, ведущий на страницу с содержимым элемента раздела
             "DISABLE_INIT_JS_IN_COMPONENT" => "N",    // Не подключать js-библиотеки в компоненте

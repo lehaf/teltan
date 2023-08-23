@@ -14216,3 +14216,8 @@ div[data-filter=unActiveAnnouncement] .product-card.product-line.user-product .r
     max-width: 100% !important;
   }
 }
+
+.bx-core-adm-dialog-content-wrap .adm-detail-valign-top img {
+  height: 15px !important;
+  width: 15px !important;
+}

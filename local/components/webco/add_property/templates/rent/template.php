@@ -621,16 +621,17 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                             <?}?>
                                         <?}?>
                                     <? }?>
+
                                     <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row">
                                         <div class="d-flex justify-content-center justify-content-lg-end form-group col-12 col-lg-10">
                                             <input id="PROP_Completion" class="form-control"  data-id_prop="113"
                                                    type="date"
-                                                   placeholder="<?=$arProps['PROP_Completion']['NAME']?>"
+                                                   placeholder="<?=!empty($arProps['PROP_Completion']['NAME']) ? $arProps['PROP_Completion']['NAME'] : Loc::getMessage('completion')?>"
                                                    required>
                                         </div>
                                         <div class="col-12 col-lg-2">
                                             <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                                                :<?=$arProps['PROP_Completion']['NAME']?>
+                                                :<?=!empty($arProps['PROP_Completion']['NAME']) ? $arProps['PROP_Completion']['NAME'] : Loc::getMessage('completion')?>
                                             </p>
                                         </div>
                                     </div>
@@ -1413,8 +1414,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
             $data['MAP_LAYOUT']= dataForAjax;
             $data['MAP_LAYOUT_BIG']= dataForAjax2;
             //!!get marker data from localStorage
-            console.log($data)
-            var deferred = $.ajax({
+            let deferred = $.ajax({
                 type: "POST",
                 url: "/ajax/add_rent.php",
                 data: $data,

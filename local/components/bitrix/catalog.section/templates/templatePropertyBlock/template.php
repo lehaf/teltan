@@ -165,6 +165,8 @@ foreach ($arResult['ITEMS'] as $arItem){
 });*/
 foreach($arResult['VIPS'] as $arItem){?>
     <?
+    $this->AddEditAction($arItem['ID'], $arItem['EDIT_LINK'], $arItem["EDIT_LINK_TEXT"]);
+    $this->AddDeleteAction($arItem['ID'], $arItem['DELETE_LINK'], $arItem["DELETE_LINK_TEXT"], array("CONFIRM" => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM')));
     $color = '';
     $vip = '';
     if($arItem['PROPERTIES']['COLOR_DATE']['VALUE'] && strtotime($arItem['PROPERTIES']['COLOR_DATE']['VALUE']) > time()) {
@@ -174,7 +176,7 @@ foreach($arResult['VIPS'] as $arItem){?>
         $vip = 'product-line-vip';
     } ?>
         <?if($vip != ''){?>
-<div class="row row-cols-1">
+<div class="row row-cols-1" id="<?=$this->GetEditAreaID($arItem['ID'])?>">
     <div class="mb-3 col">
         <div class="card product-card product-line <?=$vip;?>" style="background-color: <?=$color;?>">
             <div class="card-link">
@@ -298,6 +300,8 @@ foreach($arResult['VIPS'] as $arItem){?>
 }}?>
 <div class="row row-cols-2 row-cols-lg-3">
 <?foreach($arResult['ITEMS']  as $arItem) {
+    $this->AddEditAction($arItem['ID'], $arItem['EDIT_LINK'], $arItem["EDIT_LINK_TEXT"]);
+    $this->AddDeleteAction($arItem['ID'], $arItem['DELETE_LINK'], $arItem["DELETE_LINK_TEXT"], array("CONFIRM" => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM')));
     $color = '';
     if($arItem['PROPERTIES']['COLOR_DATE']['VALUE'] && strtotime($arItem['PROPERTIES']['COLOR_DATE']['VALUE']) > time()) {
         $color = '#FFF5D9';
@@ -306,7 +310,7 @@ foreach($arResult['VIPS'] as $arItem){?>
        continue;
     }
     ?>
-    <div class="mb-4 col">
+    <div class="mb-4 col" id="<?=$this->GetEditAreaID($arItem['ID'])?>">
         <div class="card product-card" style="background-color: <?=$color;?>">
             <div class="image-block">
                 <div class="i-box">
