@@ -1,28 +1,8 @@
-<? if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();?>
-<?
-if(CSite::InDir('/property/')) {?>
-    <?if($_GET['view'] == 'maplist'){?>
-        <main class="mb-5 wrapper flex-grow-1">
-    <?}else{?>
-        <main class="mb-5 wrapper flex-grow-1">
-    <?}?>
-   
-<?}else{?>
+<? if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 
-<? }
-if(!CSite::InDir('/index.php')) {
-    $APPLICATION->IncludeComponent(
-        "bitrix:breadcrumb",
-        "template_breadcrumbs",
-        Array(
-            "PATH" => "",
-            "SITE_ID" => SITE_ID,
-            "START_FROM" => "0"
-        )
-    );
-}
-?>
-<?php
+
+use Bitrix\Main\Loader;
+use Bitrix\Main\ModuleManager;
 
 /** @var array $arParams */
 /** @var array $arResult */
@@ -36,10 +16,56 @@ if(!CSite::InDir('/index.php')) {
 /** @var string $componentPath */
 /** @var CBitrixComponent $component */
 
-use Bitrix\Main\Loader;
-use Bitrix\Main\ModuleManager;
-
 $this->setFrameMode(true);
+
+$APPLICATION->IncludeComponent(
+    "bitrix:catalog.smart.filter",
+    "NewPropertyDesktopFilter",
+    array(
+        "COMPONENT_TEMPLATE" => "PropertyFilter",
+        "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
+        "IBLOCK_ID" => $arParams["IBLOCK_ID"],
+        "SECTION_ID" => $arResult["VARIABLES"]["SECTION_ID"],
+        "SECTION_CODE" => $arResult["VARIABLES"]["SECTION_CODE"],
+        "FILTER_NAME" => "arrFilter",
+        "HIDE_NOT_AVAILABLE" => "N",
+        "TEMPLATE_THEME" => "blue",
+        "FILTER_VIEW_MODE" => "horizontal",
+        "DISPLAY_ELEMENT_COUNT" => "Y",
+        "SEF_MODE" => "N",
+        "CACHE_TYPE" => "A",
+        "CACHE_TIME" => "36000000",
+        "CACHE_GROUPS" => "Y",
+        "SAVE_IN_SESSION" => "Y",
+
+        "PAGER_PARAMS_NAME" => "arrPager",
+        "PRICE_CODE" => array(
+            0 => "BASE",
+        ),
+        "CONVERT_CURRENCY" => "Y",
+        "XML_EXPORT" => "N",
+        "SECTION_TITLE" => "-",
+        "SECTION_DESCRIPTION" => "-",
+        "POPUP_POSITION" => "left",
+        "SEF_RULE" => "/flea/#SECTION_CODE_PATH#/filter/#SMART_FILTER_PATH#/apply/",
+        "SECTION_CODE_PATH" => "",
+        "SMART_FILTER_PATH" => '#SECTION_CODE_PATH#/filter/#SMART_FILTER_PATH#/apply/',
+        "CURRENCY_ID" => "RUB"
+    ),
+    false
+);
+
+if(!CSite::InDir('/index.php')) {
+    $APPLICATION->IncludeComponent(
+        "bitrix:breadcrumb",
+        "template_breadcrumbs",
+        Array(
+            "PATH" => "",
+            "SITE_ID" => SITE_ID,
+            "START_FROM" => "0"
+        )
+    );
+}
 
 global $USER;
 $UserID = $USER->GetID();

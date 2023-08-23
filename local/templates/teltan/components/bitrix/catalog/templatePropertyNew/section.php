@@ -4,7 +4,7 @@ use Bitrix\Main\Localization\Loc;
 
 Loc::loadMessages(__FILE__);
 
-if(CSite::InDir('/property_new/')) {
+
      $rsParentSection = CIBlockSection::GetByID($arResult["VARIABLES"]["SECTION_ID"]);
      $arSections = [];
     if ($arParentSection = $rsParentSection->GetNext())
@@ -56,13 +56,7 @@ if(CSite::InDir('/property_new/')) {
     require($_SERVER["DOCUMENT_ROOT"]."/vendor/autoload.php");
     $detect = new Mobile_Detect;
 ?>
-<script>console.log(<?=json_encode($arResult["VARIABLES"]["SECTION_ID"])?>)</script>
-<script>console.log(<?=json_encode($arSections)?>)</script>
-    <?if($_GET['view'] == 'maplist'){?>
-        <main class="mb-5 wrapper flex-grow-1">
-    <?}else{?>
-         <main class="mb-5 wrapper flex-grow-1">
-    <?}?>
+
     <?$APPLICATION->IncludeComponent(
         "bitrix:catalog.smart.filter",
         "NewPropertyDesktopFilter",
@@ -99,7 +93,7 @@ if(CSite::InDir('/property_new/')) {
         ),
         false
     );
-}?>
+?>
 <?if(!CSite::InDir('/index.php')) {
     $APPLICATION->IncludeComponent(
         "bitrix:breadcrumb",

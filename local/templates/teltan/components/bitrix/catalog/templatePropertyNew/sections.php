@@ -55,13 +55,6 @@ $detect = new Mobile_Detect;
 
 ?>
 
-<? if ($_GET['view'] == 'maplist'){ ?>
-<main class="mb-5 wrapper flex-grow-1">
-    <?
-    }else{ ?>
-    <main class="mb-5 wrapper flex-grow-1">
-        <?
-        } ?>
         <? $APPLICATION->IncludeComponent(
             "bitrix:catalog.smart.filter",
             "NewPropertyDesktopFilter",

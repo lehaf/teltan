@@ -351,11 +351,10 @@ else
 </div>
 
 
-     <?
-     if(CSite::InDir('/property/') || CSite::InDir('/property_new/')) {?>
-
-             <? }else {?>
-<main class="mb-5">
+     <? if(CSite::InDir('/property/') || CSite::InDir('/property_new/')) {?>
+        <main class="mb-5 wrapper flex-grow-1">
+     <? }else {?>
+        <main class="mb-5">
          <?
          if (!CSite::InDir('/index.php')) {
              $APPLICATION->IncludeComponent(
