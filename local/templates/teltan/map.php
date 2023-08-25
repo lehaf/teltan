@@ -227,7 +227,8 @@
                         });
                         return displayFeat;
                     });
-                    markerData = displayFeatures;
+
+                    let markerData = displayFeatures;
                     markerData.forEach(function (item, i, mapResult) {
                         if (item.sourceLayer == "abu_gosh") {
                             dataFor = item;

@@ -11,10 +11,12 @@ $secondSort = [
     'SORT' => 'property_TIME_RAISE',
     'ORDER' => 'DESC'
 ];
+
 if($_GET['SORT'] != '' && $_GET['ORDER'] != ''){
     $secondSort['SORT'] = $_GET['SORT'];
     $secondSort['ORDER'] = $_GET['ORDER'];
 }
+
 $APPLICATION->IncludeComponent(
     "bitrix:catalog",
     "templatePropertyNew",

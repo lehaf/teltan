@@ -892,17 +892,16 @@ while ($row = $res->GetNext()) {
                 </div>
             </div>
         </div>
-
     </form>
     <div style="visibility: hidden"><? ps($counter2) ?></div>
 
-    <? if ($counter2 > FILTER_EXTRA_SHOW_COUNT && !$detect->isMobile()) { ?>
-    <button class="btn btn-primary btn-more-filter-settings text-uppercase font-weight-bold collapsed" type="button"
-            data-toggle="collapse" data-target="#moreFilterSettings" aria-expanded="false"
-            aria-controls="moreFilterSettings">
-        extra options
-    </button>
-<? } ?>
+    <? if ($counter2 > FILTER_EXTRA_SHOW_COUNT && !$detect->isMobile()) :?>
+        <button class="btn btn-primary btn-more-filter-settings text-uppercase font-weight-bold collapsed" type="button"
+                data-toggle="collapse" data-target="#moreFilterSettings" aria-expanded="false"
+                aria-controls="moreFilterSettings">
+            extra options
+        </button>
+    <?endif;?>
     <script type="text/javascript">
         var smartFilter = new JCSmartFilter('<?echo CUtil::JSEscape($arResult["FORM_ACTION"])?>', '<?=CUtil::JSEscape($arParams["FILTER_VIEW_MODE"])?>', <?=CUtil::PhpToJSObject($arResult["JS_FILTER_PARAMS"])?>);
     </script>

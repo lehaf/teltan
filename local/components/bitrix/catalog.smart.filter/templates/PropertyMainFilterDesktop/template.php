@@ -663,59 +663,45 @@ if ($checkCoun > 0) {
       
 
 
-    var smartFilterMain = new JCSmartFilter('<?echo CUtil::JSEscape($arResult["FORM_ACTION"])?>', '<?=CUtil::JSEscape($arParams["FILTER_VIEW_MODE"])?>', <?=CUtil::PhpToJSObject($arResult["JS_FILTER_PARAMS"])?>);
+    let smartFilterMain = new JCSmartFilter('<?echo CUtil::JSEscape($arResult["FORM_ACTION"])?>', '<?=CUtil::JSEscape($arParams["FILTER_VIEW_MODE"])?>', <?=CUtil::PhpToJSObject($arResult["JS_FILTER_PARAMS"])?>);
 
     function changeTypeRent(element) {
-
         if ($('#buyCheck').is(':checked') == false) {
-            var elem = document.getElementById("arrFilter_178_1500340406");
-          
+            let elem = document.getElementById("arrFilter_178_1500340406");
             elem.checked = false;
-
         } else {
-            var elem = document.getElementById("arrFilter_178_1500340406");
-
+            let elem = document.getElementById("arrFilter_178_1500340406");
             elem.click();
             elem.checked = true;
-
         }
         if ($('#renCheck').is(':checked') == false) {
-            var elem = document.getElementById("arrFilter_178_1577100463");
-
+            let elem = document.getElementById("arrFilter_178_1577100463");
             elem.checked = false;
-
         } else {
-            var elem = document.getElementById("arrFilter_178_1577100463");
-
+            let elem = document.getElementById("arrFilter_178_1577100463");
             elem.click();
             elem.checked = true;
-
         }
     }
 
     $(document).ready(function () {
-
-        var elem1 = document.getElementById("arrFilter_178_1500340406");
-        var elem2 = document.getElementById("arrFilter_178_1577100463");
+        let elem1 = document.getElementById("arrFilter_178_1500340406");
+        let elem2 = document.getElementById("arrFilter_178_1577100463");
         if (elem1.checked == true) {
-            var elem = document.getElementById("buyCheck");
+            let elem = document.getElementById("buyCheck");
             elem.checked = true
         }
         if (elem2.checked == true) {
-            var elem = document.getElementById("renCheck");
+            let elem = document.getElementById("renCheck");
             elem.checked = true
         }
     })
 </script>
-<?php
-if($_GET['set_filter'] == 'y'){
-    ?>
+<?php if ($_GET['set_filter'] == 'y'): ?>
     <script>
      $(document).ready(function () {
          $('#mainFiltersRent').submit()
      })
 
     </script>
-    <?php
-}
-?>
+<?php endif?>

@@ -2337,10 +2337,9 @@ $(document).ready(function () {
     const forms = $(`${rentForm}, ${buyForm}, ${rentFormMobile}, ${buyFormMobile}, ${formModalNew}`);
     const formsOld = $(`${rentForm}, ${buyForm}, ${rentFormMobile}, ${buyFormMobile}`);
 
-// Handler show full string with tags parametr filter
+    // Handler show full string with tags parameter filter
     const hendleMoreTags = (dataArray) => {
         const nonEmptyCount = dataArray.reduce((acc, [_, value]) => value ? acc + 1 : acc, 0)
-
         if (nonEmptyCount <= 3) {
             $('.showAllTags').removeClass('active')
         } else {
@@ -2485,10 +2484,22 @@ $(document).ready(function () {
         $(".tags .option-item").remove();
 
         const dataArray = Object.entries(data)
-
+        let tagProps = [];
         dataArray.forEach(([name, value]) => {
             if (![categoryName].includes(name) && value) {
                 const text = Array.isArray(value) ? value.join(", ") : value;
+                const reg = /^arrFilter/u;
+                const notTagPropListCodes = [
+                    'price',
+                    'area',
+                    'input-studio-rent',
+                    'input-free-layout-rent',
+                    'areaTypeBuilduing',
+                ];
+
+                if (!reg.test(name) && !notTagPropListCodes.includes(name)) {
+                    tagProps.push([name, value]);
+                }
 
                 switch (name) {
                     case 'area': {
@@ -2594,7 +2605,7 @@ $(document).ready(function () {
             }
         });
 
-        hendleMoreTags(dataArray)
+        hendleMoreTags(tagProps)
     };
 // сохранение данных в скрытую форму для отправки
     const setDataToForm = (data) => {
