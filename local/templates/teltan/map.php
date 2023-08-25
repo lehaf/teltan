@@ -220,7 +220,7 @@
                         'sourceLayer',
                         'state'
                     ];
-                    const displayFeatures = features.map((feat) => {
+                    let markerData = features.map((feat) => {
                         const displayFeat = {};
                         displayProperties.forEach((prop) => {
                             displayFeat[prop] = feat[prop];
@@ -228,21 +228,8 @@
                         return displayFeat;
                     });
 
-                    let markerData = displayFeatures;
-                    markerData.forEach(function (item, i, mapResult) {
-                        if (item.sourceLayer == "abu_gosh") {
-                            dataFor = item;
-                        } else {
-                            if (item.sourceLayer != "building" && item.sourceLayer != "road") {
-                                if (item.properties.MUN_HE != undefined) {
-                                    dataFor = item;
-                                }
-                            }
-                        }
-                    });
                     let layer = markerData[0];
-
-                    if (layer !== undefined && layer.sourceLayer === "abu_gosh") {
+                    if (layer !== undefined && (layer.sourceLayer === "abu_gosh" || layer.sourceLayer === 'place_label')) {
                         window.mapError = false;
                     } else {
                         window.mapError = 'Вы выбрали метку за пределами разрешенных зон страны Израиль';
@@ -989,7 +976,6 @@
                         const features = map.queryRenderedFeatures(e.target._pos);
                         getMapMark(features, e.target._pos, e.target._lngLat);
                     })
-                    $('.wizard-control-next').removeAttr('disabled');
                 <?endif;?>
 
                 map.addControl(geocoder)

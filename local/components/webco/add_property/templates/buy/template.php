@@ -1513,15 +1513,15 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
         //get marker data from localStorage
         $data['section_id'] = $('.activeSection').data();
-        var map = localStorage.getItem('markerData');
-        var locationPosition = localStorage.getItem('locationDataPosition');
-        var locationLatLng = localStorage.getItem('locationDataLatLng');
-        var dataForAjax = '';
-        var dataForAjax2 = '';
+        let map = localStorage.getItem('markerData');
+        let locationPosition = localStorage.getItem('locationDataPosition');
+        let locationLatLng = localStorage.getItem('locationDataLatLng');
+        let dataForAjax = '';
+        let dataForAjax2 = '';
 
-        var mapResult = JSON.parse(map);
+        let mapResult = JSON.parse(map);
         mapResult.forEach(function(item, i, mapResult) {
-            if(item.sourceLayer == "abu_gosh"){
+            if(item.sourceLayer == "abu_gosh" || item.sourceLayer === 'place_label'){
                 dataForAjax = item.properties.MUN_ENG;
             }else{
                 if(item.sourceLayer !="building" && item.sourceLayer !="road"){
@@ -1544,7 +1544,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
 
         //send data to back
-        var deferred = $.ajax({
+        let deferred = $.ajax({
             type: "POST",
             url: "/ajax/add_buy.php",
             data: $data,

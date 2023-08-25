@@ -92,7 +92,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                     </div>
                     <?
                     CModule::IncludeModule('highloadblock');
-                    $entity_data_class = GetEntityDataClass(17);
+                    $entity_data_class = GetEntityDataClass(PROPERTY_TYPES_HL_ID);
                     $arTypesRent = $entity_data_class::getList(array(
                         'select' => array('*'),
                         'cache' => [
@@ -160,9 +160,9 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                 <?foreach($arTypesRent as $arItem){?>
                                                     <div data-parent-id="<?= $arItem['UF_PARENT_ID']?>"
                                                          style="display: none"
-                                                         class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn "
+                                                         class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn"
                                                     >
-                                                        <input required <?=($arProps['PROP_TYPE_APART']['VALUE'] == $arItem['UF_NAME']) ? 'checked' : ''?>
+                                                        <input required <?=($arProps['PROP_TYPE_APART']['VALUE'] == $arItem['UF_XML_ID']) ? 'checked' : ''?>
                                                                data-id-self="<?= $arItem['UF_XML_ID'] ?>"
                                                                data-id_prop="PROP_TYPE_APART"
                                                                data-req="Y"
@@ -170,7 +170,9 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                                type="radio"
                                                                name="type1"
                                                         >
-                                                        <label class="px-2 py-1" for="type<?=$arItem['UF_XML_ID']?>"><?=Loc::getMessage($arItem['UF_XML_ID']);?></label>
+                                                        <label class="px-2 py-1" for="type<?=$arItem['UF_XML_ID']?>">
+                                                            <?=!empty(Loc::getMessage($arItem['UF_XML_ID'])) ? Loc::getMessage($arItem['UF_XML_ID']) : $arItem['UF_NAME']?>
+                                                        </label>
                                                     </div>
                                                 <?}?>
                                             </div>
@@ -993,7 +995,13 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
         })
 
         if (window.location.href.indexOf("EDIT") > -1) {
-
+            if ($('#Legalname').val().length > 0) {
+                $('#forAgency').prop('checked', true);
+                $('#Legalname').show();
+            } else {
+                $('#forOwner').prop('checked', true);
+                $('#Legalname').hide();
+            }
         } else {
             $('#forOwner').prop('checked', true);
             $('#Legalname').hide();
@@ -1343,9 +1351,9 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
             let dataForAjax = '';
             let dataForAjax2 = '';
             let mapResult = JSON.parse(map);
-            mapResult.forEach(function(item, i, mapResult) {
 
-                if (item.sourceLayer == "abu_gosh"){
+            mapResult.forEach(function(item, i, mapResult) {
+                if (item.sourceLayer == "abu_gosh" || item.sourceLayer === 'place_label'){
                     dataForAjax = item.properties.MUN_ENG;
                 } else {
                     if(item.sourceLayer !="building" && item.sourceLayer !="road"){
@@ -1355,10 +1363,12 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                     }
                 }
             });
+
             if(dataForAjax == ''){
                 alert('empty location')
                 return false;
             }
+
             $data['UF_NAME'] = $('#Legalname').val();
             $data['MAP_LATLNG'] = locationLatLng;
             $data['MAP_POSITION'] = locationPosition;
