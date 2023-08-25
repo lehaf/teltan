@@ -478,6 +478,8 @@ $(document).ready(function () {
                         errors = 1;
                         $('.wizard-control-next').attr('disabled', 'disabled');
                         let errorContainer = document.querySelector('#mainForm div.map-error-message');
+                        if (window.mapError === undefined) window.mapError = 'Установите метку на карте!';
+
                         if (errorContainer) {
                             errorContainer.innerText = window.mapError;
                         } else {
@@ -2607,12 +2609,12 @@ $(document).ready(function () {
 
         hendleMoreTags(tagProps)
     };
-// сохранение данных в скрытую форму для отправки
+    // сохранение данных в скрытую форму для отправки
     const setDataToForm = (data) => {
         $("#mainFiltersRent").val(JSON.stringify(data));
     };
 
-// формирование и запись данных
+    // формирование и запись данных
     const updateData = (values) => {
         const screenWidth = window.screen.width;
 
@@ -2645,7 +2647,7 @@ $(document).ready(function () {
         //  $(buyFormMobile)[0].reset();
     }
 
-// изменение категории
+    // изменение категории
     $(categorySelector).on("change", (e) => {
         // $(".main-filters, .modals").toggleClass("hide");
 
@@ -2654,7 +2656,6 @@ $(document).ready(function () {
 
     $(categoryMobileSelector).on("change", (e) => {
         //  $(".main-filters, .modals").toggleClass("hide");
-
         resetAllForms()
     });
 
@@ -2662,7 +2663,7 @@ $(document).ready(function () {
         resetAllForms()
     })
 
-// отправка форм на изменение филдов
+    // отправка форм на изменение филдов
     let loc = document.location.pathname
     if (loc.includes('/property/')) {
         if (loc.search.length) {

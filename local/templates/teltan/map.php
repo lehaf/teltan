@@ -209,7 +209,7 @@
                 map.resize();
             })
 
-            function getMapMark (features, locationDataPosition, locationDataLatLng) {
+            function getMapMark (features, locationDataPosition = null, locationDataLatLng = null) {
                 if (features) {
                     const displayProperties = [
                         'type',
@@ -250,8 +250,8 @@
 
                     $('.wizard-control-next').removeAttr('disabled'); // снимаем блокировку с кнопки что бы пользователь мог проверить ошибку
                     localStorage.setItem('markerData', JSON.stringify(markerData))
-                    localStorage.setItem('locationDataPosition', JSON.stringify(locationDataLatLng))
-                    localStorage.setItem('locationDataLatLng', JSON.stringify(locationDataLatLng))
+                    if (locationDataPosition !== null) localStorage.setItem('locationDataPosition', JSON.stringify(locationDataPosition))
+                    if (locationDataLatLng !== null) localStorage.setItem('locationDataLatLng', JSON.stringify(locationDataLatLng))
                 }
             }
 
@@ -977,112 +977,21 @@
                         getMapMark(features, e.target._pos, e.target._lngLat);
                     })
                 })
-                <?if(!empty($_GET['ID']) && $_GET['EDIT'] == 'Y'){?>
-                const marker = new mapboxgl.Marker({
-                    draggable: true
-                }).setLngLat(<?=$GLOBALS['MAP_EDIT_RESULT_CORDINATES']?>).addTo(map)
-             //   var geocoder_point = map.project([e.result.center[0], e.result.center[1]]);
-                const features = map.queryRenderedFeatures(<?=$GLOBALS['MAP_EDIT_RESULT_POSITION']?>);
-                const displayProperties = [
-                    'type',
-                    'properties',
-                    'id',
-                    'layer',
-                    'source',
-                    'sourceLayer',
-                    'state'
-                ];
-                markerData = features.map((feat) => {
-                    const displayFeat = {};
-                    displayProperties.forEach((prop) => {
-                        displayFeat[prop] = feat[prop];
-                    });
-                    return displayFeat;
-                });
+                <?// Редактирование элемента?>
+                <?if(!empty($_GET['ID']) && $_GET['EDIT'] == 'Y'):?>
+                    marker = new mapboxgl.Marker({
+                        draggable: true
+                    }).setLngLat(<?=$GLOBALS['MAP_EDIT_RESULT_CORDINATES']?>).addTo(map);
+                    const features = map.queryRenderedFeatures(<?=$GLOBALS['MAP_EDIT_RESULT_POSITION']?>);
+                    getMapMark(features, null, <?=$GLOBALS['MAP_EDIT_RESULT_CORDINATES']?>);
 
-                markerData.forEach(function (item, i, mapResult) {
-                    if (item.sourceLayer == "abu_gosh") {
-                        dataFor = item;
-                    } else {
-                        if (item.sourceLayer != "building" && item.sourceLayer != "road") {
-                            if (item.properties.MUN_HE != undefined) {
-                                dataFor = item;
-                            }
-                        }
-                    }
-                });
-                let layer = markerData[1];
-                localStorage.setItem('markerData', JSON.stringify(markerData))
-            //    localStorage.setItem('locationDataPosition', JSON.stringify(geocoder_point))
-                localStorage.setItem('locationDataLatLng', <?=$GLOBALS['MAP_EDIT_RESULT_CORDINATES']?>)
-                marker.on('dragend', function (e) {
-                    const features = map.queryRenderedFeatures(e.target._pos);
-                    const displayProperties = [
-                        'type',
-                        'properties',
-                        'id',
-                        'layer',
-                        'source',
-                        'sourceLayer',
-                        'state'
-                    ];
-                    const markerData = features.map((feat) => {
-                        const displayFeat = {};
-                        displayProperties.forEach((prop) => {
-                            displayFeat[prop] = feat[prop];
-                        });
-                        return displayFeat;
-                    });
-                    markerData.forEach(function (item, i, mapResult) {
-                        var dataFor;
-                        if (item.sourceLayer == "abu_gosh") {
-                            dataFor = item;
-                        } else {
-                            if (item.sourceLayer != "building" && item.sourceLayer != "road") {
-                                if (item.properties.MUN_HE != undefined) {
-                                    dataFor = item;
-                                }
-                            }
-                        }
-                    });
-                    let layer = markerData[1];
+                    marker.on('dragend', function (e) {
+                        const features = map.queryRenderedFeatures(e.target._pos);
+                        getMapMark(features, e.target._pos, e.target._lngLat);
+                    })
+                    $('.wizard-control-next').removeAttr('disabled');
+                <?endif;?>
 
-                    if (layer == undefined) {
-                        $('.wizard-control-next').attr('disabled', 'disabled');
-                    }else {
-                        $('.wizard-control-next').removeAttr('disabled');
-                    }
-                    localStorage.setItem('markerData', JSON.stringify(markerData))
-                    localStorage.setItem('locationDataPosition', JSON.stringify(e.target._pos))
-                    localStorage.setItem('locationDataLatLng', JSON.stringify(e.target._lngLat))
-
-                })
-                $('.wizard-control-next').removeAttr('disabled');
-                <?}?>
-                /*        map.on('mousemove', (e) => {
-                            const features = map.queryRenderedFeatures(e.point);
-
-        // Limit the number of properties we're displaying for
-        // legibility and performance
-                            const displayProperties = [
-                                'type',
-                                'properties',
-                                'id',
-                                'layer',
-                                'source',
-                                'sourceLayer',
-                                'state'
-                            ];
-
-                            const displayFeatures = features.map((feat) => {
-                                const displayFeat = {};
-                                displayProperties.forEach((prop) => {
-                                    displayFeat[prop] = feat[prop];
-                                });
-                                return displayFeat;
-                            });
-
-                        });*/
                 map.addControl(geocoder)
                 map.on('click', 'abu-gosh', (e) => {
                     const features = map.queryRenderedFeatures(e.point);
@@ -1177,16 +1086,16 @@
                 map.on('mouseenter', 'unclustered-point', (e) => {
                     const coordinates = e.features[0].geometry.coordinates.slice();
                     const description = `
-        <div class="d-flex popup-content">
-          <div class="w-75 pr-3">
-            <img src="${e.features[0].properties.image}">
-          </div>
+                        <div class="d-flex popup-content">
+                          <div class="w-75 pr-3">
+                            <img src="${e.features[0].properties.image}">
+                          </div>
 
-          <div class="d-flex flex-column text-right">
-            <p class="font-weight-bold">${e.features[0].properties.title}</p>
-            <p class="p-0 text-primary font-weight-bold">${e.features[0].properties.price}</p>
-          </div>
-        </div>`;
+                          <div class="d-flex flex-column text-right">
+                            <p class="font-weight-bold">${e.features[0].properties.title}</p>
+                            <p class="p-0 text-primary font-weight-bold">${e.features[0].properties.price}</p>
+                          </div>
+                        </div>`;
 
                     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
@@ -1202,115 +1111,6 @@
         const clearMapItemPLace = () => {
             mapItemRenderPlace.empty()
         }
-
-        /*const rendorMapItemCard = (paramItem) => {
-            let data = paramItem;
-
-            mapItemRenderPlace.append(
-                `<div class="my-4 card product-card product-line property-product-line" style="background-color: @@bg-color">
-        <div class="card-link">
-          <div class="image-block">
-            <div class="i-box">
-              <a href="#"><img src="${data.image}" alt="no-img"></a>
-            </div>
-          </div>
-
-          <div class="px-2 px-lg-3 d-flex justify-content-between like-price">
-            <p class="mb-0 like followThisItem">
-              <svg id="iconLike" class="iconLike" viewBox="0 0 612 792"><path d="M562.413,284.393c-9.68,41.044-32.121,78.438-64.831,108.07L329.588,542.345l-165.11-149.843 c-32.771-29.691-55.201-67.076-64.892-108.12c-6.965-29.484-4.103-46.14-4.092-46.249l0.147-0.994 c6.395-72.004,56.382-124.273,118.873-124.273c46.111,0,86.703,28.333,105.965,73.933l9.061,21.477l9.061-21.477 c18.958-44.901,61.694-73.922,108.896-73.922c62.481,0,112.478,52.27,119,125.208C566.517,238.242,569.379,254.908,562.413,284.393z"/></svg>
-            </p>
-
-            <p class="mb-0 price">${data.price}</p>
-          </div>
-
-          <div class="px-2 px-lg-3 content-block">
-            <div class="text-right">
-              <a href="#" class="mb-2 mb-lg-3 title">${data.title}</a>
-              <p class="mb-2 mb-lg-3 location">
-                <span class="addres">${data.addres}</span>
-                  <svg class="icon-local" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 513.597 513.597" xml:space="preserve">
-                    <g>
-                      <path d="M263.278,0.107C158.977-3.408,73.323,80.095,73.323,183.602c0,117.469,112.73,202.72,175.915,325.322
-                      c3.208,6.225,12.169,6.233,15.388,0.009c57.16-110.317,154.854-184.291,172.959-290.569
-                      C456.331,108.387,374.776,3.866,263.278,0.107z M256.923,279.773c-53.113,0-96.171-43.059-96.171-96.171
-                      s43.059-96.171,96.171-96.171c53.113,0,96.172,43.059,96.172,96.171S310.036,279.773,256.923,279.773z"/>
-                    </g>
-                  </svg>
-              </p>
-              <p class="mb-2 mb-lg-3 category">${data.category}</p>
-            </div>
-
-            <div class="border-top py-2 d-flex justify-content-between align-items-center text-nowrap product-line__data-viwe">
-              <div class="d-flex">
-                <span class="mr-0 mr-lg-2 views"><span>${data.views}views</span> <i class="icon-visibility"></i></span>
-
-                <span class="product-line__like">To favorites
-                  <svg id="iconLike" class="iconLike" viewBox="0 0 612 792"><path d="M562.413,284.393c-9.68,41.044-32.121,78.438-64.831,108.07L329.588,542.345l-165.11-149.843 c-32.771-29.691-55.201-67.076-64.892-108.12c-6.965-29.484-4.103-46.14-4.092-46.249l0.147-0.994 c6.395-72.004,56.382-124.273,118.873-124.273c46.111,0,86.703,28.333,105.965,73.933l9.061,21.477l9.061-21.477 c18.958-44.901,61.694-73.922,108.896-73.922c62.481,0,112.478,52.27,119,125.208C566.517,238.242,569.379,254.908,562.413,284.393z"/></svg>
-                </span>
-              </div>
-
-              <span class="date">${data.date}date</span>
-            </div>
-          </div>
-        </div>
-      </div>`
-            )
-        }
-        const rendorMapVipItemCard = (paramItem) => {
-            let data = paramItem;
-
-            mapItemRenderPlace.append(
-                `<div class="my-4 card product-card product-line product-line-vip property-vip" style="background-color: #FFF5D9">
-        <div class="card-link">
-          <div class="image-block">
-            <div class="i-box">
-              <a href="#"><img src="${data.image}" alt="no-img"></a>
-            </div>
-          </div>
-
-          <div class="px-2 px-lg-3 d-flex justify-content-between like-price">
-            <p class="mb-0 like followThisItem">
-              <svg id="iconLike" class="iconLike" viewBox="0 0 612 792"><path d="M562.413,284.393c-9.68,41.044-32.121,78.438-64.831,108.07L329.588,542.345l-165.11-149.843 c-32.771-29.691-55.201-67.076-64.892-108.12c-6.965-29.484-4.103-46.14-4.092-46.249l0.147-0.994 c6.395-72.004,56.382-124.273,118.873-124.273c46.111,0,86.703,28.333,105.965,73.933l9.061,21.477l9.061-21.477 c18.958-44.901,61.694-73.922,108.896-73.922c62.481,0,112.478,52.27,119,125.208C566.517,238.242,569.379,254.908,562.413,284.393z"/></svg>
-            </p>
-
-            <p class="mb-0 price">${data.price}</p>
-          </div>
-
-          <div class="px-2 px-lg-3 content-block">
-            <div class="text-right">
-              <a href="#" class="mb-2 mb-lg-3 title">${data.title}</a>
-              <p class="mb-2 mb-lg-3 location">
-                <span class="addres">${data.addres}</span>
-                  <svg class="icon-local" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 513.597 513.597" xml:space="preserve">
-                    <g>
-                      <path d="M263.278,0.107C158.977-3.408,73.323,80.095,73.323,183.602c0,117.469,112.73,202.72,175.915,325.322
-                      c3.208,6.225,12.169,6.233,15.388,0.009c57.16-110.317,154.854-184.291,172.959-290.569
-                      C456.331,108.387,374.776,3.866,263.278,0.107z M256.923,279.773c-53.113,0-96.171-43.059-96.171-96.171
-                      s43.059-96.171,96.171-96.171c53.113,0,96.172,43.059,96.172,96.171S310.036,279.773,256.923,279.773z"/>
-                    </g>
-                  </svg>
-              </p>
-              <p class="mb-2 mb-lg-3 category">${data.category}</p>
-            </div>
-
-            <div class="border-top py-2 d-flex justify-content-between align-items-center text-nowrap product-line__data-viwe">
-              <div class="d-flex">
-                <span class="mr-0 mr-lg-2 views"><span>${data.views}views</span> <i class="icon-visibility"></i></span>
-
-                <span class="product-line__like">To favorites
-                  <svg id="iconLike" class="iconLike" viewBox="0 0 612 792"><path d="M562.413,284.393c-9.68,41.044-32.121,78.438-64.831,108.07L329.588,542.345l-165.11-149.843 c-32.771-29.691-55.201-67.076-64.892-108.12c-6.965-29.484-4.103-46.14-4.092-46.249l0.147-0.994 c6.395-72.004,56.382-124.273,118.873-124.273c46.111,0,86.703,28.333,105.965,73.933l9.061,21.477l9.061-21.477 c18.958-44.901,61.694-73.922,108.896-73.922c62.481,0,112.478,52.27,119,125.208C566.517,238.242,569.379,254.908,562.413,284.393z"/></svg>
-                </span>
-              </div>
-
-              <span class="date">${data.date}date</span>
-            </div>
-          </div>
-        </div>
-      </div>`
-            )
-        }*/
 
     });
     // MAPS END
