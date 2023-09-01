@@ -7,6 +7,8 @@ use Bitrix\Main\Localization\Loc;
  * @var array $arParams
  * created by Alexander.L
  */
+
+
 Loc::loadMessages(__FILE__);
 $this->setFrameMode(false);
 $arSection = [];
@@ -23,7 +25,7 @@ switch ($arParams['SECTION_ID']) {
         LocalRedirect('/property_new/novostroyki/snyat/');
         break;
 }
-//pr($arResult['ITEMS'])
+
 $arFilter = array('IBLOCK_ID' => 2);
 $arSelect = array('IBLOCK_ID', 'ID', 'NAME', 'IBLOCK_SECTION_ID', 'SECTION_PAGE_URL', 'DETAIL_PICTURE', 'DEPTH_LEVEL', 'UF_*');
 $rsSect = CIBlockSection::GetList(
@@ -42,12 +44,17 @@ foreach ($arSection as $item) {
         $arSection[$item['IBLOCK_SECTION_ID']]['CHILDREN']['BUY'] = $item;
     }
 }
-foreach ($arResult['ITEMS'] as $ITEM) {
+
+$newProps = [];
+foreach ($arResult['ITEMS'] as $propId => $ITEM) {
     $arResult['ITEMS_CODE'][$ITEM['CODE']] = $ITEM;
+    if (!in_array($ITEM['CODE'],IMMUTABLE_PROPERTY_FILTER_PROPS)) $newProps[$ITEM['CODE']] =  $ITEM;
 }
+
 $arBuyProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID']]['CHILDREN']['BUY']['UF_PROPS'];
 $arRentProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID']]['CHILDREN']['RENT']['UF_PROPS'];
 ?>
+
 <script>
     localStorage.setItem('FILTER_SECTION_ID', <?=$arParams['SECTION_ID']?>);
 </script>
@@ -55,36 +62,28 @@ $arRentProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID
     <div class="bg-header-filter">
         <img src="/local/templates/teltan/assets/property-header-bg-progressive.jpeg" alt="">
     </div>
-
     <div class="d-flex d-lg-none justify-content-center container p-0">
         <ul class="w-100 mb-0 header-property__category-list">
             <li>
                 <a href="/property_new/zhilaya/" class="active">Жилая</a>
             </li>
-
             <span class="text-white mx-3">/</span>
-
             <li>
                 <a href="/property_new/kommercheskaya/">Коммерческая</a>
             </li>
-
             <span class="text-white mx-3">/</span>
-
             <li>
                 <a href="/property_new/novostroyki/">Новостройки</a>
             </li>
         </ul>
     </div>
-
     <div class="d-none d-lg-block container">
         <div class="d-flex align-items-center justify-content-end">
             <ul class="mb-0 header-property__category-list">
                 <li>
                     <a href="/property_new/zhilaya/" <?= (in_array($arParams['SECTION_ID'], RESIDENTAL_SECTION_ARRAY)) ? ' class="active" ' : '' ?> >Жилая</a>
                 </li>
-
                 <span class="text-white mx-3">/</span>
-
                 <li>
                     <a href="/property_new/kommercheskaya/" <?= (in_array($arParams['SECTION_ID'], COMMERCIAL_SECTION_ARRAY)) ? ' class="active" ' : '' ?>>Коммерческая</a>
                 </li>
@@ -122,8 +121,7 @@ $arRentProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID
                                           class="dropdown-menu-search__input"></textarea>
                             </div>
                             <ul class="dropdown-card__content">
-
-                                <?php foreach ($arResult['ITEMS'][201]['VALUES'] as $val => $ar) {
+                                <?php foreach ($arResult['ITEMS'][IBLOCK_PROPERTY_MAP_LAYOUT_JSON_PROP_ID]['VALUES'] as $val => $ar) {
                                     $arState = explode(':', $ar['VALUE']);
                                     ?>
                                     <li <?php echo $ar["DISABLED"] ? 'style"display:none"' : '' ?>
@@ -163,7 +161,7 @@ $arRentProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID
                         <div class="d-flex flex-column align-items-end check-box-prop-filter">
 
                             <ul class="dropdown-card__content">
-                                <?php foreach ($arResult['ITEMS'][200]['VALUES'] as $val => $ar) { ?>
+                                <?php foreach ($arResult['ITEMS'][IBLOCK_PROPERTY_MAP_LAYOUT_BIG_PROP_ID]['VALUES'] as $val => $ar) { ?>
                                     <li <?php echo $ar["DISABLED"] ? 'style"display:none"' : '' ?>><label
                                                 class="cb-wrap">
                                             <span class="text"><?= $ar['VALUE'] ?></span>
@@ -239,7 +237,7 @@ $arRentProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID
 
                         <div class="dropdown-card dropdown-room-number">
                             <div class="mb-4 room-number flex-row-reverse">
-                                <?php foreach ($arResult['ITEMS'][109]['VALUES'] as $VALUE) { ?>
+                                <?php foreach ($arResult['ITEMS'][IBLOCK_PROPERTY_PROP_COUNT_ROOMS_PROP_ID]['VALUES'] as $VALUE) { ?>
                                     <label class="chackbox-label">
                                         <input <?= ($VALUE['CHECKED']) ? 'checked' : '' ?>
                                                 data-control-id="<?= $VALUE['CONTROL_ID'] ?>"
@@ -276,7 +274,7 @@ $arRentProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID
 
                     <div class="w-100 justify-content-end dropdown-card dropdown-building-type">
                         <div class="d-flex flex-column align-items-end check-box-prop-filter">
-                            <?php foreach ($arResult['ITEMS'][165]['VALUES'] as $VALUE) { ?>
+                            <?php foreach ($arResult['ITEMS'][IBLOCK_PROPERTY_PROP_TYPE_APART_PROP_ID]['VALUES'] as $VALUE) { ?>
                                 <label class="cb-wrap">
                                     <span class="text"><?= $VALUE['VALUE'] ?></span>
                                     <input <?= ($VALUE['CHECKED']) ? 'checked' : '' ?>
@@ -397,32 +395,31 @@ $arRentProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID
                                         Этаж
                                     </div>
                                 </div>
-
-                                <?php foreach ($arResult['ITEMS_CODE'] as $arItem) {
-
-                                    if(!in_array($arItem['CODE'], $arRentProps)) {
-                                        continue;
-                                    }
-                                    if (empty($arItem['VALUES'])){
-                                        continue;
-                                    }
+                                <?php foreach ($newProps as $propCode => $propInfo) :
+                                    if(!in_array($propCode, $arRentProps) || empty($propInfo['VALUES'])) continue;
                                     ?>
-                                    <div class="row mb-4 ">
-                                        <div class="col-10">
-                                            <div class="d-flex flex-wrap flex-row-reverse align-items-center">
-                                                <?foreach ($arItem['VALUES'] as $VALUE){?>
-                                                    <label class="parameter">
-                                                        <input  <?=(!empty($_GET[$VALUE['CONTROL_ID']]))? 'checked' : ''?> data-html-value="<?= $VALUE['HTML_VALUE'] ?>" data-control-id="<?= $VALUE['CONTROL_ID'] ?>" name="<?=$arItem['CODE']?>" value="<?=$arItem['NAME']?> : <?=$VALUE['VALUE']?>" type="checkbox">
-                                                        <div><?=$VALUE['VALUE']?></div>
-                                                    </label>
-                                                <?}?>
+                                        <div class="row mb-4 ">
+                                            <div class="col-10">
+                                                <div class="d-flex flex-wrap flex-row-reverse align-items-center">
+                                                    <?foreach ($propInfo['VALUES'] as $val){?>
+                                                        <label class="parameter">
+                                                            <input  <?=(!empty($_GET[$val['CONTROL_ID']]))? 'checked' : ''?>
+                                                                    data-html-value="<?= $val['HTML_VALUE'] ?>"
+                                                                    data-control-id="<?= $val['CONTROL_ID'] ?>"
+                                                                    name="<?=$propInfo['CODE']?>"
+                                                                    value="<?=$propInfo['NAME']?> : <?=$val['VALUE']?>"
+                                                                    type="checkbox"
+                                                            >
+                                                            <div><?=$val['VALUE']?></div>
+                                                        </label>
+                                                    <?}?>
+                                                </div>
+                                            </div>
+                                            <div data-code="<?=$propInfo['CODE']?>" class="col-2 text-right">
+                                                <?=$propInfo['NAME']?>
                                             </div>
                                         </div>
-                                        <div data-code="<?=$arItem['CODE']?>" class="col-2 text-right">
-                                            <?=$arItem['NAME']?>
-                                        </div>
-                                    </div>
-                                <?php } ?>
+                                <?php endforeach; ?>
                                 <div class="row">
                                     <div class="col-10">
                                         <div class="d-flex flex-row-reverse align-items-center">
@@ -458,9 +455,6 @@ $arRentProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID
                                         Дата въезда
                                     </div>
                                 </div>
-
-
-
                             </div>
 
                             <div id="buy_modal_body" class="modal-body">
@@ -490,32 +484,6 @@ $arRentProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID
                                             Площадь общая
                                         </div>
                                     </div>
-                                <?php } ?>
-                                <?php foreach ($arResult['ITEMS_CODE'] as $arItem) {
-
-                                    if(!in_array($arItem['CODE'], $arBuyProps)) {
-                                        continue;
-                                    }
-                                    if (empty($arItem['VALUES'])){
-                                        continue;
-                                    }
-                                    ?>
-                                    <div class="row mb-4 ">
-                                        <div class="col-10">
-                                            <div class="d-flex flex-wrap flex-row-reverse align-items-center">
-                                                <?foreach ($arItem['VALUES'] as $VALUE){?>
-                                                    <label class="parameter">
-                                                        <input <?=(!empty($_GET[$VALUE['CONTROL_ID']]))? 'checked' : ''?> data-html-value="<?= $VALUE['HTML_VALUE'] ?>" data-control-id="<?= $VALUE['CONTROL_ID'] ?>" name="<?=$arItem['CODE']?>" value="<?=$arItem['NAME']?> : <?=$VALUE['VALUE']?>" type="checkbox">
-                                                        <div><?=$VALUE['VALUE']?></div>
-                                                    </label>
-                                                <?}?>
-                                            </div>
-                                        </div>
-                                        <div data-code="<?=$arItem['CODE']?>" class="col-2 text-right">
-                                            <?=$arItem['NAME']?>
-                                        </div>
-                                    </div>
-
                                 <?php } ?>
                                 <div class="row mb-4 ">
                                     <div class="col-10">
@@ -558,6 +526,31 @@ $arRentProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID
                                         Этаж
                                     </div>
                                 </div>
+                                <?php foreach ($newProps as $propCode => $propInfo) :
+                                    if(!in_array($propCode, $arBuyProps) || empty($propInfo['VALUES'])) continue;
+                                    ?>
+                                    <div class="row mb-4 ">
+                                        <div class="col-10">
+                                            <div class="d-flex flex-wrap flex-row-reverse align-items-center">
+                                                <?foreach ($propInfo['VALUES'] as $val){?>
+                                                    <label class="parameter">
+                                                        <input  <?=(!empty($_GET[$val['CONTROL_ID']]))? 'checked' : ''?>
+                                                                data-html-value="<?= $val['HTML_VALUE'] ?>"
+                                                                data-control-id="<?= $val['CONTROL_ID'] ?>"
+                                                                name="<?=$propInfo['CODE']?>"
+                                                                value="<?=$propInfo['NAME']?> : <?=$val['VALUE']?>"
+                                                                type="checkbox"
+                                                        >
+                                                        <div><?=$val['VALUE']?></div>
+                                                    </label>
+                                                <?}?>
+                                            </div>
+                                        </div>
+                                        <div data-code="<?=$propInfo['CODE']?>" class="col-2 text-right">
+                                            <?=$propInfo['NAME']?>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
 
                                 <div class="row">
                                     <div class="col-10">
@@ -713,7 +706,7 @@ $arRentProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID
 
                     <div class="w-100 justify-content-end dropdown-card dropdown-building-type">
                         <div class="d-flex flex-column align-items-end check-box-prop-filter">
-                            <?php foreach ($arResult['ITEMS'][165]['VALUES'] as $VALUE) { ?>
+                            <?php foreach ($arResult['ITEMS'][IBLOCK_PROPERTY_PROP_TYPE_APART_PROP_ID]['VALUES'] as $VALUE) { ?>
                                 <label class="cb-wrap">
                                     <span class="text"><?= $VALUE['VALUE'] ?></span>
                                     <input data-control-id="<?= $VALUE['CONTROL_ID'] ?>"
