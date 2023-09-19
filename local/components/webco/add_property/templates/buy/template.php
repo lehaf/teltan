@@ -187,7 +187,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
     <div class="card">
         <div class="propert-sell-main">
-            <div id="wizard">
+            <div id="wizard" data-iblock-id="<?=$IBLOCK_ID?>">
                 <div class="d-flex justify-content-between border-bottom propert-sell-main__header">
                     <div class="d-flex step wizard-step" data-wizard-step="4">
                         <div class="pr-2 pr-md-4 d-flex flex-column text-right">
@@ -271,6 +271,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                         <div class="d-flex justify-content-end flex-wrap gap-1">
                                             <div class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn">
                                                 <input  <?=$arFields['IBLOCK_SECTION_ID'] == 35 ? 'checked' : ''?>
+                                                        data-section-id="<?=35?>"
                                                         id="typeResidential"
                                                         type="radio"
                                                         name="type"
@@ -282,6 +283,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
                                             <div class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn">
                                                 <input  <?=($arFields['IBLOCK_SECTION_ID'] == 31) ? 'checked' : ''?>
+                                                        data-section-id="<?=31?>"
                                                         id="typeNewBuildings"
                                                         type="radio"
                                                         name="type"
@@ -293,6 +295,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
                                             <div class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn">
                                                 <input <?=($arFields['IBLOCK_SECTION_ID'] == 33) ? 'checked' : ''?>
+                                                        data-section-id="<?=33?>"
                                                         id="typeCommercial"
                                                         type="radio"
                                                         name="type"

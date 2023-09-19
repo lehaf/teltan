@@ -4,7 +4,6 @@ use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\Page\Asset;
 
 Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . "/css/add-page.css");
-
 Loc::loadMessages(__FILE__);
 $APPLICATION->SetTitle("Добавить объявление");
 global $arSetting;
@@ -33,7 +32,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
         <h2 class="mb-5 d-flex justify-content-end subtitle"><?=Loc::getMessage('titleH2Main')?></h2>
         <div class="card">
             <div class="propert-sell-main">
-                <div id="wizard">
+                <div id="wizard" data-iblock-id="<?=$IBLOCK_ID?>">
                     <div class="d-flex justify-content-between border-bottom propert-sell-main__header">
                         <div class="d-flex step wizard-step" data-wizard-step="4">
                             <div class="pr-2 pr-md-4 d-flex flex-column text-right">
@@ -112,7 +111,12 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                         <div class="col-9 col-lg-10">
                                             <div class="d-flex justify-content-end flex-wrap gap-1">
                                                 <div class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn">
-                                                    <input <?=($arFields['IBLOCK_SECTION_ID'] == REAL_ESTATE_LIVE_RENT_SECTION_ID)? 'checked' : ''?> id="typeResidential" type="radio" name="type">
+                                                    <input <?=($arFields['IBLOCK_SECTION_ID'] == REAL_ESTATE_LIVE_RENT_SECTION_ID)? 'checked' : ''?>
+                                                            data-section-id="<?=REAL_ESTATE_LIVE_RENT_SECTION_ID?>"
+                                                            id="typeResidential"
+                                                            type="radio"
+                                                            name="type"
+                                                    >
                                                     <label id="typeResidentialLable" onclick="hideModelBrand(27, this)" class="px-2 py-1" for="typeResidential"><?=Loc::getMessage('Residential');?></label>
                                                     <?if($arFields['IBLOCK_SECTION_ID'] == REAL_ESTATE_LIVE_RENT_SECTION_ID){?>
                                                         <script>
@@ -124,7 +128,12 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                 </div>
 
                                                 <div class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn">
-                                                    <input <?=($arFields['IBLOCK_SECTION_ID'] == 30)? 'checked' : ''?> id="typeNewBuildings" type="radio" name="type">
+                                                    <input <?=($arFields['IBLOCK_SECTION_ID'] == 30)? 'checked' : ''?>
+                                                            data-section-id="<?=30?>"
+                                                            id="typeNewBuildings"
+                                                            type="radio"
+                                                            name="type"
+                                                    >
                                                     <label onclick="hideModelBrand(29, this)" class="px-2 py-1" for="typeNewBuildings"><?=Loc::getMessage('New-buildings');?></label>
                                                     <?if($arFields['IBLOCK_SECTION_ID'] == 30){?>
                                                         <script>
@@ -136,7 +145,12 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                 </div>
 
                                                 <div class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn">
-                                                    <input <?=($arFields['IBLOCK_SECTION_ID'] == 32)? 'checked' : ''?> id="typeCommercial" type="radio" name="type">
+                                                    <input <?=($arFields['IBLOCK_SECTION_ID'] == 32)? 'checked' : ''?>
+                                                            data-section-id="<?=32?>"
+                                                            id="typeCommercial"
+                                                            type="radio"
+                                                            name="type"
+                                                    >
                                                     <label onclick="hideModelBrand(28, this)" class="px-2 py-1" for="typeCommercial"><?=Loc::getMessage('Commercial');?></label>
                                                     <?if($arFields['IBLOCK_SECTION_ID'] == 32){?>
                                                         <script>

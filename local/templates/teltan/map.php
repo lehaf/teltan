@@ -211,6 +211,18 @@
 
             function getMapMark (features, locationDataPosition = null, locationDataLatLng = null) {
                 if (features) {
+                    const layersId = [
+                        'earthquakess-layer',
+                        '1-level-area8',
+                        '1-level-area7',
+                        '1-level-area6',
+                        '1-level-area5',
+                        '1-level-area3',
+                        '1-level-area2',
+                        '1-level-area1',
+                    ];
+
+
                     const displayProperties = [
                         'type',
                         'properties',
@@ -220,6 +232,7 @@
                         'sourceLayer',
                         'state'
                     ];
+
                     let markerData = features.map((feat) => {
                         const displayFeat = {};
                         displayProperties.forEach((prop) => {
@@ -228,8 +241,9 @@
                         return displayFeat;
                     });
 
-                    let layer = markerData[0];
-                    if (layer !== undefined && (layer.sourceLayer === "abu_gosh" || layer.sourceLayer === 'place_label')) {
+                    let marker = markerData[0];
+                    console.log(marker);
+                    if (marker !== undefined && layersId.includes(marker.layer.id)) {
                         window.mapError = false;
                     } else {
                         window.mapError = 'Вы выбрали метку за пределами разрешенных зон страны Израиль';
@@ -780,7 +794,6 @@
                 });
 
                 map.on('click', '1-level-area1', (e) => {
-
                     map.flyTo({center: e.features[0].geometry.coordinates[0][0], zoom: 10});
                 })
                 map.addLayer({
@@ -938,44 +951,55 @@
                 })
 
                 let marker;
+                let markerLong = false;
+                let markerLat = false;
                 geocoder.on('result', e => {
                     // Удаляем предыдущий маркер
-                    if (marker) {
-                        marker.remove();
-                    }
+                    if (marker) marker.remove();
+
+                    markerLong = e.result.geometry.coordinates[0];
+                    markerLat = e.result.geometry.coordinates[1];
 
                     marker = new mapboxgl.Marker({
                         draggable: true
-                    }).setLngLat(e.result.center).addTo(map)
+                    }).setLngLat([markerLong, markerLat]).addTo(map)
 
                     // Получаем метку если камера не двигается
-                    let geocoder_point = map.project([e.result.center[0], e.result.center[1]]);
+                    let geocoder_point = map.project([markerLong, markerLat]);
                     const features = map.queryRenderedFeatures(geocoder_point);
-                    getMapMark(features,geocoder_point,e.result.center);
-                    // Получаем метку если камера двигается
-                    map.on('zoomend', function() {
-                        let geocoder_point = map.project([e.result.center[0], e.result.center[1]]);
-                        const features = map.queryRenderedFeatures(geocoder_point);
-                        getMapMark(features,geocoder_point,e.result.center);
-                    });
+                    getMapMark(features,geocoder_point,[markerLong, markerLat]);
+
                     // Получаем метку если пользователь ее перенес вручную
                     marker.on('dragend', function (e) {
                         const features = map.queryRenderedFeatures(e.target._pos);
-                        getMapMark(features, e.target._pos, e.target._lngLat);
-                    })
+                        getMapMark(features, e.target._pos, [markerLong, markerLat]);
+                    });
+
+                    // Получаем метку если камера двигается
+                    map.on('zoomend', function() {
+                        let geocoder_point = map.project([markerLong, markerLat]);
+                        const features = map.queryRenderedFeatures(geocoder_point);
+                        getMapMark(features,geocoder_point,[markerLong, markerLat]);
+                    });
                 })
                 <?// Редактирование элемента?>
                 <?if(!empty($_GET['ID']) && $_GET['EDIT'] == 'Y'):?>
-                    marker = new mapboxgl.Marker({
-                        draggable: true
-                    }).setLngLat(<?=$GLOBALS['MAP_EDIT_RESULT_CORDINATES']?>).addTo(map);
-                    const features = map.queryRenderedFeatures(<?=$GLOBALS['MAP_EDIT_RESULT_POSITION']?>);
-                    getMapMark(features, null, <?=$GLOBALS['MAP_EDIT_RESULT_CORDINATES']?>);
+                    // Событие полной отрисовки карты
+                    map.once('idle', function() {
+                        markerLong = <?=$GLOBALS['MAP_EDIT_RESULT_CORDINATES']?>[0];
+                        markerLat = <?=$GLOBALS['MAP_EDIT_RESULT_CORDINATES']?>[1];
+                        marker = new mapboxgl.Marker({
+                            draggable: true
+                        }).setLngLat([markerLong, markerLat]).addTo(map);
+                        const features = map.queryRenderedFeatures(<?=$GLOBALS['MAP_EDIT_RESULT_POSITION']?>);
+                        getMapMark(features, null, [markerLong, markerLat]);
 
-                    marker.on('dragend', function (e) {
-                        const features = map.queryRenderedFeatures(e.target._pos);
-                        getMapMark(features, e.target._pos, e.target._lngLat);
-                    })
+                        marker.on('dragend', function (e) {
+                            const features = map.queryRenderedFeatures(e.target._pos);
+                            getMapMark(features, e.target._pos, e.target._lngLat);
+                        })
+                    });
+
                 <?endif;?>
 
                 map.addControl(geocoder)
@@ -1001,8 +1025,6 @@
                         });
                         return displayFeat;
                     });
-
-
                 });
 
                 // When a click event occurs on a feature in
