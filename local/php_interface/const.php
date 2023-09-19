@@ -6,6 +6,7 @@ const AUTO_IBLOCK_ID = 3;
 const MOTO_IBLOCK_ID = 7;
 const SCOOTER_IBLOCK_ID = 8;
 const PROPERTY_TYPES_HL_ID = 17;
+const MAP_REGIONS_HL_ID = 34;
 const REAL_ESTATE_LIVE_RENT_SECTION_ID = 34;
 const FILTER_EXTRA_SHOW_COUNT = 3; //отвечает за то сколько свойств будет показано перед фильтром (минимум 2)
 const ADD_AUTO_BODY_TYPES_SHOW_COUNT = 4; //отвечает за то сколько кузовов(пикап, минивен..) будет выводиться на странице добавления АВТО перед кнопкой show all (надо указывать на 1 меньше так как счёт идёт с 0 а не с 1)

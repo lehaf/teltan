@@ -1359,35 +1359,38 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
             //get marker data from localStorage
             $data['section_id'] = $('.activeSection').data();
             $data['PROP_Completion'] = $('#PROP_Completion').val()
-            let map = localStorage.getItem('markerData');
+            let marker = localStorage.getItem('markerData');
             let locationPosition = localStorage.getItem('locationDataPosition');
             let locationLatLng = localStorage.getItem('locationDataLatLng');
-            let dataForAjax = '';
-            let dataForAjax2 = '';
-            let mapResult = JSON.parse(map);
+            let districtName = '';
+            let regionName = '';
+            marker = JSON.parse(marker);
+            const layersId = [
+                'earthquakess-layer',
+                '1-level-area8',
+                '1-level-area7',
+                '1-level-area6',
+                '1-level-area5',
+                '1-level-area3',
+                '1-level-area2',
+                '1-level-area1',
+            ];
 
-            mapResult.forEach(function(item, i, mapResult) {
-                if (item.sourceLayer == "abu_gosh" || item.sourceLayer === 'place_label'){
-                    dataForAjax = item.properties.MUN_ENG;
-                } else {
-                    if(item.sourceLayer !="building" && item.sourceLayer !="road"){
-                        if(item.properties.MUN_HE != undefined) {
-                            dataForAjax2 = item.properties.MUN_HE;
-                        }
-                    }
-                }
-            });
+            if (layersId.includes(marker.layer.id)){
+                districtName = marker.properties.MUN_HEB !== undefined ? marker.properties.MUN_HEB : marker.properties.MUN_ENG;
+                if(marker.layer.metadata) regionName = marker.layer.metadata;
+            }
 
-            if(dataForAjax == ''){
-                alert('empty location')
+            if(districtName == ''){
+                alert('Empty location!')
                 return false;
             }
 
             $data['UF_NAME'] = $('#Legalname').val();
             $data['MAP_LATLNG'] = locationLatLng;
             $data['MAP_POSITION'] = locationPosition;
-            $data['MAP_LAYOUT']= dataForAjax;
-            $data['MAP_LAYOUT_BIG']= dataForAjax2;
+            $data['MAP_LAYOUT'] = districtName;
+            $data['MAP_LAYOUT_BIG']= regionName;
             //!!get marker data from localStorage
             let deferred = $.ajax({
                 type: "POST",
@@ -1397,7 +1400,6 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
             });
             deferred.done(function (data) {
                 $('.preloader').css({"z-index": "0", "opacity": "100", "position": "fixed"});
-                console.log(data)
                 if (data.success == 1) {
                     window.location.href = '/personal/'
                 } else {

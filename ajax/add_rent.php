@@ -22,6 +22,7 @@ foreach ($arPaket as $arItem) {
         $b = true;
     }
 }
+//pr($_REQUEST); die();
 if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0 || $b || $_REQUEST['EDIT'] == 'Y') {
     CModule::IncludeModule('iblock');
     $el = new CIBlockElement;

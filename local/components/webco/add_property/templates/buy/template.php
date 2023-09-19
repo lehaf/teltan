@@ -1521,12 +1521,20 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
         let locationLatLng = localStorage.getItem('locationDataLatLng');
         let dataForAjax = '';
         let dataForAjax2 = '';
-
         let mapResult = JSON.parse(map);
+        const layersId = [
+            'earthquakess-layer',
+            '1-level-area8',
+            '1-level-area7',
+            '1-level-area6',
+            '1-level-area5',
+            '1-level-area3',
+            '1-level-area2',
+            '1-level-area1',
+        ];
         mapResult.forEach(function(item, i, mapResult) {
-            if(item.sourceLayer == "abu_gosh" || item.sourceLayer === 'place_label'){
+            if (layersId.includes(item.layer.id)){
                 dataForAjax = item.properties.MUN_ENG;
-            }else{
                 if(item.sourceLayer !="building" && item.sourceLayer !="road"){
                     if(item.properties.MUN_HE != undefined) {
                         dataForAjax2 = item.properties.MUN_HE;

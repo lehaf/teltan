@@ -61,9 +61,11 @@ if($arResult['ITEMS']){?>
                             <div class="text-right">
                                 <a href="<?=$arItem['DETAIL_PAGE_URL'];?>" class="mb-2 mb-lg-3 title"><?=$arItem['NAME'];?></a>
 
-                                <?if($arItem['PROPERTIES']['MAP_LAYOUT']['VALUE']){?>
+                                <?if(!empty($arItem['PROPERTIES']['MAP_LAYOUT']['VALUE']) && !empty($arItem['PROPERTIES']['MAP_LAYOUT_BIG']['VALUE'])):?>
                                     <p class="mb-2 location">
-                                        <span class="addres"><?=$arItem['PROPERTIES']['MAP_LAYOUT']['VALUE'];?></span>
+                                        <span class="addres">
+                                            <?=$arItem['PROPERTIES']['MAP_LAYOUT']['VALUE'].', '.$arItem['PROPERTIES']['MAP_LAYOUT_BIG']['VALUE'];?>
+                                        </span>
                                         <svg class="icon-local" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
                                              xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 513.597 513.597" xml:space="preserve">
                                               <g>
@@ -74,7 +76,7 @@ if($arResult['ITEMS']){?>
                                               </g>
                                             </svg>
                                     </p>
-                                <?}?>
+                                <?endif;?>
                             </div>
 
                             <div class="border-top py-2 py-lg-3 d-flex justify-content-between align-items-center text-nowrap">
