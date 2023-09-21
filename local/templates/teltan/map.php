@@ -179,10 +179,8 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                 }
 
                 map.addSource('2_source', {
-                    //  buffer: 0,
                     type: 'vector',
                     url: 'mapbox://roottest123.cl4dzsogf01p420r1z1eexmd8-190dy',
-                    //   generateId: true,
                     promoteId: {"abu_gosh": "MUN_ENG"}
                 });
 
@@ -357,14 +355,6 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                     rendorMapItemCard(paramItem)
                 });
 
-
-                map.on('mouseenter', 'clusters', () => {
-                    map.getCanvas().style.cursor = 'pointer';
-                });
-
-                map.on('mouseleave', 'clusters', () => {
-                    map.getCanvas().style.cursor = '';
-                });
 
                 map.on('mouseenter', 'unclustered-point', () => {
                     map.getCanvas().style.cursor = 'pointer';
