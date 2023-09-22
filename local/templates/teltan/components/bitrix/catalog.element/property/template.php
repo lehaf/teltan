@@ -137,7 +137,6 @@ $mapArray['features'][] = [
                             <p class="mb-4 connection-with-seller__price text-primary">
                                 <?= number_format($arResult['PROPERTIES']['PRICE']['VALUE'], 0, '.', ' '); ?> <?= ICON_CURRENCY; ?>
                             </p>
-
                             <? if ($arResult['PROPERTIES']['LOCALITY']['VALUE']) { ?>
                                 <p class="pb-3 border-bottom">
                                     <span class="mr-1"><?= $arResult['PROPERTIES']['LOCALITY']['VALUE']; ?></span>
@@ -155,7 +154,6 @@ $mapArray['features'][] = [
                                     </svg>
                                 </p>
                             <? } ?>
-
                             <div class="mb-4 row no-gutters">
                                 <button class="mr-2 col btn btn-show-phone text-uppercase font-weight-bold"
                                         disabled><?= Loc::getMessage('SHOW_PHONE'); ?>
@@ -164,9 +162,7 @@ $mapArray['features'][] = [
                                         disabled><?= Loc::getMessage('SEND_MESSAGE'); ?>
                                 </button>
                             </div>
-
                             <p class="text-unaurh-user"><?= Loc::getMessage('VIEW_REGISTER_MESS'); ?></p>
-
                             <div class="row">
                                 <div class="col">
                                     <ul class="nav justify-content-end font-weight-bold">
@@ -2967,7 +2963,7 @@ $mapArray['features'][] = [
                                                     } else {
                                                         echo $PROPERTY['VALUE'];
                                                     } ?></td>
-                                                <td class="font-weight-bold"><?= $PROPERTY['HINT'] ?>:</td>
+                                                <td class="font-weight-bold">:<?= $PROPERTY['HINT'] ?></td>
                                             </tr>
                                         <? }
                                     }

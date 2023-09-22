@@ -39,6 +39,7 @@ if (!empty($section['UF_PROPS'])) {
 
         if (!empty($enumPropsId)) {
             $enumValues = \Bitrix\Iblock\PropertyEnumerationTable::getList(array(
+                'order' => array('SORT' => 'DESC','ID' => 'ASC'),
                 'select' => array('*'),
                 'filter' => array('PROPERTY_ID' => $enumPropsId),
                 'cache' => array(
