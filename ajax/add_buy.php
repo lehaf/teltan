@@ -227,7 +227,7 @@ if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0 || $b || $_REQUEST[
                     RotateJpg($item[0], $rotate, $temporaryFilePath, $arFile['type']);
                 }
                 $arFile["MODULE_ID"] = "iblock";
-                //var_dump($arFile);
+
                 if ($item[4] == 'isActive') {
                     $arLoadProductArray = array(
                         'PREVIEW_PICTURE' => $arFile,
@@ -344,7 +344,6 @@ if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0 || $b || $_REQUEST[
                         $arFile = CFile::MakeFileArray($temporaryFilePath);
                         $arFile["MODULE_ID"] = "iblock";
                         $rotate = (int)$item[5] * 90 * 3;
-                        $siteDomain = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'];
                         RotateJpg($arFile['tmp_name'], 45, $arFile['tmp_name'], $arFile['type']);
                         unlink($temporaryFilePath);
                     }
