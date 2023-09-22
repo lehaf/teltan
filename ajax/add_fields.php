@@ -18,6 +18,7 @@ $section = $sectionEntity::getList(array(
 
 if (!empty($section['UF_PROPS'])) {
     $props = \Bitrix\Iblock\PropertyTable::getList(array(
+        'order' => array('SORT' => 'DESC'),
         'select' => array('*'),
         'filter' => array('IBLOCK_ID' => $_POST['iblockId'], 'CODE' => $section['UF_PROPS']),
         'cache' => array(
