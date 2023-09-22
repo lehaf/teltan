@@ -219,16 +219,13 @@ if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0 || $b || $_REQUEST[
             $i = 1;
 
             foreach ($_POST['img'] as $item) {
-                $FILENAME = rand();
-
+                $temporaryFilePath = $_SERVER["DOCUMENT_ROOT"] . '/' . rand() . '.png';
                 $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $item[0]));
-
-                file_put_contents($_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png', $data);
-
-                $arFile = CFile::MakeFileArray($_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png');
+                file_put_contents($temporaryFilePath, $data);
+                $arFile = CFile::MakeFileArray($temporaryFilePath);
                 if ($item[5] > 0 && $item[5] != 'i') {
                     $rotate = (int)$item[5] * 90 * 3;
-                    RotateJpg($item[0], $rotate, $_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png', $arFile['type']);
+                    RotateJpg($item[0], $rotate, $temporaryFilePath, $arFile['type']);
                 }
                 $arFile["MODULE_ID"] = "iblock";
                 //var_dump($arFile);
@@ -249,7 +246,7 @@ if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0 || $b || $_REQUEST[
                 } else {
                     CIBlockElement::SetPropertyValueCode($PRODUCT_ID, "PHOTOS", array("VALUE" => $arFile));
                 }
-                unlink($_SERVER["DOCUMENT_ROOT"].'/' . $FILENAME . '.png');
+                unlink($temporaryFilePath);
                 $i++;
             }
             echo json_encode(array('success' => 1));
@@ -345,15 +342,14 @@ if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0 || $b || $_REQUEST[
                 foreach ($_POST['img'] as $key => $item) {
 
                     if ($item[5] > 0 && $item[4] != 'isActive' && $item[3] < 1 || preg_match('/^data:(\w*)\/(\w*);/', $item[0], $matches) > 0) {
-                        $FILENAME = rand();
-
-                        file_put_contents($_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png', file_get_contents($item[0]));
-                        $arFile = CFile::MakeFileArray($_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png');
+                        $temporaryFilePath = $_SERVER["DOCUMENT_ROOT"] . '/' . rand() . '.png';
+                        file_put_contents($temporaryFilePath, file_get_contents($item[0]));
+                        $arFile = CFile::MakeFileArray($temporaryFilePath);
                         $arFile["MODULE_ID"] = "iblock";
                         $rotate = (int)$item[5] * 90 * 3;
                         $siteDomain = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'];
                         RotateJpg($item[0], $rotate, $_SERVER["DOCUMENT_ROOT"] . str_replace($siteDomain, '', $item[0]), $arFile['type']);
-                        unlink($_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png');
+                        unlink($temporaryFilePath);
                     }
 
                     if ($item[1]) {
@@ -393,14 +389,13 @@ if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0 || $b || $_REQUEST[
                 $mainPhotoCount = 0;
 
                 foreach ($_POST['img'] as $img) {
-
-                    $FILENAME = rand();
-                    file_put_contents($_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png', file_get_contents($img[0]));
-                    $arFile = CFile::MakeFileArray($_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png');
+                    $temporaryFilePath = $_SERVER["DOCUMENT_ROOT"] . '/' . rand() . '.png';
+                    file_put_contents($temporaryFilePath, file_get_contents($img[0]));
+                    $arFile = CFile::MakeFileArray($temporaryFilePath);
                     preg_match('/^data:(\w*)\/(\w*);/', $img[0], $matches);
                     $rotate = (int)$img[5] * 90 * 3;
 
-                    RotateJpg($img[0], $rotate, $_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png', $arFile['type'], $matches);
+                    RotateJpg($img[0], $rotate, $temporaryFilePath, $arFile['type'], $matches);
                     $arFile["MODULE_ID"] = "iblock";
 
                     if ($img[4] == 'isActive') {
@@ -434,7 +429,7 @@ if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0 || $b || $_REQUEST[
 
                         CIBlockElement::SetPropertyValueCode(intval($_REQUEST['EDIT_ID']), "PHOTOS", array("VALUE" => $arFile));
                     }
-                    unlink($_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png');
+                    unlink($temporaryFilePath);
                 };
             }
 
@@ -469,16 +464,17 @@ if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0 || $b || $_REQUEST[
                 }
             }
             if ($mainPhotoCount < 1) {
-                $FILENAME = rand();
+                $temporaryFilePath = $_SERVER["DOCUMENT_ROOT"] . '/' . rand() . '.png';
                 $img = array_shift($arMain);
-                file_put_contents($_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png', file_get_contents($img[0]));
-                $arFile = CFile::MakeFileArray($_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png');
+                file_put_contents($temporaryFilePath, file_get_contents($img[0]));
+                $arFile = CFile::MakeFileArray($temporaryFilePath);
                 $arFile["MODULE_ID"] = "iblock";
                 $arLoadProductArray = array(
                     "PREVIEW_PICTURE" => $arFile,
                     "DETAIL_PICTURE" => $arFile,
                 );
                 $el->Update(intval($_REQUEST['EDIT_ID']), $arLoadProductArray);
+                unlink($temporaryFilePath);
             }
         } else {
             echo json_encode(array('success' => 0, 'responseBitrix' => $el->LAST_ERROR), JSON_UNESCAPED_UNICODE);

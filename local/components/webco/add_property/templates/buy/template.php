@@ -1600,12 +1600,12 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
         //get marker data from localStorage
         $data['section_id'] = $('.activeSection').data();
-        let map = localStorage.getItem('markerData');
+        let marker = localStorage.getItem('markerData');
         let locationPosition = localStorage.getItem('locationDataPosition');
         let locationLatLng = localStorage.getItem('locationDataLatLng');
-        let dataForAjax = '';
-        let dataForAjax2 = '';
-        let mapResult = JSON.parse(map);
+        let districtName = '';
+        let regionName = '';
+        marker = JSON.parse(marker);
         const layersId = [
             'earthquakess-layer',
             '1-level-area8',
@@ -1616,25 +1616,20 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
             '1-level-area2',
             '1-level-area1',
         ];
-        mapResult.forEach(function(item, i, mapResult) {
-            if (layersId.includes(item.layer.id)){
-                dataForAjax = item.properties.MUN_ENG;
-                if(item.sourceLayer !="building" && item.sourceLayer !="road"){
-                    if(item.properties.MUN_HE != undefined) {
-                        dataForAjax2 = item.properties.MUN_HE;
-                    }
-                }
-            }
-        });
-        if(dataForAjax == ''){
+
+        if (layersId.includes(marker.layer.id)){
+            districtName = marker.properties.MUN_HEB !== undefined ? marker.properties.MUN_HEB : marker.properties.MUN_ENG;
+            if(marker.layer.metadata) regionName = marker.layer.metadata;
+        }
+        if(districtName == ''){
             alert('empty location')
             return false;
         }
         $data['UF_NAME'] = $('#Legalname').val();
         $data['MAP_LATLNG'] = locationLatLng;
         $data['MAP_POSITION'] = locationPosition;
-        $data['MAP_LAYOUT']= dataForAjax;
-        $data['MAP_LAYOUT_BIG']= dataForAjax2;
+        $data['MAP_LAYOUT'] = districtName;
+        $data['MAP_LAYOUT_BIG']= regionName;
         //!!get marker data from localStorage
 
 

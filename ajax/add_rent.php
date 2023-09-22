@@ -476,6 +476,7 @@ if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0 || $b || $_REQUEST[
                     "DETAIL_PICTURE" => $arFile,
                 );
                 $el->Update(intval($_REQUEST['EDIT_ID']), $arLoadProductArray);
+                unlink($temporaryFilePath);
             }
         } else {
             echo json_encode(array('success' => 0, 'responseBitrix' => $el->LAST_ERROR), JSON_UNESCAPED_UNICODE);
