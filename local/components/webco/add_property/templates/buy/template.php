@@ -1349,15 +1349,10 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                     if (index === lastKey) {
                         let isLastStep = wizardContainer.classList.contains('active');
                         if (isLastStep) {
-
+                            checkFinalFields();
                         }
                     }
                 });
-            }
-            let currentUrl = window.location.href;
-            let isEdit = currentUrl.indexOf("EDIT=Y") !== -1;
-            if (!isEdit) {
-                setTimeout(() => $('.wizard-control-final').removeClass('active'), 100);
             }
         })
     });

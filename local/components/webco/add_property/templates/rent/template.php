@@ -1092,14 +1092,6 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
         $('#forOwner').click(function () {
             $('#Legalname').hide();
         })
-        $('.wizard-control-final').removeClass('active');
-        $('wizard-control-next').click(function () {
-            let currentUrl = window.location.href;
-            let isEdit = currentUrl.indexOf("EDIT=Y") !== -1;
-            if (!isEdit) {
-                setTimeout(() => $('.wizard-control-final').removeClass('active'), 500);
-            }
-        })
 
         if (window.location.href.indexOf("EDIT") > -1) {
             if ($('#Legalname').val().length > 0) {
@@ -1187,13 +1179,20 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
             });
 
 
+            let allWizardsContent = document.querySelectorAll('form#mainForm div.wizard-content');
             $('.wizard-control-next').click(function () {
-                let currentUrl = window.location.href;
-                let isEdit = currentUrl.indexOf("EDIT=Y") !== -1;
-                if (!isEdit) {
-                    setTimeout(() => $('.wizard-control-final').removeClass('active'), 100);
+                if (allWizardsContent) {
+                    const lastKey = allWizardsContent.length - 1;
+                    allWizardsContent.forEach((wizardContainer,index) => {
+                        if (index === lastKey) {
+                            let isLastStep = wizardContainer.classList.contains('active');
+                            if (isLastStep) {
+                                checkFinalFields();
+                            }
+                        }
+                    });
                 }
-            })
+            });
         });
 
 

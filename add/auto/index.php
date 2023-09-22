@@ -1320,15 +1320,32 @@ $arLink = CIBlockSectionPropertyLink::GetArray(AUTO_IBLOCK_ID, 80);
                     checkFinalFields();
                 });
             });
-        });
 
-        $('wizard-control-next').click(function () {
-            let currentUrl = window.location.href;
-            let isEdit = currentUrl.indexOf("EDIT=Y") !== -1;
-            if (!isEdit) {
-                setTimeout(() => $('.wizard-control-final').removeClass('active'), 200);
-            }
-        })
+            let allWizardsContent = document.querySelectorAll('form#mainForm div.wizard-content');
+            $('.wizard-control-next').click(function () {
+                let selectedSellerTypeOwner = $('#forOwner').is(':checked')
+                if (selectedSellerTypeOwner) {
+                    $('#Legalname').hide();
+                    $('#Legalname').attr('data-req', 'N');
+                } else {
+                    $('#Legalname').show();
+                    $('#Legalname').attr('data-req', 'Y');
+                }
+
+
+                if (allWizardsContent) {
+                    const lastKey = allWizardsContent.length - 1;
+                    allWizardsContent.forEach((wizardContainer,index) => {
+                        if (index === lastKey) {
+                            let isLastStep = wizardContainer.classList.contains('active');
+                            if (isLastStep) {
+                                checkFinalFields();
+                            }
+                        }
+                    });
+                }
+            });
+        });
 
         function submitForm(event) {
             event.preventDefault();
@@ -1578,23 +1595,6 @@ $arLink = CIBlockSectionPropertyLink::GetArray(AUTO_IBLOCK_ID, 80);
 
         let currentUrl = window.location.href;
         let isEdit = currentUrl.indexOf("EDIT=Y") !== -1;
-        $('.wizard-control-next').click(function () {
-            $(document).ready(function () {
-                let selectedSellerTypeOwner = $('#forOwner').is(':checked')
-                if (selectedSellerTypeOwner) {
-                    $('#Legalname').hide();
-                    $('#Legalname').attr('data-req', 'N');
-                } else {
-                    $('#Legalname').show();
-                    $('#Legalname').attr('data-req', 'Y');
-                }
-
-                if (!isEdit) {
-                    setTimeout(() => $('.wizard-control-final').removeClass('active'), 200);
-                }
-            })
-        });
-
         addEventListener('DOMContentLoaded', () => {
             // Если это режим редактирования, то устанавливаем значения по умолчанию
             if (isEdit) {
