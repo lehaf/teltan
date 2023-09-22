@@ -43,17 +43,16 @@ ps($arProps);
 $arLink = CIBlockSectionPropertyLink::GetArray(SCOOTER_IBLOCK_ID, 90);
 ?>
     <div class="container">
-        <div class="preloader">
-            <div class="preloader__row">
-                <div class="preloader__item"></div>
-                <div class="preloader__item"></div>
-            </div>
-        </div>
         <h2 class="mb-5 d-flex justify-content-end subtitle t">
             <?= Loc::getMessage('submit your ad'); ?>
         </h2>
-
         <div class="card">
+            <div class="preloader">
+                <div class="preloader__row">
+                    <div class="preloader__item"></div>
+                    <div class="preloader__item"></div>
+                </div>
+            </div>
             <div class="propert-sell-main">
                 <div id="wizard">
                     <div>
@@ -1672,14 +1671,15 @@ $arLink = CIBlockSectionPropertyLink::GetArray(SCOOTER_IBLOCK_ID, 90);
                     $data2[this.id] = [data.code_prop, dataVal];
                 });
                 $data['$data2'] = $data2;
-                var deferred = $.ajax({
+                $('.preloader').addClass('preloader-visible');
+                let deferred = $.ajax({
                     type: "POST",
                     url: "/ajax/add_scooter.php",
                     data: $data,
                     dataType: 'json'
                 });
                 deferred.done(function (data) {
-                    $('.preloader').css({"z-index": "0", "opacity": "100", "position": "fixed"});
+                    $('.preloader').removeClass('preloader-visible');
                     if (data.success == 1) {
                         window.location.href = '/personal/'
                     } else {

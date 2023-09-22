@@ -44,16 +44,16 @@ $arLink = CIBlockSectionPropertyLink::GetArray(MOTO_IBLOCK_ID, 94);
 ps($arProps);
 ?>
     <div class="container">
-        <div class="preloader">
-            <div class="preloader__row">
-                <div class="preloader__item"></div>
-                <div class="preloader__item"></div>
-            </div>
-        </div>
         <h2 class="mb-5 d-flex justify-content-end subtitle t">
             <?= Loc::getMessage('submit your ad'); ?>
         </h2>
         <div class="card">
+            <div class="preloader">
+                <div class="preloader__row">
+                    <div class="preloader__item"></div>
+                    <div class="preloader__item"></div>
+                </div>
+            </div>
             <div class="propert-sell-main">
                 <div id="wizard">
                     <div>
@@ -1596,6 +1596,7 @@ ps($arProps);
                     $data2[this.id] = [data.code_prop, dataVal];
                 });
                 $data['$data2'] = $data2;
+                $('.preloader').addClass('preloader-visible');
                 let deferred = $.ajax({
                     type: "POST",
                     url: "/ajax/add_moto.php",
@@ -1603,7 +1604,7 @@ ps($arProps);
                     dataType: 'json'
                 });
                 deferred.done(function (data) {
-                    $('.preloader').css({"z-index": "0", "opacity": "100", "position": "fixed"});
+                    $('.preloader').removeClass('preloader-visible');
                     if (data.success == 1) {
                         window.location.href = '/personal/'
                     } else {

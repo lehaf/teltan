@@ -559,7 +559,7 @@ $(document).ready(function () {
     })
 
     let radioBtn = document.querySelectorAll('form#mainForm div[data-wizard-content="0"] .form_radio_btn input[name="type"]');
-    if (radioBtn) {
+    if (radioBtn.length > 0) {
         let clicked = false;
         radioBtn.forEach((radio) => {
             if (radio.checked === true) {
@@ -567,7 +567,6 @@ $(document).ready(function () {
                 clicked = true;
             }
         });
-
         if (clicked === false) radioBtn[0].parentNode.querySelector('label').click();
     }
 

@@ -31,6 +31,12 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
     <div class="container">
         <h2 class="mb-5 d-flex justify-content-end subtitle"><?=Loc::getMessage('titleH2Main')?></h2>
         <div class="card">
+            <div class="preloader">
+                <div class="preloader__row">
+                    <div class="preloader__item"></div>
+                    <div class="preloader__item"></div>
+                </div>
+            </div>
             <div class="propert-sell-main">
                 <div id="wizard" data-iblock-id="<?=$IBLOCK_ID?>">
                     <div class="d-flex justify-content-between border-bottom propert-sell-main__header">
@@ -1481,7 +1487,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
             $data['MAP_POSITION'] = locationPosition;
             $data['MAP_LAYOUT'] = districtName;
             $data['MAP_LAYOUT_BIG']= regionName;
-            //!!get marker data from localStorage
+            $('.preloader').addClass('preloader-visible');
             let deferred = $.ajax({
                 type: "POST",
                 url: "/ajax/add_rent.php",
@@ -1489,7 +1495,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                 dataType: 'json'
             });
             deferred.done(function (data) {
-                $('.preloader').css({"z-index": "0", "opacity": "100", "position": "fixed"});
+                $('.preloader').removeClass('preloader-visible');
                 if (data.success == 1) {
                     window.location.href = '/personal/'
                 } else {

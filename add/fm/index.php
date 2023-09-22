@@ -85,18 +85,18 @@ ps($arProp);
 ?>
 
     <div class="container">
-        <div class="preloader">
-            <div class="preloader__row">
-                <div class="preloader__item"></div>
-                <div class="preloader__item"></div>
-            </div>
-        </div>
         <h2 class="d-block mb-4 subtitle">
             <?= Loc::getMessage('submit your ad'); ?>
             <div id="subtitleprepend"></div>
         </h2>
 
         <div class="p-4 card user-add-item">
+            <div class="preloader">
+                <div class="preloader__row">
+                    <div class="preloader__item"></div>
+                    <div class="preloader__item"></div>
+                </div>
+            </div>
             <form id="mainForm" onsubmit="submitForm(event)">
                 <h2 class="mb-4 d-flex justify-content-center align-items-center section-title"> <?= Loc::getMessage('Description'); ?></h2>
                 <? $APPLICATION->IncludeComponent(
@@ -922,7 +922,6 @@ ps($arProp);
             if (errors < 1 && errorsDiv < 1) {
                 if ($('.show-country ').hasClass('selected')) {
                     var $data = {};
-                    $('.preloader').css({"z-index": "1", "opacity": "100", "position": "fixed"});
                     $('#mainForm').find('input').each(function () {
                         let object;
                         if (this.checked) {
@@ -975,17 +974,18 @@ ps($arProp);
                     $data['LOCATION'] = $('.first-drop').html() + $('.second-drop').html()
                     $data['region'] = $('.first-drop').html().trim();
                     $data['city'] = $('.second-drop').html().trim();
-                    var deferred = $.ajax({
+                    $('.preloader').addClass('preloader-visible');
+                    let deferred = $.ajax({
                         type: "POST",
                         url: "/ajax/add_flea.php",
                         data: $data,
                         dataType: 'json'
                     });
                     deferred.done(function (data) {
+                        $('.preloader').removeClass('preloader-visible');
                         if (data.success == 1) {
                             window.location.href = '/personal/'
                         } else {
-                            $('.preloader').css({"z-index": "0", "opacity": "100", "position": "fixed"});
                             $('.pop-up').addClass('active');
                             $('.pop-up__text').html(data.responseBitrix)
                         }
