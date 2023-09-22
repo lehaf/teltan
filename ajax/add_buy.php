@@ -4,7 +4,6 @@ use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
 
 CModule::IncludeModule('highloadblock');
 
-
 $entity_data_class = GetEntityDataClass(28);
 $rsData = $entity_data_class::getList(array(
     'select' => array('*'),
@@ -317,8 +316,7 @@ if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0 || $b || $_REQUEST[
             foreach ($arLoadProductProps as  $key => $value) {
                 CIBlockElement::SetPropertyValueCode($_REQUEST['EDIT_ID'], $key , $value);
             }
-            //   var_dump($multiselect);
-            //    var_dump($arLoadProductProp);
+
             echo json_encode(array('success' => 1));
 
             $dbElements = \CIBlockElement::GetList([], ["ACTIVE" => "Y", "IBLOCK_ID" => 2, "ID" => intval($_REQUEST['EDIT_ID']),], false, false, ['IBLOCK_ID', 'ID', 'PROPERTY_PHOTOS',]);
@@ -340,7 +338,6 @@ if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0 || $b || $_REQUEST[
                 }
 
                 foreach ($_POST['img'] as $key => $item) {
-
                     if ($item[5] > 0 && $item[4] != 'isActive' && $item[3] < 1 || preg_match('/^data:(\w*)\/(\w*);/', $item[0], $matches) > 0) {
                         $temporaryFilePath = $_SERVER["DOCUMENT_ROOT"] . '/' . rand() . '.png';
                         file_put_contents($temporaryFilePath, file_get_contents($item[0]));
@@ -348,7 +345,7 @@ if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0 || $b || $_REQUEST[
                         $arFile["MODULE_ID"] = "iblock";
                         $rotate = (int)$item[5] * 90 * 3;
                         $siteDomain = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'];
-                        RotateJpg($item[0], $rotate, $_SERVER["DOCUMENT_ROOT"] . str_replace($siteDomain, '', $item[0]), $arFile['type']);
+                        RotateJpg($arFile['tmp_name'], 45, $arFile['tmp_name'], $arFile['type']);
                         unlink($temporaryFilePath);
                     }
 
@@ -362,7 +359,6 @@ if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0 || $b || $_REQUEST[
                         $allPhoto[] = $item[1];
                     }
                 }
-
                 while ($obFields = $dbElements->GetNext()) {
                     $aElementID = $obFields['ID'];
                     foreach ($obFields['PROPERTY_PHOTOS_VALUE'] as $iKeyValue => $sValue) {

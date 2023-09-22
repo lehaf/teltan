@@ -76,7 +76,6 @@ function RotateJpg($filename = '', $angle = 0, $savename = false, $type = 'image
     if (empty($filename)) die('photo is empty');
 
     if ($rerun > 3) die('photo error');
-
     $rerun++;
     if (!empty($matches[0])) {
         $type = str_replace('data:', "", $matches[0]);
@@ -84,6 +83,7 @@ function RotateJpg($filename = '', $angle = 0, $savename = false, $type = 'image
 
     if ($type == 'image/png') {
         $source = imagecreatefrompng($filename);
+
         if (!$source) {
             RotateJpg($filename, $angle, $savename, 'image/jpeg', $rerun);
         }
@@ -106,18 +106,18 @@ function RotateJpg($filename = '', $angle = 0, $savename = false, $type = 'image
         imagedestroy($rotate);
     } else {
         $imageTmp = imagecreatefromjpeg($filename);
-
         imagejpeg($imageTmp, $filename, 100);
 
         if (!empty($imageTmp)) imagedestroy($imageTmp);
-
         $original = imagecreatefromjpeg($filename);
+
 
         if (!$original) {
             RotateJpg($filename, $angle, $savename, 'image/png', $rerun);
         }
 
         $rotated = imagerotate($original, $angle, 0);
+
         if (!$rotated) {
             RotateJpg($filename, $angle, $savename, 'image/png', $rerun);
         }

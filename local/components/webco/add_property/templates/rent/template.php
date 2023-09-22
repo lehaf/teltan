@@ -1303,7 +1303,6 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                             let mainPhoto = photoItems[photoItems.length - 1]
                             mainPhoto.querySelector("img").setAttribute("data-activePhoto", "isActive");
                             mainPhoto.querySelector(".set-main-text").innerText = "<?=Loc::getMessage('photoMain')?>"
-
                             flagPhoto = false
                         }, 0);
                     }
@@ -1311,7 +1310,6 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
                     const filledTemplate = Object.entries(this.templateOptions).reduce((tmp, [key, value]) => {
                         const output = tmp.replaceAll(`{{${key}}}`, file[value])
-
                         return output
                     }, this.template.replace('{{dataUrl}}', dataUrl))
 
@@ -1335,10 +1333,10 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
         }
         function rotateThis(item) {
             let count_rotate = $(item).parents('.main-photo__item').find('img').attr('data-rotate');
-            console.log($(item).parents('.main-photo__item').find('img').attr('data-rotate'))
             count_rotate = parseInt(count_rotate) + 1;
             $(item).closest('.main-photo__item').find('img').attr('data-rotate', count_rotate);
         }
+
         new FileUploader(
             // container where will images rendered (prepend method useing)
             '#fileUploaderRenderContainer',

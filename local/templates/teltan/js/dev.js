@@ -557,8 +557,19 @@ $(document).ready(function () {
 
 
     })
-    $('#typeResidentialLable').trigger('click');
-    $('#typeResidentialLable').trigger('onclick');
+
+    let radioBtn = document.querySelectorAll('form#mainForm div[data-wizard-content="0"] .form_radio_btn input[name="type"]');
+    if (radioBtn) {
+        let clicked = false;
+        radioBtn.forEach((radio) => {
+            if (radio.checked === true) {
+                radio.parentNode.querySelector('label').click();
+                clicked = true;
+            }
+        });
+
+        if (clicked === false) radioBtn[0].parentNode.querySelector('label').click();
+    }
 
     var att = '1';
     $('.rise-btn').click(function () {

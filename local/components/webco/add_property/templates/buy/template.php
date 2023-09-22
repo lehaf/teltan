@@ -1263,7 +1263,13 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
     })
 
     if (window.location.href.indexOf("EDIT") > -1) {
-
+        if ($('#Legalname').val().length > 0) {
+            $('#forAgency').prop('checked', true);
+            $('#Legalname').show();
+        } else {
+            $('#forOwner').prop('checked', true);
+            $('#Legalname').hide();
+        }
     } else {
         $('#forOwner').prop('checked', true);
         $('#Legalname').hide();
@@ -1447,7 +1453,6 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
             newFilesArr.forEach(async (file) => {
                 const dataUrl = await this.readFileAsync(file);
-                console.log(allFiles);
                 let photoList = document.querySelectorAll(".main-selector-photo .set-main-text");
                 photoList.forEach((el) => {
                     let textItem = el.innerText;
@@ -1462,7 +1467,6 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                         let mainPhoto = photoItems[photoItems.length - 1]
                         mainPhoto.querySelector("img").setAttribute("data-activePhoto", "isActive");
                         mainPhoto.querySelector(".set-main-text").innerText = "<?=Loc::getMessage('photoMain');?>"
-
                         flagPhoto = false
                     }, 0);
                 }
@@ -1491,6 +1495,13 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
             $(`[data-file-id="${fileId}"]`).remove()
         }
+    }
+
+    function rotateThis(item) {
+        let count_rotate = $(item).parents('.main-photo__item').find('img').attr('data-rotate');
+        $(item).parents('.main-photo__item').find('img').attr('data-rotate')
+        count_rotate = parseInt(count_rotate) + 1;
+        $(item).closest('.main-photo__item').find('img').attr('data-rotate', count_rotate);
     }
 
     new FileUploader(
@@ -1548,7 +1559,6 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
         $('#mainForm').find('input').each(function () {
             if (this.checked) {
                 var display = $(this).parents('.flex-lg-row');
-                console.log(display.css('display'))
                 if (display.css('display') === 'none'){
                 }else {
                     var object = {}
@@ -1560,7 +1570,6 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
             } else {
                 var display = $(this).parents('.flex-lg-row');
-                console.log(display.css('display'))
                 if (display.css('display') === 'none'){
                 }else {
                     var object = {}
