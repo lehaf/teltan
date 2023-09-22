@@ -135,7 +135,7 @@ $this->setFrameMode(true);
                             <i class="icon-arrow-down-sign-to-navigate-3 d-flex justify-content-center align-items-center"></i>
                         </div>
                         <div id="collapse<?= $arItem['CODE'] ?>" class="collapse" aria-labelledby="headingThree">
-                            
+
 
 
                                 <div class="w-100 justify-content-end dropdown-card dropdown-building-area1">

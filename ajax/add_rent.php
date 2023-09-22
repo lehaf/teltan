@@ -102,7 +102,7 @@ if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0 || $b || $_REQUEST[
     if ($_REQUEST['anytime']["val"] == 'true') {
         $PROP['UF_CALL_ANYTIME'] = 1;
     } else {
-        $PROP['UF_CALL_ANYTIME'] = '';
+        $PROP['UF_CALL_ANYTIME'] = 0;
         $PROP['UF_CALL_TO'] = $_REQUEST['callTo'] . ':00';
         $PROP['UF_CALL_FROM'] = $_REQUEST['callFrom'] . ':00';
     }
@@ -292,7 +292,7 @@ if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0 || $b || $_REQUEST[
                 $arLoadProductProp[$key] = $value;
             }
         }
-        unset($arLoadProductArray['PROPERTY_VALUES']);
+        unset($arLoadProductProp);
 
         if ($res = $el->Update(intval($_REQUEST['EDIT_ID']), $arLoadProductArray)) {
             foreach ($_REQUEST as $value) {

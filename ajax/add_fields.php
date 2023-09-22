@@ -118,8 +118,8 @@ if (!empty($section['UF_PROPS'])) {
                                            data-id_prop="<?= $value['PROPERTY_ID'] ?>"
                                            data-id-self="<?= $value['ID'] ?>"
                                            type="radio" name="<?=$prop['CODE']?>1"
-                                           <?if ($prop['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
                                            <?if ($value['SELECTED'] === true):?>checked<?endif;?>
+                                           <?if ($prop['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
                                     >
                                     <label for="radio-<?=$value['ID'] ?>1"><?=$value['VALUE']?></label>
                                 </div>
@@ -145,6 +145,7 @@ if (!empty($section['UF_PROPS'])) {
                                            data-id_prop="<?= $value['PROPERTY_ID'] ?>"
                                            data-id-self="<?= $value['ID'] ?>"
                                            <?if ($value['SELECTED'] === true):?>checked<?endif;?>
+                                           <?if ($prop['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
                                     >
                                     <label for="checkbox-<?=$value['ID']?>"><?=$value['VALUE']?></label>
                                 </div>
@@ -171,6 +172,7 @@ if (!empty($section['UF_PROPS'])) {
                                            type="text"
                                            placeholder=""
                                            value="<?=$prop['VALUES']?>"
+                                           <?if ($prop['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
                                     >
                                 </div>
                             </div>

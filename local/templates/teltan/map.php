@@ -59,7 +59,6 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                     });
 
                     let marker = markerData[0];
-                    console.log(marker);
                     if (marker !== undefined && layersId.includes(marker.layer.id)) {
                         window.mapError = false;
                     } else {
@@ -80,7 +79,6 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                 center: mapCoordinate,
                 zoom: 7
             });
-
 
             // ** vip
             $(".wizard-control-next").on("click",()=>{

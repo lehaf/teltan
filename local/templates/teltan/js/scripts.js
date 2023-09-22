@@ -495,8 +495,81 @@ $(document).ready(function () {
                         }
                     }
 
-                    if (errors === 0) {
+                    let curStepInputs = document.querySelectorAll('div.wizard-content.active input');
+                    if (curStepInputs && this.activeStep > 1) {
+                        let errorExist = false;
+                        curStepInputs.forEach((input) => {
+                            const req = input.getAttribute('data-req');
+                            const type = input.getAttribute('type');
+                            if (req === 'Y') {
+                                switch (type) {
+                                    case 'radio':
+                                        const propRadioId = input.getAttribute('data-id_prop');
+                                        const radioInputs = document.querySelectorAll('input[data-id_prop="'+propRadioId+'"]');
+                                        if (radioInputs) {
+                                            let checker = 1;
+                                            radioInputs.forEach((radioInput) => {
+                                                if (radioInput.checked === true) {
+                                                    console.log(errorExist);
+                                                    checker = 0;
+                                                }
+                                            });
 
+                                            if (checker > 0) {
+                                                radioInputs.forEach((radioInput) => {
+                                                    radioInput.parentNode.querySelector('label').classList.add('error');
+                                                });
+                                                errorExist = true;
+                                            } else {
+                                                radioInputs.forEach((radioInput) => {
+                                                    radioInput.parentNode.querySelector('label').classList.remove('error');
+                                                });
+                                            }
+                                        }
+                                        break;
+                                    case 'checkbox':
+                                        const propId = input.getAttribute('data-id_prop');
+                                        const checkboxInputs = document.querySelectorAll('input[data-id_prop="'+propId+'"]');
+                                        if (checkboxInputs) {
+                                            let checker = 1;
+                                            checkboxInputs.forEach((checkbox) => {
+                                                if (checkbox.checked === true) {
+                                                    checker = 0;
+                                                }
+                                            });
+
+                                            if (checker > 0) {
+                                                checkboxInputs.forEach((checkbox) => {
+                                                    checkbox.parentNode.querySelector('label').classList.add('error');
+                                                });
+                                                errorExist = true;
+                                            } else {
+                                                checkboxInputs.forEach((checkbox) => {
+                                                    checkbox.parentNode.querySelector('label').classList.remove('error');
+                                                });
+                                            }
+                                        }
+                                        break;
+                                    default:
+                                        if (input.value.length > 0) {
+                                            input.classList.remove('error');
+                                        } else {
+                                            input.classList.add('error');
+                                            errorExist = true;
+                                        }
+                                        break;
+                                }
+                                if (errorExist === true) {
+                                    errors = 1;
+                                } else {
+                                    errors = 0;
+                                }
+
+                            }
+                        });
+                    }
+
+                    if (errors === 0) {
                         if (this.activeStep === 0) {
                             $('.wizard-control-next').attr('disabled', 'disabled');
                         }

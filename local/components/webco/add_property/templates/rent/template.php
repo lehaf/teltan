@@ -185,7 +185,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                                name="type1"
                                                         >
                                                         <label class="px-2 py-1" for="type<?=$arItem['UF_XML_ID']?>">
-                                                            <?=!empty(Loc::getMessage($arItem['UF_XML_ID'])) ? Loc::getMessage($arItem['UF_XML_ID']) : $arItem['UF_NAME']?>
+                                                            <?=!empty($arItem['UF_IVRIT']) ? $arItem['UF_IVRIT'] : $arItem['UF_XML_ID']?>
                                                         </label>
                                                     </div>
                                                 <?}?>
@@ -433,7 +433,9 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                                     <?=($arProps[$filterProp['CODE']]['VALUE'] == $arItem['VALUE'])? 'checked' : ''?>
                                                                        data-id_prop="<?= $arItem['PROPERTY_ID'] ?>"
                                                                        data-id-self="<?= $arItem['ID'] ?>"
-                                                                       type="radio" name="<?=$filterProp['CODE']?>1" >
+                                                                       type="radio" name="<?=$filterProp['CODE']?>1"
+                                                                       <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
+                                                                >
                                                                 <label for="radio-<?= $arItem['ID'] ?>1"><?=$arItem['VALUE']?></label>
                                                             </div>
                                                         <?}?>
@@ -449,19 +451,37 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                         <? }else{?>
                                             <?if($filterProp['ID'] == 174){?>
                                                 <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row" data-parent-id="27" style="display: none">
-
                                                     <div class="col-12 col-lg-10">
                                                         <div class="d-flex flex-wrap justify-content-center justify-content-lg-end">
                                                             <div class="mr-0 mr-lg-3 form-group">
-                                                                <input id="1721"  data-id_prop="172" class="form-control" type="text" placeholder="שטח מרפסת" required="" value="<?=$arProps['PROP_AREA_1']['VALUE']?>">
+                                                                <input id="1721"
+                                                                       data-id_prop="172" c
+                                                                       class="form-control"
+                                                                       type="text"
+                                                                       placeholder="שטח מרפסת"
+                                                                       value="<?=$arProps['PROP_AREA_1']['VALUE']?>"
+                                                                       <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
+                                                                >
                                                             </div>
-
                                                             <div class="mr-0 mr-lg-3 form-group">
-                                                                <input id="1731"  data-id_prop="173" class="form-control" type="text" placeholder="שטח מגורים" required="" value="<?=$arProps['PROP_AREA_2']['VALUE']?>">
+                                                                <input id="1731"
+                                                                       data-id_prop="173"
+                                                                       class="form-control"
+                                                                       type="text"
+                                                                       placeholder="שטח מגורים"
+                                                                       value="<?=$arProps['PROP_AREA_2']['VALUE']?>"
+                                                                       <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
+                                                                >
                                                             </div>
-
                                                             <div class="form-group">
-                                                                <input id="1741"  data-id_prop="174" class="form-control" type="text" placeholder=" שטח הכולל" required="" value="<?=$arProps['PROP_AREA_3']['VALUE']?>">
+                                                                <input id="1741"
+                                                                       data-id_prop="174"
+                                                                       class="form-control"
+                                                                       type="text"
+                                                                       placeholder=" שטח הכולל"
+                                                                       <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
+                                                                       value="<?=$arProps['PROP_AREA_3']['VALUE']?>"
+                                                                >
                                                             </div>
                                                         </div>
                                                     </div>
@@ -476,7 +496,14 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                     <div class="col-12 col-lg-10">
                                                         <?if ($id){foreach ($id as $ids){drawElement($filterProps[1][$ids] , $arLink ,$arProps);}}?>
                                                         <div class="d-flex justify-content-center justify-content-lg-end form-group">
-                                                            <input id="<?= $filterProp['ID'] ?>1"  data-id_prop="<?= $filterProp['CODE'] ?>" class="form-control" type="number" placeholder="" value="<?=$arProps[$filterProp['CODE']]['VALUE']?>" required="">
+                                                            <input id="<?= $filterProp['ID'] ?>1"
+                                                                   data-id_prop="<?= $filterProp['CODE'] ?>"
+                                                                   class="form-control"
+                                                                   type="number"
+                                                                   placeholder=""
+                                                                   value="<?=$arProps[$filterProp['CODE']]['VALUE']?>"
+                                                                   <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
+                                                            >
                                                         </div>
                                                     </div>
 
@@ -500,7 +527,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                         <?if($filterProp['PROPERTY_TYPE'] == 'L'){?>
                                             <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row" data-parent-id="28" style="display: none">
                                                 <div class="col-12 col-lg-10">
-                                                    <div class="d-flex justify-content-center justify-content-lg-end align-items-center">
+                                                    <div class="d-flex justify-content-center justify-content-lg-end align-items-center gap-1">
                                                         <?if ($id){foreach ($id as $ids){drawElement($filterProps[2][$ids] , $arLink ,$arProps);}}?>
                                                         <?foreach($filterProp['PROP_ENUM_VAL']  as $arItem){?>
 
@@ -509,6 +536,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                                     <?=($arProps[$filterProp['CODE']]['VALUE'] == $arItem['VALUE'])? 'checked' : ''?>
                                                                        data-id_prop="<?= $arItem['PROPERTY_ID'] ?>"
                                                                        data-id-self="<?= $arItem['ID'] ?>"
+                                                                       <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
                                                                 >
                                                                 <label for="radio-<?= $arItem['ID'] ?>2"><?=$arItem['VALUE']?></label>
                                                             </div>
@@ -529,15 +557,36 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                     <div class="col-12 col-lg-10">
                                                         <div class="d-flex flex-wrap justify-content-center justify-content-lg-end">
                                                             <div class="mr-0 mr-lg-3 form-group">
-                                                                <input id="1722"  data-id_prop="172" class="form-control" type="text" placeholder="Kitchen" required="" value="<?=$arProps['PROP_AREA_1']['VALUE']?>">
+                                                                <input id="1722"
+                                                                       data-id_prop="172"
+                                                                       class="form-control"
+                                                                       type="text"
+                                                                       placeholder="Kitchen"
+                                                                       <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
+                                                                       value="<?=$arProps['PROP_AREA_1']['VALUE']?>"
+                                                                >
                                                             </div>
 
                                                             <div class="mr-0 mr-lg-3 form-group">
-                                                                <input id="1732"  data-id_prop="173" class="form-control" type="text" placeholder="Residential" required="" value="<?=$arProps['PROP_AREA_2']['VALUE']?>">
+                                                                <input id="1732"
+                                                                       data-id_prop="173"
+                                                                       class="form-control"
+                                                                       type="text"
+                                                                       placeholder="Residential"
+                                                                       value="<?=$arProps['PROP_AREA_2']['VALUE']?>"
+                                                                       <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
+                                                                >
                                                             </div>
 
                                                             <div class="mr-3 form-group">
-                                                                <input id="1742"  data-id_prop="174" class="form-control" type="text" placeholder="General" required="" value="<?=$arProps['PROP_AREA_3']['VALUE']?>">
+                                                                <input id="1742"
+                                                                       data-id_prop="174"
+                                                                       class="form-control"
+                                                                       type="text"
+                                                                       placeholder="General"
+                                                                       <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
+                                                                       value="<?=$arProps['PROP_AREA_3']['VALUE']?>"
+                                                                >
                                                             </div>
                                                         </div>
                                                     </div>
@@ -552,7 +601,15 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                     <div class="col-12 col-lg-10">
                                                         <?if ($id){foreach ($id as $ids){drawElement($filterProps[2][$ids] , $arLink ,$arProps);}}?>
                                                         <div class="mr-3 d-flex justify-content-center justify-content-lg-end form-group">
-                                                            <input id="<?= $filterProp['ID'] ?>2"  data-id_prop="<?= $filterProp['CODE'] ?>" class="form-control" type="number" placeholder="" required="" value="<?=$arProps[$filterProp['CODE']]['VALUE']?>">
+                                                            <input id="<?= $filterProp['ID'] ?>2"
+                                                                   data-id_prop="<?= $filterProp['CODE'] ?>"
+                                                                   class="form-control"
+                                                                   type="number"
+                                                                   placeholder=""
+                                                                   required=""
+                                                                   value="<?=$arProps[$filterProp['CODE']]['VALUE']?>"
+                                                                   <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
+                                                            >
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-lg-2">
@@ -575,7 +632,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                         <?if($filterProp['PROPERTY_TYPE'] == 'L'){?>
                                             <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row" data-parent-id="29" style="display: none">
                                                 <div class="col-12 col-lg-10">
-                                                    <div class="d-flex justify-content-center justify-content-lg-end align-items-center">
+                                                    <div class="d-flex justify-content-center justify-content-lg-end align-items-center gap-1">
                                                         <?if ($id){foreach ($id as $ids){drawElement($filterProps[1][$ids] , $arLink ,$arProps);}}?>
                                                         <?foreach($filterProp['PROP_ENUM_VAL']  as $arItem){?>
 
@@ -583,7 +640,9 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                                 <input id="radio-<?= $arItem['ID'] ?>3" type="radio" name="<?=$filterProp['CODE']?>3"
                                                                     <?=($arProps[$filterProp['CODE']]['VALUE'] == $arItem['VALUE'])? 'checked' : ''?>
                                                                        data-id_prop="<?= $arItem['PROPERTY_ID'] ?>"
-                                                                       data-id-self="<?= $arItem['ID'] ?>">
+                                                                       data-id-self="<?= $arItem['ID'] ?>"
+                                                                       <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
+                                                                >
                                                                 <label for="radio-<?= $arItem['ID'] ?>3"><?=$arItem['VALUE']?></label>
                                                             </div>
                                                         <?}?>
@@ -602,15 +661,39 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                     <div class="col-12 col-lg-10">
                                                         <div class="d-flex flex-wrap justify-content-center justify-content-lg-end">
                                                             <div class="mr-0 mr-lg-3 form-group">
-                                                                <input id="1723"  data-id_prop="172" class="form-control" type="text" placeholder="Kitchen" required="" value="<?=$arProps['PROP_AREA_1']['VALUE']?>">
+                                                                <input id="1723"
+                                                                       data-id_prop="172"
+                                                                       class="form-control"
+                                                                       type="text"
+                                                                       placeholder="Kitchen"
+                                                                       required=""
+                                                                       value="<?=$arProps['PROP_AREA_1']['VALUE']?>"
+                                                                       <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
+                                                                >
                                                             </div>
 
                                                             <div class="mr-0 mr-lg-3 form-group">
-                                                                <input id="1733"  data-id_prop="173" class="form-control" type="text" placeholder="Residential" required="" value="<?=$arProps['PROP_AREA_2']['VALUE']?>">
+                                                                <input id="1733"
+                                                                       data-id_prop="173"
+                                                                       class="form-control"
+                                                                       type="text"
+                                                                       placeholder="Residential"
+                                                                       required=""
+                                                                       value="<?=$arProps['PROP_AREA_2']['VALUE']?>"
+                                                                       <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
+                                                                >
                                                             </div>
 
                                                             <div class="mr-3 form-group">
-                                                                <input id="1743"  data-id_prop="174" class="form-control" type="text" placeholder="General" required="" value="<?=$arProps['PROP_AREA_3']['VALUE']?>">
+                                                                <input id="1743"
+                                                                       data-id_prop="174"
+                                                                       class="form-control"
+                                                                       type="text"
+                                                                       placeholder="General"
+                                                                       required=""
+                                                                       value="<?=$arProps['PROP_AREA_3']['VALUE']?>"
+                                                                       <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
+                                                                >
                                                             </div>
                                                         </div>
                                                     </div>
@@ -625,7 +708,14 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                     <div class="col-12 col-lg-10">
                                                         <?if ($id){foreach ($id as $ids){drawElement($filterProps[3][$ids] , $arLink ,$arProps);}}?>
                                                         <div class="mr-3 d-flex justify-content-center justify-content-lg-end form-group">
-                                                            <input id="<?= $filterProp['ID'] ?>3"  data-id_prop="<?= $filterProp['CODE'] ?>" class="form-control" type="number" placeholder="" required="" value="<?=$arProps[$filterProp['CODE']]['VALUE']?>">
+                                                            <input id="<?= $filterProp['ID'] ?>3"
+                                                                   data-id_prop="<?= $filterProp['CODE'] ?>"
+                                                                   class="form-control"
+                                                                   type="number"
+                                                                   placeholder=""
+                                                                   value="<?=$arProps[$filterProp['CODE']]['VALUE']?>"
+                                                                   <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
+                                                            >
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-lg-2">
@@ -636,14 +726,17 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                 </div>
                                             <?}?>
                                         <?}?>
-                                    <? }?>
-
+                                    <?}?>
                                     <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row">
                                         <div class="d-flex justify-content-center justify-content-lg-end form-group col-12 col-lg-10">
-                                            <input id="PROP_Completion" class="form-control"  data-id_prop="113"
+                                            <input id="PROP_Completion"
+                                                   class="form-control"
+                                                   data-id_prop="113"
                                                    type="date"
+                                                   value="<?=!empty($arProps['PROP_Completion']['VALUE']) ? implode('-',array_reverse(explode('.',$arProps['PROP_Completion']['VALUE']))) : ''?>"
                                                    placeholder="<?=!empty($arProps['PROP_Completion']['NAME']) ? $arProps['PROP_Completion']['NAME'] : Loc::getMessage('completion')?>"
-                                                   required>
+                                                   <?php if ($arProps['PROP_Completion']['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
+                                            >
                                         </div>
                                         <div class="col-12 col-lg-2">
                                             <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
