@@ -165,7 +165,7 @@ else
                         </div>
 
                         <div class="d-none d-lg-flex align-items-center fleamarket-link">
-                            <a class="font-weight-bold d-flex align-items-center" href="/property_new/">
+                            <a class="font-weight-bold d-flex align-items-center" href="/property/">
                                 <span class="mt-1 mr-2 ml-2"><?=Loc::getMessage('PROPERTY');?></span>
                                 <i class="icon-home"></i>
                             </a>
@@ -351,7 +351,7 @@ else
 </div>
 
 
-     <? if(CSite::InDir('/property/') || CSite::InDir('/property_new/')) {?>
+     <? if(CSite::InDir('/property/')) {?>
         <main class="mb-5 wrapper flex-grow-1">
      <? }else {?>
         <main class="mb-5">

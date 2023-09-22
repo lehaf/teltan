@@ -33,9 +33,9 @@ if ( $arResult['IBLOCK_SECTION_ID']) {
     } elseif (CSite::InDir('/scooters/')) {
         $IBLOCK_ID = 8;
         $path = '/scooters/';
-    } elseif (CSite::InDir('/property_new/')) {
+    } elseif (CSite::InDir('/property/')) {
         $IBLOCK_ID = 2;
-        $path = '/property_new/';
+        $path = '/property/';
     }
 
     while ($sectionPath = $navChain->GetNext()) {

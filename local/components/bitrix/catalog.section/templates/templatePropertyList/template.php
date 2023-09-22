@@ -9,6 +9,7 @@ global $mapArray;
 $mapArray = [
     "type" => "FeatureCollection"
 ];
+
 foreach ($arResult['ITEMS'] as $arItem) {
     $mapLatlnt = json_decode($arItem['PROPERTIES']['MAP_LATLNG']['~VALUE'], true);
     $mapArray['features'][] = [

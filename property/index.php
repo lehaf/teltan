@@ -1,5 +1,9 @@
-<?php
-require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
+<?php require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
+
+use Bitrix\Main\Page\Asset;
+
+Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . "/css/catalog.css");
+
 $APPLICATION->SetTitle("Недвижимость");
 
 CModule::IncludeModule('highloadblock');
@@ -7,17 +11,21 @@ $secondSort = [
     'SORT' => 'property_TIME_RAISE',
     'ORDER' => 'DESC'
 ];
+
 if($_GET['SORT'] != '' && $_GET['ORDER'] != ''){
     $secondSort['SORT'] = $_GET['SORT'];
     $secondSort['ORDER'] = $_GET['ORDER'];
 }
-$APPLICATION->IncludeComponent("bitrix:catalog", "templateProperty",
+
+$APPLICATION->IncludeComponent(
+    "bitrix:catalog",
+    "templatePropertyNew",
     Array(
         "ACTION_VARIABLE" => "action",
         "ADD_ELEMENT_CHAIN" => "Y",
         "ADD_PICT_PROP" => "-",
         "ADD_PROPERTIES_TO_BASKET" => "Y",
-        "ADD_SECTIONS_CHAIN" => "N",
+        "ADD_SECTIONS_CHAIN" => "Y",
         "AJAX_MODE" => "N",
         "AJAX_OPTION_ADDITIONAL" => "",
         "AJAX_OPTION_HISTORY" => "N",
@@ -126,7 +134,13 @@ $APPLICATION->IncludeComponent("bitrix:catalog", "templateProperty",
         "SECTION_TOP_DEPTH" => "2",
         "SEF_FOLDER" => "/property/",
         "SEF_MODE" => "Y",
-        "SEF_URL_TEMPLATES" => Array("compare"=>"compare.php?action=#ACTION_CODE#","element"=>"#SECTION_CODE_PATH#/#ELEMENT_CODE#/","section"=>"#SECTION_CODE_PATH#/","sections"=>"","smart_filter"=>"#SECTION_CODE_PATH#/filter/#SMART_FILTER_PATH#/apply/"),
+        "SEF_URL_TEMPLATES" => Array(
+            "compare"=>"compare.php?action=#ACTION_CODE#",
+            "element"=>"#SECTION_CODE_PATH#/#ELEMENT_CODE#/",
+            "section"=>"#SECTION_CODE_PATH#/",
+            "sections"=>"",
+            "smart_filter"=>"#SECTION_CODE_PATH#/filter/#SMART_FILTER_PATH#/apply/"
+        ),
         "SET_LAST_MODIFIED" => "N",
         "SET_STATUS_404" => "N",
         "SET_TITLE" => "Y",
@@ -167,4 +181,5 @@ $APPLICATION->IncludeComponent("bitrix:catalog", "templateProperty",
         "USE_STORE" => "N"
     ),
     false
-); ?><?php require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php"); ?>
+); ?>
+<?php require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php")?>

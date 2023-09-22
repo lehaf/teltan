@@ -28,7 +28,7 @@ if (CSite::InDir('/flea/')){
     $IBLOCK_ID = 7;
 }elseif (CSite::InDir('/scooters/')){
     $IBLOCK_ID = 8;
-}elseif (CSite::InDir('/property_new/')){
+}elseif (CSite::InDir('/property/')){
     $IBLOCK_ID = 2;
 }
 

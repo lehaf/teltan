@@ -704,31 +704,31 @@ if(name.length > 4){
         if ($('#categoryRentInput').is(':checked')) {
             switch (SECTION_ID) {
                 case '35':
-                    var sectionUrl = '/property_new/zhilaya/snyat-j/'
+                    var sectionUrl = '/property/zhilaya/snyat-j/'
                     break;
                 case '33':
-                    var sectionUrl = '/property_new/kommercheskaya/snyat-kom/'
+                    var sectionUrl = '/property/kommercheskaya/snyat-kom/'
                     break;
                 case '34':
-                    var sectionUrl = '/property_new/zhilaya/snyat-j/'
+                    var sectionUrl = '/property/zhilaya/snyat-j/'
                     break;
                 case '32':
-                    var sectionUrl = '/property_new/kommercheskaya/snyat-kom/'
+                    var sectionUrl = '/property/kommercheskaya/snyat-kom/'
                     break;
             }
         } else {
             switch (SECTION_ID) {
                 case '35':
-                    var sectionUrl = '/property_new/zhilaya/kupit-j/'
+                    var sectionUrl = '/property/zhilaya/kupit-j/'
                     break;
                 case '33':
-                    var sectionUrl = '/property_new/kommercheskaya/kupit-kom/'
+                    var sectionUrl = '/property/kommercheskaya/kupit-kom/'
                     break;
                 case '34':
-                    var sectionUrl = '/property_new/zhilaya/kupit-j/'
+                    var sectionUrl = '/property/zhilaya/kupit-j/'
                     break;
                 case '32':
-                    var sectionUrl = '/property_new/kommercheskaya/kupit-kom/'
+                    var sectionUrl = '/property/kommercheskaya/kupit-kom/'
                     break;
             }
         }
@@ -776,31 +776,31 @@ if(name.length > 4){
         if ($('#categoryRentInput').is(':checked')) {
             switch (SECTION_ID) {
                 case '35':
-                    var sectionUrl = '/property_new/zhilaya/snyat-j/'
+                    var sectionUrl = '/property/zhilaya/snyat-j/'
                     break;
                 case '33':
-                    var sectionUrl = '/property_new/kommercheskaya/snyat-kom/'
+                    var sectionUrl = '/property/kommercheskaya/snyat-kom/'
                     break;
                 case '34':
-                    var sectionUrl = '/property_new/zhilaya/snyat-j/'
+                    var sectionUrl = '/property/zhilaya/snyat-j/'
                     break;
                 case '32':
-                    var sectionUrl = '/property_new/kommercheskaya/snyat-kom/'
+                    var sectionUrl = '/property/kommercheskaya/snyat-kom/'
                     break;
             }
         } else {
             switch (SECTION_ID) {
                 case '35':
-                    var sectionUrl = '/property_new/zhilaya/kupit-j/'
+                    var sectionUrl = '/property/zhilaya/kupit-j/'
                     break;
                 case '33':
-                    var sectionUrl = '/property_new/kommercheskaya/kupit-kom/'
+                    var sectionUrl = '/property/kommercheskaya/kupit-kom/'
                     break;
                 case '34':
-                    var sectionUrl = '/property_new/zhilaya/kupit-j/'
+                    var sectionUrl = '/property/zhilaya/kupit-j/'
                     break;
                 case '32':
-                    var sectionUrl = '/property_new/kommercheskaya/kupit-kom/'
+                    var sectionUrl = '/property/kommercheskaya/kupit-kom/'
                     break;
             }
         }
@@ -846,31 +846,31 @@ if(name.length > 4){
         if ($('#categoryRentInput').is(':checked')) {
             switch (SECTION_ID) {
                 case '35':
-                    var sectionUrl = '/property_new/zhilaya/snyat-j/'
+                    var sectionUrl = '/property/zhilaya/snyat-j/'
                     break;
                 case '33':
-                    var sectionUrl = '/property_new/kommercheskaya/snyat-kom/'
+                    var sectionUrl = '/property/kommercheskaya/snyat-kom/'
                     break;
                 case '34':
-                    var sectionUrl = '/property_new/zhilaya/snyat-j/'
+                    var sectionUrl = '/property/zhilaya/snyat-j/'
                     break;
                 case '32':
-                    var sectionUrl = '/property_new/kommercheskaya/snyat-kom/'
+                    var sectionUrl = '/property/kommercheskaya/snyat-kom/'
                     break;
             }
         } else {
             switch (SECTION_ID) {
                 case '35':
-                    var sectionUrl = '/property_new/zhilaya/kupit-j/'
+                    var sectionUrl = '/property/zhilaya/kupit-j/'
                     break;
                 case '33':
-                    var sectionUrl = '/property_new/kommercheskaya/kupit-kom/'
+                    var sectionUrl = '/property/kommercheskaya/kupit-kom/'
                     break;
                 case '34':
-                    var sectionUrl = '/property_new/zhilaya/kupit-j/'
+                    var sectionUrl = '/property/zhilaya/kupit-j/'
                     break;
                 case '32':
-                    var sectionUrl = '/property_new/kommercheskaya/kupit-kom/'
+                    var sectionUrl = '/property/kommercheskaya/kupit-kom/'
                     break;
             }
         }
@@ -879,11 +879,9 @@ if(name.length > 4){
             if ($(this).is(':checkbox')) {
                 if ($(this).is(':checked')) {
                     let data = $(this).data();
-                    console.log($(this).data())
                     if (data.controlId !== undefined) {
                         url = url + '&' + data.controlId + '=' + data.htmlValue
                     }
-                    console.log(url)
                 }
             } else {
                 if ($(this).is(':text')) {
@@ -892,7 +890,6 @@ if(name.length > 4){
                     if (data.controlId !== undefined) {
                         url = url + '&' + data.controlId + '=' + val
                     }
-                    console.log(url)
                 }else {
                     let data = $(this).data();
                     let val = $(this).val();
@@ -916,31 +913,31 @@ if(name.length > 4){
         if ($('#categoryRentInput').is(':checked')) {
             switch (SECTION_ID) {
                 case '35':
-                    var sectionUrl = '/property_new/zhilaya/snyat-j/'
+                    var sectionUrl = '/property/zhilaya/snyat-j/'
                     break;
                 case '33':
-                    var sectionUrl = '/property_new/kommercheskaya/snyat-kom/'
+                    var sectionUrl = '/property/kommercheskaya/snyat-kom/'
                     break;
                 case '34':
-                    var sectionUrl = '/property_new/zhilaya/snyat-j/'
+                    var sectionUrl = '/property/zhilaya/snyat-j/'
                     break;
                 case '32':
-                    var sectionUrl = '/property_new/kommercheskaya/snyat-kom/'
+                    var sectionUrl = '/property/kommercheskaya/snyat-kom/'
                     break;
             }
         } else {
             switch (SECTION_ID) {
                 case '35':
-                    var sectionUrl = '/property_new/zhilaya/kupit-j/'
+                    var sectionUrl = '/property/zhilaya/kupit-j/'
                     break;
                 case '33':
-                    var sectionUrl = '/property_new/kommercheskaya/kupit-kom/'
+                    var sectionUrl = '/property/kommercheskaya/kupit-kom/'
                     break;
                 case '34':
-                    var sectionUrl = '/property_new/zhilaya/kupit-j/'
+                    var sectionUrl = '/property/zhilaya/kupit-j/'
                     break;
                 case '32':
-                    var sectionUrl = '/property_new/kommercheskaya/kupit-kom/'
+                    var sectionUrl = '/property/kommercheskaya/kupit-kom/'
                     break;
             }
         }

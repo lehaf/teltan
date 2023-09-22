@@ -8,31 +8,31 @@
             if ($('#categoryRentInput').is(':checked')) {
                 switch (SECTION_ID) {
                     case '35':
-                        var sectionUrl = '/property_new/zhilaya/snyat-j/'
+                        var sectionUrl = '/property/zhilaya/snyat-j/'
                         break;
                     case '33':
-                        var sectionUrl = '/property_new/kommercheskaya/snyat-kom/'
+                        var sectionUrl = '/property/kommercheskaya/snyat-kom/'
                         break;
                     case '34':
-                        var sectionUrl = '/property_new/zhilaya/snyat-j/'
+                        var sectionUrl = '/property/zhilaya/snyat-j/'
                         break;
                     case '32':
-                        var sectionUrl = '/property_new/kommercheskaya/snyat-kom/'
+                        var sectionUrl = '/property/kommercheskaya/snyat-kom/'
                         break;
                 }
             } else {
                 switch (SECTION_ID) {
                     case '35':
-                        var sectionUrl = '/property_new/zhilaya/kupit-j/'
+                        var sectionUrl = '/property/zhilaya/kupit-j/'
                         break;
                     case '33':
-                        var sectionUrl = '/property_new/kommercheskaya/kupit-kom/'
+                        var sectionUrl = '/property/kommercheskaya/kupit-kom/'
                         break;
                     case '34':
-                        var sectionUrl = '/property_new/zhilaya/kupit-j/'
+                        var sectionUrl = '/property/zhilaya/kupit-j/'
                         break;
                     case '32':
-                        var sectionUrl = '/property_new/kommercheskaya/kupit-kom/'
+                        var sectionUrl = '/property/kommercheskaya/kupit-kom/'
                         break;
                 }
             }

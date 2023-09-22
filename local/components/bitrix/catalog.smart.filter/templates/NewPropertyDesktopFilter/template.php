@@ -16,13 +16,13 @@ $arSection = [];
 ps($arParams);
 switch ($arParams['SECTION_ID']) {
     case RESIDENTIAL_SECTION_ID:
-        LocalRedirect('/property_new/zhilaya/snyat-j/');
+        LocalRedirect('/property/zhilaya/snyat-j/');
         break;
     case COMMERCIAL_SECTION_ID:
-        LocalRedirect('/property_new/kommercheskaya/snyat-kom/');
+        LocalRedirect('/property/kommercheskaya/snyat-kom/');
         break;
     case NEW_SECTION_ID:
-        LocalRedirect('/property_new/novostroyki/snyat/');
+        LocalRedirect('/property/novostroyki/snyat/');
         break;
 }
 
@@ -65,15 +65,15 @@ $arRentProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID
     <div class="d-flex d-lg-none justify-content-center container p-0">
         <ul class="w-100 mb-0 header-property__category-list">
             <li>
-                <a href="/property_new/zhilaya/" class="active">Жилая</a>
+                <a href="/property/zhilaya/" class="active">Жилая</a>
             </li>
             <span class="text-white mx-3">/</span>
             <li>
-                <a href="/property_new/kommercheskaya/">Коммерческая</a>
+                <a href="/property/kommercheskaya/">Коммерческая</a>
             </li>
             <span class="text-white mx-3">/</span>
             <li>
-                <a href="/property_new/novostroyki/">Новостройки</a>
+                <a href="/property/novostroyki/">Новостройки</a>
             </li>
         </ul>
     </div>
@@ -81,24 +81,24 @@ $arRentProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID
         <div class="d-flex align-items-center justify-content-end">
             <ul class="mb-0 header-property__category-list">
                 <li>
-                    <a href="/property_new/zhilaya/" <?= (in_array($arParams['SECTION_ID'], RESIDENTAL_SECTION_ARRAY)) ? ' class="active" ' : '' ?> >Жилая</a>
+                    <a href="/property/zhilaya/" <?= (in_array($arParams['SECTION_ID'], RESIDENTAL_SECTION_ARRAY)) ? ' class="active" ' : '' ?> >Жилая</a>
                 </li>
                 <span class="text-white mx-3">/</span>
                 <li>
-                    <a href="/property_new/kommercheskaya/" <?= (in_array($arParams['SECTION_ID'], COMMERCIAL_SECTION_ARRAY)) ? ' class="active" ' : '' ?>>Коммерческая</a>
+                    <a href="/property/kommercheskaya/" <?= (in_array($arParams['SECTION_ID'], COMMERCIAL_SECTION_ARRAY)) ? ' class="active" ' : '' ?>>Коммерческая</a>
                 </li>
             </ul>
 
             <div class="d-flex nav-category-type">
                 <label class="label-type">
                     <input <?= (in_array($arParams['SECTION_ID'], [RESIDENTIAL_RENT_SECTION_ID, COMMERCIAL_RENT_SECTION_ID, NEW_RENT_SECTION_ID])) ? 'checked' : '' ?>
-                            onclick="window.location.href='<?= (in_array($arParams['SECTION_ID'], COMMERCIAL_SECTION_ARRAY)) ? '/property_new/kommercheskaya/snyat-kom/' : '/property_new/zhilaya/snyat-j/' ?>'"   id="categoryRentInput" class="category" name="category" value="rent" type="radio">
+                            onclick="window.location.href='<?= (in_array($arParams['SECTION_ID'], COMMERCIAL_SECTION_ARRAY)) ? '/property/kommercheskaya/snyat-kom/' : '/property/zhilaya/snyat-j/' ?>'"   id="categoryRentInput" class="category" name="category" value="rent" type="radio">
                     <div>Снять</div>
                 </label>
 
                 <label class="label-type">
                     <input <?= (in_array($arParams['SECTION_ID'], [RESIDENTIAL_BUY_SECTION_ID, COMMERCIAL_BUY_SECTION_ID, NEW_BUY_SECTION_ID])) ? 'checked' : '' ?>
-                           onclick="window.location.href='<?= (in_array($arParams['SECTION_ID'], COMMERCIAL_SECTION_ARRAY)) ? '/property_new/kommercheskaya/kupit-kom/' : '/property_new/zhilaya/kupit-j/' ?>'" id="categoryBuyInput" class="category" name="category" value="buy" type="radio">
+                           onclick="window.location.href='<?= (in_array($arParams['SECTION_ID'], COMMERCIAL_SECTION_ARRAY)) ? '/property/kommercheskaya/kupit-kom/' : '/property/zhilaya/kupit-j/' ?>'" id="categoryBuyInput" class="category" name="category" value="buy" type="radio">
                     <div>Купить</div>
                 </label>
             </div>

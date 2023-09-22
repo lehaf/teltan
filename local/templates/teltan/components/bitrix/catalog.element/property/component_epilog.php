@@ -33,10 +33,11 @@ if ($arResult['IBLOCK_SECTION_ID']) {
     } elseif (CSite::InDir('/scooters/')) {
         $path = '/scooters/'; // Начальный путь к Каталогу
         $IBLOCK_ID = 8;
-    } elseif (CSite::InDir('/property_new/')) {
-        $path = '/property_new/'; // Начальный путь к Каталогу
+    } elseif (CSite::InDir('/property/')) {
+        $path = '/property/'; // Начальный путь к Каталогу
         $IBLOCK_ID = 2;
     }
+
 
     while ($sectionPath = $navChain->GetNext()) {
         if ($langId) {
