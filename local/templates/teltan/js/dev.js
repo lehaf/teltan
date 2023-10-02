@@ -599,10 +599,23 @@ $(document).ready(function () {
     })
     $('.dropdown-card__content li').click(function () {
         // $(this).parents('.dropdown-card').slideToggle(300);
-        let data = $(this).find('input').attr('data-valued')
+        // let data = $(this).find('input').attr('data-valued')
         //  $(this).parents('.dropdown-card').removeClass("active");
-        $(this).parents('.dropdown-block').find('.type').text(data);
+        // $(this).parents('.dropdown-block').find('.type').text(data);
+        let data = $(this).closest('.dropdown-card__content').find('li input');
+        let viewValue = [];
+        data.each((index, input) => {
+            if (input.checked === true) viewValue.push(input.getAttribute('data-valued'));
+        });
+        $(this).parents('.dropdown-block').find('.type').text(viewValue.join(', '));
 
+        // if (Array.isArray(value)) {
+        //     typeProperty.empty()
+        //     typeProperty.append(data.areaTypeBuilduing.join(', '));
+        // } else {
+        //     typeProperty.empty()
+        //     typeProperty.append(data.areaTypeBuilduing);
+        // }
     });
 
 
@@ -658,6 +671,7 @@ $(document).ready(function () {
         })
 
     })
+
     setTimeout(function () {
         let name1 = '';
         var url = window.location.href;
@@ -682,9 +696,9 @@ $(document).ready(function () {
                     name = name + ' , ' + $(this).val()
                 }
 
-if(name.length > 4){
-                $('.typeRegion').html(name);
-}
+                if(name.length > 4){
+                    $('.typeRegion').html(name);
+                }
             });
         }
     }, 2000);
