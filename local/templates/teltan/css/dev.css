@@ -110,6 +110,10 @@
 
 .typeRegion {
     white-space: nowrap;
-    /*max-height: 1.2rem;*/
+    overflow: hidden;
+}
+
+.typeArea {
+    white-space: nowrap;
     overflow: hidden;
 }
