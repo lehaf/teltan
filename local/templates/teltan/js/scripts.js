@@ -510,7 +510,6 @@ $(document).ready(function () {
                                             let checker = 1;
                                             radioInputs.forEach((radioInput) => {
                                                 if (radioInput.checked === true) {
-                                                    console.log(errorExist);
                                                     checker = 0;
                                                 }
                                             });
@@ -2256,7 +2255,6 @@ $(document).ready(function () {
     const dropdownBtn = [$('.buttonShowPropertyFilterPrice'), $('.buttonShowPropertyFilterRoom'), $('.buttonShowPropertyFilterType'), $('.buttonShowPropertyFilterArea')]
 
     $('.buttonShowPropertyFilterPrice').click(function (e) {
-
         $(this).toggleClass('active')
         $('.dropdown-building-area2').removeClass('active');
         remooveDropDownActiveMenu(dropdownElems[0])
@@ -2305,6 +2303,7 @@ $(document).ready(function () {
 
 
     function howItPrice(priceElement) {
+
         if (userPrise[0] > 0) {
             priceElement.textContent = `от ${userPrise[0]}`
         }
@@ -2351,43 +2350,23 @@ $(document).ready(function () {
     // PRICE RANGE
     $('.priceMin').keyup(function () {
         userPrise[0] = this.value;
-
-        if (data.category === 'rent') {
-            howItPrice(showUserPrice);
-        } else {
-            howItPrice(showUserPriceBuy);
-        }
+        howItPrice(showUserPrice);
     })
 
     $('.priceMax').keyup(function () {
         userPrise[1] = this.value;
-
-        if (data.category === 'rent') {
-            howItPrice(showUserPrice);
-        } else {
-            howItPrice(showUserPriceBuy);
-        }
+        howItPrice(showUserPrice);
     })
 
     // AREA RANGE
     $('.inputAreaMin').keyup(function () {
         userAreaRange[0] = this.value;
-
-        if (data.category === 'rent') {
-            howItAreaRange(showAreaRange);
-        } else {
-            howItAreaRange(showAreaRangeBuy);
-        }
+        howItAreaRange(showAreaRange);
     })
 
     $('.inputAreaMax').keyup(function () {
         userAreaRange[1] = this.value;
-
-        if (data.category === 'rent') {
-            howItAreaRange(showAreaRange);
-        } else {
-            howItAreaRange(showAreaRangeBuy);
-        }
+        howItAreaRange(showAreaRange);
     })
 
 

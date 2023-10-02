@@ -5,7 +5,7 @@ $(document).ready(function () {
         $('#liTarget').find('li[data-parent-id="' + this.id + '"]').show()
 
     })
-    
+
     $('div.wizard-content *[id]').each(function() {
         var id = $(this).attr('id');
         var duplicates = $('div.wizard-content *[id="' + id + '"]');
