@@ -12,7 +12,6 @@ $(document).ready(function () {
         if (duplicates.length > 1) {
             if ($(this).parents('.additional').length === 0 && $(this).attr('id') != 'bs-select-22' && $(this).attr('id') != 'main-selector-photo'){
                 $(this).parents('.mb-4').remove()
-                console.log($(this).attr('id'))
             }
         }
     });
@@ -39,7 +38,7 @@ $(document).ready(function () {
             var params = href.split('?');
             /*event.preventDefault();
             let search = window.location.search.split('&').slice(2).join('&');
-            console.log('search' , search)*/
+            */
 
             if (params.length == 2) {
                 let url = $(this).attr('href') + '&' + params[1].split('&').slice(2).join('&');
@@ -60,7 +59,6 @@ $(document).ready(function () {
         }, 500);
     });
     $('.parentClass').click(function () {
-        console.log('click label');
         $('.second-drop').html('')
     })
     $('.pop-up-cross').on('click', function () {
@@ -69,7 +67,7 @@ $(document).ready(function () {
 
     $('.parentClass input').click(function (ev) {
         ev.stopPropagation();
-        console.log(this);
+
         let parent = $(this).attr('id');
         $('.show-city').find('input').each(function () {
 
@@ -77,7 +75,7 @@ $(document).ready(function () {
             if ($(this).attr('data-parent-class') === parent) {
 
                 $(this).parent('label').parent('li').show()
-                console.log(this);
+
             } else {
 
                 $(this).parent('label').parent('li').hide()
@@ -91,11 +89,8 @@ $(document).ready(function () {
 
             $(this).parent('label').parent('li').hide()
             if ($(this).attr('data-parent-class') === parent) {
-
                 $(this).parent('label').parent('li').show()
-                console.log(this);
             } else {
-
                 $(this).parent('label').parent('li').hide()
             }
         })
@@ -154,7 +149,6 @@ $(document).ready(function () {
         let codeDataInput = document.querySelectorAll(".code-group__data");
         NextInputNumber(codeDataInput);
 
-        console.log(codeDataInput, "codeDataInput")
         $.ajax({
             type: "POST",
             url: "/ajax/register.php",
@@ -180,7 +174,6 @@ $(document).ready(function () {
         let codeDataInput = document.querySelectorAll(".code-group__data");
         NextInputNumber(codeDataInput);
 
-        console.log(codeDataInput, "codeDataInput")
         $.ajax({
             type: "POST",
             url: "/ajax/registerAgain.php",
@@ -241,7 +234,7 @@ $(document).ready(function () {
     //     $(this).toggleClass('active')
     //  })
     $(document).on("click", ".like, .like_f, .product-line__like", function (e) {
-        console.log(this)
+
         e.preventDefault();
         let like = $(this);
         let id = like.data('ad_id');
@@ -343,7 +336,7 @@ $(document).ready(function () {
        var a = 0;
        var $imgobject = {};
        $(this).find('.upload-file').each(function () {
-           // console.log($(this));
+
            $imgobject['img'+ a] = $(this).data('src');
            a++;
        });
@@ -380,14 +373,14 @@ $(document).ready(function () {
         var a = 0;
         var $imgobject = {};
         $(this).find('.upload-file__name').each(function () {
-            // console.log($(this));
+
             $imgobject['img'+ a] = $(this).data('src');
             a++;
         });
         var $data2 = {};
         $data2['img'] = $imgobject;
 
-        console.log($data2);
+
 
         e.preventDefault();
         $.ajax({
@@ -583,7 +576,7 @@ $(document).ready(function () {
                     att = data;
                 }
             });
-            console.log(att);
+
             if (att == 'none') {
                 $(this).css('visibility', 'hidden');
             } else {
@@ -676,7 +669,7 @@ $(document).ready(function () {
                 if (checked) {
                     name1 = name1 + ' , ' + $(this).val()
                 }
-                console.log(name1.length);
+
 				if(name1.length > 4){
                 $('.typeArea ').html(name1);
 				}
@@ -688,7 +681,7 @@ $(document).ready(function () {
                 if (checked) {
                     name = name + ' , ' + $(this).val()
                 }
-                console.log(name.length);
+
 if(name.length > 4){
                 $('.typeRegion').html(name);
 }
@@ -747,11 +740,9 @@ if(name.length > 4){
             if ($(this).is(':checkbox')) {
                 if ($(this).is(':checked')) {
                     let data = $(this).data();
-                    console.log($(this).data())
                     if (data.controlId !== undefined) {
                         url = url + '&' + data.controlId + '=' + data.htmlValue
                     }
-                    console.log(url)
                 }
             } else {
                 if ($(this).is(':text')) {
@@ -760,7 +751,6 @@ if(name.length > 4){
                     if (data.controlId !== undefined) {
                         url = url + '&' + data.controlId + '=' + val
                     }
-                    console.log(url)
                 }else{
 
                     let data = $(this).data();
@@ -822,7 +812,6 @@ if(name.length > 4){
                     if (data.controlId !== undefined) {
                         url = url + '&' + data.controlId + '=' + data.htmlValue
                     }
-                    console.log(url)
                 }
             } else {
                 if ($(this).is(':text')) {
@@ -831,7 +820,7 @@ if(name.length > 4){
                     if (data.controlId !== undefined) {
                         url = url + '&' + data.controlId + '=' + val
                     }
-                    console.log(url)
+
                 }else {
                     let data = $(this).data();
                     let val = $(this).val();
@@ -956,7 +945,6 @@ if(name.length > 4){
             if ($(this).is(':checkbox')) {
                 if ($(this).is(':checked')) {
                     let data = $(this).data();
-                    console.log($(this).data())
                     if (data.controlId !== undefined) {
                         url = url + '&' + data.controlId + '=' + data.htmlValue
                     }
@@ -973,7 +961,7 @@ if(name.length > 4){
                 }else {
                     let data = $(this).data();
                     let val = $(this).val();
-                    console.log(val)
+
                     if (val !== '') {
                         let dateString = val;
                         let date = new Date(dateString);
