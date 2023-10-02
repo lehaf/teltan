@@ -165,7 +165,7 @@ else
                         </div>
 
                         <div class="d-none d-lg-flex align-items-center fleamarket-link">
-                            <a class="font-weight-bold d-flex align-items-center" href="/property/">
+                            <a class="font-weight-bold d-flex align-items-center" href="/property/zhilaya/snyat-j/">
                                 <span class="mt-1 mr-2 ml-2"><?=Loc::getMessage('PROPERTY');?></span>
                                 <i class="icon-home"></i>
                             </a>

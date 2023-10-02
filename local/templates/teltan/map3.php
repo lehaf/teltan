@@ -1032,6 +1032,12 @@
                     $('.cross').click(function () {
                         popup.remove();
                     })
+
+                    // map.on('click', function(e) {
+                    //     if (popup.isOpen()) {
+                    //         popup.remove()
+                    //     }
+                    // });
                 });
 
                 map.on('mouseenter', 'clusters', () => {
@@ -1114,7 +1120,9 @@
                     $('.cross').click(function () {
                         popup.remove();
                     })
+
                 });
+
             });
             const geocoder = new MapboxGeocoder({
                 mapboxgl: mapboxgl,

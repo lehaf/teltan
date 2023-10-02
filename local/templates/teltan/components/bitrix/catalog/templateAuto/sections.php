@@ -134,7 +134,7 @@ $dirName = str_replace('/', '', $dir); // PHP код
                     "VIEW_MODE" => "LINE"
                 )
             ); ?>
-            <?
+            <?php
             $APPLICATION->IncludeComponent(
                 "bitrix:catalog.smart.filter",
                 "bootstrap_v4",
