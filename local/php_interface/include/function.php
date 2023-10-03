@@ -42,6 +42,22 @@ function pr($o, $show = false, $die = false, $fullBackTrace = false)
     }
 }
 
+function getTypePropertyHl(array $valueCodes) : array
+{
+    $hlblock = \Bitrix\Highloadblock\HighloadBlockTable::getById(PROPERTY_TYPES_HL_ID)->fetch();
+    $entity = \Bitrix\Highloadblock\HighloadBlockTable::compileEntity($hlblock);
+    $entity_data_class = $entity->getDataClass();
+    return $entity_data_class::getList(array(
+        "select" => array("*"),
+        "order" => array("ID" => "ASC"),
+        "filter" => array("UF_XML_ID" => $valueCodes),
+        'cache' => [
+            'ttl' => 3600000,
+            'cache_joins' => true
+        ]
+    ))->fetchAll();
+}
+
 
 //function getAllAutoProperties($cacheTtl = 360000) : array
 //{

@@ -17,12 +17,13 @@ Loc::loadMessages(__FILE__);
 $needle = '/property/';
 $pos = strripos($url, $needle);
 
-if ($pos === false) { ?><? } else { ?>
+if ($pos !== false) { ?>
     <button id="btnToTheTop" class="btn-to-top"
             bis_size="{&quot;x&quot;:249,&quot;y&quot;:33,&quot;w&quot;:130,&quot;h&quot;:147,&quot;abs_x&quot;:699,&quot;abs_y&quot;:523}">
         <img src="/local/templates/teltan/assets/settings.svg" alt=""
              bis_size="{&quot;x&quot;:257,&quot;y&quot;:36,&quot;w&quot;:114,&quot;h&quot;:114,&quot;abs_x&quot;:707,&quot;abs_y&quot;:526}">
-        <?= Loc::getMessage('filter'); ?> </button>
+        <?= Loc::getMessage('filter'); ?>
+    </button>
 <? }
 ?>
 <footer class="footer py-3"
@@ -108,12 +109,12 @@ if ($pos === false) { ?><? } else { ?>
         </div>
     </div>
     <div class="pop-up">
-    <span class="pop-up-cross">
-        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M0.338896 0.338896C0.790758 -0.112965 1.52314 -0.112965 1.97476 0.338896L7.42773 5.79188L12.8807 0.338896C13.3326 -0.112965 14.065 -0.112965 14.5166 0.338896C14.9684 0.790758 14.9684 1.52313 14.5166 1.97476L9.06359 7.42773L14.5166 12.8807C14.9684 13.3326 14.9684 14.065 14.5166 14.5166C14.0647 14.9684 13.3323 14.9682 12.8807 14.5166L7.42773 9.06359L1.97476 14.5166C1.52289 14.9682 0.790517 14.9682 0.338896 14.5166C-0.112965 14.0647 -0.112965 13.3323 0.338896 12.8807L5.79187 7.42773L0.338896 1.97476C-0.112965 1.52289 -0.112965 0.790517 0.338896 0.338896Z"
-      fill="#A0A0A0"/>
-</svg>
-</span>
+        <span class="pop-up-cross">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0.338896 0.338896C0.790758 -0.112965 1.52314 -0.112965 1.97476 0.338896L7.42773 5.79188L12.8807 0.338896C13.3326 -0.112965 14.065 -0.112965 14.5166 0.338896C14.9684 0.790758 14.9684 1.52313 14.5166 1.97476L9.06359 7.42773L14.5166 12.8807C14.9684 13.3326 14.9684 14.065 14.5166 14.5166C14.0647 14.9684 13.3323 14.9682 12.8807 14.5166L7.42773 9.06359L1.97476 14.5166C1.52289 14.9682 0.790517 14.9682 0.338896 14.5166C-0.112965 14.0647 -0.112965 13.3323 0.338896 12.8807L5.79187 7.42773L0.338896 1.97476C-0.112965 1.52289 -0.112965 0.790517 0.338896 0.338896Z"
+                      fill="#A0A0A0"/>
+            </svg>
+        </span>
         <div class="pop-up__text"></div>
     </div>
 </footer>

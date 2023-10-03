@@ -1,6 +1,6 @@
 <?php if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 
-use Bitrix\Highloadblock as HL;
+
 
 if (!empty($arResult['ITEMS'][IBLOCK_PROPERTY_PROP_TYPE_APART_PROP_ID]['VALUES'])) {
     $valueCodes = [];
@@ -8,18 +8,7 @@ if (!empty($arResult['ITEMS'][IBLOCK_PROPERTY_PROP_TYPE_APART_PROP_ID]['VALUES']
         $valueCodes[] = $key;
     }
 
-    $hlblock = HL\HighloadBlockTable::getById(PROPERTY_TYPES_HL_ID)->fetch();
-    $entity = HL\HighloadBlockTable::compileEntity($hlblock);
-    $entity_data_class = $entity->getDataClass();
-    $res = $entity_data_class::getList(array(
-        "select" => array("*"),
-        "order" => array("ID" => "ASC"),
-        "filter" => array("UF_XML_ID" => $valueCodes),
-        'cache' => [
-            'ttl' => 3600000,
-            'cache_joins' => true
-        ]
-    ))->fetchAll();
+    $res = getTypePropertyHl($valueCodes);
 
     if (!empty($res)) {
         foreach ($res as $prop) {

@@ -139,7 +139,6 @@ $arRentProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID
                                                 <?php echo $ar["DISABLED"] ? 'style"display:none"' : '' ?>
                                                    value="<?= ltrim($arState[1]) ?>"
                                                    data-valued="<?= ltrim($arState[1]) ?>"
-                                                   onclick="smartFilterMain.click(this)"
                                             >
                                             <span class="checkmark"></span>
                                         </label>
@@ -176,7 +175,6 @@ $arRentProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID
                                                 <?php echo $ar["DISABLED"] ? '' : '' ?>
                                                     value="<?php echo $ar["VALUE"] ?>"
                                                     data-valued="<?php echo $ar["VALUE"] ?>"
-                                                    onclick="smartFilterMain.click(this);"
                                             >
                                             <span class="checkmark"></span>
                                         </label></li>

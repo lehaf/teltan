@@ -2790,7 +2790,7 @@ $(document).ready(function () {
         const btnToTheTop = $('#btnToTheTop');
 
         $(window).scroll(function () {
-            if ($(window).scrollTop() > 300) {
+            if ($(window).scrollTop() > 1300) {
                 btnToTheTop.addClass('show');
             } else {
                 btnToTheTop.removeClass('show');

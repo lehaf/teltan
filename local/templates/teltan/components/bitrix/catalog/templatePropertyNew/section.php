@@ -106,10 +106,10 @@ Loc::loadMessages(__FILE__);
     );
 }
 ?>
-<?if ($detect->isMobile()) {?>
-    <? $APPLICATION->IncludeComponent(
-    "bitrix:catalog.smart.filter",
-    "PropertyFilter",
+<?if ($detect->isMobile()) {
+    $APPLICATION->IncludeComponent(
+        "bitrix:catalog.smart.filter",
+        "PropertyFilter",
         array(
             "COMPONENT_TEMPLATE" => "PropertyFilter",
             "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
@@ -143,8 +143,7 @@ Loc::loadMessages(__FILE__);
         ),
         false
     );
-}?>
-<?
+}
 $dir = $APPLICATION->GetCurDir();
 $dirName = str_replace('/', '', $dir); // PHP код
 if($_GET['view'] == 'maplist'){?>

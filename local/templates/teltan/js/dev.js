@@ -654,6 +654,7 @@ $(document).ready(function () {
 
         elems.each(function (index) {
             let parentId = $(this).data();
+            console.log(parentId);
             if (checked) {
                 $('.dropdown-building-area2').addClass('active');
                 if (parentCheckedValue.includes(parentId.parentItemId)) {
