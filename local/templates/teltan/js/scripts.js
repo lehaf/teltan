@@ -445,14 +445,14 @@ $(document).ready(function () {
                     }
                 }
                 if (document.location.pathname === '/add/rent/' || document.location.pathname === '/add/buy/') {
-                    let typeNewBuildings = document.querySelector('#typeNewBuildings').checked === true;
+                    let typeNewBuildings = document.querySelector('#typeNewBuildings') && document.querySelector('#typeNewBuildings').checked === true;
                     let errors = 0;
                     if (!typeNewBuildings) {
                         let inputElements = document.querySelectorAll(`div[data-wizard-content="${this.activeStep}"] .div-req input[type="radio"]`);
                         if (inputElements.length > 0) {
                             errors = 1;
                             inputElements.forEach(input => {
-                                if (input.hasAttribute('required') && !$(input).parent('div').is(':hidden')) {
+                                if (input.hasAttribute('required')) { // && !$(input).parent('div').is(':hidden')
                                     if ($(input).is(':checked') == false) {
                                         $(input).addClass('error');
                                         $(input).siblings('label').addClass('error');
@@ -465,7 +465,7 @@ $(document).ready(function () {
                             // Удаляем красную окантовку полей
                             if (errors === 0) {
                                 inputElements.forEach(input => {
-                                    if (input.hasAttribute('required') && !$(input).parent('div').is(':hidden')) {
+                                    if (input.hasAttribute('required')) { // !$(input).parent('div').is(':hidden')
                                         $(input).removeClass('error');
                                         $(input).siblings('label').removeClass('error');
                                     }

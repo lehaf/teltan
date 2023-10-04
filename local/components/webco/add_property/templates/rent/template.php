@@ -132,7 +132,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                         </script>
                                                     <?}?>
                                                 </div>
-
+                                                <? /*  Новостройки
                                                 <div class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn">
                                                     <input <?=($arFields['IBLOCK_SECTION_ID'] == 30)? 'checked' : ''?>
                                                             data-section-id="<?=30?>"
@@ -149,6 +149,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                         </script>
                                                     <?}?>
                                                 </div>
+                                                */?>
 
                                                 <div class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn">
                                                     <input <?=($arFields['IBLOCK_SECTION_ID'] == 32)? 'checked' : ''?>
