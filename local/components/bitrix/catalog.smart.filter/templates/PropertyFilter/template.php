@@ -62,11 +62,10 @@ $this->setFrameMode(true);
                                                                data-html-value="<?= $ar['HTML_VALUE'] ?>"
                                                                name="<?=$ar["CONTROL_NAME"] ?>"
                                                                 <?=$ar["CHECKED"] ? 'checked="checked"' : ''?>
-                                                                <?=$ar["DISABLED"] ? 'style"display:none"' : ''?>
                                                                value="<?=$ar['HTML_VALUE']?>"
                                                                data-valued="<?=$ar['VALUE']?>"
                                                         >
-                                                        <span class="checkmark"></span>
+                                                        <span class="checkmark <?=$ar["DISABLED"] ? 'disabled' : ''?>"></span>
                                                     </label>
                                                 </li>
                                             <?endforeach; ?>
@@ -110,7 +109,7 @@ $this->setFrameMode(true);
                                                                 data-valued="<?=ltrim($arState[1])?>"
                                                                 onclick="smartFilter.click(this);"
                                                         >
-                                                        <span class="checkmark"></span>
+                                                        <span class="checkmark <?=$ar["DISABLED"] ? 'disabled' : ''?>"></span>
                                                     </label>
                                                 </li>
                                             <?endforeach;?>
@@ -175,7 +174,7 @@ $this->setFrameMode(true);
                                                     <?=$ar["DISABLED"] ? 'disabled' : '' ?>
                                                         onclick="smartFilter.click(this)"
                                                 />
-                                                <div><?=$ar["VALUE"] ?></div>
+                                                <div class="box <?=$ar["DISABLED"] ? 'disabled' : ''?>"><?=$ar["VALUE"]?></div>
                                             </label>
                                         <?endforeach;?>
                                     </div>
@@ -195,7 +194,7 @@ $this->setFrameMode(true);
                                                                     <?=$val["DISABLED"] ? 'disabled' : '' ?>
                                                                     onclick="smartFilter.click(this)"
                                                             />
-                                                            <span class="checkmark"></span>
+                                                            <span class="checkmark <?=$ar["DISABLED"] ? 'disabled' : ''?>"></span>
                                                         </label>
                                                     <?endforeach;?>
                                                 <?endif;?>
@@ -221,15 +220,15 @@ $this->setFrameMode(true);
                                             <label class="cb-wrap">
                                                 <span class="text"><?=$ar["VALUE"] ?></span>
                                                 <input
-                                                        type="checkbox"
-                                                        value="<?=$ar["HTML_VALUE"] ?>"
-                                                        name="<?=$ar["CONTROL_NAME"] ?>"
-                                                        id="<?=$ar["CONTROL_ID"] ?>"
+                                                    type="checkbox"
+                                                    value="<?=$ar["HTML_VALUE"] ?>"
+                                                    name="<?=$ar["CONTROL_NAME"] ?>"
+                                                    id="<?=$ar["CONTROL_ID"] ?>"
                                                     <?=$ar["CHECKED"] ? 'checked="checked"' : '' ?>
                                                     <?=$ar["DISABLED"] ? 'disabled' : '' ?>
-                                                        onclick="smartFilter.click(this)"
-                                                />
-                                                <span class="checkmark"></span>
+                                                    onclick="smartFilter.click(this)"
+                                                >
+                                                <span class="checkmark <?=$ar["DISABLED"] ? 'disabled' : ''?>"></span>
                                             </label>
                                         </div>
                                     <?endforeach;?>
@@ -296,7 +295,7 @@ $this->setFrameMode(true);
                                             <?=$ar["DISABLED"] ? 'disabled' : '' ?>
                                             onclick="smartFilter.click(this)"
                                       />
-                                      <span class="checkmark"></span>
+                                      <span class="checkmark <?=$ar["DISABLED"] ? 'disabled' : ''?>"></span>
                                   </label>
                             <?endforeach;?>
                             </div>
@@ -343,7 +342,7 @@ $this->setFrameMode(true);
                                                 <?=$val["DISABLED"] ? 'disabled' : '' ?>
                                                 onclick="smartFilter.click(this)"
                                         />
-                                        <div><?=$val['VALUE']?></div>
+                                        <div class="box <?=$val["DISABLED"] ? 'disabled' : ''?>"><?=$val['VALUE']?></div>
                                     </label>
                                 <?php endforeach;?>
                             <?endif;?>

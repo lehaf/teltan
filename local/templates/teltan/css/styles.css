@@ -8975,7 +8975,7 @@ tbody tr:nth-child(even) {
   justify-content: space-around;
   align-items: center;
   position: fixed;
-  width: 130px;
+  width: 60px;
   height: 50px;
   text-align: center;
   background-color: #ffffff;

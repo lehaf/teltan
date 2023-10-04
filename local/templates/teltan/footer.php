@@ -14,11 +14,8 @@ $needle = '/property/';
 $pos = strripos($url, $needle);
 
 if ($pos !== false):?>
-    <button id="btnToTheTop" class="btn-to-top"
-            bis_size="{&quot;x&quot;:249,&quot;y&quot;:33,&quot;w&quot;:130,&quot;h&quot;:147,&quot;abs_x&quot;:699,&quot;abs_y&quot;:523}">
-        <img src="/local/templates/teltan/assets/settings.svg" alt=""
-             bis_size="{&quot;x&quot;:257,&quot;y&quot;:36,&quot;w&quot;:114,&quot;h&quot;:114,&quot;abs_x&quot;:707,&quot;abs_y&quot;:526}">
-        <?= Loc::getMessage('filter'); ?>
+    <button id="btnToTheTop" class="btn-to-top">
+        <img src="/local/templates/teltan/assets/settings.svg" alt="filter">
     </button>
 <? endif;?>
 <footer class="footer py-3"

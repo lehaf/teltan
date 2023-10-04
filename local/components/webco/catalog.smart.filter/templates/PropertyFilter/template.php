@@ -558,8 +558,8 @@ $this->setFrameMode(true);
                                                         value="<? echo $ar["HTML_VALUE"] ?>"
                                                         name="<? echo $ar["CONTROL_NAME"] ?>"
                                                         id="<? echo $ar["CONTROL_ID"] ?>"
-                                                    <? echo $ar["CHECKED"] ? 'checked="checked"' : '' ?>
-                                                    <? echo $ar["DISABLED"] ? 'disabled' : '' ?>
+                                                        <? echo $ar["CHECKED"] ? 'checked="checked"' : '' ?>
+                                                        <? echo $ar["DISABLED"] ? 'disabled' : '' ?>
                                                         onclick="smartFilter.click(this)"
                                                 />
                                                 <div><? echo $ar["VALUE"] ?></div>
@@ -608,10 +608,10 @@ $this->setFrameMode(true);
 </form>
 
 <script>
-    var smartFilter = new JCSmartFilter('<?echo CUtil::JSEscape($arResult["FORM_ACTION"])?>', '<?=CUtil::JSEscape($arParams["FILTER_VIEW_MODE"])?>', <?=CUtil::PhpToJSObject($arResult["JS_FILTER_PARAMS"])?>);
-</script>
-<script>
-
+    let smartFilter = new JCSmartFilter(
+        '<?=CUtil::JSEscape($arResult["FORM_ACTION"])?>',
+        '<?=CUtil::JSEscape($arParams["FILTER_VIEW_MODE"])?>', <?=CUtil::PhpToJSObject($arResult["JS_FILTER_PARAMS"])?>
+    );
 
    /* let dropdownList = document.querySelectorAll(".dropdown");
 

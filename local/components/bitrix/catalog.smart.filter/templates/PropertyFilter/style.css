@@ -6,3 +6,15 @@ body form .card-header.disabled {
     background-color: #d5d5d5 !important;
     transition: background-color 500ms ease;
 }
+
+span.checkmark.disabled {
+    background-color: #d5d5d5;
+}
+
+.card-body .chackbox-label div.box.disabled {
+    background-color: #d5d5d5;
+}
+
+.parameter div.box.disabled {
+    background-color: #d5d5d5;
+}
