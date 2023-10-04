@@ -62,30 +62,28 @@ $arRentProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID
     <div class="bg-header-filter">
         <img src="/local/templates/teltan/assets/property-header-bg-progressive.jpeg" alt="">
     </div>
+    <?// mobile menu?>
     <div class="d-flex d-lg-none justify-content-center container p-0">
         <ul class="w-100 mb-0 header-property__category-list">
             <li>
-                <a href="/property/zhilaya/" class="active">Жилая</a>
+                <a href="/property/zhilaya/snyat-j/" <?= (in_array($arParams['SECTION_ID'], RESIDENTAL_SECTION_ARRAY)) ? ' class="active" ' : '' ?>>Жилая</a>
             </li>
             <span class="text-white mx-3">/</span>
             <li>
-                <a href="/property/kommercheskaya/">Коммерческая</a>
-            </li>
-            <span class="text-white mx-3">/</span>
-            <li>
-                <a href="/property/novostroyki/">Новостройки</a>
+                <a href="/property/kommercheskaya/snyat-kom/" <?= (in_array($arParams['SECTION_ID'], COMMERCIAL_SECTION_ARRAY)) ? ' class="active" ' : '' ?>>Коммерческая</a>
             </li>
         </ul>
     </div>
+    <?// desktop menu?>
     <div class="d-none d-lg-block container">
         <div class="d-flex align-items-center justify-content-end">
             <ul class="mb-0 header-property__category-list">
                 <li>
-                    <a href="/property/zhilaya/" <?= (in_array($arParams['SECTION_ID'], RESIDENTAL_SECTION_ARRAY)) ? ' class="active" ' : '' ?> >Жилая</a>
+                    <a href="/property/zhilaya/snyat-j/" <?= (in_array($arParams['SECTION_ID'], RESIDENTAL_SECTION_ARRAY)) ? ' class="active" ' : '' ?> >Жилая</a>
                 </li>
                 <span class="text-white mx-3">/</span>
                 <li>
-                    <a href="/property/kommercheskaya/" <?= (in_array($arParams['SECTION_ID'], COMMERCIAL_SECTION_ARRAY)) ? ' class="active" ' : '' ?>>Коммерческая</a>
+                    <a href="/property/kommercheskaya/snyat-kom/" <?= (in_array($arParams['SECTION_ID'], COMMERCIAL_SECTION_ARRAY)) ? ' class="active" ' : '' ?>>Коммерческая</a>
                 </li>
             </ul>
 

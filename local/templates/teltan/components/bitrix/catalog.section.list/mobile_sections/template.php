@@ -1,4 +1,4 @@
-<?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
+<?php if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
 /** @var array $arParams */
 /** @var array $arResult */
 /** @global CMain $APPLICATION */
@@ -11,7 +11,6 @@
 /** @var string $componentPath */
 /** @var CBitrixComponent $component */
 $this->setFrameMode(true);
-use Bitrix\Main\Localization\Loc;
 ?>
 
 <div class="mobile-menu" id="mainMobileMenu">
@@ -91,7 +90,7 @@ use Bitrix\Main\Localization\Loc;
                 </div>
             </button>
 
-            <a type="button" href="/property/" class="nav-item">
+            <a type="button" href="/property/zhilaya/snyat-j/" class="nav-item">
                 <div class="icon-menu-list"><i class="icon-home"></i></div>
                 <span class="item-name">Property</span>
             </a>

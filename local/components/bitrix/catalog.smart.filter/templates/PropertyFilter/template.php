@@ -1,4 +1,4 @@
-<? if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
+<?php if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
 use Bitrix\Main\Localization\Loc;
 
@@ -8,17 +8,30 @@ $this->setFrameMode(true);
 <div class="d-block d-lg-none mb-5 px-3 property-menu-mobile">
     <div class="d-flex d-lg-none justify-content-end nav-category-type">
         <label class="label-type">
-            <input id="renCheck1" onchange="changeTypeRent(this)" class="categoryMobile" name="categoryMobileRent"
+            <input id="renCheck1"
+                   <?= (in_array($arParams['SECTION_ID'], [RESIDENTIAL_RENT_SECTION_ID, COMMERCIAL_RENT_SECTION_ID, NEW_RENT_SECTION_ID])) ? 'checked' : '' ?>
+                   onclick="window.location.href='<?= (in_array($arParams['SECTION_ID'], COMMERCIAL_SECTION_ARRAY)) ? '/property/kommercheskaya/snyat-kom/' : '/property/zhilaya/snyat-j/' ?>'"
+                   onchange="changeTypeRent(this)"
+                   class="categoryMobile"
+                   name="categoryMobileRent"
                    value="rent" type="radio">
             <div><?= Loc::getMessage('rent'); ?></div>
         </label>
 
         <label class="label-type">
-            <input id="buyCheck1" onchange="changeTypeRent(this)" class="categoryMobile" name="categoryMobileRent"
-                   value="buy" type="radio">
+            <input id="buyCheck1"
+                <?= (in_array($arParams['SECTION_ID'], [RESIDENTIAL_BUY_SECTION_ID, COMMERCIAL_BUY_SECTION_ID, NEW_BUY_SECTION_ID])) ? 'checked' : '' ?>
+                   onclick="window.location.href='<?= (in_array($arParams['SECTION_ID'], COMMERCIAL_SECTION_ARRAY)) ? '/property/kommercheskaya/kupit-kom/' : '/property/zhilaya/kupit-j/' ?>'"
+                   onchange="changeTypeRent(this)"
+                   class="categoryMobile"
+                   name="categoryMobileRent"
+                   value="buy"
+                   type="radio"
+            >
             <div><?= Loc::getMessage('buy'); ?></div>
         </label>
     </div>
+
     <!-- RENT -->
     <form name="<?=$arResult["FILTER_NAME"] . "_form"?>" action="<?=$arResult["FORM_ACTION"]?>" method="get" class="main-filters">
         <?if (!empty($arResult["MAIN_PROPS"])):?>
@@ -140,6 +153,58 @@ $this->setFrameMode(true);
                                 </div>
                             </div>
                         <? break;?>
+                        <?case "PROP_COUNT_ROOMS":?>
+                            <div class="card-header bg-white text-right pr-4 d-flex justify-content-end" id="headingOne">
+                                <button type="button" class="w-100 text-right btn btn-link" data-toggle="collapse"
+                                        data-target="#collapse<?=$arItem['CODE']?>" aria-expanded="false" aria-controls="collapseOne">
+                                    <?=$arItem['NAME']?>
+                                </button>
+                                <i class="icon-arrow-down-sign-to-navigate-3 d-flex justify-content-center align-items-center"></i>
+                            </div>
+                            <div id="collapse<?=$arItem['CODE']?>" class="collapse" aria-labelledby="headingOne">
+                                <div class="card-body bg-white flex-column">
+                                    <div class="mb-4 room-number flex-row-reverse">
+                                        <? foreach ($arItem["VALUES"] as $val => $ar) :?>
+                                            <label class="chackbox-label">
+                                                <input
+                                                        type="checkbox"
+                                                        value="<?=$ar["HTML_VALUE"] ?>"
+                                                        name="<?=$ar["CONTROL_NAME"] ?>"
+                                                        id="<?=$ar["CONTROL_ID"] ?>"
+                                                    <?=$ar["CHECKED"] ? 'checked="checked"' : '' ?>
+                                                    <?=$ar["DISABLED"] ? 'disabled' : '' ?>
+                                                        onclick="smartFilter.click(this)"
+                                                />
+                                                <div><?=$ar["VALUE"] ?></div>
+                                            </label>
+                                        <?endforeach;?>
+                                    </div>
+                                    <div class="d-flex flex-column align-items-end check-box-prop-filter">
+                                        <?if (!empty($arResult['ROOMS_ADD_PROP'])):?>
+                                            <?foreach ($arResult['ROOMS_ADD_PROP'] as $prop):?>
+                                               <?if (!empty($prop['VALUES'])):?>
+                                                    <?foreach ($prop['VALUES'] as $val):?>
+                                                        <label class="cb-wrap">
+                                                            <span class="text"><?=$prop["NAME"] ?></span>
+                                                            <input
+                                                                    type="checkbox"
+                                                                    value="<?=$val["HTML_VALUE"] ?>"
+                                                                    name="<?=$val["CONTROL_NAME"] ?>"
+                                                                    id="<?=$val["CONTROL_ID"] ?>"
+                                                                    <?=$val["CHECKED"] ? 'checked="checked"' : '' ?>
+                                                                    <?=$val["DISABLED"] ? 'disabled' : '' ?>
+                                                                    onclick="smartFilter.click(this)"
+                                                            />
+                                                            <span class="checkmark"></span>
+                                                        </label>
+                                                    <?endforeach;?>
+                                                <?endif;?>
+                                            <?endforeach;?>
+                                        <?endif;?>
+                                     </div>
+                                </div>
+                            </div>
+                        <? break;?>
                         <? default: ?>
                             <div class="card-header bg-white text-right pr-4 d-flex justify-content-end" id="headingOne">
                                 <button type="button" class="w-100 text-right btn btn-link" data-toggle="collapse"
@@ -151,7 +216,7 @@ $this->setFrameMode(true);
                             </div>
                             <div id="collapse<?=$arItem['CODE']?>" class="collapse" aria-labelledby="headingOne">
                                 <div class="card-body bg-white">
-                                    <? foreach ($arItem["VALUES"] as $val => $ar) { ?>
+                                    <? foreach ($arItem["VALUES"] as $val => $ar) :?>
                                         <div class="d-flex flex-column align-items-end check-box-prop-filter">
                                             <label class="cb-wrap">
                                                 <span class="text"><?=$ar["VALUE"] ?></span>
@@ -167,8 +232,7 @@ $this->setFrameMode(true);
                                                 <span class="checkmark"></span>
                                             </label>
                                         </div>
-                                        <?
-                                    } ?>
+                                    <?endforeach;?>
                                 </div>
                             </div>
                         <? break;?>

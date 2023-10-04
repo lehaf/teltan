@@ -1,31 +1,26 @@
-<?
-if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
+<?php if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
-use Bitrix\Main\Page\Asset;
 use Bitrix\Main\Localization\Loc;
 
 global $mapArray;
 
 Loc::loadMessages(__FILE__);
 
-?>
- <?php
- if (CSite::InDir('/add/')) {
-    require_once 'map.php';
- }
- $url = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+if (CSite::InDir('/add/')) require_once 'map.php';
+
+$url = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 $needle = '/property/';
 $pos = strripos($url, $needle);
 
-if ($pos !== false) { ?>
+if ($pos !== false):?>
     <button id="btnToTheTop" class="btn-to-top"
             bis_size="{&quot;x&quot;:249,&quot;y&quot;:33,&quot;w&quot;:130,&quot;h&quot;:147,&quot;abs_x&quot;:699,&quot;abs_y&quot;:523}">
         <img src="/local/templates/teltan/assets/settings.svg" alt=""
              bis_size="{&quot;x&quot;:257,&quot;y&quot;:36,&quot;w&quot;:114,&quot;h&quot;:114,&quot;abs_x&quot;:707,&quot;abs_y&quot;:526}">
         <?= Loc::getMessage('filter'); ?>
     </button>
-<? }
-?>
+<? endif;?>
 <footer class="footer py-3"
         bis_size="{&quot;x&quot;:18,&quot;y&quot;:205,&quot;w&quot;:426,&quot;h&quot;:132,&quot;abs_x&quot;:468,&quot;abs_y&quot;:695}">
     <div class="container"

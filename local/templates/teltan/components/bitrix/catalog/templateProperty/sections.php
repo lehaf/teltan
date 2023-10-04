@@ -72,19 +72,10 @@ $detect = new Mobile_Detect;
                         <a onclick="routeProperty(event)"
                            href="/property/zhilaya/" <? echo (CSite::InDir('/property/zhilaya/')) ? 'class="active"' : ""; ?>><?= Loc::getMessage('zhilaya'); ?></a>
                     </li>
-
                     <span class="text-white mx-3">/</span>
-
                     <li>
                         <a onclick="routeProperty(event)"
                            href="/property/kommercheskaya/" <? echo (CSite::InDir('/property/zhilaya/')) ? 'class="active"' : ""; ?>><?= Loc::getMessage('kommercheskaya'); ?></a>
-                    </li>
-
-                    <span class="text-white mx-3">/</span>
-
-                    <li>
-                        <a onclick="routeProperty(event)"
-                           href="/property/novostroyki/" <? echo (CSite::InDir('/property/zhilaya/')) ? 'class="active"' : ""; ?>><?= Loc::getMessage('novostroyki'); ?></a>
                     </li>
                 </ul>
             </div>
@@ -103,13 +94,6 @@ $detect = new Mobile_Detect;
                         <li>
                             <a onclick="routeProperty(event)"
                                href="/property/kommercheskaya/" <? echo (CSite::InDir('/property/zhilaya/')) ? 'class="active"' : ""; ?>><?= Loc::getMessage('kommercheskaya'); ?></a>
-                        </li>
-
-                        <span class="text-white mx-3">/</span>
-
-                        <li>
-                            <a onclick="routeProperty(event)"
-                               href="/property/novostroyki/" <? echo (CSite::InDir('/property/zhilaya/')) ? 'class="active"' : ""; ?>><?= Loc::getMessage('novostroyki'); ?></a>
                         </li>
                     </ul>
 

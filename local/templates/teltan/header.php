@@ -127,14 +127,11 @@ else
                             <i class="icon-user-1 mr-2"></i>
                             <span><?=Loc::getMessage('YOU_AD');?></span>
                         </a>
-
-
                         <div class="d-none d-lg-flex align-items-center fleamarket-link">
                             <a class="font-weight-bold d-flex align-items-center" href="/flea/">
                                 <span class="mt-1 mr-2 ml-2"><?=Loc::getMessage('FLEA_MARKET');?></span>
                                 <i class="icon-free"></i>
                             </a>
-
                             <div class="fleamarket">
                                 <?$APPLICATION->IncludeComponent(
                                     "bitrix:catalog.section.list",
@@ -163,27 +160,23 @@ else
                                 );?>
                             </div>
                         </div>
-
                         <div class="d-none d-lg-flex align-items-center fleamarket-link">
                             <a class="font-weight-bold d-flex align-items-center" href="/property/zhilaya/snyat-j/">
                                 <span class="mt-1 mr-2 ml-2"><?=Loc::getMessage('PROPERTY');?></span>
                                 <i class="icon-home"></i>
                             </a>
                         </div>
-
                         <div class="d-none d-lg-flex align-items-center">
                             <a class="font-weight-bold d-flex align-items-center" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="/auto/">
                                 <span class="mt-1 mr-2 ml-2"><?=Loc::getMessage('AUTO');?></span>
                                 <i class="icon-steering"></i>
                             </a>
-
                             <div class="dropdown-menu">
                                 <a href="/auto/" class="border-bottom dropdown-item <?echo (CSite::InDir('/auto/')) ? "active" : " "; ?>"><?=Loc::getMessage('AUTO');?></a>
                                 <a href="/moto/" class="border-bottom dropdown-item <?echo (CSite::InDir('/moto/')) ? "active" : " "; ?>">Moto</a>
                                 <a href="/scooters/" class="dropdown-item <?echo (CSite::InDir('/scooters/')) ? "active" : " "; ?>">Scooters</a>
                             </div>
                         </div>
-
                         <div class="d-flex d-lg-none hamburger">
                             <span class="line"></span>
                             <span class="line"></span>
@@ -197,45 +190,38 @@ else
             <div class="row">
                 <div class="col-6 col-xl-4 order-1">
                     <div class="header__user-menu-bar d-flex align-items-center h-100">
-                        <?
-                        if($IDUser)
-                        {
+                        <? if($IDUser) {
                             include_once $_SERVER['DOCUMENT_ROOT'].SITE_TEMPLATE_PATH."/includes/header/auth_block.php";
-                        }
-                        else
-                        {
+                        } else {
                             include_once $_SERVER['DOCUMENT_ROOT']. SITE_TEMPLATE_PATH."/includes/header/not_auth_block.php";
-                        }
-                        ?>
+                        } ?>
                     </div>
                 </div>
-
                 <?$APPLICATION->IncludeComponent(
-	"bitrix:search.title", 
-	"search", 
-	array(
-		"CATEGORY_0" => array(
-			0 => "iblock_announcements",
-		),
-		"CATEGORY_0_TITLE" => "",
-		"CATEGORY_0_iblock_announcements" => array(
-			0 => "1",
-		),
-		"CHECK_DATES" => "N",
-		"CONTAINER_ID" => "title-search",
-		"INPUT_ID" => "title-search-input",
-		"NUM_CATEGORIES" => "1",
-		"ORDER" => "rank",
-		"PAGE" => "#SITE_DIR#search/index.php",
-		"SHOW_INPUT" => "Y",
-		"SHOW_OTHERS" => "N",
-		"TOP_COUNT" => "5",
-		"USE_LANGUAGE_GUESS" => "N",
-		"COMPONENT_TEMPLATE" => "search"
-	),
-	false
-);?>
-
+                    "bitrix:search.title",
+                    "search",
+                    array(
+                        "CATEGORY_0" => array(
+                            0 => "iblock_announcements",
+                        ),
+                        "CATEGORY_0_TITLE" => "",
+                        "CATEGORY_0_iblock_announcements" => array(
+                            0 => "1",
+                        ),
+                        "CHECK_DATES" => "N",
+                        "CONTAINER_ID" => "title-search",
+                        "INPUT_ID" => "title-search-input",
+                        "NUM_CATEGORIES" => "1",
+                        "ORDER" => "rank",
+                        "PAGE" => "#SITE_DIR#search/index.php",
+                        "SHOW_INPUT" => "Y",
+                        "SHOW_OTHERS" => "N",
+                        "TOP_COUNT" => "5",
+                        "USE_LANGUAGE_GUESS" => "N",
+                        "COMPONENT_TEMPLATE" => "search"
+                    ),
+                    false
+                );?>
                 <div class="col-6 col-xl-2 order-2 order-xl-3">
                     <a <?=CSite::InDir('/index.php') ? '' : 'href="/"';?> class="ml-auto d-flex justify-content-end logo">
                         <div class="mr-2 mr-lg-2 logo__image">

@@ -55,9 +55,8 @@ Loc::loadMessages(__FILE__);
     }
     require($_SERVER["DOCUMENT_ROOT"]."/vendor/autoload.php");
     $detect = new Mobile_Detect;
-?>
 
-    <?$APPLICATION->IncludeComponent(
+    $APPLICATION->IncludeComponent(
         "bitrix:catalog.smart.filter",
         "NewPropertyDesktopFilter",
         array(
@@ -93,6 +92,7 @@ Loc::loadMessages(__FILE__);
         ),
         false
     );
+
 ?>
 <?if(!CSite::InDir('/index.php')) {
     $APPLICATION->IncludeComponent(
