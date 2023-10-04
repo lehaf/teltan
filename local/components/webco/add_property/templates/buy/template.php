@@ -624,7 +624,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
                                             <div class="col-12 col-lg-2">
                                                 <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                                                    :<?=$filterProp['NAME']?>
+                                                    :<?=$filterProp['IS_REQUIRED'] === 'Y' ? $filterProp['NAME'].' *': $filterProp['NAME']?>
                                                 </p>
                                             </div>
                                         </div>
@@ -670,7 +670,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                 </div>
                                                 <div class="col-12 col-lg-2">
                                                     <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                                                        :<?=$filterProp['NAME']?>
+                                                        :<?=$filterProp['IS_REQUIRED'] === 'Y' ? $filterProp['NAME'].' *': $filterProp['NAME']?>
                                                     </p>
                                                 </div>
                                             </div>
@@ -693,7 +693,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
                                                 <div class="col-12 col-lg-2">
                                                     <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                                                        :<?=$filterProp['NAME']?>
+                                                        :<?=$filterProp['IS_REQUIRED'] === 'Y' ? $filterProp['NAME'].' *': $filterProp['NAME']?>
                                                     </p>
                                                 </div>
                                             </div>
@@ -730,7 +730,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                             </div>
                                             <div class="col-12 col-lg-2">
                                                 <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                                                    :<?=$filterProp['NAME']?>
+                                                    :<?=$filterProp['IS_REQUIRED'] === 'Y' ? $filterProp['NAME'].' *': $filterProp['NAME']?>
                                                 </p>
                                             </div>
                                         </div>
@@ -776,7 +776,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                 </div>
                                                 <div class="col-12 col-lg-2">
                                                     <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                                                        :<?=$filterProp['NAME']?>
+                                                        :<?=$filterProp['IS_REQUIRED'] === 'Y' ? $filterProp['NAME'].' *': $filterProp['NAME']?>
                                                     </p>
                                                 </div>
                                             </div>
@@ -798,7 +798,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                 </div>
                                                 <div class="col-12 col-lg-2">
                                                     <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                                                        :<?=$filterProp['NAME']?>
+                                                        :<?=$filterProp['IS_REQUIRED'] === 'Y' ? $filterProp['NAME'].' *': $filterProp['NAME']?>
                                                     </p>
                                                 </div>
                                             </div>
@@ -836,7 +836,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
                                             <div class="col-12 col-lg-2">
                                                 <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                                                    :<?=$filterProp['NAME']?>
+                                                    :<?=$filterProp['IS_REQUIRED'] === 'Y' ? $filterProp['NAME'].' *': $filterProp['NAME']?>
                                                 </p>
                                             </div>
                                         </div>
@@ -882,7 +882,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                 </div>
                                                 <div class="col-12 col-lg-2">
                                                     <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                                                        :<?=$filterProp['NAME']?>
+                                                        :<?=$filterProp['IS_REQUIRED'] === 'Y' ? $filterProp['NAME'].' *': $filterProp['NAME']?>
                                                     </p>
                                                 </div>
                                             </div>
@@ -903,7 +903,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
                                                 <div class="col-12 col-lg-2">
                                                     <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                                                        :<?=$filterProp['NAME']?>
+                                                        :<?=$filterProp['IS_REQUIRED'] === 'Y' ? $filterProp['NAME'].' *': $filterProp['NAME']?>
                                                     </p>
                                                 </div>
                                             </div>

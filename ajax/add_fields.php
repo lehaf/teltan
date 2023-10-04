@@ -130,7 +130,7 @@ if (!empty($section['UF_PROPS'])) {
                     </div>
                     <div class="col-12 col-lg-2">
                         <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                            :<?=$prop['NAME']?>
+                            :<?=$prop['IS_REQUIRED'] === 'Y' ? $prop['NAME'].' *': $prop['NAME']?>
                         </p>
                     </div>
                 </div>
@@ -156,7 +156,7 @@ if (!empty($section['UF_PROPS'])) {
                     </div>
                     <div class="col-12 col-lg-2">
                         <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                            :<?=$prop['NAME']?>
+                            :<?=$prop['IS_REQUIRED'] === 'Y' ? $prop['NAME'].' *': $prop['NAME']?>
                         </p>
                     </div>
                 </div>
@@ -181,7 +181,7 @@ if (!empty($section['UF_PROPS'])) {
                         </div>
                         <div class="col-12 col-lg-2">
                             <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                                :<?=$prop['NAME']?>
+                                :<?=$prop['IS_REQUIRED'] === 'Y' ? $prop['NAME'].' *': $prop['NAME']?>
                             </p>
                         </div>
                     </div>

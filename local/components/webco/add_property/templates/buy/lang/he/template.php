@@ -13,7 +13,7 @@ $MESS ['What-type-of-object'] = "סוג הנדל''ן";
 $MESS ['Residential'] = "מגורים";
 $MESS ['New-buildings'] = "מסחרי";
 $MESS ['Commercial'] = "מִסְחָרִי";
-$MESS ['Type'] = ":סוג:";
+$MESS ['Type'] = ":סוג";
 $MESS ['Type-rent'] = ":סוג השכרה";
 
 $MESS ['Rooms'] = "חדרים";
