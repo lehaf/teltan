@@ -140,9 +140,7 @@ function getFileIdBySrc($strFilename)
 
 function ps($array)
 {
-    ?>
-    <script>console.log(<?=json_encode($array)?>)</script>
-    <?php
+    echo "<script>console.log(".json_encode($array).")</script>";
 }
 
 function sort_date($a_new, $b_new)
