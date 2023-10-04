@@ -12,7 +12,6 @@ if(empty($arResult))
 	return "";
 
 $strReturn = '';
-ps($arResult);
 $strReturn .= '<div class="container-fluid breadcrumb-beckground p-0 mb-3 mb-lg-5" itemprop="http://schema.org/breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList"><div class="container"><nav aria-label="breadcrumb"><ol class="breadcrumb text-primary justify-content-end">';
 
 $itemSize = count($arResult);
@@ -22,7 +21,7 @@ foreach ($arResult as $key => $value){
 	$arResult[$count] = $value;
 	$count++;
 }
-ps(get_defined_vars());
+
 for($index = 0; $index < $itemSize; $index++)
 {
 	$title = htmlspecialcharsex($arResult[$index]["TITLE"]);

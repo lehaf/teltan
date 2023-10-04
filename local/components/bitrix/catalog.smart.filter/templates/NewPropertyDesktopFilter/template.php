@@ -13,7 +13,6 @@ Loc::loadMessages(__FILE__);
 $this->setFrameMode(false);
 $arSection = [];
 
-ps($arParams);
 switch ($arParams['SECTION_ID']) {
     case RESIDENTIAL_SECTION_ID:
         LocalRedirect('/property/zhilaya/snyat-j/');
@@ -856,15 +855,12 @@ $arRentProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID
         </form>
     </div>
 </div>
-<?php
-ps($arResult);
-?>
 <script>
-    <?php if($_GET['set_filter'] == 'y'){?>
-    $(document).ready(function () {
-        $('input[name="check-in-now"]').trigger('click');
-        $('input[name="check-in-now"]').trigger('click');
-    })
-    <?php }?>
-    var smartFilter = new JCSmartFilter('<?php echo CUtil::JSEscape($arResult["FORM_ACTION"])?>', '<?=CUtil::JSEscape($arParams["FILTER_VIEW_MODE"])?>', <?=CUtil::PhpToJSObject($arResult["JS_FILTER_PARAMS"])?>);
+    <?php if ($_GET['set_filter'] == 'y'):?>
+        $(document).ready(function () {
+            $('input[name="check-in-now"]').trigger('click');
+            $('input[name="check-in-now"]').trigger('click');
+        })
+    <?php endif;?>
+    let smartFilter = new JCSmartFilter('<?php echo CUtil::JSEscape($arResult["FORM_ACTION"])?>', '<?=CUtil::JSEscape($arParams["FILTER_VIEW_MODE"])?>', <?=CUtil::PhpToJSObject($arResult["JS_FILTER_PARAMS"])?>);
 </script>

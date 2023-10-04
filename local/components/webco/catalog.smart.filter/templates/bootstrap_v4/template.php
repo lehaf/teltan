@@ -893,8 +893,6 @@ while ($row = $res->GetNext()) {
             </div>
         </div>
     </form>
-    <div style="visibility: hidden"><? ps($counter2) ?></div>
-
 <? if ($counter2 > FILTER_EXTRA_SHOW_COUNT && !$detect->isMobile()) :?>
     <button class="btn btn-primary btn-more-filter-settings text-uppercase font-weight-bold collapsed" type="button"
             data-toggle="collapse" data-target="#moreFilterSettings" aria-expanded="false"

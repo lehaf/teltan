@@ -62,9 +62,9 @@ foreach ($arResult['ITEMS'] as $arItem){
     return $arr1['PROPERTIES']['TIME_RAISE']['VALUE'] < $arr2['PROPERTIES']['TIME_RAISE']['VALUE'];
 });*/
 
-?><script>console.log(<?=json_encode($arResult)?>)</script><?php
-foreach($arResult['VIPS'] as $arItem){?>
-    <?
+
+foreach($arResult['VIPS'] as $arItem){
+
     $this->AddEditAction($arItem['ID'], $arItem['EDIT_LINK'], $arItem["EDIT_LINK_TEXT"]);
     $this->AddDeleteAction($arItem['ID'], $arItem['DELETE_LINK'], $arItem["DELETE_LINK_TEXT"], array("CONFIRM" => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM')));
 

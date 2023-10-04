@@ -19,12 +19,7 @@ $this->setFrameMode(true);
 <path d="M0.999999 8L4 4.5L1 1" stroke="#3FB465" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 </span> Назад</button>
-            <script>console.log(<?=json_encode($arResult['SECTIONS'][0]['SECTION_PAGE_URL'])?>)</script>
-            <script>console.log(<?=json_encode($_SERVER['SCRIPT_URL'])?>)</script>
             <?
-
-
-
             $isi = 0;
             $i = 0;
             $depth_level = 1;

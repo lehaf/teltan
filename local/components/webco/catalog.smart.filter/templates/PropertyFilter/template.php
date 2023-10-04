@@ -6,7 +6,6 @@ Loc::loadMessages(__FILE__);
 $this->setFrameMode(true);
 
 ?>
-<script>console.log(<?=json_encode($arResult)?>)</script>
 <div class="d-block d-lg-none mb-5 px-3 property-menu-mobile">
     <div class="d-flex d-lg-none justify-content-end nav-category-type">
         <label class="label-type">
@@ -103,7 +102,6 @@ $this->setFrameMode(true);
                                             <? foreach ($arResult['ITEMS'][201]['VALUES'] as $val => $ar) {
                                                 $arState = explode(':',$ar['VALUE']);
                                                 ?>
-                                                <script>console.log(<?=json_encode(base64_decode(ltrim($arState[0])))?>)</script>
                                                 <li data-filter-for='.dropdown-menu-search' data-filter="<?=ltrim($arState[1])?>">
                                                     <label class="cb-wrap">
                                                         <span class="text"><?=ltrim($arState[1])?></span>

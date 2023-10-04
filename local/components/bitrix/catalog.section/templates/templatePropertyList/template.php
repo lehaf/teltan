@@ -369,7 +369,6 @@ foreach ($arResult['ITEMS'] as $arItem) {
                                 <div class="text-right">
                                     <a href="<?= $arItem['DETAIL_PAGE_URL'] ?>"
                                        class="mb-2 mb-lg-3 title"><?= $arItem['NAME'] ?></a>
-                                    <?ps($arItem)?>
                                     <p class="mb-2 mb-lg-3 location">
                                         <span class="addres"><?=$arItem['PROPERTIES']['MAP_LAYOUT']['VALUE'];?> <?=(!empty($arItem['PROPERTIES']['MAP_LAYOUT']['VALUE']))? ',' : ''?> <?=$arItem['PROPERTIES']['MAP_LAYOUT_BIG']['VALUE'];?></span>
                                         <svg class="icon-local" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 513.597 513.597" xml:space="preserve">

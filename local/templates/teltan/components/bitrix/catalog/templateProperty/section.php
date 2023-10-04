@@ -56,11 +56,8 @@ if ($arParentSection = $rsParentSection->GetNext())
          ?>
           <script>console.log(<?=json_encode($arResult["VARIABLES"]["SECTION_ID"])?>)</script>
            <script>console.log(<?=json_encode($arSections)?>)</script>
-<?if($_GET['view'] == 'maplist'){?>
+
      <main class="mb-5 wrapper flex-grow-1">
-         <?}else{?>
-         <main class="mb-5 wrapper flex-grow-1">
-             <?}?>
          <div class="header-property-type-menu">
              <div class="bg-header-filter">
                  <img src="<?=SITE_TEMPLATE_PATH?>/assets/property-header-bg-progressive.jpeg" alt="">
@@ -68,23 +65,12 @@ if ($arParentSection = $rsParentSection->GetNext())
                 <!-- мобильный список -->
              <div class="d-flex d-lg-none justify-content-center container p-0">
                  <ul class="w-100 mb-0 header-property__category-list">
-
-
-
                      <li>
-                             <a onclick="routeProperty(event)" href="/property/zhilaya/" <?echo (CSite::InDir('/property/zhilaya/')) ? 'class="active"' : ""; ?>><?=Loc::getMessage('zhilaya');?></a>
+                         <a onclick="routeProperty(event)" href="/property/zhilaya/" <?echo (CSite::InDir('/property/zhilaya/')) ? 'class="active"' : ""; ?>><?=Loc::getMessage('zhilaya');?></a>
                      </li>
-
                      <span class="text-white mx-3">/</span>
-
                      <li>
-                             <a onclick="routeProperty(event)" href="/property/kommercheskaya/"   <?echo (CSite::InDir('/property/kommercheskaya/')) ? 'class="active"' : ""; ?>><?=Loc::getMessage('kommercheskaya');?></a>
-                     </li>
-
-                     <span class="text-white mx-3">/</span>
-
-                     <li>
-                             <a onclick="routeProperty(event)" href="/property/novostroyki/"   <?echo (CSite::InDir('/property/novostroyki/')) ? 'class="active"' : ""; ?>><?=Loc::getMessage('novostroyki');?></a>
+                         <a onclick="routeProperty(event)" href="/property/kommercheskaya/"   <?echo (CSite::InDir('/property/kommercheskaya/')) ? 'class="active"' : ""; ?>><?=Loc::getMessage('kommercheskaya');?></a>
                      </li>
                  </ul>
              </div>

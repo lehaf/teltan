@@ -19,7 +19,6 @@
 
             const obgGeoMap = <?=json_encode($mapArray)?>
 
-            console.log(obgGeoMap);
             const objBasePin = <?=json_encode($mapArrayVip)?>
             // ** vip
 
@@ -671,7 +670,6 @@
                                 });
                                 return displayFeat;
                             });
-                            console.log(displayFeatures)
 
                         });*/
 
@@ -891,7 +889,6 @@
 
             const obgGeoMap = <?=json_encode($mapArray)?>
 
-            console.log(obgGeoMap);
             const objBasePin = <?=json_encode($mapArrayVip)?>
             // ** vip
 
@@ -1203,7 +1200,6 @@
 
             const obgGeoMap = <?=json_encode($mapArray)?>
 
-            console.log(obgGeoMap);
             const objBasePin = <?=json_encode($mapArrayVip)?>
             // ** vip
 

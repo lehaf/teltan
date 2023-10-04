@@ -53,14 +53,7 @@ require($_SERVER["DOCUMENT_ROOT"] . "/vendor/autoload.php");
 $detect = new Mobile_Detect;
 
 ?>
-
-<? if ($_GET['view'] == 'maplist'){ ?>
-<main class="mb-5 wrapper flex-grow-1">
-    <?
-    }else{ ?>
     <main class="mb-5 wrapper flex-grow-1">
-        <?
-        } ?>
         <div class="header-property-type-menu">
             <div class="bg-header-filter">
                 <img src="<?= SITE_TEMPLATE_PATH ?>/assets/property-header-bg-progressive.jpeg" alt="">

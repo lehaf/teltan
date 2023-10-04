@@ -41,11 +41,9 @@
                 if ($(this).is(':checkbox')) {
                     if ($(this).is(':checked')) {
                         let data = $(this).data();
-                        console.log($(this).data())
                         if (data.controlId !== undefined) {
                             url = url + '&' + data.controlId + '=' + data.htmlValue
                         }
-                        console.log(url)
                     }
                 } else {
                     if ($(this).is(':text')) {
@@ -54,7 +52,6 @@
                         if (data.controlId !== undefined) {
                             url = url + '&' + data.controlId + '=' + val
                         }
-                        console.log(url)
                     } else {
                         let data = $(this).data();
                         let val = $(this).val();
@@ -100,8 +97,6 @@
 
 
             const obgGeoMap = <?=json_encode($mapArray)?>
-
-            console.log(<?=json_encode($mapArrayVip)?>);
             const objBasePin = <?=json_encode($mapArrayVip)?>
             // ** vip
 
@@ -246,8 +241,6 @@
                     let elems = $('.dropdown-building-area1').find('input');
                     let count = 0;
                     elems.each(function (index) {
-                        console.log(this)
-                        console.log(features[0]['properties']['MUN_HE'])
                         let data = $(this).data()
                         if ($(this).prop("checked")) {
                             if (data.valued !== features[0]['properties']['MUN_HE']) {
@@ -264,7 +257,7 @@
                             $(this).trigger('click')
                             let item = this;
                             let link = setTimeout(function () {
-                                console.log(getLink(item))
+                                getLink(item);
                             }, 1000);
 
 
@@ -355,7 +348,7 @@
                             $(this).trigger('click')
                             let item = this;
                             let link = setTimeout(function () {
-                                console.log(getLink(item))
+                                getLink(item);
                             }, 1000);
 
 
@@ -445,7 +438,7 @@
                             $(this).trigger('click')
                             let item = this;
                             let link = setTimeout(function () {
-                                console.log(getLink(item))
+                                getLink(item);
                             }, 1000);
 
 
@@ -536,7 +529,7 @@
                             $(this).trigger('click')
                             let item = this;
                             let link = setTimeout(function () {
-                                console.log(getLink(item))
+                                getLink(item);
                             }, 1000);
 
 
@@ -628,7 +621,7 @@
                             $(this).trigger('click')
                             let item = this;
                             let link = setTimeout(function () {
-                                console.log(getLink(item))
+                               getLink(item);
                             }, 1000);
 
 
@@ -719,7 +712,7 @@
                             $(this).trigger('click')
                             let item = this;
                             let link = setTimeout(function () {
-                                console.log(getLink(item))
+                                getLink(item);
                             }, 1000);
 
 
@@ -810,7 +803,7 @@
                             $(this).trigger('click')
                             let item = this;
                             let link = setTimeout(function () {
-                                console.log(getLink(item))
+                                getLink(item);
                             }, 1000);
 
 
@@ -986,7 +979,6 @@
                 });
 
                 map.on('click', 'unclustered-vipPoint', (e) => {
-                    console.log(e)
                     const coordinates = e.features[0].geometry.coordinates.slice();
                     let description = '';
                     let middleIndex = Math.floor(e.features.length / 2);

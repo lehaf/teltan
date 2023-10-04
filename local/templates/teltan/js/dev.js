@@ -637,8 +637,9 @@ $(document).ready(function () {
         }
 
     })
+
+
     $('.data-function').click(function () {
-        let data = $(this).data();
         let elems = $('.dropdown-building-area2').find('input');
         let parentElems = $('.dropdown-building-area1').find('input');
         let checked = $(this).prop("checked");
@@ -669,8 +670,40 @@ $(document).ready(function () {
             }
 
         })
+    });
 
-    })
+    $(document).ready(() => {
+        let elems = $('.dropdown-building-area2').find('input');
+        let parentElems = $('.dropdown-building-area1').find('input');
+        let checked = $(this).prop("checked");
+        let parentCheckedValue = []
+        parentElems.each(function (index) {
+            let checkedD = $(this).prop("checked");
+            let dataD = $(this).data();
+            if (checkedD) {
+                parentCheckedValue.push(dataD.valued)
+            }
+        })
+
+
+        elems.each(function (index) {
+            let parentId = $(this).data();
+            if (checked) {
+                $('.dropdown-building-area2').addClass('active');
+                if (parentCheckedValue.includes(parentId.parentItemId)) {
+                    $(this).parent('label').parent('li').show()
+                } else {
+                    $(this).parent('label').parent('li').hide()
+                }
+
+            } else {
+                if (!parentCheckedValue.includes(parentId.parentItemId)) {
+                    $(this).parent('label').parent('li').hide()
+                }
+            }
+
+        })
+    });
 
     setTimeout(function () {
         let name1 = '';

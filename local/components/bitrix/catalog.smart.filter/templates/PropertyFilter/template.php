@@ -39,15 +39,15 @@ $this->setFrameMode(true);
                 <?php foreach ($arResult["MAIN_PROPS"] as $key => $arItem):?>
                     <?php switch ($arItem["CODE"]) :
                         case "MAP_LAYOUT_BIG":?>
-                            <div class="card-header bg-white text-right pr-4 d-flex justify-content-end" id="headingThree">
+                            <div class="card-header bg-white text-right pr-4 d-flex justify-content-end" id="<?=$arItem['CODE']?>">
                                 <button type="button" class="w-100 text-right btn btn-link collapsed" data-toggle="collapse"
-                                        data-target="#collapse<?= $arItem['CODE'] ?>" aria-expanded="false"
+                                        data-target="#collapse<?=$arItem['CODE']?>" aria-expanded="false"
                                         aria-controls="collapseThree">
                                     <?=$arItem['NAME']?>
                                 </button>
                                 <i class="icon-arrow-down-sign-to-navigate-3 d-flex justify-content-center align-items-center"></i>
                             </div>
-                            <div id="collapse<?=$arItem['CODE']?>" class="collapse" aria-labelledby="headingThree">
+                            <div id="collapse<?=$arItem['CODE']?>" class="collapse" aria-labelledby="<?=$arItem['CODE']?>">
                                 <div class="w-100 justify-content-end dropdown-card dropdown-building-area1">
                                     <div class="d-flex flex-column align-items-end check-box-prop-filter">
                                         <ul class="dropdown-card__content">
@@ -76,14 +76,14 @@ $this->setFrameMode(true);
                             </div>
                         <? break;?>
                         <?case "MAP_LAYOUT":?>
-                            <div class="card-header bg-white text-right pr-4 d-flex justify-content-end" id="headingThree">
+                            <div class="card-header bg-white text-right pr-4 d-flex justify-content-end disabled" id="<?=$arItem['CODE']?>">
                                 <button type="button" class="w-100 text-right btn btn-link collapsed" data-toggle="collapse"
                                         data-target="#collapse<?=$arItem['CODE']?>" aria-expanded="false" aria-controls="collapseThree">
                                     <?=$arItem['NAME']?>
                                 </button>
                                 <i class="icon-arrow-down-sign-to-navigate-3 d-flex justify-content-center align-items-center"></i>
                             </div>
-                            <div id="collapse<?=$arItem['CODE']?>" class="collapse" aria-labelledby="headingThree">
+                            <div id="collapse<?=$arItem['CODE']?>" class="collapse" aria-labelledby="<?=$arItem['CODE']?>">
                                 <div class="card-body w-100 justify-content-end dropdown-card dropdown-building-area2">
                                     <div class="d-flex flex-column align-items-end dropdown-card-wrapper check-box-prop-filter">
                                         <div class="dropdown-menu-search">
@@ -120,14 +120,14 @@ $this->setFrameMode(true);
                             </div>
                         <? break;?>
                         <?case "PRICE":?>
-                            <div class="card-header bg-white text-right pr-4 d-flex justify-content-end" id="headingThree">
+                            <div class="card-header bg-white text-right pr-4 d-flex justify-content-end" id="<?=$arItem['CODE']?>">
                                 <button type="button" class="w-100 text-right btn btn-link collapsed" data-toggle="collapse"
                                         data-target="#collapse<?= $arItem['CODE'] ?>" aria-expanded="false" aria-controls="collapseThree">
                                     <?= $arItem['NAME'] ?>
                                 </button>
                                 <i class="icon-arrow-down-sign-to-navigate-3 d-flex justify-content-center align-items-center"></i>
                             </div>
-                            <div id="collapse<?= $arItem['CODE'] ?>" class="collapse" aria-labelledby="headingThree">
+                            <div id="collapse<?= $arItem['CODE'] ?>" class="collapse" aria-labelledby="<?=$arItem['CODE']?>">
                                 <div class="card-body price-input-box bg-white d-flex">
                                     <div class="input-decoration">
                                         <input class="w-100 inputAreaMax"
@@ -154,14 +154,14 @@ $this->setFrameMode(true);
                             </div>
                         <? break;?>
                         <?case "PROP_COUNT_ROOMS":?>
-                            <div class="card-header bg-white text-right pr-4 d-flex justify-content-end" id="headingOne">
+                            <div class="card-header bg-white text-right pr-4 d-flex justify-content-end" id="<?=$arItem['CODE']?>">
                                 <button type="button" class="w-100 text-right btn btn-link" data-toggle="collapse"
                                         data-target="#collapse<?=$arItem['CODE']?>" aria-expanded="false" aria-controls="collapseOne">
                                     <?=$arItem['NAME']?>
                                 </button>
                                 <i class="icon-arrow-down-sign-to-navigate-3 d-flex justify-content-center align-items-center"></i>
                             </div>
-                            <div id="collapse<?=$arItem['CODE']?>" class="collapse" aria-labelledby="headingOne">
+                            <div id="collapse<?=$arItem['CODE']?>" class="collapse" aria-labelledby="<?=$arItem['CODE']?>">
                                 <div class="card-body bg-white flex-column">
                                     <div class="mb-4 room-number flex-row-reverse">
                                         <? foreach ($arItem["VALUES"] as $val => $ar) :?>
@@ -206,7 +206,7 @@ $this->setFrameMode(true);
                             </div>
                         <? break;?>
                         <? default: ?>
-                            <div class="card-header bg-white text-right pr-4 d-flex justify-content-end" id="headingOne">
+                            <div class="card-header bg-white text-right pr-4 d-flex justify-content-end" id="<?=$arItem['CODE']?>">
                                 <button type="button" class="w-100 text-right btn btn-link" data-toggle="collapse"
                                         data-target="#collapse<?=$arItem['CODE']?>" aria-expanded="false" aria-controls="collapseOne">
                                     <?=$arItem['NAME']?>
@@ -214,7 +214,7 @@ $this->setFrameMode(true);
 
                                 <i class="icon-arrow-down-sign-to-navigate-3 d-flex justify-content-center align-items-center"></i>
                             </div>
-                            <div id="collapse<?=$arItem['CODE']?>" class="collapse" aria-labelledby="headingOne">
+                            <div id="collapse<?=$arItem['CODE']?>" class="collapse" aria-labelledby="<?=$arItem['CODE']?>">
                                 <div class="card-body bg-white">
                                     <? foreach ($arItem["VALUES"] as $val => $ar) :?>
                                         <div class="d-flex flex-column align-items-end check-box-prop-filter">
