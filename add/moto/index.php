@@ -41,7 +41,6 @@ if ($_GET['EDIT'] == 'Y' && $_GET['ID']) {
 }
 
 $arLink = CIBlockSectionPropertyLink::GetArray(MOTO_IBLOCK_ID, 94);
-ps($arProps);
 ?>
     <div class="container">
         <h2 class="mb-5 d-flex justify-content-end subtitle t">
@@ -336,7 +335,6 @@ ps($arProps);
                                         </div>
                                     </div>
                                     <div id="row-cols-lg-6" class="mb-4 mb-lg-5 row row-cols-lg-6 m_15 wrapper-model-items div-req">
-                                        <?ps($arSubSections);?>
                                         <? foreach ($arSubSections as $arItem) { ?>
                                             <? if ($arItem['CODE'] != '') { ?>
                                                 <div id="<?= $arItem['CODE'] ?>" style="display: none"
@@ -365,8 +363,6 @@ ps($arProps);
                                                 </div>
                                             <? }
                                         } ?>
-
-                                        <? ps($arToClick) ?>
                                     </div>
                                 </div>
                             </div>
@@ -466,32 +462,40 @@ ps($arProps);
                                     $rsData = $entity_data_class::getList(array(
                                         'order' => array('UF_NAME' => 'ASC'),
                                         'select' => array('*'),
-                                        'filter' => array('!UF_NAME' => false)
+                                        'filter' => array('!UF_NAME' => false),
+                                        'cache' => [
+                                            'ttl' => 36000000,
+                                            'cache_joins' => true
+                                        ]
                                     ));
-                                    while ($elTipkuzova[] = $rsData->fetch()) {
-                                        // print_r($elTipkuzova);
+                                    $typeBody = [];
+                                    while ($type = $rsData->fetch()) {
+                                        if (!empty($type)) $typeBody[] = $type;
                                     }
+
                                     require($_SERVER["DOCUMENT_ROOT"] . "/vendor/autoload.php");
                                     $detect = new Mobile_Detect;
-                                    ps($arProps["PROP_BODY_TYPE"]);
-
                                     ?>
-
                                     <div class="mb-4 row __colum-reverse">
                                         <div class="col-12 col-lg-10">
 
                                             <div class="d-flex">
-                                                <select data-id_prop="PROP_BODY_TYPE" data-req="Y" class="selectpicker"
+                                                <select data-id_prop="PROP_BODY_TYPE"
+                                                        data-req="Y"
+                                                        class="selectpicker"
                                                         id="PROP_BODY_TYPE_val"
-                                                        data-style-base="form-control form-control-select" data-style=""
+                                                        data-style-base="form-control form-control-select"
+                                                        data-style=""
                                                         name="Body type">
-                                                    <? foreach ($elTipkuzova as $arItem) { ?>
-                                                        <option <?= ($arProps["PROP_BODY_TYPE"]['VALUE'] == $arItem['UF_NAME']) ? 'selected' : '' ?>
+                                                    <?php foreach ($typeBody as $arItem):?>
+                                                        <option <?=$arProps["PROP_BODY_TYPE"]['VALUE'] == $arItem['UF_NAME'] ? 'selected' : ''?>
                                                                 data-id_prop="PROP_BODY_TYPE"
-                                                                data-id-self="<?= $arItem['UF_XML_ID'] ?>"
-                                                                value="<?= $arItem['UF_NAME'] ?>"><?= $arItem['UF_NAME'] ?></option>
-                                                    <? } ?>
-
+                                                                data-id-self="<?=$arItem['UF_XML_ID'] ?>"
+                                                                value="<?=$arItem['UF_NAME']?>"
+                                                        >
+                                                            <?=$arItem['UF_NAME']?>
+                                                        </option>
+                                                    <?php endforeach;?>
                                                 </select>
                                             </div>
                                         </div>

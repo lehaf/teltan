@@ -39,7 +39,6 @@ if ($_GET['EDIT'] == 'Y' && $_GET['ID']) {
         $arProps = $ob->GetProperties();
     }
 }
-ps($arProps);
 $arLink = CIBlockSectionPropertyLink::GetArray(SCOOTER_IBLOCK_ID, 90);
 ?>
     <div class="container">
@@ -366,8 +365,6 @@ $arLink = CIBlockSectionPropertyLink::GetArray(SCOOTER_IBLOCK_ID, 90);
                                                 </div>
                                             <? }
                                         } ?>
-
-                                        <? ps($arToClick) ?>
                                     </div>
                                 </div>
                             </div>
@@ -465,61 +462,41 @@ $arLink = CIBlockSectionPropertyLink::GetArray(SCOOTER_IBLOCK_ID, 90);
                                     $rsData = $entity_data_class::getList(array(
                                         'order' => array('UF_NAME' => 'ASC'),
                                         'select' => array('*'),
-                                        'filter' => array('!UF_NAME' => false)
+                                        'filter' => array('!UF_NAME' => false),
+                                        'cache' => [
+                                            'ttl' => 36000000,
+                                            'cache_joins' => true
+                                        ]
                                     ));
-                                    while ($elTipkuzova[] = $rsData->fetch()) {
-                                        // print_r($elTipkuzova);
+                                    $typeBody = [];
+                                    while ($type = $rsData->fetch()) {
+                                        if (!empty($type)) $typeBody[] = $type;
                                     }
+
                                     require($_SERVER["DOCUMENT_ROOT"] . "/vendor/autoload.php");
                                     $detect = new Mobile_Detect;
                                     ?>
 
                                     <div class="mb-4 row __colum-reverse">
                                         <div class="col-12 col-lg-10">
-                                            <? /* if (!$detect->isMobile()) { */ ?><!--
-                                                <div id="bodyTypesCar"
-                                                     class="row row-cols-3 d-lg-flex flex-wrap flex-row-reverse justify-content-between body-type-car div-req <? /*= ($prop_field[3]['IS_REQUIRED'] == 'Y') ? 'div-req' : '' */ ?> ">
-                                                    <? /* foreach ($elTipkuzova as $key => $arItem) { */ ?>
-                                                        <? /* if ($arItem['UF_NAME'] != '') { */ ?>
-
-                                                            <div class="col form_radio_btn mb-4 <? /*= ($key > ADD_AUTO_BODY_TYPES_SHOW_COUNT) ? 'show-additionally' : '' */ ?>">
-                                                                <input data-id_prop="PROP_BODY_TYPE"
-                                                                    <? /*= ($arProps["PROP_BODY_TYPE"]['VALUE'] == $arItem['UF_XML_ID']) ? 'checked' : '' */ ?>
-                                                                       data-id-self="<? /*= $arItem['UF_XML_ID'] */ ?>"
-                                                                       id="<? /*= $arItem['UF_XML_ID'] */ ?>" type="radio"
-                                                                       name="Body type">
-                                                                <label class="d-flex flex-column position-relative"
-                                                                       for="<? /*= $arItem['UF_XML_ID'] */ ?>">
-                                                        <span class="body-type-car__icon"><i
-                                                                class="<? /*= $arItem['UF_DESCRIPTION'] */ ?>"></i></span>
-                                                                    <span class="body-type-car__name"><? /*= $arItem['UF_NAME'] */ ?></span>
-                                                                </label>
-                                                            </div>
-                                                            <? /* if ($key == ADD_AUTO_BODY_TYPES_SHOW_COUNT && count($elTipkuzova) > ADD_AUTO_BODY_TYPES_SHOW_COUNT) { */ ?>
-                                                                <div class="col" id="btnShowMoreBodyTypes">
-                                                                    <a type="button"
-                                                                       class="rounded border show-more-types">
-                                                                        <span class="font-weight-bold">Show all</span>
-                                                                    </a>
-                                                                </div>
-                                                                <? /*
-                                                            } */ ?>
-                                                        <? /* }
-                                                    } */ ?>
-                                                </div>
-                                            --><? /* } */ ?>
-
                                             <div class="d-flex">
-                                                <select data-id_prop="PROP_BODY_TYPE" data-req="Y" class="selectpicker"
+                                                <select data-id_prop="PROP_BODY_TYPE"
+                                                        data-req="Y"
+                                                        class="selectpicker"
                                                         id="PROP_BODY_TYPE_val"
-                                                        data-style-base="form-control form-control-select" data-style=""
-                                                        name="Body type">
-                                                    <? foreach ($elTipkuzova as $arItem) { ?>
+                                                        data-style-base="form-control form-control-select"
+                                                        data-style=""
+                                                        name="Body type"
+                                                >
+                                                    <?php foreach ($typeBody as $arItem):?>
                                                         <option <?= ($arProps["PROP_BODY_TYPE"]['VALUE'] == $arItem['UF_NAME']) ? 'selected' : '' ?>
                                                                 data-id_prop="PROP_BODY_TYPE"
                                                                 data-id-self="<?= $arItem['UF_XML_ID'] ?>"
-                                                                value="<?= $arItem['UF_NAME'] ?>"><?= $arItem['UF_NAME'] ?></option>
-                                                    <? } ?>
+                                                                value="<?= $arItem['UF_NAME'] ?>"
+                                                        >
+                                                            <?= $arItem['UF_NAME'] ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
 
                                                 </select>
                                             </div>
