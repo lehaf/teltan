@@ -111,7 +111,7 @@ if (!empty($section['UF_PROPS'])) {
         <?php switch ($prop['PROPERTY_TYPE']): case 'L':?>
             <?php if ($prop['MULTIPLE'] === 'N'):?>
                 <?// radio?>
-                <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row additional-prop" data-parent-id="29" style="">
+                <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row additional-prop" data-parent-id="<?=$_POST['parentSectionId']?>">
                     <div class="col-12 col-lg-10">
                         <div class="d-flex justify-content-center justify-content-lg-end align-items-center gap-1">
                             <?foreach($prop['VALUES'] as $key => $value):?>
@@ -136,7 +136,7 @@ if (!empty($section['UF_PROPS'])) {
                 </div>
             <?php else:?>
                 <?// checkbox?>
-                <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row additional-prop">
+                <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row additional-prop" data-parent-id="<?=$_POST['parentSectionId']?>">
                     <div class="col-12 col-lg-10">
                         <div class="d-flex justify-content-center justify-content-lg-end align-items-center gap-1">
                             <?foreach($prop['VALUES'] as $key => $value):?>
@@ -164,7 +164,7 @@ if (!empty($section['UF_PROPS'])) {
             <?php break;?>
             <?php case 'S':?>
                 <?// СТрока?>
-                    <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row additional-prop" data-parent-id="27" style="">
+                    <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row additional-prop" data-parent-id="<?=$_POST['parentSectionId']?>">
                         <div class="col-12 col-lg-10">
                             <div class="d-flex flex-wrap justify-content-center justify-content-lg-end">
                                 <div class="form-group">

@@ -96,7 +96,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                         </div>
                     </div>
                 </div>
-                <?
+                <?php
                 CModule::IncludeModule('highloadblock');
                 $entity_data_class = GetEntityDataClass(PROPERTY_TYPES_HL_ID);
                 $rentType = $entity_data_class::getList(array(
@@ -115,10 +115,11 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
                                 <div class="mb-4 row">
                                     <div class="col-9 col-lg-10">
-                                        <div class="d-flex justify-content-end flex-wrap gap-1">
+                                        <div class="d-flex justify-content-end flex-wrap gap-1 property-type-radio">
                                             <div class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn">
                                                 <input  <?=$arFields['IBLOCK_SECTION_ID'] == 35 ? 'checked' : ''?>
-                                                        data-section-id="<?=35?>"
+                                                        data-section-id="35"
+                                                        data-type-section-id="27"
                                                         id="typeResidential"
                                                         type="radio"
                                                         name="type"
@@ -144,7 +145,8 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                             */?>
                                             <div class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn">
                                                 <input <?=($arFields['IBLOCK_SECTION_ID'] == 33) ? 'checked' : ''?>
-                                                        data-section-id="<?=33?>"
+                                                        data-section-id="33"
+                                                        data-type-section-id="28"
                                                         id="typeCommercial"
                                                         type="radio"
                                                         name="type"

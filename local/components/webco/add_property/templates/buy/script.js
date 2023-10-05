@@ -2,6 +2,7 @@ const AdditionalProps = function () {
     this.settings = {
         'mainSectionsSelector' : '.step-one input[name="type"]',
         'dataSectionId' : 'data-section-id',
+        'dataParentSectionId' : 'data-type-section-id',
         'dataIblockId' : 'data-iblock-id',
         'wizardSelector' : 'div#wizard',
         'addFieldsContainer' : 'div[data-wizard-content="2"] div.step-three',
@@ -43,9 +44,11 @@ AdditionalProps.prototype.setSectionsEvent = function() {
         this.$sections.forEach((inputSection) => {
             inputSection.onclick = () => {
                 let sectionId = inputSection.getAttribute(_this.settings.dataSectionId);
+                let parentSectionId = inputSection.getAttribute(_this.settings.dataParentSectionId);
                 let data = {
                     'iblockId':_this.$iblockId,
                     'sectionId':sectionId,
+                    'parentSectionId':parentSectionId,
                     'get_fields':'y'
                 };
 

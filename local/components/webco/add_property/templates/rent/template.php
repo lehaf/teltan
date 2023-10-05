@@ -92,7 +92,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                             </div>
                         </div>
                     </div>
-                    <?
+                    <?php
                     CModule::IncludeModule('highloadblock');
                     $entity_data_class = GetEntityDataClass(PROPERTY_TYPES_HL_ID);
                     $arTypesRent = $entity_data_class::getList(array(
@@ -111,10 +111,11 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
                                     <div class="mb-4 row">
                                         <div class="col-9 col-lg-10">
-                                            <div class="d-flex justify-content-end flex-wrap gap-1">
+                                            <div class="d-flex justify-content-end flex-wrap gap-1 property-type-radio">
                                                 <div class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn">
                                                     <input <?=($arFields['IBLOCK_SECTION_ID'] == REAL_ESTATE_LIVE_RENT_SECTION_ID)? 'checked' : ''?>
                                                             data-section-id="<?=REAL_ESTATE_LIVE_RENT_SECTION_ID?>"
+                                                            data-type-section-id="27"
                                                             id="typeResidential"
                                                             type="radio"
                                                             name="type"
@@ -151,7 +152,8 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
                                                 <div class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn">
                                                     <input <?=($arFields['IBLOCK_SECTION_ID'] == 32)? 'checked' : ''?>
-                                                            data-section-id="<?=32?>"
+                                                            data-section-id="32"
+                                                            data-type-section-id="28"
                                                             id="typeCommercial"
                                                             type="radio"
                                                             name="type"
@@ -356,20 +358,25 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                 </div>
                             </div>
                             <div class="wizard-content" data-wizard-content="2">
-                                <?
-                                $entity_data_class = GetEntityDataClass(8);
-                                $rsData = $entity_data_class::getList(array(
-                                    'select' => array('*')
-                                ));
-                                while ($arPropsSection[] = $rsData->fetch()) {
-                                    //  print_r($arPropsSection);
-                                }
+                                <?php
+                                $entity_data_class = GetEntityDataClass(SECTION_PROPS_HL_ID);
+                                $arPropsSection = $entity_data_class::getList(array(
+                                    'select' => array('*'),
+                                    'cache' => [
+                                        'ttl' => 360000000,
+                                        'cache_joins' => true
+                                    ]
+                                ))->fetchAll();
+
                                 if (CModule::IncludeModule("iblock"))
-                                    $IBLOCK_ID = 2;
-                                $properties = CIBlockProperty::GetList(array("sort" => "asc", "name" => "asc"), array("ACTIVE" => "Y", "IBLOCK_ID" => $IBLOCK_ID));
+                                $properties = CIBlockProperty::GetList(
+                                        array("sort" => "asc", "name" => "asc"),
+                                        array("ACTIVE" => "Y", "IBLOCK_ID" => $IBLOCK_ID)
+                                );
                                 while ($prop_fields[] = $properties->GetNext()) {
                                     //echo $prop_fields["ID"]." - ".$prop_fields["NAME"]."<br>";
                                 }
+
                                 $arProp = [];
                                 foreach ($prop_fields as $field) {
                                     $needle = 'ROP';
@@ -398,25 +405,25 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                     return false;
                                 }
                                 $filterProps = [];
-                                $filterProps2 = [];
-                                $filterProps3 = [];
                                 $restrictions = [];
                                 foreach($arProp as $arItem){
                                     if(in_array_r($arItem['ID'], $arPropsSection[0]) == true && $arItem['CODE'] != 'PROP_restrictions'){
-
                                         $filterProps[1][$arItem['ID']] = $arItem;
                                     }elseif($arItem['CODE'] == 'PROP_restrictions'){
                                         $restrictions = $arItem;
                                     }
+
                                     if(in_array_r($arItem['ID'], $arPropsSection[1]) == true && $arItem['CODE'] != 'PROP_restrictions'){
 
                                         $filterProps[2][$arItem['ID']] = $arItem;
                                     }
+
                                     if(in_array_r($arItem['ID'], $arPropsSection[2]) == true && $arItem['CODE'] != 'PROP_restrictions'){
 
                                         $filterProps[3][$arItem['ID']] = $arItem;
                                     }
                                 }
+
                                 ?>
                                 <div class="property step-three">
                                     <h3 class="mb-3 mb-lg-4 text-center text-uppercase font-weight-bolder auto-step2__title"><?=Loc::getMessage('Whatapartment');?></h3>

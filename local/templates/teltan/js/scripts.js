@@ -496,7 +496,8 @@ $(document).ready(function () {
                         }
                     }
 
-                    let curStepInputs = document.querySelectorAll('div.wizard-content.active input');
+                    let curPropTypeSectionId = document.querySelector('div[data-wizard-content="0"] .property-type-radio input:checked').getAttribute('data-type-section-id');
+                    let curStepInputs = document.querySelectorAll(`div.wizard-content.active div[data-parent-id="${curPropTypeSectionId}"] input`);
                     if (curStepInputs && this.activeStep > 1) {
                         let errorExist = false;
                         curStepInputs.forEach((input) => {
@@ -554,11 +555,13 @@ $(document).ready(function () {
                                         if (input.value.length > 0) {
                                             input.classList.remove('error');
                                         } else {
+
                                             input.classList.add('error');
                                             errorExist = true;
                                         }
                                         break;
                                 }
+
                                 if (errorExist === true) {
                                     errors = 1;
                                 } else {
