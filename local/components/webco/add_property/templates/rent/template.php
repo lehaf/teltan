@@ -10,10 +10,8 @@ global $arSetting;
 $arLink = CIBlockSectionPropertyLink::GetArray(2, 27);
 // Если нет номера телефона, то редиректим на форму с его добавлением
 $userPhone = getUserInfoByID()['PERSONAL_PHONE'];
-if (!$userPhone)
-    LocalRedirect($GLOBALS['arSetting'][SITE_ID]['href'] . 'personal/edit/');
-
-$IBLOCK_ID = 2;
+if (!$userPhone) LocalRedirect($GLOBALS['arSetting'][SITE_ID]['href'] . 'personal/edit/');
+$IBLOCK_ID = PROPERTY_ADS_IBLOCK_ID;
 if ($_GET['EDIT'] == 'Y' && $_GET['ID']) {
     $arSelect = array("ID", "IBLOCK_ID", "IBLOCK_SECTION_ID", "NAME", "DATE_ACTIVE_FROM", "PROPERTY_*", "PREVIEW_TEXT", "PREVIEW_PICTURE");
     $arFilter = array("IBLOCK_ID" => $IBLOCK_ID, 'ID' => $_GET['ID'], "ACTIVE_DATE" => "Y", "ACTIVE" => "Y");
@@ -23,7 +21,6 @@ if ($_GET['EDIT'] == 'Y' && $_GET['ID']) {
         $arProps = $ob->GetProperties();
     }
 }
-ps($arProps);
 
 $GLOBALS['MAP_EDIT_RESULT_CORDINATES'] = $arProps['MAP_LATLNG']['~VALUE'];
 $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
@@ -101,11 +98,10 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                     $arTypesRent = $entity_data_class::getList(array(
                         'select' => array('*'),
                         'cache' => [
-                            'ttl' => 360000,
+                            'ttl' => 36000000,
                             'cache_joins' => true
                         ]
                     ))->fetchAll();
-
                     ?>
                     <form id="mainForm" action="/" onsubmit="submitForm(event)">
                         <div>

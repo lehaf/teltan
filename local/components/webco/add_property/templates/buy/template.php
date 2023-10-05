@@ -11,9 +11,8 @@ global $arSetting;
 
 // Если нет номера телефона, то редиректим на форму с его добавлением
 $userPhone = getUserInfoByID()['PERSONAL_PHONE'];
-if (!$userPhone)
-    LocalRedirect($GLOBALS['arSetting'][SITE_ID]['href'] . 'personal/edit/');
-$IBLOCK_ID = 2;
+if (!$userPhone) LocalRedirect($GLOBALS['arSetting'][SITE_ID]['href'] . 'personal/edit/');
+$IBLOCK_ID = PROPERTY_ADS_IBLOCK_ID;
 if ($_GET['EDIT'] == 'Y' && $_GET['ID']) {
     $arSelect = array("ID", "IBLOCK_ID", "IBLOCK_SECTION_ID", "NAME", "DATE_ACTIVE_FROM", "PROPERTY_*", "PREVIEW_TEXT", "PREVIEW_PICTURE");
     $arFilter = array("IBLOCK_ID" => $IBLOCK_ID, 'ID' => $_GET['ID'], "ACTIVE_DATE" => "Y", "ACTIVE" => "Y");
@@ -27,159 +26,6 @@ $arLink = CIBlockSectionPropertyLink::GetArray(2, 27);
 $GLOBALS['MAP_EDIT_RESULT_CORDINATES'] = $arProps['MAP_LATLNG']['~VALUE'];
 $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 ?>
-
-<? /*?> <div class="container">
-        <h2 class="d-block mb-4 subtitle">
-            <?$APPLICATION->ShowTitle();?>
-        </h2>
-
-        <div class="p-4 card user-add-item">
-            <form name="add_ad">
-                <?=bitrix_sessid_post()?>
-                <input type="hidden" name="section_id" value="">
-                <input type="hidden" name="c_country" value="">
-                <input type="hidden" name="c_city" value="">
-                <h2 class="mb-4 d-flex justify-content-center align-items-center section-title">Описание</h2>
-
-                <?$APPLICATION->IncludeComponent(
-                    "bitrix:catalog.section.list",
-                    "sections_menu_add",
-                    Array(
-                        "ADD_SECTIONS_CHAIN" => "N",
-                        "CACHE_FILTER" => "N",
-                        "CACHE_GROUPS" => "N",
-                        "CACHE_TIME" => "36000000",
-                        "CACHE_TYPE" => "A",
-                        "COUNT_ELEMENTS" => "N",
-                        "COUNT_ELEMENTS_FILTER" => "CNT_ACTIVE",
-                        "FILTER_NAME" => "sectionsFilter",
-                        "IBLOCK_ID" => "1",
-                        "IBLOCK_TYPE" => "announcements",
-                        "SECTION_CODE" => "",
-                        "SECTION_FIELDS" => array("", ""),
-                        "SECTION_ID" => $_REQUEST["SECTION_ID"],
-                        "SECTION_URL" => "",
-                        "SECTION_USER_FIELDS" => array("", ""),
-                        "SHOW_PARENT_NAME" => "Y",
-                        "TOP_DEPTH" => "2",
-                        "VIEW_MODE" => "LINE"
-                    )
-                );?>
-
-
-
-
-                <div class="form-group row flex-column-reverse flex-lg-row">
-                    <div class="col col-lg-10">
-                        <input type="text" class="form-control" name="itemTitle" placeholder="Enter Title" id="itemTitle">
-                    </div>
-                    <label for="itemTitle" class="col col-lg-2 label-name">Название</label>
-                </div>
-
-                <div class="form-group row flex-column-reverse flex-lg-row">
-                    <div class="col col-lg-10">
-                        <textarea type="text" placeholder="Enter Description" name="itemDescription" class="form-control" id="itemDescription" rows="4"></textarea>
-                    </div>
-                    <label for="itemDescription" class="col col-lg-2 label-name">Описание</label>
-                </div>
-
-                <div class="form-group row flex-column-reverse flex-lg-row">
-                    <div class="col col-lg-10">
-                        <input type="text" placeholder="Enter Short Description" name="itemShortDescription" class="form-control" id="itemShortDescription">
-                    </div>
-                    <label for="itemShortDescription" class="col col-lg-2 label-name">Краткое описание</label>
-                </div>
-
-                <div class="form-group row flex-column-reverse flex-lg-row">
-                    <div class="col col-lg-10">
-                        <input type="text" placeholder="Enter Price" name="itemPrice" class="form-control" id="itemPrice">
-                    </div>
-                    <label for="itemPrice" class="col col-lg-2 label-name">Цена</label>
-                </div>
-
-                <?
-                // Получаем список стран и городов
-
-                $countries = getCountriesHL();
-                $cities = getCitiesHL();
-                $arr_city =array();
-
-                foreach($cities as $city)
-                {
-                    $arr_city['c_'.$countries[$city['UF_ID_COUNTRY']]['ID']][] = $city['UF_NAME_'.strtoupper($arSetting[SITE_ID]['lang'])];
-                }
-
-                //print_r($arr_city);
-
-                ?>
-                <script>
-                    const placesList = <?=json_encode($arr_city, JSON_UNESCAPED_UNICODE)?>;
-                </script>
-
-                <div class="form-group row flex-column-reverse flex-lg-row">
-                    <div class="col col-lg-10 d-flex justify-content-end">
-                        <div class="dependens-dropdon">
-                            <div class="dependens-dropdon-block">
-                                <button type="button" class="dep-select first-drop">Страна</button>
-
-                                <ul class="show-country">
-                                    <?foreach($countries as $item){?>
-                                        <li>
-                                            <label>
-                                                <input name="country" value="<?='c_'.$item['ID'];?>" type="radio" />
-                                                <?=$item['UF_NAME_'.strtoupper($arSetting[SITE_ID]['lang'])]?>
-                                            </label>
-                                        </li>
-                                    <?}?>
-                                </ul>
-                            </div>
-
-                            <div class="dependens-dropdon-block">
-                                <button type="button" class="dep-select second-drop">Город</button>
-
-                                <ul class="show-city">
-                                    <li><label for="city"><input name="city" value="" type="radio">Select country</label></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <label for="userSelectSection" class="col col-lg-2 label-name">
-                        Sity / <br>
-                        Region
-                    </label>
-                </div>
-
-                <div class="section_props_user">
-                    <h2 class="mb-4 d-flex justify-content-center align-items-center section-title">Фото товара</h2>
-
-                    <div class="mb-5 row">
-                        <div class="col">
-                            <div class="step-photos">
-                                <div id="fileUploaderRenderContainer" class="mb-3 mb-lg-5 row row-cols-2 row-cols-lg-4 row-cols-xl-5 flex-row-reverse">
-                                    <input id="fileUploaderFiles" class="d-none" type="file" name="files[]" multiple>
-
-                                    <div class="col">
-                                        <div class="d-flex align-items-center justify-content-center">
-                                            <label for="fileUploaderFiles" class="mb-0 label-add-photo">
-                                                <p class="mb-2"><i class="icon-camera-1"></i></p>
-                                                <p class="mb-0 label-add-photo__text ">Add photo</p>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-none d-lg-flex  col-2">
-                            <p class="label-name">Add Photo</p>
-                        </div>
-                    </div>
-                </div>
-
-            </form>
-
-        </div>
-    </div>
-<?*/ ?>
 <div class="container">
     <h2 class="mb-5 d-flex justify-content-end subtitle">
         submit your ad
@@ -251,20 +97,15 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                     </div>
                 </div>
                 <?
-
-                use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
-
                 CModule::IncludeModule('highloadblock');
-
-
-                CModule::IncludeModule('highloadblock');
-                $entity_data_class = GetEntityDataClass(17);
-                $rsData = $entity_data_class::getList(array(
-                    'select' => array('*')
-                ));
-                while ($arTypesRent[] = $rsData->fetch()) {
-                    // print_r($el);
-                }
+                $entity_data_class = GetEntityDataClass(PROPERTY_TYPES_HL_ID);
+                $rentType = $entity_data_class::getList(array(
+                    'select' => array('*'),
+                    'cache' => [
+                        'ttl' => 36000000,
+                        'cache_joins' => true
+                    ]
+                ))->fetchAll();
                 ?>
                 <form id="mainForm" action="/" onsubmit="submitForm(event)">
                     <div>
@@ -322,7 +163,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                 <div class="mb-4 row">
                                     <div class="col-9 col-lg-10">
                                         <div class="d-flex justify-content-end flex-wrap div-req gap-1">
-                                            <?foreach($arTypesRent as $arItem):?>
+                                            <?foreach($rentType as $arItem):?>
                                                 <div data-parent-id="<?= $arItem['UF_PARENT_ID']?>"
                                                      style="display: none"
                                                      class="mr-2 mr-lg-3 mb-2 mb-lg-3 form_radio_btn"

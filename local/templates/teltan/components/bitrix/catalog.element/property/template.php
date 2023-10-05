@@ -57,8 +57,7 @@ $rsData = $entity_data_class::getList(array(
 while ($arTypesPaket[] = $rsData->fetch()) {
 
 }
-?>
-<?
+
 $editUrl = '#';
 switch ($arResult['IBLOCK_ID']) {
     case 1:
@@ -118,13 +117,9 @@ $mapArray['features'][] = [
             [$mapLatlnt['lng'], $mapLatlnt['lat']]
     ]
 ];
+
+global $arSetting;
 ?>
-<? global $arSetting; ?>
-<? if ($_GET['TEST'] == 'Y') { ?>
-    <pre>
-    <?= var_dump($arResult['PROPERTIES']['BUY']) ?>
-</pre>
-<? } ?>
     <div class="container">
         <div class="row flex-column-reverse flex-lg-row mb-4">
             <div class="col-12 col-lg-4 flex-column">
@@ -2866,71 +2861,58 @@ $mapArray['features'][] = [
                             </ul>
                         </div>
                     <? } ?>
-
                 </div>
 
                 <div class="mb-4 card">
                     <div class="p-4 text-right property-about-item">
-                        <div class="mb-4 pb-4 row text-center border-bottom property-about-item__short-description">
+                        <div class="<?=!empty($arResult['PREVIEW_TEXT']) ? 'mb-4 pb-4 border-bottom' : ''?> row text-center property-about-item__short-description">
                             <div class="col border-right">
                                 <p class="mb-2 text-secondary font-weight-bold">Floor:</p>
-
                                 <span class="d-flex justify-content-center align-items-center font-weight-bold">
-          <i class="pr-2 text-secondary icon-stairs"></i>
-          <?= $arResult['PROPERTIES']['PROP_FLOOR']['VALUE'] ?>
-        </span>
+                                  <i class="pr-2 text-secondary icon-stairs"></i>
+                                  <?= $arResult['PROPERTIES']['PROP_FLOOR']['VALUE'] ?>
+                                </span>
                             </div>
-
                             <div class="col border-right">
                                 <p class="mb-2 text-secondary font-weight-bold">Area, м²:</p>
-
                                 <span class="d-flex justify-content-center align-items-center font-weight-bold">
-          <i class="pr-2 text-secondary icon-plans"></i>
-          <?= $arResult['PROPERTIES']['PROP_AREA_3']['VALUE'] ?>
-        </span>
+                                  <i class="pr-2 text-secondary icon-plans"></i>
+                                  <?= $arResult['PROPERTIES']['PROP_AREA_3']['VALUE'] ?>
+                                </span>
                             </div>
-                            <? if ($arResult['PROPERTIES']['PROP_Completion']['VALUE']) { ?>
+                            <? if (!empty($arResult['IBLOCK_SECTION_ID']) &&
+                                in_array($arResult['IBLOCK_SECTION_ID'],RENT_SECTION_ID_ARRAY) &&
+                                !empty($arResult['PROPERTIES']['PROP_Completion']['VALUE'])):?>
                                 <div class="col border-right">
                                     <p class="mb-2 text-secondary font-weight-bold">Completion:</p>
-
                                     <span class="d-flex justify-content-center align-items-center font-weight-bold">
-          <i class="pr-2 text-secondary icon-calendar"></i>
-          <?= $arResult['PROPERTIES']['PROP_Completion']['VALUE'] ?>
-        </span>
+                                      <i class="pr-2 text-secondary icon-calendar"></i>
+                                      <?= $arResult['PROPERTIES']['PROP_Completion']['VALUE'] ?>
+                                    </span>
                                 </div>
-                            <? } ?>
-
+                            <?endif;?>
                             <div class="col">
                                 <p class="mb-2 text-secondary font-weight-bold">Rooms:</p>
-
                                 <span class="d-flex justify-content-center align-items-center font-weight-bold">
-          <i class="pr-2 text-secondary icon-sketch"></i>
-          <?= $arResult['PROPERTIES']['PROP_COUNT_ROOMS']['VALUE'] ?>
-        </span>
+                                  <i class="pr-2 text-secondary icon-sketch"></i>
+                                  <?= $arResult['PROPERTIES']['PROP_COUNT_ROOMS']['VALUE'] ?>
+                                </span>
                             </div>
                         </div>
-
-                        <p class="h6 text-uppercase font-weight-bolder">Description</p>
-
-                        <div class="d-flex flex-column-reverse align-items-end collaps-text-about">
-                            <? if (strlen($arResult['PREVIEW_TEXT']) > 350) { ?>
-                                <a class="py-2 py-lg-3 px-3 btn btn-primary text-uppercase font-weight-bold collaps-text-about-btn">Show
-                                    more</a>
-
-                                <p class="property-about-item__text collaps-text-about-text">
-                                <?= $arResult['PREVIEW_TEXT']; ?>
-                                </p><? } else { ?>
-                                <p class="property-about-item__text collaps-text-about-text show">
-                                    <?= $arResult['PREVIEW_TEXT']; ?>
-                                </p>
-                            <? } ?>
-                        </div>
+                        <?if (!empty($arResult['PREVIEW_TEXT'])):?>
+                            <p class="h6 text-uppercase font-weight-bolder">Description</p>
+                            <div class="d-flex flex-column-reverse align-items-end collaps-text-about">
+                                <? if (strlen($arResult['PREVIEW_TEXT']) > 350) { ?>
+                                    <a class="py-2 py-lg-3 px-3 btn btn-primary text-uppercase font-weight-bold collaps-text-about-btn">Show more</a>
+                                    <p class="property-about-item__text collaps-text-about-text"><?=$arResult['PREVIEW_TEXT']?></p>
+                                <? } else { ?>
+                                    <p class="property-about-item__text collaps-text-about-text show"><?=$arResult['PREVIEW_TEXT']?></p>
+                                <? } ?>
+                            </div>
+                        <?endif;?>
                     </div>
                 </div>
-                <p class=" h2 mb-4 subtitle">
-                    Description
-                </p>
-
+                <p class=" h2 mb-4 subtitle">Description</p>
                 <div class="mb-4">
                     <div class="card p-4">
                         <table class="property-item-table table">
@@ -3193,7 +3175,7 @@ $mapArray['features'][] = [
 
                 }
             });
-            console.log(price);
+
             $.ajax({
                 url: '/ajax/buy_item.php',
                 method: 'post',
@@ -3238,7 +3220,7 @@ $mapArray['features'][] = [
 
                 }
             });
-            console.log(price);
+
             $.ajax({
                 url: '/ajax/buy_item_vip.php',
                 method: 'post',
@@ -3283,7 +3265,7 @@ $mapArray['features'][] = [
 
                 }
             });
-            console.log(price);
+
             $.ajax({
                 url: '/ajax/buy_item_colour.php',
                 method: 'post',
@@ -3328,7 +3310,7 @@ $mapArray['features'][] = [
 
                 }
             });
-            console.log(price);
+
             $.ajax({
                 url: '/ajax/buy_item_lenta.php',
                 method: 'post',
@@ -3379,7 +3361,7 @@ $mapArray['features'][] = [
 
                 }
             });
-            console.log(price);
+
             $.ajax({
                 url: '/ajax/buy_item_paket.php',
                 method: 'post',
@@ -3424,7 +3406,7 @@ $mapArray['features'][] = [
 
                 }
             });
-            console.log(price);
+
 
             $.ajax({
                 url: '/ajax/secureZXC/pay.php',
@@ -3462,7 +3444,7 @@ $mapArray['features'][] = [
 
                 }
             });
-            console.log(price);
+
 
             $.ajax({
                 url: '/ajax/secureZXC/pay.php',
@@ -3496,7 +3478,7 @@ $mapArray['features'][] = [
 
                 }
             });
-            console.log(price);
+
 
             $.ajax({
                 url: '/ajax/secureZXC/pay.php',
@@ -3529,7 +3511,7 @@ $mapArray['features'][] = [
 
                 }
             });
-            console.log(price);
+
 
             $.ajax({
                 url: '/ajax/secureZXC/pay.php',
@@ -3562,7 +3544,7 @@ $mapArray['features'][] = [
 
                 }
             });
-            console.log(price);
+
             $.ajax({
                 url: '/ajax/secureZXC/pay.php',
                 method: 'post',
@@ -3581,13 +3563,10 @@ $mapArray['features'][] = [
             });
 
         }
-    </script>
-    <script>console.log(<?=json_encode($arResult)?>)</script>
-    <script>
+
         $('#dropdownMenuLink<?=$arResult['ID']?>').on('click', (e) => {
             e.preventDefault()
             $('#accordionUserItemWrap<?=$arResult['ID']?>').toggleClass('active')
         })
     </script>
-<?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/local/templates/teltan/map2.php';
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/local/templates/teltan/map2.php';
