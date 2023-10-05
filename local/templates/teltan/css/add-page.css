@@ -1,3 +1,8 @@
+.wizard-content .flex-column-reverse div.d-flex {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
 .user-add-item .property-step-contact__time .dropdown.bootstrap-select{
   width: 100% !important;
   margin-left: 0;

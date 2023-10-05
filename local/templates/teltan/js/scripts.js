@@ -447,13 +447,14 @@ $(document).ready(function () {
                 if (document.location.pathname === '/add/rent/' || document.location.pathname === '/add/buy/') {
                     let typeNewBuildings = document.querySelector('#typeNewBuildings') && document.querySelector('#typeNewBuildings').checked === true;
                     let errors = 0;
+
                     if (!typeNewBuildings) {
                         let inputElements = document.querySelectorAll(`div[data-wizard-content="${this.activeStep}"] .div-req input[type="radio"]`);
                         if (inputElements.length > 0) {
                             errors = 1;
                             inputElements.forEach(input => {
-                                if (input.hasAttribute('required')) { // && !$(input).parent('div').is(':hidden')
-                                    if ($(input).is(':checked') == false) {
+                                if (input.hasAttribute('required') && !input.classList.contains('type-sections')) {
+                                    if (input.checked === false) {
                                         $(input).addClass('error');
                                         $(input).siblings('label').addClass('error');
                                     } else {

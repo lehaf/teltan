@@ -122,6 +122,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                             id="typeResidential"
                                                             type="radio"
                                                             name="type"
+                                                            class="type-sections"
                                                     >
                                                     <label id="typeResidentialLable" onclick="hideModelBrand(27, this)" class="px-2 py-1" for="typeResidential"><?=Loc::getMessage('Residential');?></label>
                                                     <?if($arFields['IBLOCK_SECTION_ID'] == REAL_ESTATE_LIVE_RENT_SECTION_ID){?>
@@ -139,6 +140,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                             id="typeNewBuildings"
                                                             type="radio"
                                                             name="type"
+                                                            class="type-sections"
                                                     >
                                                     <label onclick="hideModelBrand(29, this)" class="px-2 py-1" for="typeNewBuildings"><?=Loc::getMessage('New-buildings');?></label>
                                                     <?if($arFields['IBLOCK_SECTION_ID'] == 30){?>
@@ -157,6 +159,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                             id="typeCommercial"
                                                             type="radio"
                                                             name="type"
+                                                            class="type-sections"
                                                     >
                                                     <label onclick="hideModelBrand(28, this)" class="px-2 py-1" for="typeCommercial"><?=Loc::getMessage('Commercial');?></label>
                                                     <?if($arFields['IBLOCK_SECTION_ID'] == 32){?>
