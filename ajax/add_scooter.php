@@ -1,17 +1,20 @@
-<?php require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
+<?php require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_before.php");
+
+global $USER;
 
 CModule::IncludeModule('highloadblock');
 
-$entity_data_class = GetEntityDataClass(28);
-$rsData = $entity_data_class::getList(array(
+$entity = GetEntityDataClass(BOUGHT_RATE_HL_ID);
+$arPaket = $entity::getList(array(
     'select' => array('*'),
-    'filter' => array('UF_USER_ID'=> $USER->GetID(), 'UF_TYPE'=> 'AUTO')
-));
-while ($arPaket[] = $rsData->fetch()) {
+    'filter' => array('UF_USER_ID'=> $USER->GetID(), 'UF_TYPE'=> 'AUTO'),
+    'cache' => [
+        'ttl' => 360000,
+        'cache_joins' => true
+    ]
+))->fetchAll();
 
-}
-$rsUser = CUser::GetByID($USER->GetID());
-$arUser = $rsUser->Fetch();
+$arUser = CUser::GetByID($USER->GetID())->Fetch();
 
 $b = false;
 foreach($arPaket as $arItem){
@@ -20,7 +23,8 @@ foreach($arPaket as $arItem){
         $b = true;
     }
 }
-if($arUser['UF_UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b || $_REQUEST['EDIT'] == 'Y') {
+
+if ($arUser['UF_AUTO'] > $arUser['UF_COUNT_AUTO'] || $b || $_REQUEST['EDIT'] == 'Y') {
 $el = new CIBlockElement;
 $checkedVaue = [];
 $count = 0;
@@ -167,17 +171,16 @@ $translit = Cutil::translit($NAME,"ru",$arParams) . $USER->GetID(). randString(1
                 }
             }
 
-            if ($arUser['UF_UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0) {
-                print_r(++$arUser['UF_COUNT_AUTO']);
-                $user = new CUser;
-                $arUser['UF_COUNT_ITEM_AUTO'][]= intval($PRODUCT_ID);
-                $fields = array(
-                    'UF_COUNT_AUTO' => ++$arUser['UF_COUNT_AUTO'],
-                    'UF_COUNT_ITEM_AUTO' =>  $arUser['UF_COUNT_ITEM_AUTO']
-                );
-                $user->Update($USER->GetID(), $fields);
-            } else {
+            // Увеличение счетчика объявлений
+            $user = new \CUser;
+            $arUser['UF_COUNT_ITEM_AUTO'][]= $PRODUCT_ID;
+            $fields = array(
+                'UF_COUNT_AUTO' => ++$arUser['UF_COUNT_AUTO'],
+                'UF_COUNT_ITEM_AUTO' =>  $arUser['UF_COUNT_ITEM_AUTO']
+            );
+            $user->Update($USER->GetID(), $fields);
 
+            if ($arUser['UF_UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] <= 0) {
                 foreach ($arPaket as $arItem) {
                     $a = $arItem['UF_COUNT_REMAIN'] - $arItem['UF_COUNT_LESS'];
                     if ($a > 0 || date("d.m.Y H:i:s") < date("d.m.Y H:i:s", strtotime('+ ' . $arItem['UF_DAYS_REMAIN'] . ' days'))) {

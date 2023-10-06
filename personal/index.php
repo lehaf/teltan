@@ -1,100 +1,73 @@
-<?
-require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
+<?php require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 
 use Bitrix\Main\Localization\Loc;
-use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
 
 Loc::loadMessages(__FILE__);
 $APPLICATION->SetTitle("Персональный раздел");
-?>
-<?
+
 if (!$USER->IsAuthorized()) LocalRedirect("/");
 
 
-$entity_data_class = GetEntityDataClass(21);
-$rsData = $entity_data_class::getList(array(
-    'select' => array('*')
-));
-while ($arTypesRise[] = $rsData->fetch()) {
+$arTypesRise = getHLData(PERSONAL_RISE_HL_ID, ['*']);
+$arTypesColour = getHLData(PERSONAL_COLOR_HL_ID, ['*']);
+$arTypesLent = getHLData(PERSONAL_RIBBON_HL_ID, ['*']);
+$arTypesPaket = getHLData(PERSONAL_PACKET_HL_ID, ['*']);
+$arPaket = getHLData(BOUGHT_RATE_HL_ID, ['*'],['UF_USER_ID' => $USER->GetID()]);
 
-}
-$entity_data_class = GetEntityDataClass(22);
-$rsData = $entity_data_class::getList(array(
-    'select' => array('*')
-));
-while ($arTypesVip[] = $rsData->fetch()) {
+$arUser = CUser::GetByID($USER->GetID())->Fetch();
 
-}
-$entity_data_class = GetEntityDataClass(23);
-$rsData = $entity_data_class::getList(array(
-    'select' => array('*')
-));
-while ($arTypesColour[] = $rsData->fetch()) {
-
-}
-$entity_data_class = GetEntityDataClass(24);
-$rsData = $entity_data_class::getList(array(
-    'select' => array('*')
-));
-while ($arTypesLent[] = $rsData->fetch()) {
-
-}
-$entity_data_class = GetEntityDataClass(25);
-$rsData = $entity_data_class::getList(array(
-    'select' => array('*')
-));
-while ($arTypesPaket[] = $rsData->fetch()) {
-
-}
-$entity_data_class = GetEntityDataClass(28);
-$rsData = $entity_data_class::getList(array(
-    'select' => array('*'),
-    'filter' => array('UF_USER_ID' => $USER->GetID())
-));
-while ($arPaket[] = $rsData->fetch()) {
-
-}
-$rsUser = CUser::GetByID($USER->GetID());
-$arUser = $rsUser->Fetch();
-
-function resGetter($id, $userId)
+function resGetter(int $iblockId, int $userId) : array
 {
     $arResult = [];
-    $arSelect = array("ID", "IBLOCK_ID", "NAME", 'DATE_MODIFY', 'TIMESTAMP_X', "DATE_ACTIVE_FROM", 'PREVIEW_PICTURE', 'DETAIL_PAGE_URL', 'SHOW_COUNTER', 'PROPERTY_TIME_RISE', 'DATE_CREATE', 'ACTIVE');
-    $arFilter = array("IBLOCK_ID" => IntVal($id), "ACTIVE" => "Y", "PROPERTY_ID_USER" => $userId);
+    $arSelect = array(
+        "ID",
+        "IBLOCK_ID",
+        "NAME",
+        'DATE_MODIFY',
+        'TIMESTAMP_X',
+        "DATE_ACTIVE_FROM",
+        'PREVIEW_PICTURE',
+        'DETAIL_PAGE_URL',
+        'SHOW_COUNTER',
+        'PROPERTY_TIME_RISE',
+        'DATE_CREATE',
+        'ACTIVE'
+    );
+
+    $arFilter = array(
+        "IBLOCK_ID" => $iblockId,
+        "ACTIVE" => "Y",
+        "PROPERTY_ID_USER" => $userId
+    );
     $res = CIBlockElement::GetList(array("DATE_CREATE" => "DESC"), $arFilter, false, false, $arSelect);
+    $counter = 0;
     while ($ob = $res->GetNextElement()) {
-        static $counter;
         $arFields = $ob->GetFields();
         $arResult['ITEMS'][$counter] = $arFields;
         $arProps = $ob->GetProperties();
         $arResult['ITEMS'][$counter]['PROPERTY'] = $arProps;
         $counter++;
     }
-    if (empty($arResult)) {
-        $arResult = ['N'];
-    }
-    return $arResult;
+
+    return !empty($arResult) ? $arResult : ['N'];
 }
 
-function resUnGetter($id, $userId)
+function resUnGetter(int $iblockId, int $userId) : array
 {
     $arResult = [];
     $arSelect = array("ID", "IBLOCK_ID", "NAME", 'DATE_MODIFY', "DATE_ACTIVE_FROM", 'PREVIEW_PICTURE', 'DETAIL_PAGE_URL', 'PROPERTY_TIME_RISE', 'SHOW_COUNTER', 'DATE_CREATE', 'ACTIVE');
-    $arFilter = array("IBLOCK_ID" => IntVal($id), "ACTIVE" => "N", "PROPERTY_ID_USER" => $userId);
+    $arFilter = array("IBLOCK_ID" => $iblockId, "ACTIVE" => "N", "PROPERTY_ID_USER" => $userId);
     $res = CIBlockElement::GetList(array("DATE_CREATE" => "DESC"), $arFilter, false, false, $arSelect);
+    $counter = 0;
     while ($ob = $res->GetNextElement()) {
-        static $counter;
         $arFields = $ob->GetFields();
         $arResult['ITEMS'][$counter] = $arFields;
         $arProps = $ob->GetProperties();
         $arResult['ITEMS'][$counter]['PROPERTY'] = $arProps;
         $counter++;
     }
-    if (empty($arResult)) {
-        $arResult = ['N'];
-    }
-    return $arResult;
+
+    return !empty($arResult) ? $arResult : ['N'];
 }
 
 function reCount($ar)
@@ -107,16 +80,16 @@ function reCount($ar)
 
 }
 
-$ar1 = resGetter(1, $USER->GetID());
-$ar2 = resGetter(2, $USER->GetID());
-$ar3 = resGetter(3, $USER->GetID());
-$ar7 = resGetter(7, $USER->GetID());
-$ar8 = resGetter(8, $USER->GetID());
-$ar1un = resUnGetter(1, $USER->GetID());
-$ar2un = resUnGetter(2, $USER->GetID());
-$ar3un = resUnGetter(3, $USER->GetID());
-$ar7un = resUnGetter(7, $USER->GetID());
-$ar8un = resUnGetter(8, $USER->GetID());
+$ar1 = resGetter(SIMPLE_ADS_IBLOCK_ID, $USER->GetID());
+$ar2 = resGetter(PROPERTY_ADS_IBLOCK_ID, $USER->GetID());
+$ar3 = resGetter(AUTO_IBLOCK_ID, $USER->GetID());
+$ar7 = resGetter(MOTO_IBLOCK_ID, $USER->GetID());
+$ar8 = resGetter(SCOOTER_IBLOCK_ID, $USER->GetID());
+$ar1un = resUnGetter(SIMPLE_ADS_IBLOCK_ID, $USER->GetID());
+$ar2un = resUnGetter(PROPERTY_ADS_IBLOCK_ID, $USER->GetID());
+$ar3un = resUnGetter(AUTO_IBLOCK_ID, $USER->GetID());
+$ar7un = resUnGetter(MOTO_IBLOCK_ID, $USER->GetID());
+$ar8un = resUnGetter(SCOOTER_IBLOCK_ID, $USER->GetID());
 $active = reCount($ar1['ITEMS']) + reCount($ar2['ITEMS']) + reCount($ar3['ITEMS']) + reCount($ar7['ITEMS']) + reCount($ar8['ITEMS']);
 $unactive = reCount($ar1un['ITEMS']) + reCount($ar2un['ITEMS']) + reCount($ar3un['ITEMS']) + reCount($ar7un['ITEMS']) + reCount($ar8un['ITEMS']);
 
@@ -165,75 +138,64 @@ usort($allElements, function ($a, $b) {
 });
 $allElements = array_reverse($allElements);
 ?>
-
-
 <div class="container">
     <h2 class="mb-4 subtitle">
         <?= Loc::getMessage('TITl'); ?>
     </h2>
-
     <div class="row">
         <div class="col-12 col-xl-9">
-
             <!-- annoucments -->
             <div class="mb-4">
                 <div id="userItemFilter">
                     <div class="mb-4 d-flex justify-content-center justify-content-lg-end status-announcement">
                         <div class="form_radio_btn">
-                            <input id="falseAnnouncement" type="radio" name="announcement"
-                                   value="unActiveAnnouncement">
-                            <label class="btn-left"
-                                   for="falseAnnouncement">  <?= Loc::getMessage('UNACTIVE_COUNT'); ?> <span
-                                        class="ml-2 falseAnnouncementCounter"><? echo $unactive; ?></span></label>
+                            <input id="falseAnnouncement" type="radio" name="announcement" value="unActiveAnnouncement">
+                            <label class="btn-left" for="falseAnnouncement"><?=Loc::getMessage('UNACTIVE_COUNT')?>
+                                <span class="ml-2 falseAnnouncementCounter"><?=$unactive?></span>
+                            </label>
                         </div>
-
                         <div class="form_radio_btn">
-                            <input id="trueAnnouncement" type="radio" name="announcement" value="activeAnnouncement"
-                                   checked>
-                            <label class="btn-right" for="trueAnnouncement"><?= Loc::getMessage('ACTIVE_COUNT'); ?>
-                                <span
-                                        class="ml-2 trueAnnouncementCounter"><?= $active ?></span></label>
+                            <input id="trueAnnouncement" type="radio" name="announcement" value="activeAnnouncement" checked>
+                            <label class="btn-right" for="trueAnnouncement"><?=Loc::getMessage('ACTIVE_COUNT')?>
+                                <span class="ml-2 trueAnnouncementCounter"><?=$active?></span>
+                            </label>
                         </div>
                     </div>
                 </div>
-
                 <div class="mb-1 p-3 card d-flex flex-column-reverse flex-lg-row announcement-list">
                     <a class="p-3 d-flex justify-content-center align-items-center" data-toggle="collapse"
                        href="#userAnnouncementList" role="button" aria-expanded="false"
                        aria-controls="collapseExample">
                         <i class="icon-arrow-down-sign-to-navigate-3"></i>
                     </a>
-
                     <div class="w-100 d-flex flex-column flex-xl-row align-items-xl-center justify-content-between">
                         <div class="pl-lg-3 d-flex flex-column text-right">
                             <p class="header-title font-weight-bold"><?= Loc::getMessage('FREE_ADS_1'); ?></p>
-                            <p>
-                                <?= Loc::getMessage('PROPERTY'); ?> <span
-                                        class="counters"><?= reCount($ar8['ITEMS']) ?></span> <?= Loc::getMessage('OF_COUNT'); ?>
-                                <span
-                                        class="counters"><?= $arUser['UF_COUNT_RENT'] ?></span> /
-                                <?= Loc::getMessage('AUTO'); ?> <span
-                                        class="counters"><? echo reCount($ar2['ITEMS']) + reCount($ar3['ITEMS']) + reCount($ar7['ITEMS']) ?></span>
-                                <?= Loc::getMessage('OF_COUNT'); ?> <span
-                                        class="counters"><?= $arUser['UF_AUTO'] ?></span> /
-                                <?= Loc::getMessage('FLEA'); ?> <span
-                                        class="counters"><?= reCount($ar1['ITEMS']) ?></span> <?= Loc::getMessage('OF_COUNT'); ?>
-                                <span
-                                        class="counters"><?= $arUser['UF_ANOUNC'] ?></span>
+                            <p><?= Loc::getMessage('PROPERTY')?>
+                                <span class="counters"><?=reCount($ar2['ITEMS'])?></span>
+                                <?= Loc::getMessage('OF_COUNT');?>
+                                <span class="counters"><?=$arUser['UF_COUNT_RENT']?></span> /
+                                <?= Loc::getMessage('AUTO') ?>
+                                <span class="counters"><?=reCount($ar3['ITEMS']) + reCount($ar7['ITEMS']) + reCount($ar8['ITEMS']) ?></span>
+                                <?= Loc::getMessage('OF_COUNT'); ?>
+                                <span class="counters"><?=$arUser['UF_AUTO']?></span> /
+                                <?= Loc::getMessage('FLEA'); ?>
+                                <span class="counters"><?= reCount($ar1['ITEMS']) ?></span> <?= Loc::getMessage('OF_COUNT'); ?>
+                                <span class="counters"><?=$arUser['UF_ANOUNC']?></span>
                             </p>
                         </div>
-
                         <div class="d-flex flex-column text-right">
                             <p class="mb-0"><?= Loc::getMessage('BUY_NEW_TARIF'); ?></p>
                         </div>
-
                         <div class="d-flex justify-content-center align-items-center">
                             <button onclick="window.location.href = '/personal/rate/'"
-                                    class="btn btn-primary text-uppercase align-self-end"><?= Loc::getMessage('BUY'); ?></button>
+                                    class="btn btn-primary text-uppercase align-self-end"
+                            >
+                                <?= Loc::getMessage('BUY'); ?>
+                            </button>
                         </div>
                     </div>
                 </div>
-
                 <div class="collapse" id="userAnnouncementList">
                     <div class="mb-2">
                         <table class="w-100">
@@ -242,21 +204,21 @@ $allElements = array_reverse($allElements);
                             <tr class="d-flex">
                                 <td class="d-flex flex-column flex-lg-row justify-content-end">
                                     <div class="m-0 mr-lg-4 d-flex align-items-center justify-content-end justify-content-lg-center category">
-                                        <img src="<?= SITE_TEMPLATE_PATH ?>/assets/announsment-list-free.svg"
-                                             alt=""></div>
+                                        <img src="<?= SITE_TEMPLATE_PATH ?>/assets/announsment-list-free.svg" alt="">
+                                    </div>
                                     <div class="d-flex justify-content-end align-items-center justify-content-lg-center font-weight-bold">
                                         <span class="ml-1"><?= $arUser['UF_UF_DAYS_FREE2'] ?></span><?= Loc::getMessage('OF_COUNT'); ?>
                                         <span class="mr-1"> <?= ($arUser['UF_COUNT_AUTO'] < 1) ? "0" : $arUser['UF_COUNT_AUTO']; ?></span>
                                     </div>
                                 </td>
-
-                                <td class="d-flex justify-content-center align-items-center date-announcment"><span>
-                                            <? if (reCount($arUser['UF_COUNT_ITEM_AUTO']) > 0) { ?>
-                                                (  <?= date("d.m.Y H:i:s", strtotime('+ ' . $arItem['UF_DAYS_AUTO_REMAIN'] . ' days')) ?>)
-                                            <? } else { ?>
-                                                -
-                                            <? } ?>
-                                        </span>
+                                <td class="d-flex justify-content-center align-items-center date-announcment">
+                                    <span>
+                                        <? if (reCount($arUser['UF_COUNT_ITEM_AUTO']) > 0) { ?>
+                                            (  <?= date("d.m.Y H:i:s", strtotime('+ ' . $arItem['UF_DAYS_AUTO_REMAIN'] . ' days')) ?>)
+                                        <? } else { ?>
+                                            -
+                                        <? } ?>
+                                    </span>
                                 </td>
                             </tr>
                             <? foreach ($arPaket as $arItem) { ?>
@@ -344,7 +306,6 @@ $allElements = array_reverse($allElements);
                             </tr>
 
                             <? foreach ($arPaket as $arItem) { ?>
-                                <?ps($arItem)?>
                                 <? if ($arItem['UF_COUNT_REMAIN'] > 0 && $arItem['UF_TYPE'] == 'FLEA') { ?>
                                     <tr class="d-flex">
                                         <td class="d-flex flex-column flex-lg-row justify-content-center">
@@ -6849,7 +6810,7 @@ $allElements = array_reverse($allElements);
                     </div>
                 </div>
                 <? } ?>
-                        <? foreach ($ar2un['ITEMS'] as $arItem) { ?>
+                <? foreach ($ar2un['ITEMS'] as $arItem) { ?>
                 <div class="mb-4 card product-card product-line user-product">
                     <div class="card-link" href="<?= $arItem['DETAIL_PAGE_URL'] ?>">
                         <div onclick="window.location.href='<?= $arItem['DETAIL_PAGE_URL'] ?>'" style="cursor: pointer" class="image-block">

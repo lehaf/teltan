@@ -1595,9 +1595,8 @@ $arLink = CIBlockSectionPropertyLink::GetArray(SCOOTER_IBLOCK_ID, 90);
                 $('.first-drop').removeClass('error');
             }
             event.preventDefault();
-            var $data = {};
+            let $data = {};
             if ($('.show-country ').hasClass('selected')) {
-                $('.preloader').css({"z-index": "1", "opacity": "100", "position": "fixed"});
                 $('#mainForm').find('input').each(function () {
                     if (this.checked) {
                         //alert("checked");

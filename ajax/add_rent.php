@@ -1,19 +1,18 @@
 <?php require_once $_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_before.php";
 
-use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
-
 CModule::IncludeModule('highloadblock');
-$entity_data_class = GetEntityDataClass(28);
-$rsData = $entity_data_class::getList(array(
+
+$entity = GetEntityDataClass(BOUGHT_RATE_HL_ID);
+$arPaket = $entity::getList(array(
     'select' => array('*'),
-    'filter' => array('UF_USER_ID' => $USER->GetID(), 'UF_TYPE' => 'Prop')
-));
-while ($arPaket[] = $rsData->fetch()) {
+    'filter' => array('UF_USER_ID'=> $USER->GetID(), 'UF_TYPE'=> 'AUTO'),
+    'cache' => [
+        'ttl' => 360000,
+        'cache_joins' => true
+    ]
+))->fetchAll();
 
-}
-
-$rsUser = CUser::GetByID($USER->GetID());
-$arUser = $rsUser->Fetch();
+$arUser = CUser::GetByID($USER->GetID())->Fetch();
 
 $b = false;
 foreach ($arPaket as $arItem) {
@@ -22,8 +21,8 @@ foreach ($arPaket as $arItem) {
         $b = true;
     }
 }
-//pr($_REQUEST); die();
-if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0 || $b || $_REQUEST['EDIT'] == 'Y') {
+
+if ($arUser['UF_COUNT_RENT'] > $arUser['UF_COUNT_APART'] || $b || $_REQUEST['EDIT'] == 'Y') {
     CModule::IncludeModule('iblock');
     $el = new CIBlockElement;
     $checkedVaue = [];
@@ -87,7 +86,6 @@ if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0 || $b || $_REQUEST[
         $sectionIdNedv = 30;
         $PROP['BUY'] = 150;
         $NAME = $PROP['PROP_TYPE_APART'] . ' ' . $PROP[174] . 'm2' . ' этаж ' . $PROP['PROP_FLOOR'] . '|' . $PROP['PROP_FLOOR_IN'] . ' комнат - ' . $countRooms;
-
     } elseif ($_POST["typeCommercial"]["val"] == 'true') {
         $sectionIdNedv = 32;
         $PROP['BUY'] = 150;
@@ -191,22 +189,23 @@ if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0 || $b || $_REQUEST[
                     CIBlockElement::SetPropertyValueCode($PRODUCT_ID, $key, $value);
                 }
             }
-            if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0) {
-                foreach ($multiselect as $key => $value) {
-                    if (!is_string($key) && !empty($key)) {
 
-                        CIBlockElement::SetPropertyValueCode($PRODUCT_ID, $key, $value);
-                    }
+            foreach ($multiselect as $key => $value) {
+                if (!is_string($key) && !empty($key)) {
+                    CIBlockElement::SetPropertyValueCode($PRODUCT_ID, $key, $value);
                 }
-                $user = new CUser;
-                $arUser['UF_COUNT_ITEM_PROP'][] = intval($PRODUCT_ID);
-                $fields = array(
-                    'UF_COUNT_APART' => ++$arUser['UF_COUNT_APART'],
-                    'UF_COUNT_ITEM_PROP' => $arUser['UF_COUNT_ITEM_PROP']
-                );
-                $user->Update($USER->GetID(), $fields);
-            } else {
+            }
 
+            // Увеличение счетчика объявлений
+            $user = new \CUser;
+            $arUser['UF_COUNT_ITEM_PROP'][] = intval($PRODUCT_ID);
+            $fields = array(
+                'UF_COUNT_APART' => ++$arUser['UF_COUNT_APART'],
+                'UF_COUNT_ITEM_PROP' => $arUser['UF_COUNT_ITEM_PROP']
+            );
+            $user->Update($USER->GetID(), $fields);
+
+            if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] <= 0) {
                 foreach ($arPaket as $arItem) {
                     $a = $arItem['UF_COUNT_REMAIN'] - $arItem['UF_COUNT_LESS'];
                     if ($a > 0 || date("d.m.Y H:i:s") < date("d.m.Y H:i:s", strtotime('+ ' . $arItem['UF_DAYS_REMAIN'] . ' days'))) {

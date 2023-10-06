@@ -1232,7 +1232,6 @@ $arLink = CIBlockSectionPropertyLink::GetArray(MOTO_IBLOCK_ID, 94);
             </div>
         </div>
     </div>
-
     <script>
         $('#forAutohouse').click(function () {
             $('#Legalname').show();
@@ -1549,7 +1548,6 @@ $arLink = CIBlockSectionPropertyLink::GetArray(MOTO_IBLOCK_ID, 94);
             event.preventDefault();
             let $data = {};
             if ($('.show-country ').hasClass('selected')) {
-                $('.preloader').css({"z-index": "1", "opacity": "100", "position": "fixed"});
                 $('#mainForm').find('input').each(function () {
                     if (this.checked) {
                         //alert("checked");
@@ -1613,7 +1611,8 @@ $arLink = CIBlockSectionPropertyLink::GetArray(MOTO_IBLOCK_ID, 94);
                         window.location.href = '/personal/'
                     } else {
                         $('.pop-up').addClass('active');
-                        $('.pop-up__text').html(data.responseBitrix)
+                        $('.modal-backdrop').addClass('show');
+                        $('.pop-up__text').html(data.responseBitrix);
                     }
                 });
             } else {

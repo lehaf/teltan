@@ -1,25 +1,21 @@
-<? require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_before.php");
+<?php require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_before.php");
 
 CModule::IncludeModule('highloadblock');
-
-$entity_data_class = GetEntityDataClass(28);
-$rsData = $entity_data_class::getList(array(
+$entity = GetEntityDataClass(BOUGHT_RATE_HL_ID);
+$arPaket = $entity::getList(array(
     'select' => array('*'),
-    'filter' => array('UF_USER_ID' => $USER->GetID(), 'UF_TYPE' => 'FLEA')
-));
-while ($arPaket[] = $rsData->fetch()) {
+    'filter' => array('UF_USER_ID'=> $USER->GetID(), 'UF_TYPE'=> 'AUTO'),
+    'cache' => [
+        'ttl' => 360000,
+        'cache_joins' => true
+    ]
+))->fetchAll();
 
-}
+$arUser = CUser::GetByID($USER->GetID())->Fetch();
 
-$rsUser = CUser::GetByID($USER->GetID());
-$arUser = $rsUser->Fetch();
 foreach ($_POST['img'] as $key => $value) {
-    if (preg_match("#^data:image/\w+;base64,#i", $value[0])) {
-    } else {
+    if (!preg_match("#^data:image/\w+;base64,#i", $value[0]))
         $_POST['img'][$key][0] = strstr($value[0], '?', true);
-    }
-
-
 }
 
 
@@ -31,7 +27,7 @@ foreach ($arPaket as $arItem) {
     }
 }
 
-if ($arUser['UF_DAYS_FREE1'] - $arUser['UF_COUNT_FLEA'] > 0 || $b || $_REQUEST['EDIT'] == 'Y') {
+if ($arUser['UF_ANOUNC'] > $arUser['UF_COUNT_FLEA'] || $b || $_REQUEST['EDIT'] == 'Y') {
 
     CModule::IncludeModule('iblock');
     $el = new CIBlockElement;
@@ -132,18 +128,17 @@ if ($arUser['UF_DAYS_FREE1'] - $arUser['UF_COUNT_FLEA'] > 0 || $b || $_REQUEST['
                         CIBlockElement::SetPropertyValueCode($PRODUCT_ID, $key, $value);
                     }
                 }
-                if ($arUser['UF_DAYS_FREE1'] - $arUser['UF_COUNT_FLEA'] > 0) {
 
-                    $user = new CUser;
-                    $arUser['UF_COUNT_ITEM_FLEA'][] = intval($PRODUCT_ID);
-                    $fields = array(
+                // Увеличение счетчика объявлений
+                $user = new \CUser;
+                $arUser['UF_COUNT_ITEM_FLEA'][] = $PRODUCT_ID;
+                $fields = array(
+                    'UF_COUNT_FLEA' => ++$arUser['UF_COUNT_FLEA'],
+                    'UF_COUNT_ITEM_FLEA' => $arUser['UF_COUNT_ITEM_FLEA']
+                );
+                $user->Update($USER->GetID(), $fields);
 
-                        'UF_COUNT_FLEA' => ++$arUser['UF_COUNT_FLEA'],
-                        'UF_COUNT_ITEM_FLEA' => $arUser['UF_COUNT_ITEM_FLEA']
-                    );
-                    $user->Update($USER->GetID(), $fields);
-                } else {
-
+                if ($arUser['UF_DAYS_FREE1'] - $arUser['UF_COUNT_FLEA'] <= 0) {
                     foreach ($arPaket as $arItem) {
                         $a = $arItem['UF_COUNT_REMAIN'] - $arItem['UF_COUNT_LESS'];
                         if ($a > 0 || date("d.m.Y H:i:s") < date("d.m.Y H:i:s", strtotime('+ ' . $arItem['UF_DAYS_REMAIN'] . ' days'))) {
@@ -400,8 +395,9 @@ if ($arUser['UF_DAYS_FREE1'] - $arUser['UF_COUNT_FLEA'] > 0 || $b || $_REQUEST['
                 );
                 $el->Update(intval($_REQUEST['EDIT_ID']), $arLoadProductArray);
             }
-            echo json_encode(array('success' => 1));
 
+
+            echo json_encode(array('success' => 1));
         } else {
             echo json_encode(array('success' => 0, 'responseBitrix' => $el->LAST_ERROR), JSON_UNESCAPED_UNICODE);
         }

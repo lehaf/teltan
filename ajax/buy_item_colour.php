@@ -1,10 +1,9 @@
-<?require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
-use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
+<?php require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
+
 CModule::IncludeModule('iblock');
-define("MY_HL_BLOCK_ID", 30);
 CModule::IncludeModule('highloadblock');
 
-$entity_data_class = GetEntityDataClass(MY_HL_BLOCK_ID);
+$entity_data_class = GetEntityDataClass(PERSONAL_HISTORY_BUY_HL_ID);
 
 $rsUser = CUser::GetByID($USER->GetID());
 $arUser = $rsUser->Fetch();

@@ -1,19 +1,68 @@
-<?require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
-CModule::IncludeModule('iblock');
+<?php require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
 
-$PRODUCT_ID = IntVal($_REQUEST['item']);  // изменяем элемент с кодом (ID) 2
-CIBlockElement::Delete($PRODUCT_ID);
-const MY_HL_BLOCK_ID = 1;
-CModule::IncludeModule('highloadblock');
+use Bitrix\Main\Loader;
 
-$entity_data_class = GetEntityDataClass(5);
-$rsData = $entity_data_class::getList(array(
-    'select' => array('*')
-));
-while($el = $rsData->fetch()){
-    if ($el['UF_ID_USER'] == $USER->GetID() && $el['UF_ID_AD'] == $_REQUEST['item']){
-        $result = $entity_data_class::delete($el['ID']);
+if (Loader::includeModule("iblock") && Loader::includeModule("highloadblock") && !empty($_REQUEST['item'])) {
+    global $USER;
+    // Удаляем объявление из инфоблока а также уменьшаем счетчик созданных объявлений пользователя
+    $itemId = intval($_REQUEST['item']);
+    $item = \Bitrix\Iblock\ElementTable::getList(array(
+        'select' => array('ID', 'IBLOCK_ID'),
+        'filter' => array('ID' => $itemId),
+    ))->fetch();
+
+
+    $iblockIdToPropCountAds = [
+        1 => "UF_COUNT_FLEA",
+        2 => "UF_COUNT_APART",
+        3 => "UF_COUNT_AUTO",
+        7 => "UF_COUNT_AUTO",
+        8 => "UF_COUNT_AUTO",
+    ];
+
+    $iblockIdToPropIdAds = [
+        1 => "UF_COUNT_ITEM_FLEA",
+        2 => "UF_COUNT_ITEM_PROP",
+        3 => "UF_COUNT_ITEM_AUTO",
+        7 => "UF_COUNT_ITEM_AUTO",
+        8 => "UF_COUNT_ITEM_AUTO",
+    ];
+
+    if (!empty($item)) {
+        $userPropCountAdsName = $iblockIdToPropCountAds[$item['IBLOCK_ID']];
+        $arUser = CUser::GetByID($USER->GetID())->Fetch();
+        if (!empty($userPropCountAdsName) && !empty($arUser[$userPropCountAdsName])) {
+            $user = new \CUser;
+            $countAds = $arUser[$userPropCountAdsName];
+            $fields = array(
+                $userPropCountAdsName => $countAds !== 0 ? --$countAds : 0,
+            );
+            // Обновляем список id созданных пользователем объявлений
+            if (!empty($iblockIdToPropIdAds[$item['IBLOCK_ID']])) {
+                $propIdAdsName = $iblockIdToPropIdAds[$item['IBLOCK_ID']];
+
+                if (!empty($arUser[$propIdAdsName])) {
+                    $key = array_search($itemId, $arUser[$propIdAdsName]);
+                    if ($key !== false) {
+                        unset($arUser[$propIdAdsName][$key]);
+                        $fields[$propIdAdsName] = $arUser[$propIdAdsName];
+                    }
+                }
+            }
+
+            $user->Update($USER->GetID(), $fields);
+        }
+        CIBlockElement::Delete($itemId);
     }
+
+    // Удаляем объявление из таблицы избранного пользователей
+    $entity = GetEntityDataClass(PERSONAL_FAVORITE_HL_ID);
+    $favoriteItem = $entity::getList(array(
+        'select' => array('*'),
+        'filter' => array('UF_ID_USER'=> $USER->GetID(), 'UF_ID_AD'=> $itemId),
+    ))->fetchObject();
+
+    if ($favoriteItem) $favoriteItem->delete();
 }
+
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/epilog_after.php");
-?>

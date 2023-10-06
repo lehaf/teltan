@@ -42,6 +42,23 @@ function pr($o, $show = false, $die = false, $fullBackTrace = false)
     }
 }
 
+function getHLData(int $hlBlockId, array $select = [], array $filter = []) : array
+{
+    $hlBlockTable = \Bitrix\Highloadblock\HighloadBlockTable::getById($hlBlockId)->fetch();
+    $entity = \Bitrix\Highloadblock\HighloadBlockTable::compileEntity($hlBlockTable);
+    $hlClass = $entity->getDataClass();
+    $res = $hlClass::getList(array(
+        'select' => !empty($select) ? $select : ['*'],
+        'filter' => $filter,
+        'cache' => [
+            'ttl' => 36000000,
+            'cache_joins' => true
+        ]
+    ))->fetchAll();
+
+    return !empty($res) && is_array($res) ? $res : [];
+}
+
 function getTypePropertyHl(array $valueCodes) : array
 {
     $hlblock = \Bitrix\Highloadblock\HighloadBlockTable::getById(PROPERTY_TYPES_HL_ID)->fetch();
