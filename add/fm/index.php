@@ -590,6 +590,21 @@ $arLink = CIBlockSectionPropertyLink::GetArray(SIMPLE_ADS_IBLOCK_ID, $_GET['ids'
 
         let flagPhoto = true;
         $(document).ready(function () {
+            function resetActiveSection() {
+                $('div[role="tablist"] a').each(function () {
+                    $(this).removeClass('active');
+                });
+
+                $('div.tab-pane').each(function () {
+                    $(this).removeClass('show active');
+                });
+
+                $('div.tab-content li a').each(function () {
+                    $(this).removeClass('activeSection');
+                });
+            }
+
+
             let sectionId = $('.section_id_a.activeSection').attr('data-id_section');
             if (sectionId) $('input#section_id').val(sectionId);
 
@@ -597,6 +612,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray(SIMPLE_ADS_IBLOCK_ID, $_GET['ids'
             let fields = <?=json_encode($arFields)?>;
 
             if (fields.IBLOCK_SECTION_ID && fields.IBLOCK_SECTION_ID > 0) {
+                resetActiveSection();
                 $(`a[data-id_section="${fields.IBLOCK_SECTION_ID}"].section_id_a`).addClass('activeSection');
                 $(`a[data-id_section="${fields.IBLOCK_SECTION_ID}"].section_id_a`)
                     .closest('.tab-pane').addClass('show active')
@@ -815,14 +831,6 @@ $arLink = CIBlockSectionPropertyLink::GetArray(SIMPLE_ADS_IBLOCK_ID, $_GET['ids'
       </div>
     </div>`,
         )
-        <?if(!$_GET['ids'] && !$_GET['EDIT']){?>
-            $('#v-pills-tabDescriptionContent').find('li').each(function (index) {
-                if (index < 1) {
-                    let id_section = $(this).children('a').attr('data-id_section');
-                    window.location.href = `/add/fm/?ids=${id_section}`;
-                }
-            })
-        <?}?>
 
         $('.section_id_a').click(function (e) {
             $('.activeSection').each(function () {

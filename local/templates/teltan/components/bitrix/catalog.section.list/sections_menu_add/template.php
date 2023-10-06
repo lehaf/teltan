@@ -11,7 +11,8 @@
 /** @var string $componentPath */
 /** @var CBitrixComponent $component */
 $this->setFrameMode(true);
-
+$activeMainSectionId = array_key_first($arResult['SECTIONS']);
+$activeSubsectionId = array_key_first($arResult['SECTIONS'][$activeMainSectionId]['ITEMS']);
 ?>
 <div class="mb-5 row flex-column-reverse flex-lg-row">
     <div class="col-12 col-lg">
@@ -27,101 +28,49 @@ $this->setFrameMode(true);
                     Назад
                 </button>
                 <!-- Flea market on click content link-->
-
-                <?
-                $isi = 0;
-                $i = 0;
-                $depth_level = 1;
-                foreach($arResult['SECTIONS'] as $k => $section)
-                {
-                    if($_GET['ids'] == $section['ID'])
-                    {
-
-                       $idParenActive = $section['IBLOCK_SECTION_ID'];
-                    }
-                }
-                foreach ($arResult['SECTIONS'] as $k => $section){
-                    if ($section['ID'] == $idParenActive){
-                        $arResult['SECTIONS'][$k]['ACTIVE_BLOCK'] = 'Y' ;
-                    }
-
-                }?>
-                <script>console.log(<?=json_encode($arResult)?>)</script>
-                <?
-
-                foreach($arResult['SECTIONS'] as $k => $section)
-                {
-
-                switch (LANGUAGE_ID){
-                    case 'en':
-                        $section['NAME'] = $section['UF_NAME_EN'];
-                        $section['~NAME'] = $section['~UF_NAME_EN'];
-                        break;
-                    case 'he':
-                        $section['NAME'] = $section['UF_NAME_HEB'];
-                        $section['~NAME'] = $section['~UF_NAME_HEB'];
-                        break;
-                }
-                if($section['DEPTH_LEVEL'] == 1)
-                {
-                if($i > 0)
-                {?>
-                </ul>
+                <?php foreach ($arResult['SECTIONS'] as $key => $sectionMain):?>
+                    <div class="tab-pane fade show <?=$key === $activeMainSectionId ? ' active' : ''?>"
+                         id="ad_<?=$sectionMain['CODE'];?>"
+                         role="tabpanel"
+                         aria-labelledby="ad_<?=$sectionMain['CODE'];?>-tab"
+                    >
+                        <ul>
+                            <?foreach ($sectionMain['ITEMS'] as $subKey => $subsection):?>
+                                <li>
+                                    <a data-id_section="<?=$subsection['ID']?>"
+                                       class="section_id_a <?=$activeSubsectionId === $subKey ? 'activeSection' : ''?>">
+                                        <?=$subsection['NAME'];?>
+                                    </a>
+                                </li>
+                            <?endforeach;?>
+                        </ul>
+                    </div>
+                <?endforeach;?>
             </div>
-            <?}
-            ?>
-
-            <div class="tab-pane fade show <?if($section['ACTIVE_BLOCK'] == 'Y'){echo ' active';}?>" id="ad_<?=$section['CODE'];?>" role="tabpanel" aria-labelledby="ad_<?=$section['CODE'];?>-tab">
-                <ul>
-
-                    <?
-
-                    }?>
-                    <?
-                    if($section['DEPTH_LEVEL'] == 2)
-                    {?>
-
-                        <li><a data-id_section="<?=$section['ID']?>" class="section_id_a<?if($_GET['ids'] == $section['ID']){echo ' activeSection'; $idParenActive = $section['IBLOCK_SECTION_ID'];}?>"><?=$section['~NAME'];?></a></li>
-                        <?
-                    }
-                    $depth_level = $section['DEPTH_LEVEL'];
-                    $i++;
-                    }
-                    ?>
-                </ul>
+            <!-- Flea market categories links-->
+            <div class="nav flex-column nav-pills border-left" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <?php foreach ($arResult['SECTIONS'] as $key => $sectionMain):?>
+                    <?if (empty($sectionMain['ITEMS'])) continue;?>
+                    <a class="nav-link  <?=$activeMainSectionId == $key ? 'active' : ''?>"
+                       id="ad_<?=$sectionMain['CODE'];?>-tab"
+                       data-toggle="pill"
+                       href="#ad_<?=$sectionMain['CODE'];?>"
+                       role="tab"
+                       aria-controls="ad_<?=$sectionMain['CODE'];?>"
+                       aria-selected="true"
+                    >
+                        <?=$sectionMain['NAME'];?>
+                        <img style=" height: 20px; width: auto; position: absolute;top: 6px;right: 0;"
+                             src="<?=CFile::GetPath($sectionMain['UF_SVG_ICON_URL']);?>"
+                             alt="<?=$sectionMain['NAME']?>"
+                             title="<?=$sectionMain['NAME']?>"
+                        >
+                    </a>
+                <?endforeach;?>
             </div>
-        </div>
-
-        <!-- Flea market categories links-->
-        <div class="nav flex-column nav-pills border-left" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            <?
-            $j = 0;
-            foreach($arResult['SECTIONS'] as $k => $section){
-
-                switch (LANGUAGE_ID){
-                    case 'en':
-                        $section['NAME'] = $section['UF_NAME_EN'];
-                        $section['~NAME'] = $section['~UF_NAME_EN'];
-                        break;
-                    case 'he':
-                        $section['NAME'] = $section['UF_NAME_HEB'];
-                        $section['~NAME'] = $section['~UF_NAME_HEB'];
-                        break;
-                }
-                if($section['DEPTH_LEVEL'] > 1)
-                    continue;
-                ?>
-
-                <a class="nav-link  <?if($idParenActive == $section['ID']){echo 'active';}?>" id="ad_<?=$section['CODE'];?>-tab" data-toggle="pill" href="#ad_<?=$section['CODE'];?>" role="tab" aria-controls="ad_<?=$section['CODE'];?>" aria-selected="true">
-                    <?=$section['~NAME'];?>
-                    <img style=" height: 20px; width: auto; position: absolute;top: 6px;right: 0;" src="<?=CFile::GetPath($section['UF_SVG_ICON_URL']);?>" alt="">
-                </a>
-                <?$j++;}?>
         </div>
     </div>
-</div>
-
-<div class="col-12 col-lg-2">
-    <p class="font-weight-bold label-name">:Select section</p>
-</div>
+    <div class="col-12 col-lg-2">
+        <p class="font-weight-bold label-name">:Select section</p>
+    </div>
 </div>
