@@ -89,7 +89,7 @@ if ($arUser['UF_ANOUNC'] > $arUser['UF_COUNT_FLEA'] || $b || $_REQUEST['EDIT'] =
     } else {
         $arLoadProductArray = array(
             'MODIFIED_BY' => $GLOBALS['USER']->GetID(),
-            //  'IBLOCK_SECTION_ID' => (int)$_POST['section_id']['id_section'],
+            'IBLOCK_SECTION_ID' => (int)$_POST['section_id'],
             'IBLOCK_ID' => SIMPLE_ADS_IBLOCK_ID,
             'CODE' => $translit,
             'PROPERTY_VALUES' => $PROP,

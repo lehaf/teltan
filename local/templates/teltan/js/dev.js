@@ -547,8 +547,6 @@ $(document).ready(function () {
                 $('.section_props_user').empty().html(msg);
             }
         });
-
-
     })
 
     let radioBtn = document.querySelectorAll('form#mainForm div[data-wizard-content="0"] .form_radio_btn input[name="type"]');

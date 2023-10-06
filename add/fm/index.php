@@ -15,6 +15,7 @@ $properties = CIBlockProperty::GetList(
         array("ACTIVE" => "Y", "IBLOCK_ID" => SIMPLE_ADS_IBLOCK_ID)
 );
 while ($prop_fields[] = $properties->GetNext()) {
+
 }
 $arProp = [];
 
@@ -80,8 +81,6 @@ if ($_GET['EDIT'] == 'Y' && $_GET['ID']) {
     }
 }
 $arLink = CIBlockSectionPropertyLink::GetArray(SIMPLE_ADS_IBLOCK_ID, $_GET['ids']);
-
-ps($arProp);
 ?>
 
     <div class="container">
@@ -123,6 +122,7 @@ ps($arProp);
                         "VIEW_MODE" => "LINE"
                     )
                 ); ?>
+                <input type="hidden" id="section_id" name="section_id" value="">
                 <div class="form-group row flex-column-reverse flex-lg-row">
                     <div class="col col-lg-10">
                         <input type="text" value="<?= $arFields['NAME'] ?>" class="form-control"
@@ -585,43 +585,54 @@ ps($arProp);
 
         </div>
     </div>
-<?ps($arProps)?>
+
     <script>
 
         let flagPhoto = true;
         $(document).ready(function () {
+            let sectionId = $('.section_id_a.activeSection').attr('data-id_section');
+            if (sectionId) $('input#section_id').val(sectionId);
+
             let props = <?=json_encode($arProps)?>;
             let fields = <?=json_encode($arFields)?>;
-            console.log(props);
-            console.log(fields);
-            <?if(!$_GET['ids'] && $_GET['EDIT']){?>
-            window.location.href = document.location.href + `&ids=${fields.IBLOCK_SECTION_ID}`
-            <?}?>
-            <?if($_GET['EDIT']){?>
-            $('#mainForm').find('input').each(function (index) {
-                if ($(this).val() === '') {
-                    if (props[$(this).attr('id')] !== undefined) {
-                        $(this).val(props[$(this).attr('id')]['VALUE'])
-                    }
-                }
-                let id_prop = $(this).data();
 
-                if (id_prop.idSelf !== undefined) {
-                    if (props[id_prop.code_prop] !== undefined) {
-                        if (id_prop.idSelf == props[id_prop.code_prop]['VALUE_ENUM_ID']) {
+            if (fields.IBLOCK_SECTION_ID && fields.IBLOCK_SECTION_ID > 0) {
+                $(`a[data-id_section="${fields.IBLOCK_SECTION_ID}"].section_id_a`).addClass('activeSection');
+                $(`a[data-id_section="${fields.IBLOCK_SECTION_ID}"].section_id_a`)
+                    .closest('.tab-pane').addClass('show active')
+                let mainMenuBtn = $(`a[data-id_section="${fields.IBLOCK_SECTION_ID}"].section_id_a`)
+                    .closest('.tab-pane').attr('id');
 
-                            $(this).prop('checked', true);
+                $(`a[href="#${mainMenuBtn}"]`).addClass('active');
+
+                $('input#section_id').val(fields.IBLOCK_SECTION_ID);
+            }
+
+            <?if($_GET['EDIT'] === 'Y'){?>
+                $('#mainForm').find('input').each(function (index) {
+                    if ($(this).val() === '') {
+                        if (props[$(this).attr('id')] !== undefined) {
+                            $(this).val(props[$(this).attr('id')]['VALUE'])
                         }
                     }
-                }
-                if (id_prop.idSelf !== undefined) {
-                    if (props[id_prop.code_prop] !== undefined) {
-                        if (props[id_prop.code_prop]['VALUE_ENUM_ID'].includes(id_prop.idSelf)) {
-                            $(this).prop('checked', true);
+                    let id_prop = $(this).data();
+
+                    if (id_prop.idSelf !== undefined) {
+                        if (props[id_prop.code_prop] !== undefined) {
+                            if (id_prop.idSelf == props[id_prop.code_prop]['VALUE_ENUM_ID']) {
+
+                                $(this).prop('checked', true);
+                            }
                         }
                     }
-                }
-            })
+                    if (id_prop.idSelf !== undefined) {
+                        if (props[id_prop.code_prop] !== undefined) {
+                            if (props[id_prop.code_prop]['VALUE_ENUM_ID'].includes(id_prop.idSelf)) {
+                                $(this).prop('checked', true);
+                            }
+                        }
+                    }
+                })
             <?}?>
         })
 
@@ -641,7 +652,7 @@ ps($arProp);
 
         function rotateThis(item) {
             let count_rotate = $(item).parents('.main-photo__item').find('img').attr('data-rotate');
-            console.log($(item).parents('.main-photo__item').find('img').attr('data-rotate'))
+
             count_rotate = parseInt(count_rotate) + 1;
             $(item).closest('.main-photo__item').find('img').attr('data-rotate', count_rotate);
         }
@@ -721,7 +732,7 @@ ps($arProp);
 
                 newFilesArr.forEach(async (file) => {
                     const dataUrl = await this.readFileAsync(file);
-                    console.log(allFiles);
+
                     let photoList = document.querySelectorAll(".main-selector-photo .set-main-text");
                     photoList.forEach((el) => {
                         let textItem = el.innerText;
@@ -805,30 +816,26 @@ ps($arProp);
     </div>`,
         )
         <?if(!$_GET['ids'] && !$_GET['EDIT']){?>
+            $('#v-pills-tabDescriptionContent').find('li').each(function (index) {
+                if (index < 1) {
+                    let id_section = $(this).children('a').attr('data-id_section');
+                    window.location.href = `/add/fm/?ids=${id_section}`;
+                }
+            })
+        <?}?>
 
-        $('#v-pills-tabDescriptionContent').find('li').each(function (index) {
-            if (index < 1) {
-                let id_section = $(this).children('a').attr('data-id_section');
-                window.location.href = `/add/fm/?ids=${id_section}`;
-            }
-        })
-        <?}
-        if (empty($_GET['ids'])) {
-            $_GET['ids'] = 0;
-        }
-        ?>
         $('.section_id_a').click(function (e) {
             $('.activeSection').each(function () {
                 if (e.target != this) {
                     this.checked = false;
                     $(this).toggleClass('activeSection')
                 }
-
             });
             $(this).toggleClass('activeSection')
             let id_section = $(this).attr('data-id_section');
-            window.location.href = `/add/fm/?ids=${id_section}`
+            $('input#section_id').val(id_section);
         })
+
 
         function submitForm(event) {
             let errors = 0;
@@ -892,7 +899,7 @@ ps($arProp);
 
             });
             let thisdiv = 0;
-            let checkedData = '';
+
             $('#mainForm').find('.div-req').each(function () {
                 errorsDiv++;
                 thisdiv++;
@@ -917,8 +924,7 @@ ps($arProp);
             } else {
                 $('.first-drop').removeClass('error');
             }
-            console.log(errors)
-            console.log(thisdiv)
+
             if (errors < 1 && errorsDiv < 1) {
                 if ($('.show-country ').hasClass('selected')) {
                     var $data = {};
@@ -963,13 +969,13 @@ ps($arProp);
                     $data['img'] = $imgobject;
 
                     <?if($_GET['EDIT'] == 'Y'){?>
-                    $data['EDIT'] = 'Y';
-                    $data['CALL_FROM'] = $('#callFrom').val();
-                    $data['CALL_TO'] = $('#callTo').val();
-                    $data['EDIT_ID'] = '<?=$_GET['ID']?>'
+                        $data['EDIT'] = 'Y';
+                        $data['CALL_FROM'] = $('#callFrom').val();
+                        $data['CALL_TO'] = $('#callTo').val();
+                        $data['EDIT_ID'] = '<?=$_GET['ID']?>'
                     <?}?>
                     $data['itemDescription'] = $('#itemDescription').val();
-                    $data['section_id'] = <?=$_GET['ids']?>;
+                    $data['section_id'] = $('input#section_id').val();
 
                     $data['LOCATION'] = $('.first-drop').html() + $('.second-drop').html()
                     $data['region'] = $('.first-drop').html().trim();
