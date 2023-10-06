@@ -372,14 +372,15 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                         <div class="wizard-content" data-wizard-content="2">
                             <?
                             $entity_data_class = GetEntityDataClass(8);
-                            $rsData = $entity_data_class::getList(array(
-                                'select' => array('*')
-                            ));
-                            while ($arPropsSection[] = $rsData->fetch()) {
-                                //  print_r($arPropsSection);
-                            }
+                            $arPropsSection = $entity_data_class::getList(array(
+                                'select' => array('*'),
+                                'cache' => [
+                                    'ttl' => 3600000,
+                                    'cache_joins' => true
+                                ]
+                            ))->fetchAll();
+
                             if (CModule::IncludeModule("iblock"))
-                                $IBLOCK_ID = 2;
                             $properties = CIBlockProperty::GetList(array("sort" => "asc", "name" => "asc"), array("ACTIVE" => "Y", "IBLOCK_ID" => $IBLOCK_ID));
                             while ($prop_fields[] = $properties->GetNext()) {
                                 //echo $prop_fields["ID"]." - ".$prop_fields["NAME"]."<br>";
@@ -431,9 +432,6 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                 }
 
                             }
-                            //    print_r($filterProps);
-
-
 
                             ?>
                             <div class="property step-three">
@@ -784,7 +782,6 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                         <div class="wizard-content" data-wizard-content="3">
                             <div class="property-step-price">
                                 <h2 class="mb-4 text-center text-uppercase font-weight-bolder auto-step2__title"><?=Loc::getMessage('rent-price');?></h2>
-
                                 <p class="text-center">
                                     <?
                                     $dir = $APPLICATION->GetCurDir();
@@ -821,10 +818,8 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
                                     ?>
                                 </p>
-
                                 <div class="d-flex justify-content-center align-items-center">
                                     <div class="d-flex">
-
                                         <p class="icon-currency-shek" style="font-size: 33px;
                                                         margin-top: 5px;
                                                         color: #3fb465;
@@ -833,7 +828,6 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                             <?= ICON_CURRENCY; ?>
                                         </p>
                                         <div class="ml-4 mb-0 form-group">
-
                                             <input type="number" class="form-control" id="sellPrice" placeholder="0" required value="<?=(is_array($arProps['PRICE']['VALUE'])) ? $arProps['PRICE']['VALUE'][0]: $arProps['PRICE']['VALUE'] ?>">
                                         </div>
                                     </div>

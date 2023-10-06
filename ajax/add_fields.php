@@ -10,21 +10,26 @@ $section = $sectionEntity::getList(array(
         "ACTIVE" => "Y",
     ),
     "select" => array("UF_PROPS"),
-    'cache' => array(
-        'ttl' => 360000, // Время жизни кеша
-        'cache_joins' => true // Кешировать ли выборки с JOIN
-    ),
+//    'cache' => array(
+//        'ttl' => 360000, // Время жизни кеша
+//        'cache_joins' => true // Кешировать ли выборки с JOIN
+//    ),
 ))->fetch();
 
 if (!empty($section['UF_PROPS'])) {
+    // Убираем свойства которые не должны быть дополнительными (например дубликаты)
+    foreach ($section['UF_PROPS'] as $key => $propCode) {
+        if (in_array($propCode, NOT_ADDITIONAL_PROPERTY_PROPS)) unset($section['UF_PROPS'][$key]);
+    }
+
     $props = \Bitrix\Iblock\PropertyTable::getList(array(
         'order' => array('SORT' => 'DESC'),
         'select' => array('*'),
         'filter' => array('IBLOCK_ID' => $_POST['iblockId'], 'CODE' => $section['UF_PROPS']),
-        'cache' => array(
-            'ttl' => 360000, // Время жизни кеша
-            'cache_joins' => true // Кешировать ли выборки с JOIN
-        ),
+//        'cache' => array(
+//            'ttl' => 360000, // Время жизни кеша
+//            'cache_joins' => true // Кешировать ли выборки с JOIN
+//        ),
     ))->fetchAll();
 
     if (!empty($props)) {
@@ -42,10 +47,10 @@ if (!empty($section['UF_PROPS'])) {
                 'order' => array('SORT' => 'DESC','ID' => 'ASC'),
                 'select' => array('*'),
                 'filter' => array('PROPERTY_ID' => $enumPropsId),
-                'cache' => array(
-                    'ttl' => 360000, // Время жизни кеша
-                    'cache_joins' => true // Кешировать ли выборки с JOIN
-                ),
+//                'cache' => array(
+//                    'ttl' => 360000, // Время жизни кеша
+//                    'cache_joins' => true // Кешировать ли выборки с JOIN
+//                ),
             ))->fetchAll();
 
             if (!empty($enumValues)) {
