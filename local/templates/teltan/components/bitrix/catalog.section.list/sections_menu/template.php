@@ -11,85 +11,57 @@
 /** @var string $componentPath */
 /** @var CBitrixComponent $component */
 $this->setFrameMode(true);
-
+$activeMainSectionId = array_key_first($arResult['SECTIONS']);
 ?>
-
-        <div class="tab-content" id="v-pills-tabContent">
-            <button type="button" class="d-flex d-lg-none justify-content-end btn w-100 border-bottom btn-back"><span class="mr-5 btn-back-arrow"><svg width="5" height="9" viewBox="0 0 5 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M0.999999 8L4 4.5L1 1" stroke="#3FB465" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-</span> Назад</button>
-            <?
-            $isi = 0;
-            $i = 0;
-            $depth_level = 1;
-            foreach($arResult['SECTIONS'] as $k => $section)
-            {
-            $pos = strpos($_SERVER['SCRIPT_URL'], $section['SECTION_PAGE_URL']);
-            switch (LANGUAGE_ID){
-                case 'en':
-                    $section['NAME'] = $section['UF_NAME_EN'];
-                    $section['~NAME'] = $section['~UF_NAME_EN'];
-                    break;
-                case 'he':
-                    $section['NAME'] = $section['UF_NAME_HEB'];
-                    $section['~NAME'] = $section['~UF_NAME_HEB'];
-                    break;
-            }
-
-                if($section['DEPTH_LEVEL'] == 1)
-                {
-                    if($i > 0)
-                    {?>
-                        </ul>
-                    </div>
-                    <?}
-                    ?>
-                    <div class="tab-pane fade show <?=($pos !== false)? 'active' : ''?>" id="<?=$section['CODE'];?>" role="tabpanel" aria-labelledby="<?=$section['CODE'];?>-tab">
-                            <ul>
-
-                <?
-
-                }?>
-                <?
-                if($section['DEPTH_LEVEL'] == 2)
-                {?>
-                    <li><a class="<?=($pos !== false)? 'activeSection' : ''?>" href="<?=$section['SECTION_PAGE_URL'];?>"><?=$section['NAME'];?><img tyle="width: auto;" src="<?=CFile::GetPath($section['~UF_SVG_ICON_URL'])?>" alt=""></a></li>
-                <?
-                }
-                $depth_level = $section['DEPTH_LEVEL'];
-                $i++;
-            }
-            ?>
-                            </ul>
-                    </div>
-
-        </div>
-
-        <!-- Flea market categories links-->
-        <div class="nav flex-column nav-pills border-left" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            <?
-            $j = 0;
-            foreach($arResult['SECTIONS'] as $k => $section){
-                $pos = strpos($_SERVER['SCRIPT_URL'], $section['SECTION_PAGE_URL']);
-
-                switch (LANGUAGE_ID){
-                    case 'en':
-                        $section['NAME'] = $section['UF_NAME_EN'];
-                        $section['~NAME'] = $section['~UF_NAME_EN'];
-                        break;
-                    case 'he':
-                        $section['NAME'] = $section['UF_NAME_HEB'];
-                        $section['~NAME'] = $section['~UF_NAME_HEB'];
-                        break;
-                }
-                if($section['DEPTH_LEVEL'] > 1)
-                    continue;
-                ?>
-                <a class="nav-link  <?=($pos !== false)? 'active' : ''?>" id="<?=$section['CODE'];?>-tab" data-toggle="pill" href="#<?=$section['CODE'];?>" role="tab" aria-controls="<?=$section['CODE'];?>" aria-selected="true">
-                    <?=$section['~NAME'];?>
-                    <img style="height: 20px;width: auto; position: absolute;top: 6px;right: 0;" src="<?=CFile::GetPath($section['~UF_SVG_ICON_URL'])?>" alt="">
-                </a>
-            <?$j++;}?>
-
-        </div>
+<?php if (!empty($arResult['SECTIONS'])):?>
+    <div class="tab-content" id="v-pills-tabContent">
+        <button type="button" class="d-flex d-lg-none justify-content-end btn w-100 border-bottom btn-back">
+            <span class="mr-5 btn-back-arrow">
+                <svg width="5" height="9" viewBox="0 0 5 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0.999999 8L4 4.5L1 1" stroke="#3FB465" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            Назад
+        </button>
+        <!-- Flea market on click content link-->
+        <?php foreach ($arResult['SECTIONS'] as $key => $sectionMain):?>
+            <div class="tab-pane fade show <?=$key === $activeMainSectionId ? ' active' : ''?>"
+                 id="menu_<?=$sectionMain['CODE'];?>"
+                 role="tabpanel"
+                 aria-labelledby="ad_<?=$sectionMain['CODE'];?>-tab"
+            >
+                <ul>
+                    <?foreach ($sectionMain['ITEMS'] as $subKey => $subsection):?>
+                        <li>
+                            <a data-id_section="<?=$subsection['ID']?>"
+                               class="section_id_a">
+                                <?=$subsection['NAME'];?>
+                            </a>
+                        </li>
+                    <?endforeach;?>
+                </ul>
+            </div>
+        <?endforeach;?>
+    </div>
+    <!-- Flea market categories links-->
+    <div class="nav flex-column nav-pills border-left" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+        <?php foreach ($arResult['SECTIONS'] as $key => $sectionMain):?>
+            <?if (empty($sectionMain['ITEMS'])) continue;?>
+            <a class="nav-link  <?=$activeMainSectionId == $key ? 'active' : ''?>"
+               id="menu_<?=$sectionMain['CODE'];?>-tab"
+               data-toggle="pill"
+               href="#menu_<?=$sectionMain['CODE'];?>"
+               role="tab"
+               aria-controls="ad_<?=$sectionMain['CODE'];?>"
+               aria-selected="true"
+            >
+                <?=$sectionMain['NAME'];?>
+                <img style=" height: 20px; width: auto; position: absolute;top: 6px;right: 0;"
+                     src="<?=CFile::GetPath($sectionMain['UF_SVG_ICON_URL']);?>"
+                     alt="<?=$sectionMain['NAME']?>"
+                     title="<?=$sectionMain['NAME']?>"
+                >
+            </a>
+        <?endforeach;?>
+    </div>
+<?php endif;?>
