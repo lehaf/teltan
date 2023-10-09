@@ -10,12 +10,14 @@ const SECTION_PROPS_HL_ID = 8;
 const LIVING_PROP_SECTIONS_ID = [34, 35];
 const COMMERCICAL_PROP_SECTIONS_ID = [32, 33];
 const NEW_BUILDINGS_PROP_SECTIONS_ID = [31, 30];
+// Highload-блоки
 const MAP_REGIONS_HL_ID = 34;
 const BOUGHT_RATE_HL_ID = 28;
 const PERSONAL_RISE_HL_ID = 21;
 const PERSONAL_COLOR_HL_ID = 23;
 const PERSONAL_RIBBON_HL_ID = 24;
 const PERSONAL_PACKET_HL_ID = 25;
+const PROPERTY_ADD_PAGE_PROPS_HL_ID = 8;
 const PERSONAL_HISTORY_BUY_HL_ID = 30;
 const PERSONAL_FAVORITE_HL_ID = 5;
 const REAL_ESTATE_LIVE_RENT_SECTION_ID = 34;
@@ -49,6 +51,19 @@ const NOT_ADDITIONAL_PROPERTY_PROPS = [
     'PROP_restrictions',
 ];
 
+// PROPERTY PROPS CONST
+const PROP_AREA_1_ID = 172;
+const PROP_AREA_2_ID = 173;
+const PROP_AREA_3_ID = 174;
+const PROP_COMPLETION_ID = 113;
+const PROP_RESTRICTIONS_ID = 166;
+const SPECIAL_PROPERTY_PROPS_ID = [
+    172,
+    173,
+    174,
+    113
+];
+
 const IMMUTABLE_PROPERTY_FILTER_PROPS = [
     'MAP_LAYOUT_JSON',
     'MAP_LAYOUT_BIG',
@@ -63,4 +78,32 @@ const IMMUTABLE_PROPERTY_FILTER_PROPS = [
     'NOT_LAST',
     'PROP_Completion',
     'IMMEDIATELY_ENTRY',
+];
+
+// Время
+const DAY_TIME = [
+    '00:00',
+    '01:00',
+    '02:00',
+    '03:00',
+    '04:00',
+    '05:00',
+    '06:00',
+    '07:00',
+    '08:00',
+    '09:00',
+    '10:00',
+    '11:00',
+    '12:00',
+    '13:00',
+    '14:00',
+    '15:00',
+    '16:00',
+    '17:00',
+    '18:00',
+    '19:00',
+    '20:00',
+    '21:00',
+    '22:00',
+    '23:00',
 ];

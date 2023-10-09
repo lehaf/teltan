@@ -25,6 +25,17 @@ if ($_GET['EDIT'] == 'Y' && $_GET['ID']) {
 $arLink = CIBlockSectionPropertyLink::GetArray(2, 27);
 $GLOBALS['MAP_EDIT_RESULT_CORDINATES'] = $arProps['MAP_LATLNG']['~VALUE'];
 $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
+
+
+CModule::IncludeModule('highloadblock');
+$entity_data_class = GetEntityDataClass(PROPERTY_TYPES_HL_ID);
+$rentType = $entity_data_class::getList(array(
+    'select' => array('*'),
+    'cache' => [
+        'ttl' => 36000000,
+        'cache_joins' => true
+    ]
+))->fetchAll();
 ?>
 <div class="container">
     <h2 class="mb-5 d-flex justify-content-end subtitle">
@@ -96,17 +107,6 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                         </div>
                     </div>
                 </div>
-                <?php
-                CModule::IncludeModule('highloadblock');
-                $entity_data_class = GetEntityDataClass(PROPERTY_TYPES_HL_ID);
-                $rentType = $entity_data_class::getList(array(
-                    'select' => array('*'),
-                    'cache' => [
-                        'ttl' => 36000000,
-                        'cache_joins' => true
-                    ]
-                ))->fetchAll();
-                ?>
                 <form id="mainForm" action="/" onsubmit="submitForm(event)">
                     <div>
                         <div class="wizard-content" data-wizard-content="0">
@@ -334,9 +334,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                             </div>
                                         <? } ?>
                                     <? } ?>
-                                    <input id="fileUploaderFiles" class="d-none" type="file" name="files[]"
-                                           multiple>
-
+                                    <input id="fileUploaderFiles" class="d-none" type="file" name="files[]" multiple>
                                     <div class="col">
                                         <div class="d-flex align-items-center justify-content-center">
                                             <label for="fileUploaderFiles" class="mb-0 label-add-photo">
@@ -346,418 +344,25 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                         </div>
                                     </div>
                                 </div>
-
                                 <p><?=Loc::getMessage('Ads-are-published-only-with-photos');?></p>
                             </div>
                         </div>
-
                         <div class="wizard-content" data-wizard-content="1">
                             <div class="step-two">
                                 <h2 class="text-center text-uppercase font-weight-bolder step-two__title"><?=Loc::getMessage('Citystreet');?></h2>
-
                                 <div class="map-wrapper">
                                     <div class="steps-map">
-                                        <!--   <div action="/" class="row d-flex justify-content-start justify-content-lg-center steps-map__form">
-
-                                               <div class="col-6 mb-0 form-group">
-                                                   <input data-id_prop="55" type="text" placeholder="City" class="border-0 form-control" id="55locla" aria-describedby="">
-                                               </div>
-                                           </div> -->
-
                                         <div id='map' style="width: 100%; height: 100%;"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="wizard-content" data-wizard-content="2">
-                            <?
-                            $entity_data_class = GetEntityDataClass(8);
-                            $arPropsSection = $entity_data_class::getList(array(
-                                'select' => array('*'),
-                                'cache' => [
-                                    'ttl' => 3600000,
-                                    'cache_joins' => true
-                                ]
-                            ))->fetchAll();
-
-                            if (CModule::IncludeModule("iblock"))
-                            $properties = CIBlockProperty::GetList(array("sort" => "asc", "name" => "asc"), array("ACTIVE" => "Y", "IBLOCK_ID" => $IBLOCK_ID));
-                            while ($prop_fields[] = $properties->GetNext()) {
-                                //echo $prop_fields["ID"]." - ".$prop_fields["NAME"]."<br>";
-                            }
-                            $arProp = [];
-                            foreach ($prop_fields as $field) {
-                                $needle = 'ROP';
-                                $pos = strripos($field['CODE'], $needle);
-                                if ($pos == 1 ) {
-                                    if ($field['PROPERTY_TYPE'] == 'L') {
-                                        $db_enum_list = CIBlockProperty::GetPropertyEnum($field['ID'], array("sort" => "asc"), array("IBLOCK_ID" => 2, 'PROPERTY_ID' => $field['ID']));
-                                        while ($ar_enum_list[] = $db_enum_list->GetNext()) {
-                                            $field['PROP_ENUM_VAL'] = $ar_enum_list;
-                                        }
-                                        // print_r($ar_enum_list);
-                                    }
-                                    $ar_enum_list = [];
-                                    $arProp[] = $field;
-                                }
-                            }
-
-                            function in_array_r($needle, $haystack, $strict = false) {
-                                foreach ($haystack as $item) {
-                                    if (($strict ? $item === $needle : $item == $needle) || (is_array($item) && in_array_r($needle, $item, $strict))) {
-                                        return true;
-                                    }
-                                }
-
-                                return false;
-                            }
-                            $filterProps = [];
-                            $filterProps2 = [];
-                            $filterProps3 = [];
-                            $restrictions = [];
-                            foreach($arProp as $arItem){
-                                if(in_array_r($arItem['ID'], $arPropsSection[0]) == true && $arItem['CODE'] != 'PROP_restrictions'){
-
-                                    $filterProps[1][$arItem['ID']] = $arItem;
-                                }elseif($arItem['CODE'] == 'PROP_restrictions'){
-                                    $restrictions = $arItem;
-                                }
-                                if(in_array_r($arItem['ID'], $arPropsSection[1]) == true && $arItem['CODE'] != 'PROP_restrictions'){
-
-                                    $filterProps[2][$arItem['ID']] = $arItem;
-                                }
-                                if(in_array_r($arItem['ID'], $arPropsSection[2]) == true && $arItem['CODE'] != 'PROP_restrictions'){
-
-                                    $filterProps[3][$arItem['ID']] = $arItem;
-                                }
-
-                            }
-
-                            ?>
                             <div class="property step-three">
                                 <h3 class="mb-3 mb-lg-4 text-center text-uppercase font-weight-bolder auto-step2__title">What apartment are you renting?</h3>
-                                <? foreach ($filterProps[1] as $filterProp) {?>
-                                    <?
-                                    $pattern = '/ID(\d+)/';
-                                    preg_match_all($pattern, $filterProp['CODE'], $matches);
-                                     $id = $matches[1];
-                                        $id = array_reverse($id);
-                                    ?>
-                                    <?if($filterProp['PROPERTY_TYPE'] == 'L'){?>
-                                        <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row" data-parent-id="27" style="display: none">
-                                            <div class="col-12 col-lg-10">
-                                                <div class="d-flex justify-content-center justify-content-lg-end align-items-center gap-1">
-                                                    <?if ($id){foreach ($id as $ids){drawElement($filterProps[1][$ids] , $arLink ,$arProps);}}?>
-
-                                                    <?foreach($filterProp['PROP_ENUM_VAL']  as $arItem){?>
-
-                                                        <div class="mr-3 form_radio_btn">
-                                                            <input
-                                                                <?=($arProps[$filterProp['CODE']]['VALUE'] == $arItem['VALUE'])? 'checked' : ''?>
-                                                                    id="radio-<?= $arItem['ID'] ?>1"
-                                                                   data-id_prop="<?= $arItem['PROPERTY_ID'] ?>"
-                                                                   data-id-self="<?= $arItem['ID'] ?>"
-                                                                   type="radio" name="<?=$filterProp['CODE']?>1"
-                                                                    <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
-                                                            >
-                                                            <label for="radio-<?= $arItem['ID'] ?>1"><?=$arItem['VALUE']?></label>
-                                                        </div>
-                                                    <?}?>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-12 col-lg-2">
-                                                <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                                                    :<?=$filterProp['IS_REQUIRED'] === 'Y' ? $filterProp['NAME'].' *': $filterProp['NAME']?>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    <? }else{?>
-                                        <?if($filterProp['ID'] == 174){?>
-                                            <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row " data-parent-id="27" style="display: none">
-
-                                                <div class="col-12 col-lg-10">
-                                                    <div class="d-flex flex-wrap justify-content-center justify-content-lg-end gap-1">
-                                                        <div class="mr-0 mr-lg-3 form-group">
-                                                            <input  value="<?=$arProps['PROP_AREA_1']['VALUE']?>"
-                                                                    id="1721"
-                                                                    data-id_prop="172"
-                                                                    class="form-control"
-                                                                    type="text"
-                                                                    placeholder="שטח מרפסת"
-                                                                    <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
-                                                            >
-                                                        </div>
-
-                                                        <div class="mr-0 mr-lg-3 form-group">
-                                                            <input value="<?=$arProps['PROP_AREA_2']['VALUE']?>"
-                                                                   id="1731"
-                                                                   data-id_prop="173"
-                                                                   class="form-control"
-                                                                   type="text"
-                                                                   placeholder="שטח מגורים"
-                                                                   <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
-                                                            >
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <input value="<?=$arProps['PROP_AREA_3']['VALUE']?>"
-                                                                   id="1741"
-                                                                   data-id_prop="174"
-                                                                   class="form-control"
-                                                                   type="text"
-                                                                   placeholder=" שטח הכולל"
-                                                                   <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
-                                                            >
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12 col-lg-2">
-                                                    <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                                                        :<?=$filterProp['IS_REQUIRED'] === 'Y' ? $filterProp['NAME'].' *': $filterProp['NAME']?>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        <?}else{?>
-                                            <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row" data-parent-id="27" style="display: none">
-                                                <div class="col-12 col-lg-10">
-                                                    <?if ($id){foreach ($id as $ids){drawElement($filterProps[1][$ids] , $arLink ,$arProps);}}?>
-
-                                                    <div class="d-flex justify-content-center justify-content-lg-end form-group">
-                                                        <input value="<?=$arProps[$filterProp['CODE']]['VALUE']?>"
-                                                               id="<?= $filterProp['ID'] ?>1"
-                                                               data-id_prop="<?= $filterProp['CODE'] ?>"
-                                                               class="form-control"
-                                                               type="number"
-                                                               placeholder=""
-                                                               <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
-                                                        >
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-12 col-lg-2">
-                                                    <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                                                        :<?=$filterProp['IS_REQUIRED'] === 'Y' ? $filterProp['NAME'].' *': $filterProp['NAME']?>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        <?}?>
-                                    <? }
-                                }?>
-                                <? foreach ($filterProps[2] as $filterProp) {?>
-                                    <?
-                                    $pattern = '/ID(\d+)/';
-                                    preg_match_all($pattern, $filterProp['CODE'], $matches);
-                                     $id = $matches[1];
-                                        $id = array_reverse($id);
-                                    ?>
-                                    <?sort($filterProp['PROP_ENUM_VAL'])?>
-                                    <?if($filterProp['PROPERTY_TYPE'] == 'L'){?>
-                                        <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row" data-parent-id="28" style="display: none">
-                                            <div class="col-12 col-lg-10">
-                                                <div class="d-flex justify-content-center justify-content-lg-end align-items-center gap-1">
-                                                    <?if ($id){foreach ($id as $ids){drawElement($filterProps[2][$ids] , $arLink ,$arProps);}}?>
-
-                                                    <?foreach($filterProp['PROP_ENUM_VAL']  as $arItem){?>
-
-                                                        <div class="mr-3 form_radio_btn">
-                                                            <input id="radio-<?= $arItem['ID'] ?>2" type="radio" name="<?=$filterProp['CODE']?>2"
-                                                                <?=($arProps[$filterProp['CODE']]['VALUE'] == $arItem['VALUE'])? 'checked' : ''?>
-                                                                   data-id_prop="<?= $arItem['PROPERTY_ID'] ?>"
-                                                                   data-id-self="<?= $arItem['ID'] ?>"
-                                                                   <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
-                                                            >
-                                                            <label for="radio-<?= $arItem['ID'] ?>2"><?=$arItem['VALUE']?></label>
-                                                        </div>
-                                                    <?}?>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 col-lg-2">
-                                                <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                                                    :<?=$filterProp['IS_REQUIRED'] === 'Y' ? $filterProp['NAME'].' *': $filterProp['NAME']?>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    <? }else{?>
-                                        <?if($filterProp['ID'] == 174){?>
-                                            <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row" data-parent-id="28" style="display: none">
-
-                                                <div class="col-12 col-lg-10">
-                                                    <div class="d-flex flex-wrap justify-content-center justify-content-lg-end">
-                                                        <div class="mr-0 mr-lg-3 form-group">
-                                                            <input value="<?=$arProps['PROP_AREA_1']['VALUE']?>"
-                                                                   id="1722"
-                                                                   data-id_prop="172"
-                                                                   class="form-control"
-                                                                   type="text"
-                                                                   placeholder="Kitchen"
-                                                                   <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
-                                                            >
-                                                        </div>
-
-                                                        <div class="mr-0 mr-lg-3 form-group">
-                                                            <input value="<?=$arProps['PROP_AREA_2']['VALUE']?>"
-                                                                   id="1732"
-                                                                   data-id_prop="173"
-                                                                   class="form-control"
-                                                                   type="text"
-                                                                   placeholder="Residential"
-                                                                   <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
-                                                            >
-                                                        </div>
-
-                                                        <div class="mr-3 form-group">
-                                                            <input  value="<?=$arProps['PROP_AREA_3']['VALUE']?>"
-                                                                    id="1742"
-                                                                    data-id_prop="174"
-                                                                    class="form-control"
-                                                                    type="text"
-                                                                    placeholder="General"
-                                                                    <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
-                                                            >
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12 col-lg-2">
-                                                    <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                                                        :<?=$filterProp['IS_REQUIRED'] === 'Y' ? $filterProp['NAME'].' *': $filterProp['NAME']?>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        <?}else{?>
-                                            <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row" data-parent-id="28" style="display: none">
-                                                <div class="col-12 col-lg-10">
-                                                    <?if ($id){foreach ($id as $ids){drawElement($filterProps[2][$ids] , $arLink ,$arProps);}}?>
-
-                                                    <div class="mr-3 d-flex justify-content-center justify-content-lg-end form-group">
-                                                        <input value="<?=$arProps[$filterProp['CODE']]['VALUE']?>"
-                                                               id="<?= $filterProp['ID'] ?>2"
-                                                               data-id_prop="<?= $filterProp['CODE'] ?>"
-                                                               class="form-control"
-                                                               type="number"
-                                                               placeholder=""
-                                                               <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
-                                                        >
-                                                    </div>
-                                                </div>
-                                                <div class="col-12 col-lg-2">
-                                                    <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                                                        :<?=$filterProp['IS_REQUIRED'] === 'Y' ? $filterProp['NAME'].' *': $filterProp['NAME']?>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        <?}
-                                    }?>
-                                <? }?>
-                                <? foreach ($filterProps[3] as $filterProp) {?>
-                                    <?
-                                    $pattern = '/ID(\d+)/';
-                                    preg_match_all($pattern, $filterProp['CODE'], $matches);
-                                     $id = $matches[1];
-                                        $id = array_reverse($id);
-                                    ?>
-                                    <?sort($filterProp['PROP_ENUM_VAL'])?>
-                                    <?if($filterProp['PROPERTY_TYPE'] == 'L'){?>
-                                        <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row" data-parent-id="29" style="display: none">
-                                            <div class="col-12 col-lg-10">
-                                                <div class="d-flex justify-content-center justify-content-lg-end align-items-center gap-1">
-                                                    <?if ($id){foreach ($id as $ids){drawElement($filterProps[3][$ids] , $arLink ,$arProps);}}?>
-
-                                                    <?foreach($filterProp['PROP_ENUM_VAL']  as $arItem){?>
-
-                                                        <div class="mr-3 form_radio_btn">
-                                                            <input id="radio-<?= $arItem['ID'] ?>3" type="radio" name="<?=$filterProp['CODE']?>3"
-                                                                <?=($arProps[$filterProp['CODE']]['VALUE'] == $arItem['VALUE'])? 'checked' : ''?>
-                                                                   data-id_prop="<?= $arItem['PROPERTY_ID'] ?>"
-                                                                   data-id-self="<?= $arItem['ID'] ?>"
-                                                                   <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
-                                                            >
-                                                            <label for="radio-<?= $arItem['ID'] ?>3"><?=$arItem['VALUE']?></label>
-                                                        </div>
-                                                    <?}?>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-12 col-lg-2">
-                                                <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                                                    :<?=$filterProp['IS_REQUIRED'] === 'Y' ? $filterProp['NAME'].' *': $filterProp['NAME']?>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    <? }else{?>
-                                        <?if($filterProp['ID'] == 174){?>
-                                            <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row" data-parent-id="29" style="display: none">
-
-                                                <div class="col-12 col-lg-10">
-                                                    <div class="d-flex flex-wrap justify-content-center justify-content-lg-end">
-                                                        <div class="mr-0 mr-lg-3 form-group">
-                                                            <input id="1723"
-                                                                   data-id_prop="172"
-                                                                   class="form-control"
-                                                                   type="text"
-                                                                   placeholder="Kitchen"
-                                                                   <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
-                                                                   value="<?=$arProps['PROP_AREA_1']['VALUE']?>"
-                                                            >
-                                                        </div>
-
-                                                        <div class="mr-0 mr-lg-3 form-group">
-                                                            <input id="1733"
-                                                                   data-id_prop="173"
-                                                                   class="form-control"
-                                                                   type="text"
-                                                                   placeholder="Residential"
-                                                                   <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
-                                                                   value="<?=$arProps['PROP_AREA_2']['VALUE']?>"
-                                                            >
-                                                        </div>
-
-                                                        <div class="mr-3 form-group">
-                                                            <input id="1743"
-                                                                   data-id_prop="174"
-                                                                   class="form-control"
-                                                                   type="text"
-                                                                   placeholder="General"
-                                                                   <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
-                                                                   value="<?=$arProps['PROP_AREA_3']['VALUE']?>"
-                                                            >
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12 col-lg-2">
-                                                    <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                                                        :<?=$filterProp['IS_REQUIRED'] === 'Y' ? $filterProp['NAME'].' *': $filterProp['NAME']?>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        <?}else{?>
-                                            <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row" data-parent-id="29" style="display: none">
-                                                <div class="col-12 col-lg-10">
-                                                    <?if ($id){foreach ($id as $ids){drawElement($filterProps[3][$ids] , $arLink ,$arProps);}}?>
-                                                    <div class="mr-3 d-flex justify-content-center justify-content-lg-end form-group">
-                                                        <input id="<?= $filterProp['ID'] ?>3"
-                                                               data-id_prop="<?= $filterProp['CODE'] ?>"
-                                                               class="form-control"
-                                                               type="number" placeholder=""
-                                                               <?php if ($filterProp['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
-                                                               value="<?=$arProps[$filterProp['CODE']]['VALUE']?>"
-                                                        >
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-12 col-lg-2">
-                                                    <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                                                        :<?=$filterProp['IS_REQUIRED'] === 'Y' ? $filterProp['NAME'].' *': $filterProp['NAME']?>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        <?}?>
-                                    <?}?>
-                                <? }?>
-
                                 <div class="mb-5 d-flex flex-column">
                                     <p class="pt-0 text-right text-before-ta">
-                                        <?
+                                        <?php
                                         $dir = $APPLICATION->GetCurDir();
                                         $dirName = str_replace('/', '', $dir); // PHP код
                                         $APPLICATION->IncludeComponent(
@@ -768,14 +373,13 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                                 "PATH" => "/include-area/".mb_strtolower($dirName)."-p5-ru.php",
                                                 "EDIT_TEMPLATE" => ""
                                             )
-                                        );
-                                        // символы для удаления
-
-
-                                        ?>
+                                        );?>
                                     </p>
-
-                                    <textarea class="w-100 p-3 pt-2 border rounded" placeholder="תיאור" name="discriptions" id="text-discriptions" rows="4"><?=$arFields['PREVIEW_TEXT']?></textarea>
+                                    <textarea class="w-100 p-3 pt-2 border rounded"
+                                              placeholder="תיאור"
+                                              name="discriptions"
+                                              id="text-discriptions"
+                                              rows="4"><?=$arFields['PREVIEW_TEXT']?></textarea>
                                 </div>
                             </div>
                         </div>
@@ -783,7 +387,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                             <div class="property-step-price">
                                 <h2 class="mb-4 text-center text-uppercase font-weight-bolder auto-step2__title"><?=Loc::getMessage('rent-price');?></h2>
                                 <p class="text-center">
-                                    <?
+                                    <?php
                                     $dir = $APPLICATION->GetCurDir();
                                     $dirName = str_replace('/', '', $dir); // PHP код
                                     $APPLICATION->IncludeComponent(
@@ -794,14 +398,10 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                             "PATH" => "/include-area/".mb_strtolower($dirName)."-p3-ru.php",
                                             "EDIT_TEMPLATE" => ""
                                         )
-                                    );
-                                    // символы для удаления
-
-
-                                    ?>
+                                    );?>
                                 </p>
                                 <p class="mb-4 text-center">
-                                    <?
+                                    <?php
                                     $dir = $APPLICATION->GetCurDir();
                                     $dirName = str_replace('/', '', $dir); // PHP код
                                     $APPLICATION->IncludeComponent(
@@ -812,11 +412,7 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                             "PATH" => "/include-area/".mb_strtolower($dirName)."-p4-ru.php",
                                             "EDIT_TEMPLATE" => ""
                                         )
-                                    );
-                                    // символы для удаления
-
-
-                                    ?>
+                                    );?>
                                 </p>
                                 <div class="d-flex justify-content-center align-items-center">
                                     <div class="d-flex">
@@ -898,174 +494,57 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                                     <div class="mb-4 row flex-column-reverse flex-lg-row property-step-contact__time">
                                         <div class="d-none d-lg-flex col-3">
                                             <div class="form_radio_btn">
-                                                <input  <?=$arProps["UF_CALL_ANYTIME"]['VALUE'] > 0 ? 'checked' : '' ?> id="anytime" type="checkbox" name="anytime" value="anytime" data-id_prop="UF_CALL_ANYTIME" data-id-self="1">
-                                                <label class="mr-3 mb-0" for="anytime"><?=Loc::getMessage('Anytime');?></label>
+                                                <input  <?=$arProps["UF_CALL_ANYTIME"]['VALUE'] > 0 ? 'checked' : '' ?>
+                                                        id="anytime"
+                                                        type="checkbox"
+                                                        name="anytime"
+                                                        value="anytime"
+                                                        data-id_prop="UF_CALL_ANYTIME"
+                                                        data-id-self="1"
+                                                >
+                                                <label class="mr-3 mb-0" for="anytime">
+                                                    <?=Loc::getMessage('Anytime')?>
+                                                </label>
                                             </div>
                                         </div>
-
                                         <div class="col-12 col-lg-7">
                                             <div class="row">
                                                 <div class="col">
-                                                    <select id="callTo" class="selectpicker"
+                                                    <select id="callTo"
+                                                            class="selectpicker"
                                                             data-style-base="form-control form-control-select"
-                                                            data-style="">
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '00:00') ? 'selected' : '' ?>
-                                                                value="00"><?= Loc::getMessage('to'); ?>
-                                                            <span>00:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '01:00') ? 'selected' : '' ?>
-                                                                value="01"><?= Loc::getMessage('to'); ?>
-                                                            <span>01:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '02:00') ? 'selected' : '' ?>
-                                                                value="02"><?= Loc::getMessage('to'); ?>
-                                                            <span>02:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '03:00') ? 'selected' : '' ?>
-                                                                value="03"><?= Loc::getMessage('to'); ?>
-                                                            <span>03:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '04:00') ? 'selected' : '' ?>
-                                                                value="04"><?= Loc::getMessage('to'); ?>
-                                                            <span>04:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '05:00') ? 'selected' : '' ?>
-                                                                value="05"><?= Loc::getMessage('to'); ?>
-                                                            <span>05:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '06:00') ? 'selected' : '' ?>
-                                                                value="06"><?= Loc::getMessage('to'); ?>
-                                                            <span>06:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '07:00') ? 'selected' : '' ?>
-                                                                value="07"><?= Loc::getMessage('to'); ?>
-                                                            <span>07:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '08:00') ? 'selected' : '' ?>
-                                                                value="08"><?= Loc::getMessage('to'); ?>
-                                                            <span>08:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '09:00') ? 'selected' : '' ?>
-                                                                value="09"><?= Loc::getMessage('to'); ?>
-                                                            <span>09:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '10:00') ? 'selected' : '' ?>
-                                                                value="10"><?= Loc::getMessage('to'); ?>
-                                                            <span>10:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '11:00') ? 'selected' : '' ?>
-                                                                value="11"><?= Loc::getMessage('to'); ?>
-                                                            <span>11:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '12:00') ? 'selected' : '' ?>
-                                                                value="12"><?= Loc::getMessage('to'); ?>
-                                                            <span>12:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '13:00') ? 'selected' : '' ?>
-                                                                value="13"><?= Loc::getMessage('to'); ?>
-                                                            <span>13:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '14:00') ? 'selected' : '' ?>
-                                                                value="14"><?= Loc::getMessage('to'); ?>
-                                                            <span>14:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '15:00') ? 'selected' : '' ?>
-                                                                value="15"><?= Loc::getMessage('to'); ?>
-                                                            <span>15:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '16:00') ? 'selected' : '' ?>
-                                                                value="16"><?= Loc::getMessage('to'); ?>
-                                                            <span>16:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '17:00') ? 'selected' : '' ?>
-                                                                value="17"><?= Loc::getMessage('to'); ?>
-                                                            <span>17:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '18:00') ? 'selected' : '' ?>
-                                                                value="18"><?= Loc::getMessage('to'); ?>
-                                                            <span>18:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '19:00') ? 'selected' : '' ?>
-                                                                value="19"><?= Loc::getMessage('to'); ?>
-                                                            <span>19:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '20:00') ? 'selected' : '' ?>
-                                                                value="20"><?= Loc::getMessage('to'); ?>
-                                                            <span>20:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '21:00') ? 'selected' : '' ?>
-                                                                value="21"><?= Loc::getMessage('to'); ?>
-                                                            <span>21:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '22:00') ? 'selected' : '' ?>
-                                                                value="22"><?= Loc::getMessage('to'); ?>
-                                                            <span>22:00</span></option>
-                                                        <option <?= ($arProps['UF_CALL_TO']['VALUE'] == '23:00') ? 'selected' : '' ?>
-                                                                value="23"><?= Loc::getMessage('to'); ?>
-                                                            <span>23:00</span></option>
+                                                    >
+                                                        <?php foreach (DAY_TIME as $time):?>
+                                                            <option <?= ($arProps['UF_CALL_TO']['VALUE'] == $time) ? 'selected' : '' ?>
+                                                                    value="<?=explode(':',$time)[0]?>"
+                                                            >
+                                                                <?= Loc::getMessage('to')?>
+                                                                <span><?=$time?></span>
+                                                            </option>
+                                                        <?php endforeach;?>
                                                     </select>
                                                 </div>
                                                 <div class="col">
-                                                    <select id="callFrom" class="selectpicker"
+                                                    <select id="callFrom"
+                                                            class="selectpicker"
                                                             data-style-base="form-control form-control-select"
-                                                            data-style="">
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '00:00') ? 'selected' : '' ?>
-                                                                value="00"><?= Loc::getMessage('from'); ?> <span>00:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '01:00') ? 'selected' : '' ?>
-                                                                value="01"><?= Loc::getMessage('from'); ?> <span>01:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '02:00') ? 'selected' : '' ?>
-                                                                value="02"><?= Loc::getMessage('from'); ?> <span>02:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '03:00') ? 'selected' : '' ?>
-                                                                value="03"><?= Loc::getMessage('from'); ?> <span>03:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '04:00') ? 'selected' : '' ?>
-                                                                value="04"><?= Loc::getMessage('from'); ?> <span>04:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '05:00') ? 'selected' : '' ?>
-                                                                value="05"><?= Loc::getMessage('from'); ?> <span>05:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '06:00') ? 'selected' : '' ?>
-                                                                value="06"><?= Loc::getMessage('from'); ?> <span>06:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '07:00') ? 'selected' : '' ?>
-                                                                value="07"><?= Loc::getMessage('from'); ?> <span>07:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '08:00') ? 'selected' : '' ?>
-                                                                value="08"><?= Loc::getMessage('from'); ?> <span>08:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '09:00') ? 'selected' : '' ?>
-                                                                value="09"><?= Loc::getMessage('from'); ?> <span>09:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '10:00') ? 'selected' : '' ?>
-                                                                value="10"><?= Loc::getMessage('from'); ?> <span>10:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '11:00') ? 'selected' : '' ?>
-                                                                value="11"><?= Loc::getMessage('from'); ?> <span>11:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '12:00') ? 'selected' : '' ?>
-                                                                value="12"><?= Loc::getMessage('from'); ?> <span>12:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '13:00') ? 'selected' : '' ?>
-                                                                value="13"><?= Loc::getMessage('from'); ?> <span>13:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '14:00') ? 'selected' : '' ?>
-                                                                value="14"><?= Loc::getMessage('from'); ?> <span>14:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '15:00') ? 'selected' : '' ?>
-                                                                value="15"><?= Loc::getMessage('from'); ?> <span>15:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '16:00') ? 'selected' : '' ?>
-                                                                value="16"><?= Loc::getMessage('from'); ?> <span>16:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '17:00') ? 'selected' : '' ?>
-                                                                value="17"><?= Loc::getMessage('from'); ?> <span>17:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '18:00') ? 'selected' : '' ?>
-                                                                value="18"><?= Loc::getMessage('from'); ?> <span>18:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '19:00') ? 'selected' : '' ?>
-                                                                value="19"><?= Loc::getMessage('from'); ?> <span>19:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '20:00') ? 'selected' : '' ?>
-                                                                value="20"><?= Loc::getMessage('from'); ?> <span>20:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '21:00') ? 'selected' : '' ?>
-                                                                value="21"><?= Loc::getMessage('from'); ?> <span>21:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '22:00') ? 'selected' : '' ?>
-                                                                value="22"><?= Loc::getMessage('from'); ?> <span>22:00</span>
-                                                        </option>
-                                                        <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == '23:00') ? 'selected' : '' ?>
-                                                                value="23"><?= Loc::getMessage('from'); ?> <span>23:00</span>
-                                                        </option>
+                                                    >
+                                                        <?php foreach (DAY_TIME as $time):?>
+                                                            <option <?= ($arProps['UF_CALL_FROM']['VALUE'] == $time) ? 'selected' : '' ?>
+                                                                    value="<?=explode(':',$time)[0]?>"
+                                                            >
+                                                                <?=Loc::getMessage('from')?>
+                                                                <span><?=$time?></span>
+                                                            </option>
+                                                        <?php endforeach;?>
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="col-12 col-lg-2 d-flex justify-content-end align-items-center">
-                                            <p class="text-right mb-3 mb-lg-0 font-weight-bold"><?=Loc::getMessage('Call:');?></p>
+                                            <p class="text-right mb-3 mb-lg-0 font-weight-bold">
+                                                <?=Loc::getMessage('Call:')?>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -1073,21 +552,14 @@ $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
                             </div>
                         </div>
                     </div>
-
                     <div class="propert-sell-main__step-control">
                         <button onclick="submitForm(event)" class="btn btn-primary wizard-control-final">
                             <span><?=Loc::getMessage('Submit your ad');?></span>
                         </button>
-
-                        <!-- <button class="btn wizard-control-final">
-                          <span>Preview</span>
-                        </button> -->
-
                         <button type="button" class="btn steps-button wizard-control-next">
                             <span class="btn-icon"><i class="icon-left-arrow"></i></span>
                             <span><?=Loc::getMessage('Next step');?></span>
                         </button>
-
                         <button type="button" class="btn wizard-control-prev">
                             <span class="mr-2"><?=Loc::getMessage('Next step');?></span>
                             <span class="btn-icon icon-arrow-right"><i class="icon-left-arrow"></i></span>

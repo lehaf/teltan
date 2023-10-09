@@ -59,6 +59,23 @@ function getHLData(int $hlBlockId, array $select = [], array $filter = []) : arr
     return !empty($res) && is_array($res) ? $res : [];
 }
 
+function getPropertyRestrictionsValues() : array
+{
+    if (\Bitrix\Main\Loader::includeModule('iblock')) {
+        $enumValues = \Bitrix\Iblock\PropertyEnumerationTable::getList(array(
+            'order' => array('SORT' => 'DESC','ID' => 'ASC'),
+            'select' => array('*'),
+            'filter' => array('PROPERTY_ID' => PROP_RESTRICTIONS_ID),
+                'cache' => array(
+                    'ttl' => 360000, // Время жизни кеша
+                    'cache_joins' => true // Кешировать ли выборки с JOIN
+                ),
+        ))->fetchAll();
+    }
+
+    return !empty($enumValues) && is_array($enumValues) ? $enumValues : [];
+}
+
 function getTypePropertyHl(array $valueCodes) : array
 {
     $hlblock = \Bitrix\Highloadblock\HighloadBlockTable::getById(PROPERTY_TYPES_HL_ID)->fetch();

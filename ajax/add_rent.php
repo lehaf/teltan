@@ -262,16 +262,6 @@ if ($arUser['UF_COUNT_RENT'] > $arUser['UF_COUNT_APART'] || $b || $_REQUEST['EDI
         } else {
             echo json_encode(array('success' => 0, 'responseBitrix' => $el->LAST_ERROR), JSON_UNESCAPED_UNICODE);
         }
-      /*  foreach ($_POST['img'] as $item) {
-            $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $item));
-
-            file_put_contents($_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png', $data);
-
-            $arFile = CFile::MakeFileArray($_SERVER["DOCUMENT_ROOT"] . '/' . $FILENAME . '.png');
-
-            $arFile["MODULE_ID"] = "iblock";
-            CIBlockElement::SetPropertyValueCode($PRODUCT_ID, "PHOTOS", array("VALUE" => $arFile));
-        }*/
 
     // Редактирование элемента
     } else {
@@ -285,13 +275,13 @@ if ($arUser['UF_COUNT_RENT'] > $arUser['UF_COUNT_APART'] || $b || $_REQUEST['EDI
 
         $arLoadProductProp = [];
         foreach ($arLoadProductArray['PROPERTY_VALUES'] as $key => $value) {
-            if ($value == '') {
+            if ($value == '' && $key !== 'UF_CALL_ANYTIME') {
                 unset($arLoadProductArray['PROPERTY_VALUES'][$key]);
             } else {
                 $arLoadProductProp[$key] = $value;
             }
         }
-        unset($arLoadProductProp);
+        unset($arLoadProductArray['PROPERTY_VALUES']);
 
         if ($res = $el->Update(intval($_REQUEST['EDIT_ID']), $arLoadProductArray)) {
             foreach ($_REQUEST as $value) {

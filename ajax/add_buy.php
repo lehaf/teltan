@@ -102,7 +102,7 @@ if ($arUser['UF_COUNT_RENT'] > $arUser['UF_COUNT_APART'] || $b || $_REQUEST['EDI
     if ($_REQUEST['anytime']["val"] == 'true') {
         $PROP['UF_CALL_ANYTIME'] = 1;
     } else {
-        $PROP['UF_CALL_ANYTIME'] = '';
+        $PROP['UF_CALL_ANYTIME'] = 0;
         $PROP['UF_CALL_TO'] = $_REQUEST['callTo'] . ':00';
         $PROP['UF_CALL_FROM'] = $_REQUEST['callFrom'] . ':00';
     }
@@ -126,6 +126,7 @@ if ($arUser['UF_COUNT_RENT'] > $arUser['UF_COUNT_APART'] || $b || $_REQUEST['EDI
             $restriction[] = $value['data']['idSelf'];
         }
     }
+
     $PROP['ID_USER'] = $USER->GetID();
     if ($PROP[109] > 1){
         $PROP['NOT_FIRST'] = 'Y';
@@ -145,8 +146,6 @@ if ($arUser['UF_COUNT_RENT'] > $arUser['UF_COUNT_APART'] || $b || $_REQUEST['EDI
             'NAME' => $NAME,
             'ACTIVE' => 'Y',
             'PREVIEW_TEXT' => $_POST['itemDescription'],
-          //  'DETAIL_TEXT' => $_POST['itemDescription'],
-            //'PREVIEW_PICTURE' => $arFile
         );
     } else {
         $arLoadProductArray = array(
@@ -265,21 +264,19 @@ if ($arUser['UF_COUNT_RENT'] > $arUser['UF_COUNT_APART'] || $b || $_REQUEST['EDI
         }
 
         foreach ($arLoadProductArray as $key => $value) {
-            if ($value == '') {
-                unset($arLoadProductArray[$key]);
-            }
-
+            if ($value == '') unset($arLoadProductArray[$key]);
         }
+
         $arLoadProductProp = [];
         foreach ($arLoadProductArray['PROPERTY_VALUES'] as $key => $value) {
-            if ($value == '') {
+            if ($value == '' && $key !== 'UF_CALL_ANYTIME') {
                 unset($arLoadProductArray['PROPERTY_VALUES'][$key]);
             } else {
                 $arLoadProductProp[$key] = $value;
             }
-
         }
         unset($arLoadProductArray['PROPERTY_VALUES']);
+
         if ($res = $el->Update(intval($_REQUEST['EDIT_ID']), $arLoadProductArray)) {
             foreach ($_REQUEST as $value) {
                 if ($value['val'] == 'true') {
