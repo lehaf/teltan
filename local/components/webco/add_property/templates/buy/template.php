@@ -22,7 +22,7 @@ if ($_GET['EDIT'] == 'Y' && $_GET['ID']) {
         $arProps = $ob->GetProperties();
     }
 }
-$arLink = CIBlockSectionPropertyLink::GetArray(2, 27);
+$arLink = \CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 27);
 $GLOBALS['MAP_EDIT_RESULT_CORDINATES'] = $arProps['MAP_LATLNG']['~VALUE'];
 $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];
 
@@ -921,45 +921,23 @@ $rentType = $entity_data_class::getList(array(
 
         // check if is edit page
         <?if($_GET['EDIT'] == 'Y'){?>
-        $data['EDIT'] = 'Y';
-        $data['EDIT_ID'] = '<?=$_GET['ID']?>'
+            $data['EDIT'] = 'Y';
+            $data['EDIT_ID'] = '<?=$_GET['ID']?>'
         <?}?>
 
-        //get marker data from localStorage
         $data['section_id'] = $('.activeSection').data();
-        let marker = localStorage.getItem('markerData');
+        // get marker
+        let marker = JSON.parse(localStorage.getItem('markerData')); // object
         let locationPosition = localStorage.getItem('locationDataPosition');
         let locationLatLng = localStorage.getItem('locationDataLatLng');
-        let districtName = '';
-        let regionName = '';
-        marker = JSON.parse(marker);
-        const layersId = [
-            'earthquakess-layer',
-            '1-level-area8',
-            '1-level-area7',
-            '1-level-area6',
-            '1-level-area5',
-            '1-level-area3',
-            '1-level-area2',
-            '1-level-area1',
-        ];
 
-        if (layersId.includes(marker.layer.id)){
-            districtName = marker.properties.MUN_HEB !== undefined ? marker.properties.MUN_HEB : marker.properties.MUN_ENG;
-            if(marker.layer.metadata) regionName = marker.layer.metadata;
-        }
-        if(districtName == ''){
-            alert('empty location')
-            return false;
-        }
         $data['UF_NAME'] = $('#Legalname').val();
         $data['MAP_LATLNG'] = locationLatLng;
         $data['MAP_POSITION'] = locationPosition;
-        $data['MAP_LAYOUT'] = districtName;
-        $data['MAP_LAYOUT_BIG']= regionName;
-        //!!get marker data from localStorage
+        $data['MAP_LAYOUT'] = marker.districtName;
+        $data['MAP_LAYOUT_BIG']= marker.regionName;
+
         $('.preloader').addClass('preloader-visible');
-        //send data to back
         let deferred = $.ajax({
             type: "POST",
             url: "/ajax/add_buy.php",
@@ -985,7 +963,3 @@ $rentType = $entity_data_class::getList(array(
 
 </style>
 <? require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php"); ?>
-<script>
-
-
-</script>

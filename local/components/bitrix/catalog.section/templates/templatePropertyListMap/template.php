@@ -15,62 +15,61 @@ global $mapArrayVip;
 $mapArrayVip = [
     "type" => "FeatureCollection"
 ];
-foreach ($arResult['ITEMS'] as $arItem) {
-    $counterJson = 0;
+if (!empty($arResult['ITEMS'])) {
+    foreach ($arResult['ITEMS'] as $arItem) {
+        $counterJson = 0;
 
-    $res = CIBlockElement::GetByID($arItem["ID"]);
-    if ($ar_res = $res->GetNext())
-        $counterJson = $ar_res['SHOW_COUNTER'];
+        $res = CIBlockElement::GetByID($arItem["ID"]);
+        if ($ar_res = $res->GetNext()) $counterJson = $ar_res['SHOW_COUNTER'];
 
-    $nameSection = '';
-    $res = CIBlockSection::GetByID($arItem["IBLOCK_SECTION_ID"]);
-    if ($ar_res = $res->GetNext())
-        $nameSection = $ar_res['NAME'];
+        $nameSection = '';
+        $res = CIBlockSection::GetByID($arItem["IBLOCK_SECTION_ID"]);
+        if ($ar_res = $res->GetNext()) $nameSection = $ar_res['NAME'];
 
-    // $arItem['PROPERTIES']['MAP_LATLNG']['VALUE'] = str_replace('&quot;', '"', $arItem['PROPERTIES']['MAP_LATLNG']['VALUE']);
-    $mapLatlnt = json_decode($arItem['PROPERTIES']['MAP_LATLNG']['~VALUE'], true);
-    if ($arItem['PROPERTIES']['VIP_DATE']['VALUE'] && strtotime($arItem['PROPERTIES']['VIP_DATE']['VALUE']) > time()) {
-        $mapArrayVip['features'][] = [
-            'type' => 'Feature',
-            'properties' => [
-                'href' => $arItem['DETAIL_PAGE_URL'],
-                'image' => $arItem['PREVIEW_PICTURE']['SAFE_SRC'] ?? '/no-image.svg',
-                'title' => $arItem['NAME'],
-                'price' => $arItem['PROPERTIES']['PRICE']['VALUE'],
-                'addres' => $arItem['NAME'],
-                'category' => $nameSection,
-                'views' => $counterJson,
-                'date' => $arItem['DATE_CREATE'],
-                'isVipCard' => false,
-            ],
-            'geometry' => [
-                'type' => 'Point',
-                'coordinates' =>
-                    [$mapLatlnt['lng'], $mapLatlnt['lat']]
-            ]
-        ];
-    } else {
-        $mapArray['features'][] = [
-            'type' => 'Feature',
-            'properties' => [
-                'href' => $arItem['DETAIL_PAGE_URL'],
-                'image' => $arItem['PREVIEW_PICTURE']['SAFE_SRC'] ?? '/no-image.svg',
-                'title' => $arItem['NAME'],
-                'price' => $arItem['PROPERTIES']['PRICE']['VALUE'],
-                'addres' => $arItem['NAME'],
-                'category' => $nameSection,
-                'views' => $counterJson,
-                'date' => $arItem['DATE_CREATE'],
-                'isVipCard' => false,
-            ],
-            'geometry' => [
-                'type' => 'Point',
-                'coordinates' =>
-                    [$mapLatlnt['lng'], $mapLatlnt['lat']]
-            ]
-        ];
+        $mapLatlnt = json_decode($arItem['PROPERTIES']['MAP_LATLNG']['~VALUE'], true);
+        if ($arItem['PROPERTIES']['VIP_DATE']['VALUE'] && strtotime($arItem['PROPERTIES']['VIP_DATE']['VALUE']) > time()) {
+            $mapArrayVip['features'][] = [
+                'type' => 'Feature',
+                'properties' => [
+                    'href' => $arItem['DETAIL_PAGE_URL'],
+                    'image' => $arItem['PREVIEW_PICTURE']['SAFE_SRC'] ?? '/no-image.svg',
+                    'title' => $arItem['NAME'],
+                    'price' => '₪ '.$arItem['PROPERTIES']['PRICE']['VALUE'],
+                    'addres' => $arItem['NAME'],
+                    'category' => $nameSection,
+                    'views' => $counterJson,
+                    'date' => $arItem['DATE_CREATE'],
+                    'isVipCard' => false,
+                ],
+                'geometry' => [
+                    'type' => 'Point',
+                    'coordinates' =>
+                        [$mapLatlnt[0], $mapLatlnt[1]]
+                ]
+            ];
+        } else {
+            $mapArray['features'][] = [
+                'type' => 'Feature',
+                'properties' => [
+                    'href' => $arItem['DETAIL_PAGE_URL'],
+                    'image' => $arItem['PREVIEW_PICTURE']['SAFE_SRC'] ?? '/no-image.svg',
+                    'title' => $arItem['NAME'],
+                    'price' => '₪ '.$arItem['PROPERTIES']['PRICE']['VALUE'],
+                    'addres' => $arItem['NAME'],
+                    'category' => $nameSection,
+                    'views' => $counterJson,
+                    'date' => $arItem['DATE_CREATE'],
+                    'isVipCard' => false,
+                ],
+                'geometry' => [
+                    'type' => 'Point',
+                    'coordinates' =>
+                        [$mapLatlnt[0], $mapLatlnt[1]]
+                ]
+            ];
+        }
+
     }
-
 }
 ?>
 

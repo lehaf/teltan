@@ -1,5 +1,4 @@
 <script>
-
     $(document).ready(function () {
         // MAPS START
         function getLink(elem) {
@@ -95,10 +94,8 @@
             let hoveredStateId8 = null;
             let hoveredStateId9 = null;
 
-
-            const obgGeoMap = <?=json_encode($mapArray)?>
-            const objBasePin = <?=json_encode($mapArrayVip)?>
-            // ** vip
+            const obgGeoMap = <?=json_encode($mapArray)?>;
+            const objBasePin = <?=json_encode($mapArrayVip)?>; // ** vip
 
             map.on('load', () => {
 
@@ -1025,11 +1022,6 @@
                         popup.remove();
                     })
 
-                    // map.on('click', function(e) {
-                    //     if (popup.isOpen()) {
-                    //         popup.remove()
-                    //     }
-                    // });
                 });
 
                 map.on('mouseenter', 'clusters', () => {

@@ -10,11 +10,11 @@ Loc::loadMessages(__FILE__);
 
 $APPLICATION->SetTitle("Добавить объявление");
 global $arSetting;
-$arLink = CIBlockSectionPropertyLink::GetArray(2, 27);
+$IBLOCK_ID = PROPERTY_ADS_IBLOCK_ID;
+$arLink = \CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 27);
 // Если нет номера телефона, то редиректим на форму с его добавлением
 $userPhone = getUserInfoByID()['PERSONAL_PHONE'];
 if (!$userPhone) LocalRedirect($GLOBALS['arSetting'][SITE_ID]['href'] . 'personal/edit/');
-$IBLOCK_ID = PROPERTY_ADS_IBLOCK_ID;
 if ($_GET['EDIT'] == 'Y' && $_GET['ID']) {
     $arSelect = array("ID", "IBLOCK_ID", "IBLOCK_SECTION_ID", "NAME", "DATE_ACTIVE_FROM", "PROPERTY_*", "PREVIEW_TEXT", "PREVIEW_PICTURE");
     $arFilter = array("IBLOCK_ID" => $IBLOCK_ID, 'ID' => $_GET['ID'], "ACTIVE_DATE" => "Y", "ACTIVE" => "Y");
@@ -869,7 +869,6 @@ $arTypesRent = $entity_data_class::getList(array(
             $('#mainForm').find('input').each(function () {
                 if (this.checked) {
                     var display = $(this).parents('.flex-lg-row');
-                    console.log(display.css('display'))
                     if (display.css('display') === 'none'){
                     }else {
                         var object = {}
@@ -881,7 +880,6 @@ $arTypesRent = $entity_data_class::getList(array(
 
                 } else {
                     var display = $(this).parents('.flex-lg-row');
-                    console.log(display.css('display'))
                     if (display.css('display') === 'none'){
                     }else {
                         var object = {}
@@ -893,7 +891,6 @@ $arTypesRent = $entity_data_class::getList(array(
                 }
             });
             $('#mainForm').find('select').each(function () {
-                // console.log($(this));
                 $data[this.id] = $(this).val();
             });
             var a = 0;
@@ -911,46 +908,25 @@ $arTypesRent = $entity_data_class::getList(array(
             }
             $data['img'] = $imgobject;
             <?if($_GET['EDIT'] == 'Y'){?>
-            $data['EDIT'] = 'Y';
-            $data['EDIT_ID'] = '<?=$_GET['ID']?>'
+                $data['EDIT'] = 'Y';
+                $data['EDIT_ID'] = '<?=$_GET['ID']?>'
             <?}?>
             $data['itemDescription'] = $('#text-discriptions').val();
             $data['section_id'] = $('.activeSection').data();
             //get marker data from localStorage
             $data['section_id'] = $('.activeSection').data();
             $data['PROP_Completion'] = $('#PROP_Completion').val()
-            let marker = localStorage.getItem('markerData');
+            let marker = JSON.parse(localStorage.getItem('markerData')); // object
             let locationPosition = localStorage.getItem('locationDataPosition');
             let locationLatLng = localStorage.getItem('locationDataLatLng');
-            let districtName = '';
-            let regionName = '';
-            marker = JSON.parse(marker);
-            const layersId = [
-                'earthquakess-layer',
-                '1-level-area8',
-                '1-level-area7',
-                '1-level-area6',
-                '1-level-area5',
-                '1-level-area3',
-                '1-level-area2',
-                '1-level-area1',
-            ];
-
-            if (layersId.includes(marker.layer.id)){
-                districtName = marker.properties.MUN_HEB !== undefined ? marker.properties.MUN_HEB : marker.properties.MUN_ENG;
-                if(marker.layer.metadata) regionName = marker.layer.metadata;
-            }
-
-            if(districtName == ''){
-                alert('Empty location!')
-                return false;
-            }
 
             $data['UF_NAME'] = $('#Legalname').val();
+            // Map data
             $data['MAP_LATLNG'] = locationLatLng;
             $data['MAP_POSITION'] = locationPosition;
-            $data['MAP_LAYOUT'] = districtName;
-            $data['MAP_LAYOUT_BIG']= regionName;
+            $data['MAP_LAYOUT'] = marker.districtName;
+            $data['MAP_LAYOUT_BIG']= marker.regionName;
+
             $('.preloader').addClass('preloader-visible');
             let deferred = $.ajax({
                 type: "POST",
@@ -968,7 +944,6 @@ $arTypesRent = $entity_data_class::getList(array(
                 }
             });
         }
-
 
     </script>
     <style>

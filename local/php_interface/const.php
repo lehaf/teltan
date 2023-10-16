@@ -5,11 +5,12 @@ const PROPERTY_ADS_IBLOCK_ID = 2;
 const AUTO_IBLOCK_ID = 3;
 const MOTO_IBLOCK_ID = 7;
 const SCOOTER_IBLOCK_ID = 8;
-const PROPERTY_TYPES_HL_ID = 17;
-const SECTION_PROPS_HL_ID = 8;
+
 const LIVING_PROP_SECTIONS_ID = [34, 35];
 const COMMERCICAL_PROP_SECTIONS_ID = [32, 33];
 const NEW_BUILDINGS_PROP_SECTIONS_ID = [31, 30];
+
+
 // Highload-блоки
 const MAP_REGIONS_HL_ID = 34;
 const BOUGHT_RATE_HL_ID = 28;
@@ -17,9 +18,12 @@ const PERSONAL_RISE_HL_ID = 21;
 const PERSONAL_COLOR_HL_ID = 23;
 const PERSONAL_RIBBON_HL_ID = 24;
 const PERSONAL_PACKET_HL_ID = 25;
+const SECTION_PROPS_HL_ID = 8;
+const PROPERTY_TYPES_HL_ID = 17;
 const PROPERTY_ADD_PAGE_PROPS_HL_ID = 8;
 const PERSONAL_HISTORY_BUY_HL_ID = 30;
 const PERSONAL_FAVORITE_HL_ID = 5;
+
 const REAL_ESTATE_LIVE_RENT_SECTION_ID = 34;
 const FILTER_EXTRA_SHOW_COUNT = 3; //отвечает за то сколько свойств будет показано перед фильтром (минимум 2)
 const ADD_AUTO_BODY_TYPES_SHOW_COUNT = 4; //отвечает за то сколько кузовов(пикап, минивен..) будет выводиться на странице добавления АВТО перед кнопкой show all (надо указывать на 1 меньше так как счёт идёт с 0 а не с 1)
@@ -47,9 +51,7 @@ const IBLOCK_PROPERTY_MAP_LAYOUT_BIG_PROP_ID = 200;
 const IBLOCK_PROPERTY_PROP_COUNT_ROOMS_PROP_ID = 109;
 const IBLOCK_PROPERTY_PROP_TYPE_APART_PROP_ID = 165;
 
-const NOT_ADDITIONAL_PROPERTY_PROPS = [
-    'PROP_restrictions',
-];
+
 
 // PROPERTY PROPS CONST
 const PROP_AREA_1_ID = 172;

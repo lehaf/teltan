@@ -1,5 +1,4 @@
-<? require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_before.php");
-
+<?php require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_before.php");
 
 CModule::IncludeModule('highloadblock');
 $entity = GetEntityDataClass(BOUGHT_RATE_HL_ID);

@@ -31,7 +31,7 @@ foreach ($arResult['ITEMS'] as $arItem) {
                 'href' => $arItem['DETAIL_PAGE_URL'],
                 'image' => $arItem['PREVIEW_PICTURE']['SAFE_SRC'] ?? '/no-image.svg',
                 'title' => $arItem['NAME'],
-                'price' => $arItem['PROPERTIES']['PRICE']['VALUE'],
+                'price' => '₪ '.$arItem['PROPERTIES']['PRICE']['VALUE'],
                 'addres' => $arItem['NAME'],
                 'category' => $nameSection,
                 'views' => $counterJson,
@@ -41,7 +41,7 @@ foreach ($arResult['ITEMS'] as $arItem) {
             'geometry' => [
                 'type' => 'Point',
                 'coordinates' =>
-                    [$mapLatlnt['lng'], $mapLatlnt['lat']]
+                    [$mapLatlnt[0], $mapLatlnt[1]]
             ]
         ];
     }else{
@@ -51,7 +51,7 @@ foreach ($arResult['ITEMS'] as $arItem) {
                 'href' => $arItem['DETAIL_PAGE_URL'],
                 'image' => $arItem['PREVIEW_PICTURE']['SAFE_SRC'] ?? '/no-image.svg',
                 'title' => $arItem['NAME'],
-                'price' => $arItem['PROPERTIES']['PRICE']['VALUE'],
+                'price' => '₪ '.$arItem['PROPERTIES']['PRICE']['VALUE'],
                 'addres' => $arItem['NAME'],
                 'category' => $nameSection,
                 'views' => $counterJson,
@@ -61,7 +61,7 @@ foreach ($arResult['ITEMS'] as $arItem) {
             'geometry' => [
                 'type' => 'Point',
                 'coordinates' =>
-                    [$mapLatlnt['lng'], $mapLatlnt['lat']]
+                    [$mapLatlnt[0], $mapLatlnt[1]]
             ]
         ];
     }

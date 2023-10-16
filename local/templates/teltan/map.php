@@ -1,11 +1,11 @@
 <?php require_once($_SERVER['DOCUMENT_ROOT'] . "/bitrix/modules/main/include/prolog_before.php");
+
 use Bitrix\Main\Loader;
-use Bitrix\Highloadblock as HL;
 
 $regions = [];
 if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
-    $hlblock = HL\HighloadBlockTable::getById(MAP_REGIONS_HL_ID)->fetch();
-    $entity = HL\HighloadBlockTable::compileEntity($hlblock);
+    $hlblock = \Bitrix\Highloadblock\HighloadBlockTable::getById(MAP_REGIONS_HL_ID)->fetch();
+    $entity = \Bitrix\Highloadblock\HighloadBlockTable::compileEntity($hlblock);
     $entityClass = $entity->getDataClass();
 
      $regions = $entityClass::getList(array(
@@ -26,29 +26,30 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
 
         if ($('#map').length > 0) {
 
+            const districtZoneId = 'earthquakess-layer';
+            const layersId = [
+                'earthquakess-layer',
+                '1-level-area8',
+                '1-level-area7',
+                '1-level-area6',
+                '1-level-area5',
+                '1-level-area3',
+                '1-level-area2',
+                '1-level-area1',
+            ];
+
+            const displayProperties = [
+                'type',
+                'properties',
+                'id',
+                'layer',
+                'source',
+                'sourceLayer',
+                'state'
+            ];
+
             function getMapMark (features, locationDataPosition = null, locationDataLatLng = null) {
                 if (features) {
-                    const layersId = [
-                        'earthquakess-layer',
-                        '1-level-area8',
-                        '1-level-area7',
-                        '1-level-area6',
-                        '1-level-area5',
-                        '1-level-area3',
-                        '1-level-area2',
-                        '1-level-area1',
-                    ];
-
-
-                    const displayProperties = [
-                        'type',
-                        'properties',
-                        'id',
-                        'layer',
-                        'source',
-                        'sourceLayer',
-                        'state'
-                    ];
 
                     let markerData = features.map((feat) => {
                         const displayFeat = {};
@@ -64,6 +65,22 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                     } else {
                         window.mapError = 'Вы выбрали метку за пределами разрешенных зон страны Израиль';
                     }
+
+                    let markZones = map.queryRenderedFeatures(locationDataPosition,{layers: layersId});
+                    if (markZones.length > 0) {
+                        for (const zone of markZones) {
+                            // Получаем регион
+                            if (zone.layer.id === districtZoneId) {
+                                marker.districtName = zone.properties.MUN_HEB;
+                            } else {
+                                marker.regionName = zone.properties.MUN_HE;
+                            }
+                        }
+                    }
+
+                    // Проверка на зону
+                    if (!window.mapError && !marker.districtName) window.mapError = 'Вы не выбрали район!';
+                    if (!window.mapError && !marker.regionName) window.mapError = 'Вы не выбрали область!';
 
                     $('.wizard-control-next').removeAttr('disabled'); // снимаем блокировку с кнопки что бы пользователь мог проверить ошибку
                     localStorage.setItem('markerData', JSON.stringify(marker))
@@ -119,7 +136,7 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                             'id': reg.UF_MAP_ID,
                             'type': 'fill',
                             'source': reg.UF_SOURCE,
-                            'maxzoom': 8,
+                            // 'maxzoom': 8,
                             'metadata': reg.UF_NAME,
                             'source-layer': reg.UF_PROMOTE_ID,
                             'paint': {
@@ -187,7 +204,7 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                     'type': 'fill',
                     'source': '2_source',
                     'metadata': 'Abu-gosh',
-                    'minzoom': 8,
+                    // 'minzoom': 8,
                     'source-layer': 'abu_gosh',
                     'paint': {
                         'fill-color': '#627BC1',
@@ -257,9 +274,11 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                 let marker;
                 let markerLong = false;
                 let markerLat = false;
+
+                // После добавления маркера на карту
                 geocoder.on('result', e => {
-                    // Удаляем предыдущий маркер
-                    if (marker) marker.remove();
+
+                    if (marker) marker.remove();  // Удаляем предыдущий маркер
 
                     markerLong = e.result.geometry.coordinates[0];
                     markerLat = e.result.geometry.coordinates[1];
@@ -287,117 +306,41 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                         const features = map.queryRenderedFeatures(geocoder_point);
                         getMapMark(features,geocoder_point,[markerLong, markerLat]);
                     });
-                })
+                });
+
                 <?// Редактирование элемента?>
                 <?if(!empty($_GET['ID']) && $_GET['EDIT'] == 'Y'):?>
                     // Событие полной отрисовки карты
                     map.once('idle', function() {
-                        markerLong = <?=$GLOBALS['MAP_EDIT_RESULT_CORDINATES']?>[0];
-                        markerLat = <?=$GLOBALS['MAP_EDIT_RESULT_CORDINATES']?>[1];
+                        const markCoordinates = <?=$GLOBALS['MAP_EDIT_RESULT_CORDINATES']?>;
+                        markerLong = markCoordinates['lng'] ? markCoordinates['lng'] : markCoordinates[0];
+                        markerLat = markCoordinates['lat'] ? markCoordinates['lat'] : markCoordinates[1];
                         marker = new mapboxgl.Marker({
                             draggable: true
                         }).setLngLat([markerLong, markerLat]).addTo(map);
                         const features = map.queryRenderedFeatures(<?=$GLOBALS['MAP_EDIT_RESULT_POSITION']?>);
-                        getMapMark(features, null, [markerLong, markerLat]);
+                        const geocoderPoint = map.project([markerLong, markerLat]);
+                        // Полет к метке
+                        map.flyTo({
+                            center: [markerLong, markerLat], // координаты метки
+                            zoom: 7, // зум после перемещения
+                            speed: 0.3, // скорость перемещения (от 0 до 1)
+                            curve: 1, // кривая перемещения (от 0 до 1)
+                            essential: true // указывает, что это важное перемещение и не должно быть прервано другими анимациями
+                        });
+
+                        getMapMark(features, geocoderPoint, [markerLong, markerLat]);
 
                         marker.on('dragend', function (e) {
                             const features = map.queryRenderedFeatures(e.target._pos);
                             getMapMark(features, e.target._pos, e.target._lngLat);
                         })
                     });
-
                 <?endif;?>
 
-                map.addControl(geocoder)
-                map.on('click', 'abu-gosh', (e) => {
-                    const features = map.queryRenderedFeatures(e.point);
-
-                    // Limit the number of properties we're displaying for
-                    // legibility and performance
-                    const displayProperties = [
-                        'type',
-                        'properties',
-                        'id',
-                        'layer',
-                        'source',
-                        'sourceLayer',
-                        'state'
-                    ];
-
-                    const displayFeatures = features.map((feat) => {
-                        const displayFeat = {};
-                        displayProperties.forEach((prop) => {
-                            displayFeat[prop] = feat[prop];
-                        });
-                        return displayFeat;
-                    });
-                });
-
-                // When a click event occurs on a feature in
-                // the unclustered-point layer, open a popup at
-                // the location of the feature, with
-                // description HTML from its properties.
-                map.on('click', 'unclustered-point', (e) => {
-                    const coordinates = e.features[0].geometry.coordinates.slice();
-
-                    let paramItem = e.features[0].properties
-
-                    // Ensure that if the map is zoomed out such that
-                    // multiple copies of the feature are visible, the
-                    // popup appears over the copy being pointed to.
-                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                    }
-
-                    clearMapItemPLace();
-                    rendorMapItemCard(paramItem)
-                });
-
-
-                map.on('mouseenter', 'unclustered-point', () => {
-                    map.getCanvas().style.cursor = 'pointer';
-                });
-
-                map.on('mouseleave', 'unclustered-point', () => {
-                    map.getCanvas().style.cursor = '';
-                    popup.remove();
-                });
-
-
-                const popup = new mapboxgl.Popup({
-                    closeButton: false,
-                    closeOnClick: false
-                });
-
-                map.on('mouseenter', 'unclustered-point', (e) => {
-                    const coordinates = e.features[0].geometry.coordinates.slice();
-                    const description = `
-                        <div class="d-flex popup-content">
-                          <div class="w-75 pr-3">
-                            <img src="${e.features[0].properties.image}">
-                          </div>
-
-                          <div class="d-flex flex-column text-right">
-                            <p class="font-weight-bold">${e.features[0].properties.title}</p>
-                            <p class="p-0 text-primary font-weight-bold">${e.features[0].properties.price}</p>
-                          </div>
-                        </div>`;
-
-                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                    }
-
-                    popup.setLngLat(coordinates).setHTML(description).addTo(map);
-                });
+                map.addControl(geocoder);
             });
         }
-
-        const mapItemRenderPlace = $('#rendorMapItemCard');
-
-        const clearMapItemPLace = () => {
-            mapItemRenderPlace.empty()
-        }
-
     });
     // MAPS END
 </script>
