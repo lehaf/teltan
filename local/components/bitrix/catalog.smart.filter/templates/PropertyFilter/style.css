@@ -18,3 +18,15 @@ span.checkmark.disabled {
 .parameter div.box.disabled {
     background-color: #d5d5d5;
 }
+
+.date-container-mobile {
+    justify-content: flex-end;
+}
+
+.immediately-entry-box {
+    margin-top: 15px;
+}
+
+.date-input {
+    margin-top: 5px;
+}

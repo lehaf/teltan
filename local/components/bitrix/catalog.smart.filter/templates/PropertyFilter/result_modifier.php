@@ -33,7 +33,7 @@ if (!empty($arResult['ITEMS'])) {
     $additionalFilter = [
         'PROP_AREA_2', // Площадь общая
         'PROP_FLOOR', // Этаж
-//        'PROP_Completion', // Дата въезда
+        'PROP_Completion', // Дата въезда
         'IMMEDIATELY_ENTRY', // Немедленный въезд
         'NOT_FIRST', // Не первый
         'NOT_LAST', // Не последний
@@ -70,7 +70,7 @@ if (!empty($arResult['ITEMS'])) {
             if ($item['CODE'] === 'PROP_TYPE_APART') $arResult['MAIN_PROPS'][4] = $item;
         }
 
-        if (!empty($item['CODE']) && in_array($item['CODE'],$additionalFilter)) $newItems[] = $item;
+        if (!empty($item['CODE']) && in_array($item['CODE'],$additionalFilter)) $newItems[$item['ID']] = $item;
 
 
         if (!empty($item['CODE']) && in_array($item['CODE'],$propRoomsAdditionalCheckbox)) $arResult['ROOMS_ADD_PROP'][] = $item;
@@ -78,6 +78,7 @@ if (!empty($arResult['ITEMS'])) {
         if (!empty($sectionAdditionalProps) && in_array($item['CODE'],$sectionAdditionalProps)) $arResult['ADDITIONAL_PROPS'][] = $item;
 
     }
+
     $arResult['ITEMS'] = $newItems;
     ksort($arResult['MAIN_PROPS']);
 }

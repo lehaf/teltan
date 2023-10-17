@@ -17,4 +17,6 @@ $MESS ['find_map'] = "find on map";
 $MESS ['more_params'] = "more params";
 $MESS ['city'] = "city";
 $MESS ['date'] = "arrival date";
+$MESS ['MIN'] = "From";
+$MESS ['MAX'] = "To";
 ?>

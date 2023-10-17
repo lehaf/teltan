@@ -17,4 +17,6 @@ $MESS ['find_map'] = "הצג במפה";
 $MESS ['more_params'] = "פארמים נוספים";
 $MESS ['city'] = "עיר, רחוב, שכונה";
 $MESS ['date'] = "תאריך הגעה";
+$MESS ['MIN'] = "From";
+$MESS ['MAX'] = "To";
 ?>

@@ -11,6 +11,10 @@ use Bitrix\Main\Localization\Loc;
 Loc::loadMessages(__FILE__);
 $this->setFrameMode(false);
 $arSection = [];
+$curPage = $APPLICATION->GetCurPage();
+$isLiveBuyPage = strpos($curPage,'/property/zhilaya/kupit-j/') !== false;
+$isСommercialRentPage = strpos($curPage,'/property/kommercheskaya/snyat-kom/') !== false;
+$isСommercialBuyPage = strpos($curPage,'/property/kommercheskaya/kupit-kom/') !== false;
 
 switch ($arParams['SECTION_ID']) {
     case RESIDENTIAL_SECTION_ID:
@@ -23,34 +27,6 @@ switch ($arParams['SECTION_ID']) {
         LocalRedirect('/property/novostroyki/snyat/');
         break;
 }
-
-$arFilter = array('IBLOCK_ID' => PROPERTY_ADS_IBLOCK_ID);
-$arSelect = array('IBLOCK_ID', 'ID', 'NAME', 'IBLOCK_SECTION_ID', 'SECTION_PAGE_URL', 'DETAIL_PICTURE', 'DEPTH_LEVEL', 'UF_*');
-$rsSect = CIBlockSection::GetList(
-    array("SORT" => "ASC"),
-    $arFilter,
-    false,
-    $arSelect
-);
-while ($arSect = $rsSect->GetNext()) {
-    $arSection[$arSect['ID']] = $arSect;
-}
-foreach ($arSection as $item) {
-    if ($item['NAME'] == 'Снять') {
-        $arSection[$item['IBLOCK_SECTION_ID']]['CHILDREN']['RENT'] = $item;
-    } else {
-        $arSection[$item['IBLOCK_SECTION_ID']]['CHILDREN']['BUY'] = $item;
-    }
-}
-
-$newProps = [];
-foreach ($arResult['ITEMS'] as $propId => $ITEM) {
-    $arResult['ITEMS_CODE'][$ITEM['CODE']] = $ITEM;
-    if (!in_array($ITEM['CODE'],IMMUTABLE_PROPERTY_FILTER_PROPS)) $newProps[$ITEM['CODE']] =  $ITEM;
-}
-
-$arBuyProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID']]['CHILDREN']['BUY']['UF_PROPS'];
-$arRentProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID']]['CHILDREN']['RENT']['UF_PROPS'];
 ?>
 
 <script>
@@ -282,7 +258,6 @@ $arRentProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <div class="d-flex sub-menu-prop">
@@ -314,84 +289,94 @@ $arRentProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID
                         <div class="modal-content">
                             <div class="modal-header flex-row-reverse align-items-center justify-content-between">
                                 <h5 class="modal-title">Еще фильтры</h5>
-
                                 <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">×</span>
                                 </button>
                             </div>
-
-                            <div id="rent_modal_body" class="modal-body">
-                                <?php if (!in_array($arParams['SECTION_ID'], COMMERCIAL_SECTION_ARRAY)) { ?>
+                            <?// Дополнительные фильтры?>
+                            <div class="modal-body">
+                                <?// Площадь общая?>
+                                <?php if (!empty($arResult['ITEMS'][PROP_AREA_2_ID]['VALUES']) && !$isСommercialRentPage && !$isСommercialBuyPage):?>
                                     <div class="row mb-4">
                                         <div class="col-10">
                                             <div class="input-group-modal">
                                                 <div class="d-flex flex-row-reverse align-items-center">
-                                                    <div class="input-decoration">
-                                                        <input value="<?= $_GET['arrFilter_173_MIN'] ?>" type="text"
-                                                               data-control-id="arrFilter_173_MIN" name="fullAreaRent"
-                                                               placeholder="От">
-                                                        <span class="decoration">м²</span>
+                                                    <?php $firstKey = array_key_first($arResult['ITEMS'][PROP_AREA_2_ID]['VALUES'])?>
+                                                    <?php foreach ($arResult['ITEMS'][PROP_AREA_2_ID]['VALUES'] as $key => $filterVal):?>
+                                                        <div class="input-decoration <?=$firstKey !== $key ? 'mr-3' : ''?>">
+                                                            <input value="<?=!empty($_GET[$filterVal['CONTROL_ID']]) ? $_GET[$filterVal['CONTROL_ID']] : ''?>"
+                                                                   type="text"
+                                                                   data-control-id="<?=$filterVal['CONTROL_ID']?>"
+                                                                   name="fullAreaRent"
+                                                                   placeholder="<?=Loc::getMessage($key)?>"
+                                                            >
+                                                            <span class="decoration">м²</span>
+                                                        </div>
+                                                    <?php endforeach;?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-2 text-right"><?=$arResult['ITEMS'][PROP_AREA_2_ID]['NAME']?></div>
+                                    </div>
+                                <?php endif?>
+                                <?// Этаж / Не первый / Не последний?>
+                                <?php if (!empty($arResult['ITEMS'][PROP_FLOOR_ID]['VALUES']) &&
+                                    !empty($arResult['ITEMS'][PROP_NOT_LAST_ID]['VALUES']) &&
+                                    !empty($arResult['ITEMS'][PROP_NOT_FIRST_ID]['VALUES'])):?>
+                                    <div class="row mb-4 ">
+                                        <div class="col-10">
+                                            <div class="d-flex flex-row-reverse align-items-center">
+                                                <?php $firstKey = array_key_first($arResult['ITEMS'][PROP_FLOOR_ID]['VALUES'])?>
+                                                <?php foreach ($arResult['ITEMS'][PROP_FLOOR_ID]['VALUES'] as $key => $filterVal):?>
+                                                    <div class="d-flex input-group-modal">
+                                                        <div class="input-decoration <?=$firstKey !== $key ? 'mr-3' : ''?>">
+                                                            <input value="<?=!empty($_GET[$filterVal['CONTROL_ID']]) ? $_GET[$filterVal['CONTROL_ID']] : ''?>"
+                                                                   data-control-id="<?=$filterVal['CONTROL_ID']?>"
+                                                                   name="fleatRent"
+                                                                   type="text"
+                                                                   placeholder="<?=Loc::getMessage($key)?>"
+                                                            >
+                                                        </div>
                                                     </div>
-
-                                                    <div class="input-decoration mr-3">
-                                                        <input value="<?= $_GET['arrFilter_173_MAX'] ?>" class=""
-                                                               data-control-id="arrFilter_173_MAX" name="fullAreaRent"
-                                                               type="text" placeholder="До">
-                                                        <span class="decoration">м²</span>
-                                                    </div>
+                                                <?php endforeach;?>
+                                                <div class="mr-5 d-flex check-box-prop-filter">
+                                                    <?php foreach ($arResult['ITEMS'][PROP_NOT_FIRST_ID]['VALUES'] as $key => $notFirstVal):?>
+                                                        <div class="mr-5">
+                                                            <label class="cb-wrap">
+                                                                <span class="text"><?=$arResult['ITEMS'][PROP_NOT_FIRST_ID]['NAME']?></span>
+                                                                <input  <?=$_GET[$notFirstVal['CONTROL_ID']] === 'Y'? 'checked' : ''?>
+                                                                        data-control-id="<?=$notFirstVal['CONTROL_ID']?>"
+                                                                        data-html-value="Y"
+                                                                        type="checkbox"
+                                                                        name="noFirstFloreRent"
+                                                                        value="Не первый"
+                                                                >
+                                                                <span class="checkmark"></span>
+                                                            </label>
+                                                        </div>
+                                                    <?php endforeach;?>
+                                                    <?php foreach ($arResult['ITEMS'][PROP_NOT_LAST_ID]['VALUES'] as $key => $notLastVal):?>
+                                                        <label class="cb-wrap">
+                                                            <span class="text"><?=$arResult['ITEMS'][PROP_NOT_LAST_ID]['NAME']?></span>
+                                                            <input   <?=$_GET[$notLastVal['CONTROL_ID']] === 'Y'? 'checked' : ''?>
+                                                                    data-control-id="<?=$notLastVal['CONTROL_ID']?>"
+                                                                    data-html-value="Y"
+                                                                    type="checkbox"
+                                                                    name="noLastFloreRent"
+                                                                    value="Не последний"
+                                                            >
+                                                            <span class="checkmark"></span>
+                                                        </label>
+                                                    <?php endforeach;?>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="col-2 text-right">
-                                            Площадь общая
-                                        </div>
+                                        <div class="col-2 text-right"><?=$arResult['ITEMS'][PROP_FLOOR_ID]['NAME']?></div>
                                     </div>
-                                <?php } ?>
-                                <div class="row mb-4 ">
-                                    <div class="col-10">
-                                        <div class="d-flex flex-row-reverse align-items-center">
-
-                                            <div class="d-flex input-group-modal">
-                                                <div class="input-decoration mr-3">
-                                                    <input value="<?= $_GET['arrFilter_111_MAX'] ?>"
-                                                           data-control-id="arrFilter_111_MAX" name="fleatRent"
-                                                           type="text" placeholder="До">
-                                                </div>
-
-                                                <div class="input-decoration">
-                                                    <input value="<?= $_GET['arrFilter_111_MIN'] ?>"
-                                                           data-control-id="arrFilter_111_MIN" name="fleatRent" class=""
-                                                           type="text" placeholder="От">
-                                                </div>
-                                            </div>
-
-                                            <div class="mr-5 d-flex check-box-prop-filter">
-                                                <div class="mr-5">
-                                                    <label class="cb-wrap">
-                                                        <span class="text">Не первый</span>
-                                                        <input  <?=($_GET['arrFilter_240_3233089245'] == 'Y')? 'checked' : ''?> data-control-id="arrFilter_240_3233089245" data-html-value="Y" type="checkbox" name="noFirstFloreRent"
-                                                               value="Не первый">
-                                                        <span class="checkmark"></span>
-                                                    </label>
-                                                </div>
-
-                                                <label class="cb-wrap">
-                                                    <span class="text">Не последний</span>
-                                                    <input  <?=($_GET['arrFilter_241_3233089245'] == 'Y')? 'checked' : ''?> data-control-id="arrFilter_241_3233089245" data-html-value="Y" type="checkbox" name="noLastFloreRent" value="Не последний">
-                                                    <span class="checkmark"></span>
-                                                </label>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-2 text-right">
-                                        Этаж
-                                    </div>
-                                </div>
-                                <?php foreach ($newProps as $propCode => $propInfo) :
-                                    if(!in_array($propCode, $arRentProps) || empty($propInfo['VALUES'])) continue;
-                                    ?>
+                                <?php endif?>
+                                <?// Дополнительные свойства фильтра?>
+                                <?php if (!empty($arResult['ADDITIONAL_PROPS'])):?>
+                                    <?php foreach ($arResult['ADDITIONAL_PROPS'] as $propCode => $propInfo) :?>
                                         <div class="row mb-4 ">
                                             <div class="col-10">
                                                 <div class="d-flex flex-wrap flex-row-reverse align-items-center">
@@ -413,168 +398,60 @@ $arRentProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID
                                                 <?=$propInfo['NAME']?>
                                             </div>
                                         </div>
-                                <?php endforeach; ?>
-                                <div class="row">
-                                    <div class="col-10">
-                                        <div class="d-flex flex-row-reverse align-items-center">
-
-                                            <div class="d-flex input-group-modal">
-                                                <div class="input-decoration date-input">
-                                                    <?
-                                                    if ($_GET['arrFilter_113_MIN']) {
-                                                        $dateString = $_GET['arrFilter_113_MIN'];
-                                                        $date = DateTime::createFromFormat('d/m/Y', $dateString);
-
-                                                        $formattedDate = $date->format('Y-m-d');
-                                                    }
-                                                    ?>
-                                                    <input value="<?=$formattedDate ?>" data-control-id="arrFilter_113_MIN"  class="check-in-date"  name="check-in-date" type="date" placeholder="Дата въезда">
-                                                </div>
-                                            </div>
-
-                                            <div class="d-flex check-box-prop-filter">
-                                                <div class="mr-5">
-                                                    <label class="cb-wrap">
-                                                        <span class="text">Немедленный въезд</span>
-                                                        <input <?=($_GET['arrFilter_239_3233089245'] == 'Y')? 'checked' : ''?> data-control-id="arrFilter_239_3233089245" data-html-value="Y" type="checkbox" name="check-in-now"
-                                                               value="Немедленный въезд">
-                                                        <span class="checkmark"></span>
-                                                    </label>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-2 text-right">
-                                        Дата въезда
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="buy_modal_body" class="modal-body">
-                                <?php if (!in_array($arParams['SECTION_ID'], COMMERCIAL_SECTION_ARRAY)) { ?>
-                                    <div class="row mb-4">
+                                    <?php endforeach; ?>
+                                <?endif;?>
+                                <?// Дата въезда / Немедленный въезд?>
+                                <?php if (!$isLiveBuyPage && !$isСommercialBuyPage):?>
+                                    <div class="row">
                                         <div class="col-10">
-                                            <div class="input-group-modal">
-                                                <div class="d-flex flex-row-reverse align-items-center">
-                                                    <div class="input-decoration">
-                                                        <input value="<?= $_GET['arrFilter_173_MIN'] ?>" type="text"
-                                                               data-control-id="arrFilter_173_MIN" name="fullAreaRent"
-                                                               placeholder="От">
-                                                        <span class="decoration">м²</span>
+                                            <div class="d-flex flex-row-reverse align-items-center">
+                                                <?php foreach ($arResult['ITEMS'][PROP_COMPLETION_ID]['VALUES'] as $key => $propDate):?>
+                                                    <?php if ($key === 'MIN'):?>
+                                                        <div class="d-flex input-group-modal">
+                                                            <div class="input-decoration date-input">
+                                                                <?
+                                                                if (!empty($_GET[$propDate['CONTROL_ID']])) {
+                                                                    $dateString = $_GET[$propDate['CONTROL_ID']];
+                                                                    $date = DateTime::createFromFormat('d/m/Y', $dateString);
+                                                                    $formattedDate = $date->format('Y-m-d');
+                                                                }
+                                                                ?>
+                                                                <input value="<?=!empty($formattedDate) ? $formattedDate : ''?>"
+                                                                       data-control-id="<?=$propDate['CONTROL_ID']?>"
+                                                                       class="check-in-date"
+                                                                       name="check-in-date"
+                                                                       type="date"
+                                                                       placeholder="Дата въезда"
+                                                                >
+                                                            </div>
+                                                        </div>
+                                                    <?php endif?>
+                                                <?php endforeach; ?>
+                                                <?php foreach ($arResult['ITEMS'][PROP_IMMEDIATELY_ENTRY_ID]['VALUES'] as $key => $prop):?>
+                                                    <div class="d-flex check-box-prop-filter">
+                                                        <div class="mr-5">
+                                                            <label class="cb-wrap">
+                                                                <span class="text">
+                                                                    <?=$arResult['ITEMS'][PROP_IMMEDIATELY_ENTRY_ID]['NAME']?>
+                                                                </span>
+                                                                <input  <?=(!empty($_GET[$prop['CONTROL_ID']]))? 'checked' : ''?>
+                                                                        data-html-value="<?=$prop['HTML_VALUE']?>"
+                                                                        data-control-id="<?=$prop['CONTROL_ID']?>"
+                                                                        type="checkbox"
+                                                                        name="check-in-now"
+                                                                        value="<?=$prop['HTML_VALUE']?>"
+                                                                >
+                                                                <span class="checkmark"></span>
+                                                            </label>
+                                                        </div>
                                                     </div>
-
-                                                    <div class="input-decoration mr-3">
-                                                        <input value="<?= $_GET['arrFilter_173_MAX'] ?>" class=""
-                                                               data-control-id="arrFilter_173_MAX" name="fullAreaRent"
-                                                               type="text" placeholder="До">
-                                                        <span class="decoration">м²</span>
-                                                    </div>
-                                                </div>
+                                                <?php endforeach; ?>
                                             </div>
                                         </div>
-
-                                        <div class="col-2 text-right">
-                                            Площадь общая
-                                        </div>
+                                        <div class="col-2 text-right"><?=$arResult['ITEMS'][PROP_COMPLETION_ID]['NAME']?></div>
                                     </div>
-                                <?php } ?>
-                                <div class="row mb-4 ">
-                                    <div class="col-10">
-                                        <div class="d-flex flex-row-reverse align-items-center">
-
-                                            <div class="d-flex input-group-modal">
-                                                <div class="input-decoration mr-3">
-                                                    <input value="<?= $_GET['arrFilter_111_MAX'] ?>"
-                                                           data-control-id="arrFilter_111_MAX" name="fleatRent"
-                                                           type="text" placeholder="До">
-                                                </div>
-
-                                                <div class="input-decoration">
-                                                    <input value="<?= $_GET['arrFilter_111_MIN'] ?>"
-                                                           data-control-id="arrFilter_111_MIN" name="fleatRent" class=""
-                                                           type="text" placeholder="От">
-                                                </div>
-                                            </div>
-
-                                            <div class="mr-5 d-flex check-box-prop-filter">
-                                                <div class="mr-5">
-                                                    <label class="cb-wrap">
-                                                        <span class="text">Не первый</span>
-                                                        <input type="checkbox" name="noFirstFloreRent"
-                                                               value="Не первый">
-                                                        <span class="checkmark"></span>
-                                                    </label>
-                                                </div>
-
-                                                <label class="cb-wrap">
-                                                    <span class="text">Не последний</span>
-                                                    <input type="checkbox" name="noLastFloreRent" value="Не последний">
-                                                    <span class="checkmark"></span>
-                                                </label>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-2 text-right">
-                                        Этаж
-                                    </div>
-                                </div>
-                                <?php foreach ($newProps as $propCode => $propInfo) :
-                                    if(!in_array($propCode, $arBuyProps) || empty($propInfo['VALUES'])) continue;
-                                    ?>
-                                    <div class="row mb-4 ">
-                                        <div class="col-10">
-                                            <div class="d-flex flex-wrap flex-row-reverse align-items-center">
-                                                <?foreach ($propInfo['VALUES'] as $val){?>
-                                                    <label class="parameter">
-                                                        <input  <?=(!empty($_GET[$val['CONTROL_ID']]))? 'checked' : ''?>
-                                                                data-html-value="<?= $val['HTML_VALUE'] ?>"
-                                                                data-control-id="<?= $val['CONTROL_ID'] ?>"
-                                                                name="<?=$propInfo['CODE']?>"
-                                                                value="<?=$propInfo['NAME']?> : <?=$val['VALUE']?>"
-                                                                type="checkbox"
-                                                        >
-                                                        <div><?=$val['VALUE']?></div>
-                                                    </label>
-                                                <?}?>
-                                            </div>
-                                        </div>
-                                        <div data-code="<?=$propInfo['CODE']?>" class="col-2 text-right">
-                                            <?=$propInfo['NAME']?>
-                                        </div>
-                                    </div>
-                                <?php endforeach; ?>
-
-                                <div class="row">
-                                    <div class="col-10">
-                                        <div class="d-flex flex-row-reverse align-items-center">
-
-                                            <div class="d-flex input-group-modal">
-                                                <div class="input-decoration date-input">
-                                                    <input value="<?=$_GET['arrFilter_113_MIN']?>" data-control-id="arrFilter_113_MIN" class="check-in-date" name="check-in-date" type="date" placeholder="Дата въезда">
-                                                </div>
-                                            </div>
-
-                                            <div class="d-flex check-box-prop-filter">
-                                                <div class="mr-5">
-                                                    <label class="cb-wrap">
-                                                        <span class="text">Немедленный въезд</span>
-                                                        <input type="checkbox" name="check-in-now"
-                                                               value="Немедленный въезд">
-                                                        <span class="checkmark"></span>
-                                                    </label>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-2 text-right">
-                                        Дата въезда
-                                    </div>
-                                </div>
+                                <?php endif;?>
                             </div>
-
                             <div class="modal-footer flex-row-reverse border-top-0">
                                 <button type="button" class="btn text-primary ressetFilterAll">Сбросить фильтры</button>
                                 <button type="button" class="btn btn-primary submitFilterAll" data-dismiss="modal">
@@ -586,280 +463,9 @@ $arRentProps = $arSection[$arSection[$arParams['SECTION_ID']]['IBLOCK_SECTION_ID
                 </div>
             </div>
         </form>
-
-        <form id="mainFiltersBuy" class="main-filters hide">
-            <div class="prop-rent-form">
-                <div class="w-40">
-                    <input class="search-input" type="text" placeholder="Город, адрес, метро, район, ж/д, шоссе или ЖК">
-                </div>
-
-                <div class="w-17 position-relative">
-                    <button type="button" class="custom-btn-property btn-price buttonShowPropertyFilterPrice">
-                        <i class="icon-arrow-down-sign-to-navigate-3"></i>
-                        <span class="houseBuyUserPrise">Цена</span>
-                    </button>
-
-                    <div class="dropdown-card dropdown-filter dropdown-prise">
-                        <div class="input-decoration mr-3">
-                            <input class="priceMin" type="text" name="price" placeholder="От">
-                            <span class="decoration">₪</span>
-                        </div>
-
-                        <div class="input-decoration">
-                            <input class="priceMax" type="text" name="price" placeholder="До">
-                            <span class="decoration">₪</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="w-17 position-relative">
-                    <button type="button" class="custom-btn-property btn-room-number buttonShowPropertyFilterRoom">
-                        <i class="icon-arrow-down-sign-to-navigate-3"></i>
-                        <span class="countRoomNumberFilter">Число комнат</span>
-                    </button>
-
-                    <div class="dropdown-card dropdown-room-number">
-                        <div class="mb-4 room-number flex-row-reverse">
-                            <label class="chackbox-label">
-                                <input type="checkbox" name="area" value="1">
-                                <div>1</div>
-                            </label>
-
-                            <label class="chackbox-label">
-                                <input type="checkbox" name="area" value="1.5">
-                                <div>1,5</div>
-                            </label>
-
-                            <label class="chackbox-label">
-                                <input type="checkbox" name="area" value="2">
-                                <div>2</div>
-                            </label>
-
-                            <label class="chackbox-label">
-                                <input type="checkbox" name="area" value="2.5">
-                                <div>2,5</div>
-                            </label>
-
-                            <label class="chackbox-label">
-                                <input type="checkbox" name="area" value="3">
-                                <div>3</div>
-                            </label>
-
-                            <label class="chackbox-label">
-                                <input type="checkbox" name="area" value="3.5">
-                                <div>3,5</div>
-                            </label>
-
-                            <label class="chackbox-label">
-                                <input type="checkbox" name="area" value="4">
-                                <div>4</div>
-                            </label>
-
-                            <label class="chackbox-label">
-                                <input type="checkbox" name="area" value="4.5">
-                                <div>4,5</div>
-                            </label>
-
-                            <label class="chackbox-label">
-                                <input type="checkbox" name="area" value="5">
-                                <div>5</div>
-                            </label>
-
-                            <label class="chackbox-label" "="">
-                            <input type="checkbox" name="area" value="5.5">
-                            <div>5,5</div>
-                            </label>
-
-                            <label class="chackbox-label" "="">
-                            <input type="checkbox" name="area" value="6">
-                            <div>6+</div>
-                            </label>
-                        </div>
-
-                        <div class="d-flex flex-column align-items-end check-box-prop-filter">
-                            <label class="cb-wrap">
-                                <span class="text">Студия</span>
-                                <input <?=($_GET['arr_rlfr'])? 'checked' : ''?> data-control-id="arr_rlfr" data-html-value='Y' type="checkbox" name="input-studio-rent" value="Студия">
-                                <span class="checkmark"></span>
-                            </label>
-
-                            <label class="cb-wrap">
-                                <span class="text">Свободная планировка</span>
-                                <input <?=($_GET['arr_rlfrf'])? 'checked' : ''?> data-control-id="arr_rlfrf" data-html-value='Y' type="checkbox" name="input-free-layout-rent" value="Свободная планировка">
-                                <span class="checkmark"></span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="w-30 position-relative">
-                    <button type="button" class="custom-btn-property btn-property-type buttonShowPropertyFilterType">
-                        <i class="icon-arrow-down-sign-to-navigate-3"></i>
-                        <span class="typeProperty">Тип недвижимости</span>
-                    </button>
-
-                    <div class="w-100 justify-content-end dropdown-card dropdown-building-type">
-                        <div class="d-flex flex-column align-items-end check-box-prop-filter">
-                            <?php foreach ($arResult['ITEMS'][IBLOCK_PROPERTY_PROP_TYPE_APART_PROP_ID]['VALUES'] as $VALUE) { ?>
-                                <label class="cb-wrap">
-                                    <span class="text"><?= $VALUE['VALUE'] ?></span>
-                                    <input data-control-id="<?= $VALUE['CONTROL_ID'] ?>"
-                                           data-html-value="<?= $VALUE['HTML_VALUE'] ?>"
-                                           type="checkbox" name="areaTypeBuilduing" value="<?= $VALUE['CONTROL_ID'] ?>">
-                                    <span class="checkmark"></span>
-                                </label>
-                            <?php } ?>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="d-flex sub-menu-prop">
-                <!-- отправляет форму с клоном даты  form="sandRequest"-->
-                <button type="#" class="btn btn-primary font-weight-bold submit-btn-search" form="sandRequest">Найти
-                </button>
-                <button type="#" class="btn bg-white text-primary font-weight-bold border-primary btn-show-map">Показать
-                    на карте
-                </button>
-
-                <div class="list-filter-options">
-                    <div class="showAllTags" data-toggle="modal" data-target="#moreFilterPropertyRent">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-
-                    <div class="d-flex justify-content-end align-items-center tags">
-
-                        <!-- TAGS PLACE -->
-                    </div>
-                </div>
-
-                <a href="#" type="button"
-                   class="btn-more-filters d-flex justify-content-between align-items-center text-white"
-                   data-toggle="modal" data-target="#moreFilterPropertyBuy">
-                    <i class="icon-arrow-down-sign-to-navigate-3"></i>
-                    Еще параметры
-                </a>
-
-                <div class="modal-filter-header modal fade" id="moreFilterPropertyBuy">
-                    <div class="modal-dialog modal-dialog-centered modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header flex-row-reverse align-items-center justify-content-between">
-                                <h5 class="modal-title">Еще фильтры</h5>
-                                <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                            </div>
-
-                            <div class="modal-body">
-                                <div class="row mb-4">
-                                    <div class="col-10">
-                                        <div class="input-group-modal">
-                                            <div class="d-flex flex-row-reverse align-items-center">
-                                                <div class="input-decoration">
-                                                    <input type="text" name="fullAreaBuy" placeholder="От">
-                                                    <span class="decoration">м²</span>
-                                                </div>
-
-                                                <div class="input-decoration mr-3">
-                                                    <input class="" name="fullAreaBuy" type="text" placeholder="До">
-                                                    <span class="decoration">м²</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-2 text-right">
-                                        Площадь общая
-                                    </div>
-                                </div>
-
-                                <div class="row mb-4 ">
-                                    <div class="col-10">
-                                        <div class="d-flex flex-row-reverse align-items-center">
-
-                                            <div class="d-flex input-group-modal">
-                                                <div class="input-decoration mr-3">
-                                                    <input name="fleatBuy" type="text" placeholder="До">
-                                                </div>
-
-                                                <div class="input-decoration">
-                                                    <input name="fleatBuy" class="" type="text" placeholder="От">
-                                                </div>
-                                            </div>
-
-                                            <div class=" mr-5 d-flex check-box-prop-filter">
-                                                <div class="mr-5">
-                                                    <label class="cb-wrap">
-                                                        <span class="text">Не первый</span>
-                                                        <input type="checkbox" name="noFirstFloreBuy" value="Не первый">
-                                                        <span class="checkmark"></span>
-                                                    </label>
-                                                </div>
-
-                                                <label class="cb-wrap">
-                                                    <span class="text">Не последний</span>
-                                                    <input type="checkbox" name="noLastFloreBuy" value="Не последний">
-                                                    <span class="checkmark"></span>
-                                                </label>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-2 text-right">
-                                        Этаж
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-10">
-                                        <div class="d-flex flex-wrap flex-row-reverse align-items-center">
-                                            <label class="parameter">
-                                                <input name="repair1Buy" value="Ремонт - 1" type="checkbox">
-                                                <div>Параметр 1</div>
-                                            </label>
-
-                                            <label class="parameter">
-                                                <input name="repair2Buy" value="Ремонт - 2" type="checkbox">
-                                                <div>Параметр 2</div>
-                                            </label>
-
-                                            <label class="parameter">
-                                                <input name="repair3Buy" value="Ремонт - 3" type="checkbox">
-                                                <div>Параметр 3</div>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-2 text-right">
-                                        Ремонт
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="modal-footer flex-row-reverse border-top-0">
-                                <button type="button" class="btn text-primary ressetFilterAll">Сбросить фильтры</button>
-                                <button type="button" class="btn btn-primary" data-dismiss="modal">Применить</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-
         <!-- Скрытая форма только собирает дату для отправки -->
         <form action="" class="d-none" id="sandRequest">
             <input id="allFilters" type="text" name="filters">
         </form>
     </div>
 </div>
-<script>
-    <?php if ($_GET['set_filter'] == 'y'):?>
-        $(document).ready(function () {
-            $('input[name="check-in-now"]').trigger('click');
-            $('input[name="check-in-now"]').trigger('click');
-        })
-    <?php endif;?>
-    let smartFilter = new JCSmartFilter('<?php echo CUtil::JSEscape($arResult["FORM_ACTION"])?>', '<?=CUtil::JSEscape($arParams["FILTER_VIEW_MODE"])?>', <?=CUtil::PhpToJSObject($arResult["JS_FILTER_PARAMS"])?>);
-</script>

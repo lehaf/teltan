@@ -4,6 +4,11 @@ use Bitrix\Main\Localization\Loc;
 
 Loc::loadMessages(__FILE__);
 $this->setFrameMode(true);
+
+$curPage = $APPLICATION->GetCurPage();
+$isLiveBuyPage = strpos($curPage,'/property/zhilaya/kupit-j/') !== false;
+$isСommercialRentPage = strpos($curPage,'/property/kommercheskaya/snyat-kom/') !== false;
+$isСommercialBuyPage = strpos($curPage,'/property/kommercheskaya/kupit-kom/') !== false;
 ?>
 <div class="d-block d-lg-none mb-5 px-3 property-menu-mobile">
     <div class="d-flex d-lg-none justify-content-end nav-category-type">
@@ -247,11 +252,11 @@ $this->setFrameMode(true);
                     </div>
                 </div>
         <?php endif;?>
-
+        <?// Дополнительные свойства?>
         <div id="extraMObileOptionsPropertyMmm" class="collapse" aria-labelledby="extraMObileOptionsProperty">
             <div class="card-body modal-filter-header">
                 <?php foreach ($arResult["ITEMS"] as $key => $arItem):?>
-                    <?if ($arItem["CODE"] === "PROP_AREA_2" || $arItem["CODE"] === "PROP_FLOOR"):?>
+                    <?if (($arItem["CODE"] === "PROP_AREA_2" && !$isСommercialRentPage && !$isСommercialBuyPage) || $arItem["CODE"] === "PROP_FLOOR"):?>
                         <div class="mb-4">
                             <div class="mb-3 d-flex justify-content-end">
                                 <span class="rentAreaCommerce"><?= $arItem['NAME'] ?></span>
@@ -264,8 +269,8 @@ $this->setFrameMode(true);
                                            name="<?=$arItem["VALUES"]["MIN"]["CONTROL_NAME"] ?>"
                                            placeholder="<?= $arItem["VALUES"]["MIN"]["VALUE"] ?>"
                                            id="<?=$arItem["VALUES"]["MIN"]["CONTROL_ID"] ?>"
-                                           onkeyup="smartFilter.keyup(this)">
-
+                                           onkeyup="smartFilter.keyup(this)"
+                                    >
                                     <?if ($arItem['CODE'] !== 'PROP_FLOOR'):?><span class="decoration">м²</span><?endif;?>
                                 </div>
 
@@ -276,12 +281,13 @@ $this->setFrameMode(true);
                                            name="<?=$arItem["VALUES"]["MAX"]["CONTROL_NAME"] ?>"
                                            placeholder="<?= $arItem["VALUES"]["MAX"]["VALUE"] ?>"
                                            id="<?=$arItem["VALUES"]["MAX"]["CONTROL_ID"] ?>"
-                                           onkeyup="smartFilter.keyup(this)">
+                                           onkeyup="smartFilter.keyup(this)"
+                                    >
                                     <?if ($arItem['CODE'] !== 'PROP_FLOOR'):?><span class="decoration">м²</span><?endif;?>
                                 </div>
                             </div>
                         </div>
-                    <?elseif ($arItem["CODE"] === "NOT_LAST" || $arItem["CODE"] === "NOT_FIRST" || $arItem["CODE"] === "IMMEDIATELY_ENTRY"):?>
+                    <?elseif ($arItem["CODE"] === "NOT_LAST" || $arItem["CODE"] === "NOT_FIRST"):?>
                         <div class="d-flex flex-column check-box-prop-filter">
                             <?php foreach ($arItem["VALUES"] as $val => $ar):?>
                                  <label class="mb-3 cb-wrap">
@@ -298,31 +304,6 @@ $this->setFrameMode(true);
                                       <span class="checkmark <?=$ar["DISABLED"] ? 'disabled' : ''?>"></span>
                                   </label>
                             <?endforeach;?>
-                            </div>
-                    <?else:?>
-                        <div <?if($arItem['ID'] == 200 || $arItem['ID'] == 201 || $arItem['ID'] == 199){?>style="display: none" <?}?> class="row mb-4">
-                            <div class="col-10">
-                                <div class="d-flex flex-wrap flex-row-reverse align-items-center">
-                                    <? foreach ($arItem["VALUES"] as $val => $ar) { ?>
-                                        <label class="parameter">
-                                            <input
-                                                type="checkbox"
-                                                value="<?=$ar["HTML_VALUE"] ?>"
-                                                name="<?=$ar["CONTROL_NAME"] ?>"
-                                                id="<?=$ar["CONTROL_ID"] ?>"
-                                                <?=$ar["CHECKED"] ? 'checked="checked"' : '' ?>
-                                                <?=$ar["DISABLED"] ? 'disabled' : '' ?>
-                                                onclick="smartFilter.click(this)"
-                                            />
-                                            <div><?=$ar["VALUE"] ?></div>
-                                        </label>
-                                        <?
-                                    } ?>
-                                </div>
-                            </div>
-                            <div class="col-2 text-right">
-                                <?= $arItem['NAME'] ?>
-                            </div>
                         </div>
                     <?endif;?>
                 <?php endforeach?>
@@ -347,6 +328,55 @@ $this->setFrameMode(true);
                                 <?php endforeach;?>
                             <?endif;?>
                         </div>
+                    <?php endforeach;?>
+                <?php endif;?>
+                <?// Немедленный въезд?>
+                <?php if (!empty($arResult["ITEMS"][PROP_IMMEDIATELY_ENTRY_ID]['VALUES']) && !$isLiveBuyPage && !$isСommercialBuyPage):?>
+                    <?php foreach ($arResult['ITEMS'][PROP_IMMEDIATELY_ENTRY_ID]['VALUES'] as $key => $prop):?>
+                        <div class="d-flex flex-column check-box-prop-filter immediately-entry-box">
+                            <label class="mb-3 cb-wrap">
+                                <span class="text"><?=$arResult["ITEMS"][PROP_IMMEDIATELY_ENTRY_ID]['NAME']?></span>
+                                <input
+                                        type="checkbox"
+                                        value="<?=$prop["HTML_VALUE"] ?>"
+                                        name="<?=$prop["CONTROL_NAME"] ?>"
+                                        id="<?=$prop["CONTROL_ID"] ?>"
+                                    <?=(!empty($_GET[$prop['CONTROL_ID']]))? 'checked' : ''?>
+                                        data-html-value="<?=$prop['HTML_VALUE']?>"
+                                        data-control-id="<?=$prop['CONTROL_ID']?>"
+                                />
+                                <span class="checkmark <?=$prop["DISABLED"] ? 'disabled' : ''?>"></span>
+                            </label>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif;?>
+                <?// Дата въезда?>
+                <?php if (!empty($arResult["ITEMS"][PROP_COMPLETION_ID]['VALUES']) && !$isLiveBuyPage && !$isСommercialBuyPage):?>
+                    <?php foreach ($arResult['ITEMS'][PROP_COMPLETION_ID]['VALUES'] as $key => $propDate):?>
+                        <?php if ($key === 'MIN'):
+                            if (!empty($_GET[$propDate['CONTROL_ID']])) {
+                                $dateString = $_GET[$propDate['CONTROL_ID']];
+                                $date = DateTime::createFromFormat('d/m/Y', $dateString);
+                                $formattedDate = $date->format('Y-m-d');
+                            }
+                        ?>
+                            <div class="mb-4 date-input">
+                                <div class="mb-3 d-flex justify-content-end">
+                                    <span class="rentAreaCommerce"><?=$arResult["ITEMS"][PROP_COMPLETION_ID]["NAME"]?></span>
+                                </div>
+                                <div class="d-flex input-group-modal date-container-mobile">
+                                    <div class="input-decoration">
+                                        <input value="<?=!empty($formattedDate) ? $formattedDate : ''?>"
+                                               data-control-id="<?=$propDate['CONTROL_ID']?>"
+                                               class="check-in-date"
+                                               name="check-in-date"
+                                               type="date"
+                                               placeholder="Дата въезда"
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif;?>
                     <?php endforeach;?>
                 <?php endif;?>
             </div>
