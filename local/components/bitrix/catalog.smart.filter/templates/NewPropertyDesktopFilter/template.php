@@ -8,7 +8,6 @@ use Bitrix\Main\Localization\Loc;
  * created by Alexander.L
  */
 
-
 Loc::loadMessages(__FILE__);
 $this->setFrameMode(false);
 $arSection = [];
@@ -25,7 +24,7 @@ switch ($arParams['SECTION_ID']) {
         break;
 }
 
-$arFilter = array('IBLOCK_ID' => 2);
+$arFilter = array('IBLOCK_ID' => PROPERTY_ADS_IBLOCK_ID);
 $arSelect = array('IBLOCK_ID', 'ID', 'NAME', 'IBLOCK_SECTION_ID', 'SECTION_PAGE_URL', 'DETAIL_PICTURE', 'DEPTH_LEVEL', 'UF_*');
 $rsSect = CIBlockSection::GetList(
     array("SORT" => "ASC"),

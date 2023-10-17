@@ -971,8 +971,6 @@
                     }
 
                     clearMapItemPLace();
-
-
                 });
 
                 map.on('click', 'unclustered-vipPoint', (e) => {
