@@ -1,5 +1,7 @@
 <?php require_once($_SERVER['DOCUMENT_ROOT'] . "/bitrix/modules/main/include/prolog_before.php");
 
+/** @var array $mapArray */
+
 use Bitrix\Main\Loader;
 
 $regions = [];
@@ -136,7 +138,6 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                             'id': reg.UF_MAP_ID,
                             'type': 'fill',
                             'source': reg.UF_SOURCE,
-                            // 'maxzoom': 8,
                             'metadata': reg.UF_NAME,
                             'source-layer': reg.UF_PROMOTE_ID,
                             'paint': {
@@ -204,7 +205,6 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                     'type': 'fill',
                     'source': '2_source',
                     'metadata': 'Abu-gosh',
-                    // 'minzoom': 8,
                     'source-layer': 'abu_gosh',
                     'paint': {
                         'fill-color': '#627BC1',
@@ -342,5 +342,4 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
             });
         }
     });
-    // MAPS END
 </script>
