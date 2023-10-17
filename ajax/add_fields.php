@@ -121,6 +121,7 @@ if (!empty($sectionFeatures['UF_ID_PROPS'])) {
         }
     }
 }
+//pr($addProps); die();
 ?>
 <?php if (!empty($addProps)):?>
     <?// Свойства с особенной версткой, верстка у которых стандартна?>
@@ -194,34 +195,64 @@ if (!empty($sectionFeatures['UF_ID_PROPS'])) {
     <?// Обычные свойства, верстка у которых стандартна?>
     <?php foreach ($addProps as $propId => $prop):?>
         <?php switch ($prop['PROPERTY_TYPE']): case 'L':?>
-            <?php if ($prop['MULTIPLE'] === 'N'):?>
-                <?// radio?>
-                <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row additional-prop" data-parent-id="<?=$_POST['parentSectionId']?>">
-                    <div class="col-12 col-lg-10">
-                        <div class="d-flex justify-content-center justify-content-lg-end align-items-center gap-1">
-                            <?foreach($prop['VALUES'] as $key => $value):?>
-                                <div class="mr-3 form_radio_btn">
-                                    <input id="radio-<?= $value['ID'] ?>1"
-                                           data-id_prop="<?= $value['PROPERTY_ID'] ?>"
-                                           data-id-self="<?= $value['ID'] ?>"
-                                           type="radio" name="<?=$prop['CODE']?>1"
-                                           <?if ($value['SELECTED'] === true):?>checked<?endif;?>
-                                           <?if ($prop['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
-                                    >
-                                    <label for="radio-<?=$value['ID'] ?>1"><?=$value['VALUE']?></label>
-                                </div>
-                            <?endforeach;?>
+            <?php if ($prop['LIST_TYPE'] === 'L'):?>
+                <?php if ($prop['MULTIPLE'] === 'N'):?>
+                    <?// radio?>
+                    <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row additional-prop" data-parent-id="<?=$_POST['parentSectionId']?>">
+                        <div class="col-12 col-lg-10">
+                            <div class="d-flex justify-content-center justify-content-lg-end align-items-center gap-1">
+                                <?foreach($prop['VALUES'] as $key => $value):?>
+                                    <div class="mr-3 form_radio_btn">
+                                        <input id="radio-<?= $value['ID'] ?>1"
+                                               data-id_prop="<?= $value['PROPERTY_ID'] ?>"
+                                               data-id-self="<?= $value['ID'] ?>"
+                                               type="radio" name="<?=$prop['CODE']?>1"
+                                               <?if ($value['SELECTED'] === true):?>checked<?endif;?>
+                                               <?if ($prop['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
+                                        >
+                                        <label for="radio-<?=$value['ID'] ?>1"><?=$value['VALUE']?></label>
+                                    </div>
+                                <?endforeach;?>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-2">
+                            <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
+                                :<?=$prop['IS_REQUIRED'] === 'Y' ? $prop['NAME'].' *': $prop['NAME']?>
+                            </p>
                         </div>
                     </div>
-                    <div class="col-12 col-lg-2">
-                        <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
-                            :<?=$prop['IS_REQUIRED'] === 'Y' ? $prop['NAME'].' *': $prop['NAME']?>
-                        </p>
+                <?php else:?>
+                    <?// checkbox?>
+                    <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row additional-prop" data-parent-id="<?=$_POST['parentSectionId']?>">
+                        <div class="col-12 col-lg-10">
+                            <div class="d-flex justify-content-center justify-content-lg-end align-items-center gap-1">
+                                <?foreach($prop['VALUES'] as $key => $value):?>
+                                    <div class="mr-2 mb-2 mr-md-4 mb-md-4 form_radio_btn">
+                                        <input id="checkbox-<?=$value['ID']?>"
+                                               type="checkbox"
+                                               name="<?=$value['VALUE']?>"
+                                               data-id_prop="<?= $value['PROPERTY_ID'] ?>"
+                                               data-id-self="<?= $value['ID'] ?>"
+                                               <?if ($value['SELECTED'] === true):?>checked<?endif;?>
+                                               <?if ($prop['IS_REQUIRED'] === 'Y'):?>data-req="Y"<?endif;?>
+                                        >
+                                        <label for="checkbox-<?=$value['ID']?>"><?=$value['VALUE']?></label>
+                                    </div>
+                                <?endforeach;?>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-2">
+                            <p class="mb-3 m-lg-0 d-flex justify-content-center justify-content-lg-start font-weight-bold">
+                                :<?=$prop['IS_REQUIRED'] === 'Y' ? $prop['NAME'].' *': $prop['NAME']?>
+                            </p>
+                        </div>
                     </div>
-                </div>
-            <?php else:?>
+                <?php endif;?>
+            <?php elseif ($prop['LIST_TYPE'] === 'C'):?>
                 <?// checkbox?>
-                <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row additional-prop" data-parent-id="<?=$_POST['parentSectionId']?>">
+                <div class="mb-3 mb-lg-4 row flex-column-reverse flex-lg-row additional-prop"
+                     data-parent-id="<?=$_POST['parentSectionId']?>"
+                >
                     <div class="col-12 col-lg-10">
                         <div class="d-flex justify-content-center justify-content-lg-end align-items-center gap-1">
                             <?foreach($prop['VALUES'] as $key => $value):?>
