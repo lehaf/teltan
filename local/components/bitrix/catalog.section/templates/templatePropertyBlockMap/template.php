@@ -22,7 +22,6 @@ foreach ($arResult['ITEMS'] as $arItem) {
     if($ar_res = $res->GetNext())
         $nameSection =  $ar_res['NAME'];
 
-    // $arItem['PROPERTIES']['MAP_LATLNG']['VALUE'] = str_replace('&quot;', '"', $arItem['PROPERTIES']['MAP_LATLNG']['VALUE']);
     $mapLatlnt = json_decode($arItem['PROPERTIES']['MAP_LATLNG']['~VALUE'], true);
     if($arItem['PROPERTIES']['VIP_DATE']['VALUE'] && strtotime($arItem['PROPERTIES']['VIP_DATE']['VALUE']) > time()) {
         $mapArrayVip['features'][] = [
@@ -281,24 +280,21 @@ foreach ($arResult['ITEMS'] as $arItem) {
                                     <p class="mb-0 price"><?=ICON_CURRENCY;?> <?=number_format($arItem['PROPERTIES']['PRICE']['VALUE'], 0, '.', ' ');?></p>
                                 <?}?>
                             </div>
-
-
                             <div class="px-2 px-lg-3 content-block">
                                 <div class="text-right">
                                     <a href="<?=$arItem['DETAIL_PAGE_URL']?>" class="mb-2 mb-lg-3 title"><?=$arItem['NAME']?></a>
                                     <p class="mb-2 mb-lg-3 location">
                                         <span class="addres"><?=$arItem['PROPERTIES']['MAP_LAYOUT']['VALUE'];?> <?=(!empty($arItem['PROPERTIES']['MAP_LAYOUT']['VALUE']))? ',' : ''?> <?=$arItem['PROPERTIES']['MAP_LAYOUT_BIG']['VALUE'];?></span>
                                         <svg class="icon-local" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 513.597 513.597" xml:space="preserve">
-              <g>
-                  <path d="M263.278,0.107C158.977-3.408,73.323,80.095,73.323,183.602c0,117.469,112.73,202.72,175.915,325.322
-                c3.208,6.225,12.169,6.233,15.388,0.009c57.16-110.317,154.854-184.291,172.959-290.569
-                C456.331,108.387,374.776,3.866,263.278,0.107z M256.923,279.773c-53.113,0-96.171-43.059-96.171-96.171
-                s43.059-96.171,96.171-96.171c53.113,0,96.172,43.059,96.172,96.171S310.036,279.773,256.923,279.773z"></path>
-              </g>
-            </svg>
+                                              <g>
+                                                  <path d="M263.278,0.107C158.977-3.408,73.323,80.095,73.323,183.602c0,117.469,112.73,202.72,175.915,325.322
+                                                c3.208,6.225,12.169,6.233,15.388,0.009c57.16-110.317,154.854-184.291,172.959-290.569
+                                                C456.331,108.387,374.776,3.866,263.278,0.107z M256.923,279.773c-53.113,0-96.171-43.059-96.171-96.171
+                                                s43.059-96.171,96.171-96.171c53.113,0,96.172,43.059,96.172,96.171S310.036,279.773,256.923,279.773z"></path>
+                                              </g>
+                                        </svg>
                                     </p>
                                 </div>
-
                                 <div class="border-top py-2 py-lg-3 d-flex justify-content-between align-items-center text-nowrap">
                                     <span class="mr-0 mr-lg-2 views"><span><?$res = CIBlockElement::GetByID($arItem["ID"]);
                                             if($ar_res = $res->GetNext())
@@ -349,4 +345,4 @@ foreach ($arResult['ITEMS'] as $arItem) {
     </div>
 </div>
 </div>
-<? require_once $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH .'/map3.php';?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH .'/map3.php';?>

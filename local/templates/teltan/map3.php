@@ -94,22 +94,22 @@
             let hoveredStateId8 = null;
             let hoveredStateId9 = null;
 
-            const obgGeoMap = <?=json_encode($mapArray)?>;
-            const objBasePin = <?=json_encode($mapArrayVip)?>; // ** vip
+            const geoMarks = <?=json_encode($mapArray)?>;
+            const geoMarksVip = <?=json_encode($mapArrayVip)?>; // ** vip
 
             map.on('load', () => {
 
                 map.addSource('earthquakes', {
                     type: 'geojson',
-                    data: obgGeoMap,
+                    data: geoMarks,
                     cluster: true,
                     clusterMaxZoom: 10, // Max zoom to cluster points on
                     clusterRadius: 38 // Radius of each cluster when clustering points (defaults to 50)
                 });
+
                 map.addSource('vipPoint', {
                     type: 'geojson',
-                    // Point to GeoJSON data
-                    data: objBasePin,
+                    data: geoMarksVip,
                     cluster: false,
                 });
 
@@ -120,6 +120,7 @@
                     //   generateId: true,
                     promoteId: {"abu_gosh": "MUN_ENG"}
                 });
+
                 map.addSource('1_source-1', {
                     //  buffer: 0,
                     type: 'vector',
@@ -127,6 +128,7 @@
                     //   generateId: true,
                     promoteId: {"1": "MUN_HE"}
                 });
+
                 map.addSource('1_source-2', {
                     //  buffer: 0,
                     type: 'vector',
@@ -134,6 +136,7 @@
                     //   generateId: true,
                     promoteId: {"2": "MUN_HE"}
                 });
+
                 map.addSource('1_source-3', {
                     //  buffer: 0,
                     type: 'vector',
@@ -141,6 +144,7 @@
                     //   generateId: true,
                     promoteId: {"3": "MUN_HE"}
                 });
+
                 map.addSource('1_source-4', {
                     //  buffer: 0,
                     type: 'vector',
@@ -148,6 +152,7 @@
                     //   generateId: true,
                     promoteId: {"44": "MUN_HE"}
                 });
+
                 map.addSource('1_source-5', {
                     //  buffer: 0,
                     type: 'vector',
@@ -155,6 +160,7 @@
                     //   generateId: true,
                     promoteId: {"5": "MUN_HE"}
                 });
+
                 map.addSource('1_source-6', {
                     //  buffer: 0,
                     type: 'vector',
@@ -162,6 +168,7 @@
                     //   generateId: true,
                     promoteId: {"6": "MUN_HE"}
                 });
+
                 map.addSource('1_source-7', {
                     //  buffer: 0,
                     type: 'vector',
@@ -169,6 +176,7 @@
                     generateId: true,
 
                 });
+
                 map.addSource('1_source-8', {
                     //  buffer: 0,
                     type: 'vector',
@@ -176,6 +184,7 @@
                     generateId: true,
 
                 });
+
                 map.addLayer({
                     'id': '1-level-area8',
                     'type': 'fill',
@@ -198,6 +207,7 @@
                         ]
                     }
                 });
+
                 map.on('mousemove', '1-level-area8', (e) => {
                     let features = map.queryRenderedFeatures(e.point);
 
@@ -226,7 +236,7 @@
                         {hover: false}
                     );
 
-                    hoveredStateI8 = null;
+                    let hoveredStateI8 = null;
                 });
 
                 map.on('click', '1-level-area8', (e) => {
@@ -265,7 +275,8 @@
                         $('.preloader').removeClass('preloader-visible');
                     }
 
-                })
+                });
+
                 map.addLayer({
                     'id': '1-level-area7',
                     'type': 'fill',
@@ -288,6 +299,7 @@
                         ]
                     }
                 });
+
                 map.on('mousemove', '1-level-area7', (e) => {
                     let features = map.queryRenderedFeatures(e.point);
 
@@ -355,7 +367,8 @@
                     if (count === 0) {
                         $('.preloader').removeClass('preloader-visible');
                     }
-                })
+                });
+
                 map.addLayer({
                     'id': '1-level-area6',
                     'type': 'fill',
@@ -378,6 +391,7 @@
                         ]
                     }
                 });
+
                 map.on('mousemove', '1-level-area6', (e) => {
                     let features = map.queryRenderedFeatures(e.point);
 
@@ -935,15 +949,6 @@
 
                     const clusterId = features[0].properties.cluster_id;
 
-                    map.getSource('earthquakes').getClusterChildren(clusterId, (error, features) => {
-
-                        let pp = () => {
-                            // clearMapItemPLace();
-                            features.forEach(e => rendorMapItemCard(e.properties));
-                        }
-
-                        features.find(x => !x.properties.cluster ? pp() : console.log('the cluster'));
-                    });
                     map.getSource('earthquakes').getClusterExpansionZoom(
                         clusterId,
                         (err, zoom) => {
@@ -960,7 +965,6 @@
 
                 map.on('mouseenter', 'unclustered-point', (e) => {
                     const coordinates = e.features[0].geometry.coordinates.slice();
-
                     let paramItem = e.features[0].properties
 
                     // Ensure that if the map is zoomed out such that
@@ -976,8 +980,6 @@
                 map.on('click', 'unclustered-vipPoint', (e) => {
                     const coordinates = e.features[0].geometry.coordinates.slice();
                     let description = '';
-                    let middleIndex = Math.floor(e.features.length / 2);
-                    e.features.splice(middleIndex);
                     let i = 0;
                     e.features.forEach(function (index) {
                         if (i < 1) {
@@ -991,10 +993,10 @@
                                     <a href="${index.properties.href}" class="font-weight-bold">${index.properties.title}</a>
                                     <p class="p-0 text-primary font-weight-bold">${index.properties.price}</p>
                                   </div>
-                                <div class="cross" style="display: inline-block; margin-left: 10px; padding-right: 20px; cursor: pointer; width: 20px; height: 20px; background-color: #ccc; border-radius: 50%; position: relative;">
-                                    <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 2px; background-color: #fff; transform: rotate(45deg);"></span>
+                                    <div class="cross" style="display: inline-block; margin-left: 10px; padding-right: 20px; cursor: pointer; width: 20px; height: 20px; background-color: #ccc; border-radius: 50%; position: relative;">
+                                        <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 2px; background-color: #fff; transform: rotate(45deg);"></span>
                                         <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 2px; background-color: #fff; transform: rotate(-45deg);"></span>
-                                </div>
+                                    </div>
                                 </div>`
                         }else {
                             description = description + `
@@ -1010,7 +1012,8 @@
                                 </div>`
                         }
                         i = i + 1;
-                    })
+                    });
+
                     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                     }
@@ -1040,7 +1043,7 @@
                     clearMapItemPLace();
                 });
 
-                map.on('mouseenter', 'unclustered-vipPoint', () => {
+                map.on('mouseenter', 'unclustered-vipPoint', (e) => {
                     map.getCanvas().style.cursor = 'pointer';
                     //   clearMapItemPLace();
                 });
@@ -1059,8 +1062,6 @@
                 map.on('click', 'unclustered-point', (e) => {
                     const coordinates = e.features[0].geometry.coordinates.slice();
                     let description = '';
-                    let middleIndex = Math.floor(e.features.length / 2);
-                    e.features.splice(middleIndex);
                     let i = 0;
                     e.features.forEach(function (index) {
                         if (i < 1) {
@@ -1113,120 +1114,9 @@
             map.addControl(geocoder)
         }
 
-        const mapItemRenderPlace = $('.databefore');
 
-        const clearMapItemPLace = () => {
-            $('div.databeforeinsert').remove()
-        }
+        const clearMapItemPLace = () => $('div.databeforeinsert').remove();
 
-        const rendorMapItemCard = (paramItem) => {
-            let data = paramItem;
-
-            mapItemRenderPlace.before(
-                `<div class="my-4 card product-card product-line property-product-line databeforeinsert" style="background-color: @@bg-color">
-                    <div class="card-link">
-                      <div class="image-block">
-                        <div class="i-box">
-                          <a href="${data.href}"><img src="${data.image}" alt="no-img"></a>
-                        </div>
-                      </div>
-
-                      <div class="px-2 px-lg-3 d-flex justify-content-between like-price">
-                        <p class="mb-0 like followThisItem">
-                          <svg id="iconLike" class="iconLike" viewBox="0 0 612 792"><path d="M562.413,284.393c-9.68,41.044-32.121,78.438-64.831,108.07L329.588,542.345l-165.11-149.843 c-32.771-29.691-55.201-67.076-64.892-108.12c-6.965-29.484-4.103-46.14-4.092-46.249l0.147-0.994 c6.395-72.004,56.382-124.273,118.873-124.273c46.111,0,86.703,28.333,105.965,73.933l9.061,21.477l9.061-21.477 c18.958-44.901,61.694-73.922,108.896-73.922c62.481,0,112.478,52.27,119,125.208C566.517,238.242,569.379,254.908,562.413,284.393z"/></svg>
-                        </p>
-
-                        <p class="mb-0 price">${data.price}</p>
-                      </div>
-
-                      <div class="px-2 px-lg-3 content-block">
-                        <div class="text-right">
-                          <a href="${data.href}" class="mb-2 mb-lg-3 title">${data.title}</a>
-                          <p class="mb-2 mb-lg-3 location">
-                            <span class="addres">${data.addres}</span>
-                              <svg class="icon-local" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
-                                xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 513.597 513.597" xml:space="preserve">
-                                <g>
-                                  <path d="M263.278,0.107C158.977-3.408,73.323,80.095,73.323,183.602c0,117.469,112.73,202.72,175.915,325.322
-                                  c3.208,6.225,12.169,6.233,15.388,0.009c57.16-110.317,154.854-184.291,172.959-290.569
-                                  C456.331,108.387,374.776,3.866,263.278,0.107z M256.923,279.773c-53.113,0-96.171-43.059-96.171-96.171
-                                  s43.059-96.171,96.171-96.171c53.113,0,96.172,43.059,96.172,96.171S310.036,279.773,256.923,279.773z"/>
-                                </g>
-                              </svg>
-                          </p>
-                          <p class="mb-2 mb-lg-3 category">${data.category}</p>
-                        </div>
-
-                        <div class="border-top py-2 d-flex justify-content-between align-items-center text-nowrap product-line__data-viwe">
-                          <div class="d-flex">
-                            <span class="mr-0 mr-lg-2 views"><span>${data.views}</span> <i class="icon-visibility"></i></span>
-
-                            <span class="product-line__like">To favorites
-                              <svg id="iconLike" class="iconLike" viewBox="0 0 612 792"><path d="M562.413,284.393c-9.68,41.044-32.121,78.438-64.831,108.07L329.588,542.345l-165.11-149.843 c-32.771-29.691-55.201-67.076-64.892-108.12c-6.965-29.484-4.103-46.14-4.092-46.249l0.147-0.994 c6.395-72.004,56.382-124.273,118.873-124.273c46.111,0,86.703,28.333,105.965,73.933l9.061,21.477l9.061-21.477 c18.958-44.901,61.694-73.922,108.896-73.922c62.481,0,112.478,52.27,119,125.208C566.517,238.242,569.379,254.908,562.413,284.393z"/></svg>
-                            </span>
-                          </div>
-
-                          <span class="date">${data.date}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>`
-            )
-        }
-        const rendorMapVipItemCard = (paramItem) => {
-            let data = paramItem;
-
-            mapItemRenderPlace.append(
-                `<div class="my-4 card product-card product-line product-line-vip property-vip" style="background-color: #FFF5D9">
-                    <div class="card-link">
-                      <div class="image-block">
-                        <div class="i-box">
-                          <a href="${data.href}"><img src="${data.image}" alt="no-img"></a>
-                        </div>
-                      </div>
-
-                      <div class="px-2 px-lg-3 d-flex justify-content-between like-price">
-                        <p class="mb-0 like followThisItem">
-                          <svg id="iconLike" class="iconLike" viewBox="0 0 612 792"><path d="M562.413,284.393c-9.68,41.044-32.121,78.438-64.831,108.07L329.588,542.345l-165.11-149.843 c-32.771-29.691-55.201-67.076-64.892-108.12c-6.965-29.484-4.103-46.14-4.092-46.249l0.147-0.994 c6.395-72.004,56.382-124.273,118.873-124.273c46.111,0,86.703,28.333,105.965,73.933l9.061,21.477l9.061-21.477 c18.958-44.901,61.694-73.922,108.896-73.922c62.481,0,112.478,52.27,119,125.208C566.517,238.242,569.379,254.908,562.413,284.393z"/></svg>
-                        </p>
-
-                        <p class="mb-0 price">${data.price}₪</p>
-                      </div>
-
-                      <div class="px-2 px-lg-3 content-block">
-                        <div class="text-right">
-                          <a href="${data.href}" class="mb-2 mb-lg-3 title">${data.title}</a>
-                          <p class="mb-2 mb-lg-3 location">
-                            <span class="addres">${data.addres}</span>
-                              <svg class="icon-local" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
-                                xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 513.597 513.597" xml:space="preserve">
-                                <g>
-                                  <path d="M263.278,0.107C158.977-3.408,73.323,80.095,73.323,183.602c0,117.469,112.73,202.72,175.915,325.322
-                                  c3.208,6.225,12.169,6.233,15.388,0.009c57.16-110.317,154.854-184.291,172.959-290.569
-                                  C456.331,108.387,374.776,3.866,263.278,0.107z M256.923,279.773c-53.113,0-96.171-43.059-96.171-96.171
-                                  s43.059-96.171,96.171-96.171c53.113,0,96.172,43.059,96.172,96.171S310.036,279.773,256.923,279.773z"/>
-                                </g>
-                              </svg>
-                          </p>
-                          <p class="mb-2 mb-lg-3 category">${data.category}</p>
-                        </div>
-
-                        <div class="border-top py-2 d-flex justify-content-between align-items-center text-nowrap product-line__data-viwe">
-                          <div class="d-flex">
-                            <span class="mr-0 mr-lg-2 views"><span>${data.views}</span> <i class="icon-visibility"></i></span>
-
-                            <span class="product-line__like">To favorites
-                              <svg id="iconLike" class="iconLike" viewBox="0 0 612 792"><path d="M562.413,284.393c-9.68,41.044-32.121,78.438-64.831,108.07L329.588,542.345l-165.11-149.843 c-32.771-29.691-55.201-67.076-64.892-108.12c-6.965-29.484-4.103-46.14-4.092-46.249l0.147-0.994 c6.395-72.004,56.382-124.273,118.873-124.273c46.111,0,86.703,28.333,105.965,73.933l9.061,21.477l9.061-21.477 c18.958-44.901,61.694-73.922,108.896-73.922c62.481,0,112.478,52.27,119,125.208C566.517,238.242,569.379,254.908,562.413,284.393z"/></svg>
-                            </span>
-                          </div>
-
-                          <span class="date">${data.date}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>`
-            )
-        }
 
         if ($('#mapMini').length > 0) {
             const map = new mapboxgl.Map({
