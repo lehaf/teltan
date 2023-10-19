@@ -981,37 +981,41 @@
                     const coordinates = e.features[0].geometry.coordinates.slice();
                     let description = '';
                     let i = 0;
+                    let adsNames = [];
                     e.features.forEach(function (index) {
-                        if (i < 1) {
-                            description = description + `
-                                <div class="d-flex popup-content">
-                                  <div class="w-75 pr-3">
-                                    <img src="${index.properties.image}">
-                                  </div>
-
-                                  <div class="d-flex flex-column text-right">
-                                    <a href="${index.properties.href}" class="font-weight-bold">${index.properties.title}</a>
-                                    <p class="p-0 text-primary font-weight-bold">${index.properties.price}</p>
-                                  </div>
+                        if (!adsNames.includes(index.properties.addres)) {
+                            adsNames.push(index.properties.addres);
+                            if (i < 1) {
+                                description = description + `
                                     <div class="cross" style="display: inline-block; margin-left: 10px; padding-right: 20px; cursor: pointer; width: 20px; height: 20px; background-color: #ccc; border-radius: 50%; position: relative;">
                                         <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 2px; background-color: #fff; transform: rotate(45deg);"></span>
                                         <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 2px; background-color: #fff; transform: rotate(-45deg);"></span>
                                     </div>
-                                </div>`
-                        }else {
-                            description = description + `
-                                <div class="d-flex popup-content">
-                                  <div class="w-75 pr-3">
-                                    <img src="${index.properties.image}">
-                                  </div>
+                                    <div class="d-flex popup-content">
+                                      <div class="w-75 pr-3">
+                                        <img src="${index.properties.image}">
+                                      </div>
 
-                                  <div class="d-flex flex-column text-right">
-                                    <a href="${index.properties.href}" class="font-weight-bold">${index.properties.title}</a>
-                                    <p class="p-0 text-primary font-weight-bold">${index.properties.price}</p>
-                                  </div>
-                                </div>`
+                                      <div class="d-flex flex-column text-right">
+                                        <a href="${index.properties.href}" class="font-weight-bold">${index.properties.title}</a>
+                                        <p class="p-0 text-primary font-weight-bold">${index.properties.price}</p>
+                                      </div>
+                                    </div>`
+                            }else {
+                                description = description + `
+                                    <div class="d-flex popup-content">
+                                      <div class="w-75 pr-3">
+                                        <img src="${index.properties.image}">
+                                      </div>
+
+                                      <div class="d-flex flex-column text-right">
+                                        <a href="${index.properties.href}" class="font-weight-bold">${index.properties.title}</a>
+                                        <p class="p-0 text-primary font-weight-bold">${index.properties.price}</p>
+                                      </div>
+                                    </div>`
+                            }
+                            i = i + 1;
                         }
-                        i = i + 1;
                     });
 
                     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
@@ -1063,38 +1067,42 @@
                     const coordinates = e.features[0].geometry.coordinates.slice();
                     let description = '';
                     let i = 0;
+                    let adsNames = [];
                     e.features.forEach(function (index) {
-                        if (i < 1) {
-                            description = description + `
-                                <div class="d-flex popup-content">
-                                  <div class="w-75 pr-3">
-                                    <img src="${index.properties.image}">
-                                  </div>
-
-                                  <div class="d-flex flex-column text-right">
-                                    <a href="${index.properties.href}" class="font-weight-bold">${index.properties.title}</a>
-                                    <p class="p-0 text-primary font-weight-bold">${index.properties.price}</p>
-                                  </div>
-                                <div class="cross" style="display: inline-block; margin-left: 10px; padding-right: 20px; cursor: pointer; width: 20px; height: 20px; background-color: #ccc; border-radius: 50%; position: relative;">
-                                    <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 2px; background-color: #fff; transform: rotate(45deg);"></span>
+                        if (!adsNames.includes(index.properties.addres)) {
+                            adsNames.push(index.properties.addres);
+                            if (i < 1) {
+                                description = description + `
+                                    <div class="cross" style="display: inline-block; margin-left: 10px; padding-right: 20px; cursor: pointer; width: 20px; height: 20px; background-color: #ccc; border-radius: 50%; position: relative;">
+                                        <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 2px; background-color: #fff; transform: rotate(45deg);"></span>
                                         <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 2px; background-color: #fff; transform: rotate(-45deg);"></span>
-                                </div>
-                                </div>`
-                        }else {
-                            description = description + `
-                                <div class="d-flex popup-content">
-                                  <div class="w-75 pr-3">
-                                    <img src="${index.properties.image}">
-                                  </div>
+                                    </div>
+                                    <div class="d-flex popup-content">
+                                      <div class="w-75 pr-3">
+                                        <img src="${index.properties.image}">
+                                      </div>
 
-                                  <div class="d-flex flex-column text-right">
-                                    <a href="${index.properties.href}" class="font-weight-bold">${index.properties.title}</a>
-                                    <p class="p-0 text-primary font-weight-bold">${index.properties.price}</p>
-                                  </div>
-                                </div>`
+                                      <div class="d-flex flex-column text-right">
+                                        <a href="${index.properties.href}" class="font-weight-bold">${index.properties.title}</a>
+                                        <p class="p-0 text-primary font-weight-bold">${index.properties.price}</p>
+                                      </div>
+                                    </div>`
+                            }else {
+                                description = description + `
+                                    <div class="d-flex popup-content">
+                                      <div class="w-75 pr-3">
+                                        <img src="${index.properties.image}">
+                                      </div>
+
+                                      <div class="d-flex flex-column text-right">
+                                        <a href="${index.properties.href}" class="font-weight-bold">${index.properties.title}</a>
+                                        <p class="p-0 text-primary font-weight-bold">${index.properties.price}</p>
+                                      </div>
+                                    </div>`
+                            }
+                            i = i + 1;
                         }
-                        i = i + 1;
-                    })
+                    });
                     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                     }

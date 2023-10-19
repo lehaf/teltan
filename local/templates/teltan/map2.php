@@ -15,8 +15,9 @@
                 container: 'map',
                 style: 'mapbox://styles/roottest123/cl6erwd1b000w14papxnk52l0',
                 center: mapCoordinate,
-                zoom: 7
+                zoom: 4
             });
+
             let hoveredStateId = null;
 
             map.on('load', () => {
@@ -31,7 +32,6 @@
 
                 map.addSource('vipPoint', {
                     type: 'geojson',
-                    // Point to GeoJSON data
                     data: objBasePin,
                     cluster: false,
                 });
@@ -455,7 +455,6 @@
                 });
 
                 map.on('click', '1-level-area2', (e) => {
-
                     map.flyTo({center: e.features[0].geometry.coordinates[0][0], zoom: 10});
                 });
 
@@ -593,7 +592,6 @@
                             ['get', 'point_count'], 15, 50, 25, 350, 35, 500, 45]
                     }
                 });
-                const stateDataLayer = map.getLayer('abu-gosh');
 
                 map.addLayer({
                     id: 'cluster-count',
@@ -652,8 +650,6 @@
                     );
                 });
 
-
-
                 // When a click event occurs on a feature in
                 // the unclustered-point layer, open a popup at
                 // the location of the feature, with
@@ -663,15 +659,6 @@
                     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                     }
-                    clearMapItemPLace();
-                });
-
-                map.on('click', 'unclustered-vipPoint', (e) => {
-                    const coordinates = e.features[0].geometry.coordinates.slice();
-                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                    }
-                    clearMapItemPLace();
                 });
 
                 map.on('mouseenter', 'clusters', () => {
@@ -688,8 +675,6 @@
 
                 map.on('mouseleave', 'unclustered-point', () => {
                     map.getCanvas().style.cursor = '';
-                    // popup.remove();
-                    clearMapItemPLace();
                 });
 
                 map.on('mouseenter', 'unclustered-vipPoint', () => {
@@ -698,12 +683,162 @@
 
                 map.on('mouseleave', 'unclustered-vipPoint', () => {
                     map.getCanvas().style.cursor = '';
-                    popup.remove();
                 });
 
                 const popup = new mapboxgl.Popup({
                     closeButton: false,
-                    closeOnClick: false
+                    closeOnClick: true
+                });
+
+                map.on('click', 'unclustered-point', (e) => {
+                    const coordinates = e.features[0].geometry.coordinates.slice();
+                    let description = '';
+                    let adsNames = [];
+                    e.features.forEach(function (index) {
+                        if (!adsNames.includes(index.properties.addres)) {
+                            adsNames.push(index.properties.addres);
+                            description = description + `
+                                <div class="d-flex popup-content">
+                                  <div class="w-75 pr-3">
+                                    <img src="${index.properties.image}">
+                                  </div>
+
+                                  <div class="d-flex flex-column text-right">
+                                    <a href="${index.properties.href}" class="font-weight-bold">${index.properties.title}</a>
+                                    <p class="p-0 text-primary font-weight-bold">${index.properties.price}</p>
+                                  </div>
+                                </div>`
+                        }
+                    });
+
+                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                    }
+
+                    popup.setLngLat(coordinates).setHTML(description).addTo(map);
+                });
+
+                map.on('click', 'unclustered-vipPoint', (e) => {
+                    const coordinates = e.features[0].geometry.coordinates.slice();
+                    let description = '';
+                    let adsNames = [];
+                    e.features.forEach(function (index) {
+                        if (!adsNames.includes(index.properties.addres)) {
+                            adsNames.push(index.properties.addres);
+                            description = description + `
+                                <div class="d-flex popup-content">
+                                  <div class="w-75 pr-3">
+                                    <img src="${index.properties.image}">
+                                  </div>
+
+                                  <div class="d-flex flex-column text-right">
+                                    <a href="${index.properties.href}" class="font-weight-bold">${index.properties.title}</a>
+                                    <p class="p-0 text-primary font-weight-bold">${index.properties.price}</p>
+                                  </div>
+                                </div>`
+                        }
+                    });
+
+                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                    }
+
+                    popup.setLngLat(coordinates).setHTML(description).addTo(map);
+                });
+
+            });
+        }
+
+
+
+        // МИНИКАРТА В ДЕТАЛКЕ
+        if ($('#mapMini').length > 0) {
+
+            // Центрируем карту по метке
+            const markCoordinates = obgGeoMap !== null ?
+                obgGeoMap.features[0].geometry.coordinates : objBasePin.features[0].geometry.coordinates;
+
+            const map = new mapboxgl.Map({
+                container: 'mapMini',
+                style: 'mapbox://styles/roottest123/cl6erwd1b000w14papxnk52l0',
+                center: markCoordinates,
+                zoom: 7
+            });
+
+            map.on('load', () => {
+
+                map.addSource('earthquakes', {
+                    type: 'geojson',
+                    data: obgGeoMap,
+                    cluster: false,
+                });
+
+                map.addSource('vipPoint', {
+                    type: 'geojson',
+                    data: objBasePin,
+                    cluster: false,
+                });
+
+                map.addLayer({
+                    id: 'unclustered-point',
+                    type: 'circle',
+                    source: 'earthquakes',
+                    filter: ['!', ['has', 'point_count']],
+                    paint: {
+                        'circle-color': '#73b387',
+                        'circle-radius': 5,
+                        'circle-stroke-width': 1,
+                        'circle-stroke-color': '#fff',
+                    }
+                });
+
+                map.addLayer({
+                    id: 'unclustered-vipPoint',
+                    type: 'circle',
+                    source: 'vipPoint',
+                    filter: ['!', ['has', 'point_count']],
+                    paint: {
+                        'circle-color': '#FF5900',
+                        'circle-radius': 5,
+                        'circle-stroke-width': 1,
+                        'circle-stroke-color': '#fff',
+                    }
+                });
+
+                map.on('mouseenter', 'unclustered-point', (e) => {
+                    const coordinates = e.features[0].geometry.coordinates.slice();
+                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                    }
+                });
+
+                map.on('click', 'unclustered-vipPoint', (e) => {
+                    const coordinates = e.features[0].geometry.coordinates.slice();
+                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                    }
+                });
+
+
+                map.on('mouseenter', 'unclustered-point', () => {
+                    map.getCanvas().style.cursor = 'pointer';
+                });
+
+                map.on('mouseleave', 'unclustered-point', () => {
+                    map.getCanvas().style.cursor = '';
+                });
+
+                map.on('mouseenter', 'unclustered-vipPoint', () => {
+                    map.getCanvas().style.cursor = 'pointer';
+                });
+
+                map.on('mouseleave', 'unclustered-vipPoint', () => {
+                    map.getCanvas().style.cursor = '';
+                });
+
+                const popup = new mapboxgl.Popup({
+                    closeButton: false,
+                    closeOnClick: true
                 });
 
                 map.on('click', 'unclustered-point', (e) => {
@@ -726,179 +861,20 @@
 
                     popup.setLngLat(coordinates).setHTML(description).addTo(map);
                 });
-            });
-        }
-
-        const clearMapItemPLace = () => {
-            $('div.databeforeinsert').remove()
-        }
-
-
-        // МИНИКАРТА В ДЕТАЛКЕ
-        if ($('#mapMini').length > 0) {
-            const map = new mapboxgl.Map({
-                container: 'mapMini',
-                style: 'mapbox://styles/roottest123/cl6erwd1b000w14papxnk52l0',
-                center: mapCoordinate,
-                zoom: 7
-            });
-            let hoveredStateId = null;
-
-            map.on('load', () => {
-
-                map.addSource('earthquakes', {
-                    type: 'geojson',
-                    data: obgGeoMap,
-                    cluster: true,
-                    clusterMaxZoom: 10, // Max zoom to cluster points on
-                    clusterRadius: 38 // Radius of each cluster when clustering points (defaults to 50)
-                });
-                map.addSource('vipPoint', {
-                    type: 'geojson',
-                    // Point to GeoJSON data
-                    data: objBasePin,
-                    cluster: false,
-                });
-
-
-
-                map.addLayer({
-                    id: 'clusters',
-                    type: 'circle',
-                    source: 'earthquakes',
-                    filter: ['has', 'point_count'],
-                    paint: {
-                        'circle-color': [
-                            'step',
-                            ['get', 'point_count'], '#abce00', 50, '#719b25', 350, '#417d19', 500, '#2e6409'],
-                        'circle-radius': [
-                            'step',
-                            ['get', 'point_count'], 15, 50, 25, 350, 35, 500, 45]
-                    }
-                });
-                const stateDataLayer = map.getLayer('abu-gosh');
-
-                map.addLayer({
-                    id: 'cluster-count',
-                    type: 'symbol',
-                    source: 'earthquakes',
-                    filter: ['has', 'point_count'],
-                    layout: {
-                        'text-field': '{point_count_abbreviated}',
-                        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                        'text-size': 12
-                    }
-                });
-
-                map.addLayer({
-                    id: 'unclustered-point',
-                    type: 'circle',
-                    source: 'earthquakes',
-                    filter: ['!', ['has', 'point_count']],
-                    paint: {
-                        'circle-color': '#73b387',
-                        'circle-radius': 5,
-                        'circle-stroke-width': 1,
-                        'circle-stroke-color': '#fff',
-                    }
-                });
-
-                map.addLayer({
-                    id: 'unclustered-vipPoint',
-                    type: 'circle',
-                    source: 'vipPoint',
-                    filter: ['!', ['has', 'point_count']],
-                    paint: {
-                        'circle-color': '#FF5900',
-                        'circle-radius': 5,
-                        'circle-stroke-width': 1,
-                        'circle-stroke-color': '#fff',
-                    }
-                });
-
-                // inspect a cluster on click
-                map.on('click', 'clusters', (e) => {
-                    const features = map.queryRenderedFeatures(e.point, {
-                        layers: ['clusters']
-                    });
-
-                    const clusterId = features[0].properties.cluster_id;
-
-                    map.getSource('earthquakes').getClusterExpansionZoom(
-                        clusterId,
-                        (err, zoom) => {
-                            if (err) return;
-
-                            map.easeTo({
-                                center: features[0].geometry.coordinates,
-                                zoom: zoom
-                            });
-                        }
-                    );
-                });
-                map.on('mouseenter', 'unclustered-point', (e) => {
-                    const coordinates = e.features[0].geometry.coordinates.slice();
-                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                    }
-
-                    clearMapItemPLace();
-                });
 
                 map.on('click', 'unclustered-vipPoint', (e) => {
                     const coordinates = e.features[0].geometry.coordinates.slice();
-                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                    }
-
-                    clearMapItemPLace();
-                });
-
-                map.on('mouseenter', 'clusters', () => {
-                    map.getCanvas().style.cursor = 'pointer';
-                });
-
-                map.on('mouseleave', 'clusters', () => {
-                    map.getCanvas().style.cursor = '';
-                });
-
-                map.on('mouseenter', 'unclustered-point', () => {
-                    map.getCanvas().style.cursor = 'pointer';
-                });
-
-                map.on('mouseleave', 'unclustered-point', () => {
-                    map.getCanvas().style.cursor = '';
-                    // popup.remove();
-                    clearMapItemPLace();
-                });
-
-                map.on('mouseenter', 'unclustered-vipPoint', () => {
-                    map.getCanvas().style.cursor = 'pointer';
-                });
-
-                map.on('mouseleave', 'unclustered-vipPoint', () => {
-                    map.getCanvas().style.cursor = '';
-                    popup.remove();
-                });
-
-                const popup = new mapboxgl.Popup({
-                    closeButton: false,
-                    closeOnClick: false
-                });
-
-                map.on('click', 'unclustered-point', (e) => {
-                    const coordinates = e.features[0].geometry.coordinates.slice();
                     const description = `
-        <div class="d-flex popup-content">
-          <div class="w-75 pr-3">
-            <img src="${e.features[0].properties.image}">
-          </div>
+                        <div class="d-flex popup-content">
+                          <div class="w-75 pr-3">
+                            <img src="${e.features[0].properties.image}">
+                          </div>
 
-          <div class="d-flex flex-column text-right">
-            <a href="${e.features[0].properties.href}" class="font-weight-bold">${e.features[0].properties.title}</a>
-            <p class="p-0 text-primary font-weight-bold">${e.features[0].properties.price}</p>
-          </div>
-        </div>`;
+                          <div class="d-flex flex-column text-right">
+                            <a href="${e.features[0].properties.href}" class="font-weight-bold">${e.features[0].properties.title}</a>
+                            <p class="p-0 text-primary font-weight-bold">${e.features[0].properties.price}</p>
+                          </div>
+                        </div>`;
 
                     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
@@ -908,66 +884,33 @@
                 });
             });
 
-            const clearMapItemPLace = () => {
-                $('div.databeforeinsert').remove()
-            }
-
         }
 
         if ($('#mapFullSize').length > 0) {
+
+            // Центрируем карту по метке
+            const markCoordinates = obgGeoMap !== null ?
+                obgGeoMap.features[0].geometry.coordinates : objBasePin.features[0].geometry.coordinates;
+
             const map = new mapboxgl.Map({
                 container: 'mapFullSize',
                 style: 'mapbox://styles/roottest123/cl6erwd1b000w14papxnk52l0',
-                center: mapCoordinate,
+                center: markCoordinates,
                 zoom: 7
             });
-            let hoveredStateId = null;
-
-            const obgGeoMap = <?=json_encode($mapArray)?>
-
-            const objBasePin = <?=json_encode($mapArrayVip)?>
-            // ** vip
 
             map.on('load', () => {
 
                 map.addSource('earthquakes', {
                     type: 'geojson',
                     data: obgGeoMap,
-                    cluster: true,
-                    clusterMaxZoom: 10, // Max zoom to cluster points on
-                    clusterRadius: 38 // Radius of each cluster when clustering points (defaults to 50)
-                });
-                map.addSource('vipPoint', {
-                    type: 'geojson',
-                    // Point to GeoJSON data
-                    data: objBasePin,
                     cluster: false,
                 });
-                map.addLayer({
-                    id: 'clusters',
-                    type: 'circle',
-                    source: 'earthquakes',
-                    filter: ['has', 'point_count'],
-                    paint: {
-                        'circle-color': [
-                            'step',
-                            ['get', 'point_count'], '#abce00', 50, '#719b25', 350, '#417d19', 500, '#2e6409'],
-                        'circle-radius': [
-                            'step',
-                            ['get', 'point_count'], 15, 50, 25, 350, 35, 500, 45]
-                    }
-                });
-                const stateDataLayer = map.getLayer('abu-gosh');
-                map.addLayer({
-                    id: 'cluster-count',
-                    type: 'symbol',
-                    source: 'earthquakes',
-                    filter: ['has', 'point_count'],
-                    layout: {
-                        'text-field': '{point_count_abbreviated}',
-                        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                        'text-size': 12
-                    }
+
+                map.addSource('vipPoint', {
+                    type: 'geojson',
+                    data: objBasePin,
+                    cluster: false,
                 });
 
                 map.addLayer({
@@ -996,53 +939,24 @@
                     }
                 });
 
-                // inspect a cluster on click
-                map.on('click', 'clusters', (e) => {
-                    const features = map.queryRenderedFeatures(e.point, {
-                        layers: ['clusters']
-                    });
-
-                    const clusterId = features[0].properties.cluster_id;
-
-
-                    map.getSource('earthquakes').getClusterExpansionZoom(
-                        clusterId,
-                        (err, zoom) => {
-                            if (err) return;
-
-                            map.easeTo({
-                                center: features[0].geometry.coordinates,
-                                zoom: zoom
-                            });
-                        }
-                    );
-                });
                 map.on('mouseenter', 'unclustered-point', (e) => {
                     const coordinates = e.features[0].geometry.coordinates.slice();
                     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                     }
-                    clearMapItemPLace();
                 });
                 map.on('click', 'unclustered-vipPoint', (e) => {
                     const coordinates = e.features[0].geometry.coordinates.slice();
                     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                     }
-                    clearMapItemPLace();
                 });
-                map.on('mouseenter', 'clusters', () => {
-                    map.getCanvas().style.cursor = 'pointer';
-                });
-                map.on('mouseleave', 'clusters', () => {
-                    map.getCanvas().style.cursor = '';
-                });
+
                 map.on('mouseenter', 'unclustered-point', () => {
                     map.getCanvas().style.cursor = 'pointer';
                 });
                 map.on('mouseleave', 'unclustered-point', () => {
                     map.getCanvas().style.cursor = '';
-                    clearMapItemPLace();
                 });
                 map.on('mouseenter', 'unclustered-vipPoint', () => {
                     map.getCanvas().style.cursor = 'pointer';
@@ -1050,15 +964,35 @@
 
                 map.on('mouseleave', 'unclustered-vipPoint', () => {
                     map.getCanvas().style.cursor = '';
-                    popup.remove();
                 });
 
                 const popup = new mapboxgl.Popup({
                     closeButton: false,
-                    closeOnClick: false
+                    closeOnClick: true
                 });
 
                 map.on('click', 'unclustered-point', (e) => {
+                    const coordinates = e.features[0].geometry.coordinates.slice();
+                    const description = `
+                        <div class="d-flex popup-content">
+                          <div class="w-75 pr-3">
+                            <img src="${e.features[0].properties.image}">
+                          </div>
+
+                          <div class="d-flex flex-column text-right">
+                            <a href="${e.features[0].properties.href}" class="font-weight-bold">${e.features[0].properties.title}</a>
+                            <p class="p-0 text-primary font-weight-bold">${e.features[0].properties.price}</p>
+                          </div>
+                        </div>`;
+
+                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                    }
+
+                    popup.setLngLat(coordinates).setHTML(description).addTo(map);
+                });
+
+                map.on('click', 'unclustered-vipPoint', (e) => {
                     const coordinates = e.features[0].geometry.coordinates.slice();
                     const description = `
                         <div class="d-flex popup-content">
@@ -1083,11 +1017,6 @@
             $("#itemMapFullSize").on('shown.bs.modal', function () {
                 map.resize();
             })
-
-            const clearMapItemPLace = () => {
-                $('div.databeforeinsert').remove()
-            }
-
         }
     });
     // MAPS END

@@ -1,4 +1,5 @@
-<? if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
+<?php if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
+
 /** @var array $arParams */
 /** @var array $arResult */
 /** @global CMain $APPLICATION */
@@ -9,10 +10,8 @@
 /** @var string $templateFile */
 /** @var string $templateFolder */
 /** @var string $componentPath */
-
 /** @var CBitrixComponent $component */
 
-use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
 use Bitrix\Main\Localization\Loc;
 
 Loc::loadMessages(__FILE__);
@@ -78,9 +77,9 @@ switch ($arResult['IBLOCK_ID']) {
         break;
     case 8:
         $editUrl = '/add/scooter/?ID=' . $arResult['ID'] . '&EDIT=Y';
-
         break;
 }
+
 $counterJson = 0;
 
 $res = CIBlockElement::GetByID($arResult["ID"]);
@@ -98,13 +97,15 @@ if ($mapLatlnt['lng'] == null) {
     $mapLatlnt['lat'] = $mapLatlnt[1];
     $mapLatlnt['lng'] = $mapLatlnt[0];
 }
-$mapArray['features'][] = [
+
+$mapMark = ["type"=> "FeatureCollection"];
+$mapMark['features'][] = [
     'type' => 'Feature',
     'properties' => [
         'href' => $arResult['DETAIL_PAGE_URL'],
         'image' => $arResult['PREVIEW_PICTURE']['SAFE_SRC'] ?? '/no-image.svg',
         'title' => $arResult['NAME'],
-        'price' => $arResult['PROPERTIES']['PRICE']['VALUE'],
+        'price' => PROPERTY_CURRENCY_SYMBOL.' '.$arResult['PROPERTIES']['PRICE']['VALUE'],
         'addres' => $arResult['NAME'],
         'category' => $nameSection,
         'views' => $counterJson,
@@ -117,6 +118,12 @@ $mapArray['features'][] = [
             [$mapLatlnt['lng'], $mapLatlnt['lat']]
     ]
 ];
+
+if (!empty($arResult['PROPERTIES']['VIP_DATE']['VALUE']) && strtotime($arResult['PROPERTIES']['VIP_DATE']['VALUE']) > time()) {
+    $mapArrayVip = $mapMark;
+} else {
+    $mapArray = $mapMark;
+}
 
 global $arSetting;
 ?>
@@ -420,18 +427,18 @@ global $arSetting;
                                                         </button>
                                                         <button type="button"
                                                                 onclick="countVipBuyShek(<?= $arResult['ID'] ?>, $('#formProdactVip1'), <?= $arResult['IBLOCK_ID'] ?>)"
-
-                                                                class="btn btn-primary btn-paid"><span
-                                                                    class="mr-2"><svg width="17"
-                                                                                      height="14"
-                                                                                      viewBox="0 0 17 14"
-                                                                                      fill="none"
-                                                                                      xmlns="http://www.w3.org/2000/svg">
-<path d="M16.3929 0H0.607143C0.271317 0 0 0.284375 0 0.636364V3.81818H17V0.636364C17 0.284375 16.7287 0 16.3929 0ZM0 13.3636C0 13.7156 0.271317 14 0.607143 14H16.3929C16.7287 14 17 13.7156 17 13.3636V5.56818H0V13.3636ZM10.9855 9.70455C10.9855 9.61705 11.0538 9.54545 11.1373 9.54545H14.2679C14.3513 9.54545 14.4196 9.61705 14.4196 9.70455V11.1364C14.4196 11.2239 14.3513 11.2955 14.2679 11.2955H11.1373C11.0538 11.2955 10.9855 11.2239 10.9855 11.1364V9.70455Z"
-      fill="white"/>
-</svg>
-</span> <?= Loc::getMessage('PAY_CARD'); ?>
-
+                                                                class="btn btn-primary btn-paid"
+                                                        >
+                                                            <span class="mr-2">
+                                                                <svg width="17"
+                                                                      height="14"
+                                                                      viewBox="0 0 17 14"
+                                                                      fill="none"
+                                                                      xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M16.3929 0H0.607143C0.271317 0 0 0.284375 0 0.636364V3.81818H17V0.636364C17 0.284375 16.7287 0 16.3929 0ZM0 13.3636C0 13.7156 0.271317 14 0.607143 14H16.3929C16.7287 14 17 13.7156 17 13.3636V5.56818H0V13.3636ZM10.9855 9.70455C10.9855 9.61705 11.0538 9.54545 11.1373 9.54545H14.2679C14.3513 9.54545 14.4196 9.61705 14.4196 9.70455V11.1364C14.4196 11.2239 14.3513 11.2955 14.2679 11.2955H11.1373C11.0538 11.2955 10.9855 11.2239 10.9855 11.1364V9.70455Z"
+                                                                          fill="white"/>
+                                                                </svg>
+                                                            </span> <?= Loc::getMessage('PAY_CARD'); ?>
                                                         </button>
                                                     </div>
                                                 </div>
@@ -450,19 +457,19 @@ global $arSetting;
                                                     <div class="pr-4 d-flex justify-content-between align-items-center">
                                                         <span class="plus"></span>
                                                         <span class="card-header__title"><?= Loc::getMessage('COLOUR_PAKET'); ?></span>
-
                                                     </div>
-                                                    <span class="card-header__icon"><svg width="16"
-                                                                                         height="17"
-                                                                                         viewBox="0 0 16 17"
-                                                                                         fill="none"
-                                                                                         xmlns="http://www.w3.org/2000/svg">
-<path d="M8.20189 0.934761C8.20189 0.779763 8.14032 0.631114 8.03072 0.521514C7.92112 0.411914 7.77247 0.350342 7.61747 0.350342C7.46247 0.350342 7.31382 0.411914 7.20422 0.521514C7.09462 0.631114 7.03305 0.779763 7.03305 0.934761V1.90879C6.78643 1.99564 6.56248 2.13677 6.37772 2.32178L1.01743 7.68285C0.854624 7.84566 0.725478 8.03894 0.637367 8.25165C0.549256 8.46437 0.503906 8.69236 0.503906 8.9226C0.503906 9.15284 0.549256 9.38083 0.637367 9.59355C0.725478 9.80626 0.854624 9.99954 1.01743 10.1623L4.82005 13.9634C4.98286 14.1262 5.17613 14.2554 5.38885 14.3435C5.60157 14.4316 5.82956 14.4769 6.0598 14.4769C6.29004 14.4769 6.51803 14.4316 6.73075 14.3435C6.94346 14.2554 7.13674 14.1262 7.29955 13.9634L12.6598 8.60312C12.8226 8.44031 12.9518 8.24703 13.0399 8.03432C13.128 7.8216 13.1734 7.59361 13.1734 7.36337C13.1734 7.13313 13.128 6.90514 13.0399 6.69242C12.9518 6.47971 12.8226 6.28643 12.6598 6.12362L8.85644 2.32178C8.67191 2.13687 8.44823 1.99574 8.20189 1.90879V0.934761ZM7.03305 3.31919V4.44127C7.03305 4.59627 7.09462 4.74492 7.20422 4.85452C7.31382 4.96412 7.46247 5.02569 7.61747 5.02569C7.77247 5.02569 7.92112 4.96412 8.03072 4.85452C8.14032 4.74492 8.20189 4.59627 8.20189 4.44127V3.31919L11.8323 6.95038C11.9417 7.05996 12.0032 7.2085 12.0032 7.36337C12.0032 7.51824 11.9417 7.66678 11.8323 7.77636L11.0765 8.53221H1.82159L1.84419 8.50883L7.03305 3.31919Z"
-      fill="#6633F5"/>
-<path d="M14.063 9.78046C14.0049 9.67162 13.9183 9.5806 13.8125 9.51714C13.7067 9.45369 13.5856 9.42017 13.4622 9.42017C13.3388 9.42017 13.2177 9.45369 13.1119 9.51714C13.0061 9.5806 12.9195 9.67162 12.8614 9.78046L11.2967 12.715C10.4232 14.3498 11.6092 16.3244 13.4622 16.3244C15.3152 16.3244 16.4996 14.3498 15.6284 12.715L14.063 9.78046Z"
-      fill="#6633F5"/>
-</svg></span>
-
+                                                    <span class="card-header__icon">
+                                                        <svg width="16"
+                                                             height="17"
+                                                             viewBox="0 0 16 17"
+                                                             fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M8.20189 0.934761C8.20189 0.779763 8.14032 0.631114 8.03072 0.521514C7.92112 0.411914 7.77247 0.350342 7.61747 0.350342C7.46247 0.350342 7.31382 0.411914 7.20422 0.521514C7.09462 0.631114 7.03305 0.779763 7.03305 0.934761V1.90879C6.78643 1.99564 6.56248 2.13677 6.37772 2.32178L1.01743 7.68285C0.854624 7.84566 0.725478 8.03894 0.637367 8.25165C0.549256 8.46437 0.503906 8.69236 0.503906 8.9226C0.503906 9.15284 0.549256 9.38083 0.637367 9.59355C0.725478 9.80626 0.854624 9.99954 1.01743 10.1623L4.82005 13.9634C4.98286 14.1262 5.17613 14.2554 5.38885 14.3435C5.60157 14.4316 5.82956 14.4769 6.0598 14.4769C6.29004 14.4769 6.51803 14.4316 6.73075 14.3435C6.94346 14.2554 7.13674 14.1262 7.29955 13.9634L12.6598 8.60312C12.8226 8.44031 12.9518 8.24703 13.0399 8.03432C13.128 7.8216 13.1734 7.59361 13.1734 7.36337C13.1734 7.13313 13.128 6.90514 13.0399 6.69242C12.9518 6.47971 12.8226 6.28643 12.6598 6.12362L8.85644 2.32178C8.67191 2.13687 8.44823 1.99574 8.20189 1.90879V0.934761ZM7.03305 3.31919V4.44127C7.03305 4.59627 7.09462 4.74492 7.20422 4.85452C7.31382 4.96412 7.46247 5.02569 7.61747 5.02569C7.77247 5.02569 7.92112 4.96412 8.03072 4.85452C8.14032 4.74492 8.20189 4.59627 8.20189 4.44127V3.31919L11.8323 6.95038C11.9417 7.05996 12.0032 7.2085 12.0032 7.36337C12.0032 7.51824 11.9417 7.66678 11.8323 7.77636L11.0765 8.53221H1.82159L1.84419 8.50883L7.03305 3.31919Z"
+                                                                  fill="#6633F5"/>
+                                                            <path d="M14.063 9.78046C14.0049 9.67162 13.9183 9.5806 13.8125 9.51714C13.7067 9.45369 13.5856 9.42017 13.4622 9.42017C13.3388 9.42017 13.2177 9.45369 13.1119 9.51714C13.0061 9.5806 12.9195 9.67162 12.8614 9.78046L11.2967 12.715C10.4232 14.3498 11.6092 16.3244 13.4622 16.3244C15.3152 16.3244 16.4996 14.3498 15.6284 12.715L14.063 9.78046Z"
+                                                                  fill="#6633F5"/>
+                                                        </svg>
+                                                    </span>
                                                 </button>
                                             </div>
 
@@ -527,17 +534,15 @@ global $arSetting;
                                                         </button>
                                                         <button type="button"
                                                                 onclick="countColourBuyShek(<?= $arResult['ID'] ?>, $('#formProdactColour1'), <?= $arResult['IBLOCK_ID'] ?>)"
-                                                                class="btn btn-primary btn-paid"><span
-                                                                    class="mr-2"><svg width="17"
-                                                                                      height="14"
-                                                                                      viewBox="0 0 17 14"
-                                                                                      fill="none"
-                                                                                      xmlns="http://www.w3.org/2000/svg">
-<path d="M16.3929 0H0.607143C0.271317 0 0 0.284375 0 0.636364V3.81818H17V0.636364C17 0.284375 16.7287 0 16.3929 0ZM0 13.3636C0 13.7156 0.271317 14 0.607143 14H16.3929C16.7287 14 17 13.7156 17 13.3636V5.56818H0V13.3636ZM10.9855 9.70455C10.9855 9.61705 11.0538 9.54545 11.1373 9.54545H14.2679C14.3513 9.54545 14.4196 9.61705 14.4196 9.70455V11.1364C14.4196 11.2239 14.3513 11.2955 14.2679 11.2955H11.1373C11.0538 11.2955 10.9855 11.2239 10.9855 11.1364V9.70455Z"
-      fill="white"/>
-</svg>
-</span> <?= Loc::getMessage('PAY_CARD'); ?>
-
+                                                                class="btn btn-primary btn-paid"
+                                                        >
+                                                            <span class="mr-2">
+                                                                <svg width="17" height="14" viewBox="0 0 17 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M16.3929 0H0.607143C0.271317 0 0 0.284375 0 0.636364V3.81818H17V0.636364C17 0.284375 16.7287 0 16.3929 0ZM0 13.3636C0 13.7156 0.271317 14 0.607143 14H16.3929C16.7287 14 17 13.7156 17 13.3636V5.56818H0V13.3636ZM10.9855 9.70455C10.9855 9.61705 11.0538 9.54545 11.1373 9.54545H14.2679C14.3513 9.54545 14.4196 9.61705 14.4196 9.70455V11.1364C14.4196 11.2239 14.3513 11.2955 14.2679 11.2955H11.1373C11.0538 11.2955 10.9855 11.2239 10.9855 11.1364V9.70455Z"
+                                                                          fill="white"/>
+                                                                </svg>
+                                                            </span>
+                                                            <?= Loc::getMessage('PAY_CARD'); ?>
                                                         </button>
                                                     </div>
                                                 </div>
@@ -937,10 +942,7 @@ global $arSetting;
                                 <? } ?>
                             </ul>
                         </div>
-
                     <? } ?>
-
-
                 </div>
                 <div class="mb-4 card seller-card text-right">
                     <p class="text-uppercase seller-card__title"><?= Loc::getMessage('SELLER'); ?></p>
@@ -960,27 +962,25 @@ global $arSetting;
                                     <span class="status_dot"></span>
                                 </p>
                             <? } ?>
-
-
                             <span class="date-registration">Registered: <?= $arResult['USER']['DATE_REGISTER']; ?></span>
                         </div>
                         <div class="seller-card__photo">
                             <img src="<?= SITE_TEMPLATE_PATH; ?>/img/seller-photo.png" alt="">
                         </div>
                     </div>
-
-                    <button class="w-100 btn btn-primary text-uppercase btn-author-add"><a
-                                href="/search/author/?R=<?= $arResult['IBLOCK_ID'] ?>&I=<?= $arResult['PROPERTIES']['ID_USER']['VALUE'] ?>&sort=price_d&display=block"><?= Loc::getMessage('ALL_ADS_AUTHOR'); ?></a></a>
+                    <button class="w-100 btn btn-primary text-uppercase btn-author-add">
+                        <a href="/search/author/?R=<?= $arResult['IBLOCK_ID'] ?>&I=<?= $arResult['PROPERTIES']['ID_USER']['VALUE'] ?>&sort=price_d&display=block"><?= Loc::getMessage('ALL_ADS_AUTHOR'); ?></a></a>
                     </button>
                 </div>
                 <div class="mb-4 card exact-address-card text-right" data-toggle="modal" data-target="#itemMapFullSize">
                     <p class="text-uppercase exact-address-card__title">Exact address</p>
-
-                    <div type="button" class="flex-column">
-                        <p class="map__address"><?= $arResult['PROPERTIES']['LOCATION']['VALUE']; ?><i
-                                    class="icon-pin"></i></p>
-                        <div id="mapMini" style="width: 100%; height: 200px;"></div>
-                    </div>
+                    <?php if ($arResult['PROPERTIES']['MAP_LAYOUT_BIG']['VALUE'] && $arResult['PROPERTIES']['MAP_LAYOUT']['VALUE']):?>
+                        <div type="button" class="flex-column">
+                            <p class="map__address"><?=$arResult['PROPERTIES']['MAP_LAYOUT']['VALUE'].', '.$arResult['PROPERTIES']['MAP_LAYOUT_BIG']['VALUE'] ?>
+                                <i class="icon-pin"></i></p>
+                            <div id="mapMini" style="width: 100%; height: 200px;"></div>
+                        </div>
+                    <?php endif;?>
                 </div>
                 <div class="modal fade" id="itemMapFullSize">
                     <div class="modal-dialog modal-dialog-centered">
@@ -989,31 +989,29 @@ global $arSetting;
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
-
                                 <p class="mb-3 modal-title subtitle" id="staticBackdropLabel">Exact address</p>
-
-                                <p class="mb-0 map-address">Tel Aviv-Yafo, Tel Aviv District, Israel
-                                    <svg
-                                            class="icon-local"
-                                            version="1.1"
-                                            id="Capa_1"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink"
-                                            x="0px"
-                                            y="0px"
-                                            viewBox="0 0 513.597 513.597"
-                                            xml:space="preserve"
-                                    >
-            <g>
-                <path
-                        d="M263.278,0.107C158.977-3.408,73.323,80.095,73.323,183.602c0,117.469,112.73,202.72,175.915,325.322
-              c3.208,6.225,12.169,6.233,15.388,0.009c57.16-110.317,154.854-184.291,172.959-290.569
-              C456.331,108.387,374.776,3.866,263.278,0.107z M256.923,279.773c-53.113,0-96.171-43.059-96.171-96.171
-              s43.059-96.171,96.171-96.171c53.113,0,96.172,43.059,96.172,96.171S310.036,279.773,256.923,279.773z"
-                />
-            </g>
-          </svg>
-                                </p>
+                                <?php if ($arResult['PROPERTIES']['MAP_LAYOUT_BIG']['VALUE'] && $arResult['PROPERTIES']['MAP_LAYOUT']['VALUE']):?>
+                                    <p class="mb-0 map-address"><?=$arResult['PROPERTIES']['MAP_LAYOUT']['VALUE'].', '.$arResult['PROPERTIES']['MAP_LAYOUT_BIG']['VALUE']?>
+                                        <svg    class="icon-local"
+                                                version="1.1"
+                                                id="Capa_1"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                x="0px"
+                                                y="0px"
+                                                viewBox="0 0 513.597 513.597"
+                                                xml:space="preserve"
+                                        >
+                                            <g>
+                                                <path d="M263.278,0.107C158.977-3.408,73.323,80.095,73.323,183.602c0,117.469,112.73,202.72,175.915,325.322
+                                              c3.208,6.225,12.169,6.233,15.388,0.009c57.16-110.317,154.854-184.291,172.959-290.569
+                                              C456.331,108.387,374.776,3.866,263.278,0.107z M256.923,279.773c-53.113,0-96.171-43.059-96.171-96.171
+                                              s43.059-96.171,96.171-96.171c53.113,0,96.172,43.059,96.172,96.171S310.036,279.773,256.923,279.773z"
+                                                />
+                                            </g>
+                                      </svg>
+                                    </p>
+                                <?php endif;?>
                             </div>
 
                             <div class="modal-body">
