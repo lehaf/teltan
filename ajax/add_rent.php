@@ -147,8 +147,6 @@ if ($arUser['UF_COUNT_RENT'] > $arUser['UF_COUNT_APART'] || $b || $_REQUEST['EDI
             'ACTIVE' => 'Y',
             'PREVIEW_TEXT' => $_POST['itemDescription'],
             'DETAIL_TEXT' => $_POST['itemDescription'],
-            // 'PREVIEW_PICTURE' => $arFile,
-            // 'DETAIL_PICTURE' => $arFile
         );
     } else {
         $arLoadProductArray = array(
@@ -161,10 +159,9 @@ if ($arUser['UF_COUNT_RENT'] > $arUser['UF_COUNT_APART'] || $b || $_REQUEST['EDI
             'ACTIVE' => 'Y',
             'PREVIEW_TEXT' => $_POST['itemDescription'],
             'DETAIL_TEXT' => $_POST['itemDescription'],
-            //  'PREVIEW_PICTURE' => $arFile,
-            //   'DETAIL_PICTURE' => $arFile
         );
     }
+
 
     if ($arFile["type"] == "image/png" || $arFile["type"] == "image/jpeg") {
 
@@ -269,9 +266,9 @@ if ($arUser['UF_COUNT_RENT'] > $arUser['UF_COUNT_APART'] || $b || $_REQUEST['EDI
             unset($arLoadProductArray['NAME']);
         }
 
-        foreach ($arLoadProductArray as $key => $value) {
-            if ($value == '') unset($arLoadProductArray[$key]);
-        }
+//        foreach ($arLoadProductArray as $key => $value) {
+//            if ($value == '') unset($arLoadProductArray[$key]);
+//        }
 
         $arLoadProductProp = [];
         foreach ($arLoadProductArray['PROPERTY_VALUES'] as $key => $value) {

@@ -1,8 +1,5 @@
-<? if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
+<?php if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 
-use Bitrix\Main\Loader;
-
-CModule::includeModule('iblock');
 $navChain = CIBlockSection::GetNavChain(
     false,
     $arResult['IBLOCK_SECTION_ID'], // Родительский раздел элемента
@@ -10,6 +7,7 @@ $navChain = CIBlockSection::GetNavChain(
         'NAME',
         'CODE'
     ));
+
 switch (LANGUAGE_ID) {
     case 'he':
         $langId = 'HEB';

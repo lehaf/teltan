@@ -62,11 +62,13 @@
                     }
                 }
             })
+
             $.ajax({
                 type: "GET",
                 dataType: "html",
                 url: sectionUrl + '?' + url,
                 success: function (data) {
+                    console.log(123);
                     $('#rendorMapItemCard').replaceWith($(data).find('#rendorMapItemCard'));
                 }
             });
@@ -240,10 +242,8 @@
                 });
 
                 map.on('click', '1-level-area8', (e) => {
-
                     map.flyTo({center: {lat: 30.792293462499828, lng: 34.88696429992865}, zoom: 8});
                     let features = map.queryRenderedFeatures(e.point);
-
                     $('.preloader').addClass('preloader-visible');
                     let elems = $('.dropdown-building-area1').find('input');
                     let count = 0;
@@ -263,7 +263,7 @@
                             count++;
                             $(this).trigger('click')
                             let item = this;
-                            let link = setTimeout(function () {
+                            setTimeout(function () {
                                 getLink(item);
                             }, 1000);
 
@@ -356,7 +356,7 @@
                             count++;
                             $(this).trigger('click')
                             let item = this;
-                            let link = setTimeout(function () {
+                            setTimeout(function () {
                                 getLink(item);
                             }, 1000);
 
@@ -448,7 +448,7 @@
                             count++;
                             $(this).trigger('click')
                             let item = this;
-                            let link = setTimeout(function () {
+                            setTimeout(function () {
                                 getLink(item);
                             }, 1000);
 
@@ -539,7 +539,7 @@
                             count++;
                             $(this).trigger('click')
                             let item = this;
-                            let link = setTimeout(function () {
+                            setTimeout(function () {
                                 getLink(item);
                             }, 1000);
 
@@ -631,7 +631,7 @@
                             count++;
                             $(this).trigger('click')
                             let item = this;
-                            let link = setTimeout(function () {
+                            setTimeout(function () {
                                getLink(item);
                             }, 1000);
 
@@ -722,7 +722,7 @@
                             count++;
                             $(this).trigger('click')
                             let item = this;
-                            let link = setTimeout(function () {
+                            setTimeout(function () {
                                 getLink(item);
                             }, 1000);
 
@@ -813,7 +813,7 @@
                             count++;
                             $(this).trigger('click')
                             let item = this;
-                            let link = setTimeout(function () {
+                            setTimeout(function () {
                                 getLink(item);
                             }, 1000);
 

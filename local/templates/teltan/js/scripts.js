@@ -136,12 +136,6 @@ $(document).ready(function () {
         })
     }
 
-    // Dropdown cabinet item menu
-    /*$('.btn-accelerate-sale').on('click', (e) => {
-    e.preventDefault()
-    $('.accardion-wrap').toggleClass('active')
-  })*/
-
     $('.btn-accelerate-sale').click(function () {
 
         $(this).next().toggleClass('active')
@@ -379,8 +373,6 @@ $(document).ready(function () {
             const $items = $(`[data-filter-for="${formSelector}"]`)
 
             $form.on('keyup change paste', 'input, select, textarea', (e) => {
-
-
                 this.filterData = {...this.filterData, [e.target.name]: e.target.value.toLowerCase()}
                 $items.each((_, el) => {
                     const $el = $(el);
