@@ -31,9 +31,6 @@ if (!empty($arResult['ITEMS'])) {
             $item['VIP_COLOR'] = PROPERTY_VIP_COLOR;
         }
 
-        $arResult['VIP_ITEMS_ID'][] = $item['ID'];
     }
     unset($item);
-
-    $this->__component->setResultCacheKeys(['VIP_ITEMS_ID']);
 }

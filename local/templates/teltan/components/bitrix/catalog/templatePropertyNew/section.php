@@ -298,7 +298,7 @@ if ($_GET['view'] == 'maplist') {
                 "RCM_PROD_ID" => $_REQUEST["PRODUCT_ID"],    // Параметр ID продукта (для товарных рекомендаций)
                 "RCM_TYPE" => "personal",    // Тип рекомендации
                 "SECTION_CODE" => "",    // Код раздела
-                "SECTION_ID" => $_REQUEST["SECTION_ID"],    // ID раздела
+                "SECTION_ID" => $arResult["VARIABLES"]["SECTION_ID"],
                 "SECTION_ID_VARIABLE" => "SECTION_ID",    // Название переменной, в которой передается код группы
                 "SECTION_URL" => "",    // URL, ведущий на страницу с содержимым раздела
                 "SECTION_USER_FIELDS" => array(    // Свойства раздела
@@ -337,19 +337,18 @@ if ($_GET['view'] == 'maplist') {
                 <?php
                 $adsTemplate = 'templatePropertyList';
                 if ($_SESSION['view'] == 'block') $adsTemplate = 'templatePropertyBlock';
-                global $adsListFilter;
-                if (!empty($GLOBALS['vip_items_id'])) $adsListFilter = ['!=ID' => $GLOBALS['vip_items_id']];
                 $APPLICATION->IncludeComponent(
                     "bitrix:catalog.section",
                     $adsTemplate,
                     array(
+                        "SECTION_NAME" => $sectionName,
                         "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
                         "IBLOCK_ID" => $arParams["IBLOCK_ID"],
                         "ELEMENT_SORT_FIELD" => $arParams["ELEMENT_SORT_FIELD"],
                         "ELEMENT_SORT_ORDER" => $arParams["ELEMENT_SORT_ORDER"],
                         "ELEMENT_SORT_FIELD2" => $arParams["ELEMENT_SORT_FIELD2"],
                         "ELEMENT_SORT_ORDER2" => $arParams["ELEMENT_SORT_ORDER2"],
-                        "PROPERTY_CODE" => (isset($arParams["LIST_PROPERTY_CODE"]) ? $arParams["LIST_PROPERTY_CODE"] : []),
+                        "PROPERTY_CODE" => ['SHOW_COUNTER'],
                         "PROPERTY_CODE_MOBILE" => $arParams["LIST_PROPERTY_CODE_MOBILE"],
                         "META_KEYWORDS" => $arParams["LIST_META_KEYWORDS"],
                         "META_DESCRIPTION" => $arParams["LIST_META_DESCRIPTION"],

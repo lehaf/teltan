@@ -1,7 +1,6 @@
-<? if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
+<?php if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 
-use Bitrix\Main\Loader;
-if ($arResult['IBLOCK_SECTION_ID']) {
+if (!empty($arResult['IBLOCK_SECTION_ID'])) {
     CModule::includeModule('iblock');
     $navChain = CIBlockSection::GetNavChain(
         false,
@@ -63,5 +62,5 @@ if ($arResult['IBLOCK_SECTION_ID']) {
 
     }
     $APPLICATION->AddChainItem($arResult['NAME']); // Последний элемент
-//
+
 }

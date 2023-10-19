@@ -1,96 +1,14 @@
-<? if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
+<?php if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 
-use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
+/** @var array $arResult */
+/** @var array $arParams */
+
 use Bitrix\Main\Localization\Loc;
 
-Loc::loadMessages(__FILE__); ?>
-<?
-global $mapArray;
-$mapArray = [
-    "type" => "FeatureCollection"
-];
+Loc::loadMessages(__FILE__);
 
-foreach ($arResult['ITEMS'] as $arItem) {
-    $mapLatlnt = json_decode($arItem['PROPERTIES']['MAP_LATLNG']['~VALUE'], true);
-    $mapArray['features'][] = [
-        'type' => 'Feature',
-        'properties' => [
-            'image' => $arItem['PREVIEW_PICTURE']['SAFE_SRC'] ?? '/no-image.svg',
-            'title' => $arItem['NAME'],
-            'addres' => $arItem['NAME'],
-            'category' => $arItem['IBLOCK_SECTION_ID'],
-            'views' => $arItem['IBLOCK_SECTION_ID'],
-            'date' => $arItem['DATE_CREATE'],
-            'isVipCard' => false,
-        ],
-        'geometry' => [
-            'type' => 'Point',
-            'coordinates' =>
-                [$mapLatlnt['lng'], $mapLatlnt['lat']]
-        ]
-    ];
-
-}
-global $mapArrayVip;
-$mapArrayVip = [
-    "type" => "FeatureCollection"
-];
-foreach ($arResult['ITEMS'] as $arItem) {
-    $counterJson = 0;
-
-    $res = CIBlockElement::GetByID($arItem["ID"]);
-    if ($ar_res = $res->GetNext())
-        $counterJson = $ar_res['SHOW_COUNTER'];
-
-    $nameSection = '';
-    $res = CIBlockSection::GetByID($arItem["IBLOCK_SECTION_ID"]);
-    if ($ar_res = $res->GetNext())
-        $nameSection = $ar_res['NAME'];
-
-    // $arItem['PROPERTIES']['MAP_LATLNG']['VALUE'] = str_replace('&quot;', '"', $arItem['PROPERTIES']['MAP_LATLNG']['VALUE']);
-    $mapLatlnt = json_decode($arItem['PROPERTIES']['MAP_LATLNG']['~VALUE'], true);
-    if ($arItem['PROPERTIES']['VIP_DATE']['VALUE'] && strtotime($arItem['PROPERTIES']['VIP_DATE']['VALUE']) > time()) {
-        $mapArrayVip['features'][] = [
-            'type' => 'Feature',
-            'properties' => [
-                'href' => $arItem['DETAIL_PAGE_URL'],
-                'image' => $arItem['PREVIEW_PICTURE']['SAFE_SRC'] ?? '/no-image.svg',
-                'title' => $arItem['NAME'],
-                'price' => $arItem['PROPERTIES']['PRICE']['VALUE'],
-                'addres' => $arItem['NAME'],
-                'category' => $nameSection,
-                'views' => $counterJson,
-                'date' => $arItem['DATE_CREATE'],
-                'isVipCard' => false,
-            ],
-            'geometry' => [
-                'type' => 'Point',
-                'coordinates' =>
-                    [$mapLatlnt['lng'], $mapLatlnt['lat']]
-            ]
-        ];
-    } else {
-        $mapArray['features'][] = [
-            'type' => 'Feature',
-            'properties' => [
-                'href' => $arItem['DETAIL_PAGE_URL'],
-                'image' => $arItem['PREVIEW_PICTURE']['SAFE_SRC'] ?? '/no-image.svg',
-                'title' => $arItem['NAME'],
-                'price' => $arItem['PROPERTIES']['PRICE']['VALUE'],
-                'addres' => $arItem['NAME'],
-                'category' => $nameSection,
-                'views' => $counterJson,
-                'date' => $arItem['DATE_CREATE'],
-                'isVipCard' => false,
-            ],
-            'geometry' => [
-                'type' => 'Point',
-                'coordinates' =>
-                    [$mapLatlnt['lng'], $mapLatlnt['lat']]
-            ]
-        ];
-    }
-}
+$mapArray = $arResult['MAP_ARRAY'];
+$mapArrayVip = $arResult['MAP_ARRAY_VIP'];
 ?>
 <div class="property-map">
     <div id="map" style="width: 100%; height: 100%"></div>
