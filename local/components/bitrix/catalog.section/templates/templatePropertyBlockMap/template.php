@@ -280,7 +280,6 @@ $mapArrayVip = [
                 <?}} ?>
             </div>
 
-
             <div class="cord_pagination">
                 <?=$arResult['NAV_STRING']?>
             </div>

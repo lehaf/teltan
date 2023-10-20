@@ -1,47 +1,19 @@
 <script>
     $(document).ready(function () {
         // MAPS START
-        function getLink(elem) {
+        function filterItems() {
             $(this).trigger('click')
-            let SECTION_ID = localStorage.getItem('FILTER_SECTION_ID');
-            if ($('#categoryRentInput').is(':checked')) {
-                switch (SECTION_ID) {
-                    case '35':
-                        var sectionUrl = '/property/zhilaya/snyat-j/'
-                        break;
-                    case '33':
-                        var sectionUrl = '/property/kommercheskaya/snyat-kom/'
-                        break;
-                    case '34':
-                        var sectionUrl = '/property/zhilaya/snyat-j/'
-                        break;
-                    case '32':
-                        var sectionUrl = '/property/kommercheskaya/snyat-kom/'
-                        break;
-                }
-            } else {
-                switch (SECTION_ID) {
-                    case '35':
-                        var sectionUrl = '/property/zhilaya/kupit-j/'
-                        break;
-                    case '33':
-                        var sectionUrl = '/property/kommercheskaya/kupit-kom/'
-                        break;
-                    case '34':
-                        var sectionUrl = '/property/zhilaya/kupit-j/'
-                        break;
-                    case '32':
-                        var sectionUrl = '/property/kommercheskaya/kupit-kom/'
-                        break;
-                }
-            }
-            let url = 'set_filter=y&view=maplist';
+            let url = 'view=maplist&set_filter=y';
+            let dataInputs = {};
             $('#mainFiltersRent').find('input').each(function (index) {
                 if ($(this).is(':checkbox')) {
                     if ($(this).is(':checked')) {
                         let data = $(this).data();
                         if (data.controlId !== undefined) {
-                            url = url + '&' + data.controlId + '=' + data.htmlValue
+                            if (data.htmlValue.length > 0) {
+                                url = url + '&' + data.controlId + '=' + data.htmlValue;
+                                dataInputs[data.controlId] = data.htmlValue;
+                            }
                         }
                     }
                 } else {
@@ -49,27 +21,37 @@
                         let data = $(this).data();
                         let val = $(this).val();
                         if (data.controlId !== undefined) {
-                            url = url + '&' + data.controlId + '=' + val
+                            if (val.length > 0) {
+                                url = url + '&' + data.controlId + '=' + val;
+                                dataInputs[data.controlId] = val;
+                            }
                         }
                     } else {
                         let data = $(this).data();
                         let val = $(this).val();
                         if (val !== '') {
                             if (data.controlId !== undefined) {
-                                url = url + '&' + data.controlId + '=' + val;
+                                if (val.length > 0) {
+                                    url = url + '&' + data.controlId + '=' + val;
+                                    dataInputs[data.controlId] = val;
+                                }
                             }
                         }
                     }
                 }
-            })
+            });
 
+            $('.preloader').addClass('preloader-visible');
             $.ajax({
-                type: "GET",
+                type: "POST",
                 dataType: "html",
-                url: sectionUrl + '?' + url,
+                data: dataInputs,
+                headers: {"X-Requested-With": "XMLHttpRequest"},
+                url: location.pathname + '?' + url,
                 success: function (data) {
-                    console.log(123);
                     $('#rendorMapItemCard').replaceWith($(data).find('#rendorMapItemCard'));
+                    history.pushState({}, "", location.origin + location.pathname + '?' + url);
+                    $('.preloader').removeClass('preloader-visible');
                 }
             });
         }
@@ -85,6 +67,7 @@
                 center: mapCoordinate,
                 zoom: 6
             });
+
             let hoveredStateId = null;
             let hoveredStateId1 = null;
             let hoveredStateId2 = null;
@@ -244,37 +227,16 @@
                 map.on('click', '1-level-area8', (e) => {
                     map.flyTo({center: {lat: 30.792293462499828, lng: 34.88696429992865}, zoom: 8});
                     let features = map.queryRenderedFeatures(e.point);
-                    $('.preloader').addClass('preloader-visible');
                     let elems = $('.dropdown-building-area1').find('input');
-                    let count = 0;
                     elems.each(function (index) {
                         let data = $(this).data()
-                        if ($(this).prop("checked")) {
-                            if (data.valued !== features[0]['properties']['MUN_HE']) {
-                                $(this).trigger('click')
-
-                            } else {
-                                if (data.valued === features[0]['properties']['MUN_HE']) {
-                                    $(this).trigger('click')
-                                }
-                            }
-                        }
                         if (data.valued === features[0]['properties']['MUN_HE']) {
-                            count++;
-                            $(this).trigger('click')
-                            let item = this;
-                            setTimeout(function () {
-                                getLink(item);
-                            }, 1000);
-
-
+                            $(this).attr("checked", true);
+                        } else {
+                            $(this).attr("checked", false);
                         }
-
-                    })
-                    if (count === 0) {
-                        $('.preloader').removeClass('preloader-visible');
-                    }
-
+                    });
+                    filterItems();
                 });
 
                 map.addLayer({
@@ -332,41 +294,18 @@
                 });
 
                 map.on('click', '1-level-area7', (e) => {
-
                     map.flyTo({center: {lng: 34.68506737325703, lat: 31.616011520099917}, zoom: 8});
                     let features = map.queryRenderedFeatures(e.point);
-
-                    $('.preloader').addClass('preloader-visible');
                     let elems = $('.dropdown-building-area1').find('input');
-                    let count = 0;
                     elems.each(function (index) {
-
                         let data = $(this).data()
-                        if ($(this).prop("checked")) {
-                            if (data.valued !== features[0]['properties']['MUN_HE']) {
-                                $(this).trigger('click')
-
-                            } else {
-                                if (data.valued === features[0]['properties']['MUN_HE']) {
-                                    $(this).trigger('click')
-                                }
-                            }
-                        }
                         if (data.valued === features[0]['properties']['MUN_HE']) {
-                            count++;
-                            $(this).trigger('click')
-                            let item = this;
-                            setTimeout(function () {
-                                getLink(item);
-                            }, 1000);
-
-
+                            $(this).attr("checked", true);
+                        } else {
+                            $(this).attr("checked", false);
                         }
-
-                    })
-                    if (count === 0) {
-                        $('.preloader').removeClass('preloader-visible');
-                    }
+                    });
+                    filterItems();
                 });
 
                 map.addLayer({
@@ -424,43 +363,20 @@
                 });
 
                 map.on('click', '1-level-area6', (e) => {
-
                     map.flyTo({center: {lng: 34.98752305903815, lat: 31.6928666963656}, zoom: 8});
                     let features = map.queryRenderedFeatures(e.point);
-
-                    $('.preloader').addClass('preloader-visible');
                     let elems = $('.dropdown-building-area1').find('input');
-                    let count = 0;
                     elems.each(function (index) {
-
                         let data = $(this).data()
-                        if ($(this).prop("checked")) {
-                            if (data.valued !== features[0]['properties']['MUN_HE']) {
-                                $(this).trigger('click')
-
-                            } else {
-                                if (data.valued === features[0]['properties']['MUN_HE']) {
-                                    $(this).trigger('click')
-                                }
-                            }
-                        }
                         if (data.valued === features[0]['properties']['MUN_HE']) {
-                            count++;
-                            $(this).trigger('click')
-                            let item = this;
-                            setTimeout(function () {
-                                getLink(item);
-                            }, 1000);
-
-
+                            $(this).attr("checked", true);
+                        } else {
+                            $(this).attr("checked", false);
                         }
+                    });
+                    filterItems();
+                });
 
-                    })
-                    if (count === 0) {
-                        $('.preloader').removeClass('preloader-visible');
-                    }
-
-                })
                 map.addLayer({
                     'id': '1-level-area5',
                     'type': 'fill',
@@ -515,43 +431,19 @@
                 });
 
                 map.on('click', '1-level-area5', (e) => {
-
                     map.flyTo({center: {lng: 34.903915804879404, lat: 32.05794313480354}, zoom: 8});
                     let features = map.queryRenderedFeatures(e.point);
-
-                    $('.preloader').addClass('preloader-visible');
                     let elems = $('.dropdown-building-area1').find('input');
-                    let count = 0;
                     elems.each(function (index) {
-
                         let data = $(this).data()
-                        if ($(this).prop("checked")) {
-                            if (data.valued !== features[0]['properties']['MUN_HE']) {
-                                $(this).trigger('click')
-
-                            } else {
-                                if (data.valued === features[0]['properties']['MUN_HE']) {
-                                    $(this).trigger('click')
-                                }
-                            }
-                        }
                         if (data.valued === features[0]['properties']['MUN_HE']) {
-                            count++;
-                            $(this).trigger('click')
-                            let item = this;
-                            setTimeout(function () {
-                                getLink(item);
-                            }, 1000);
-
-
+                            $(this).attr("checked", true);
+                        } else {
+                            $(this).attr("checked", false);
                         }
-
-                    })
-                    if (count === 0) {
-                        $('.preloader').removeClass('preloader-visible');
-                    }
-
-                })
+                    });
+                    filterItems();
+                });
 
                 map.addLayer({
                     'id': '1-level-area3',
@@ -607,43 +499,20 @@
                 });
 
                 map.on('click', '1-level-area3', (e) => {
-
                     map.flyTo({center: {lng: 35.346581583016246, lat: 31.954594298007592}, zoom: 8});
                     let features = map.queryRenderedFeatures(e.point);
-
-                    $('.preloader').addClass('preloader-visible');
                     let elems = $('.dropdown-building-area1').find('input');
-                    let count = 0;
                     elems.each(function (index) {
-
                         let data = $(this).data()
-                        if ($(this).prop("checked")) {
-                            if (data.valued !== features[0]['properties']['MUN_HE']) {
-                                $(this).trigger('click')
-
-                            } else {
-                                if (data.valued === features[0]['properties']['MUN_HE']) {
-                                    $(this).trigger('click')
-                                }
-                            }
-                        }
                         if (data.valued === features[0]['properties']['MUN_HE']) {
-                            count++;
-                            $(this).trigger('click')
-                            let item = this;
-                            setTimeout(function () {
-                               getLink(item);
-                            }, 1000);
-
-
+                            $(this).attr("checked", true);
+                        } else {
+                            $(this).attr("checked", false);
                         }
+                    });
+                    filterItems();
+                });
 
-                    })
-                    if (count === 0) {
-                        $('.preloader').removeClass('preloader-visible');
-                    }
-
-                })
                 map.addLayer({
                     'id': '1-level-area2',
                     'type': 'fill',
@@ -698,43 +567,20 @@
                 });
 
                 map.on('click', '1-level-area2', (e) => {
-
                     map.flyTo({center: {lng: 35.24984065244277, lat: 32.59322837411284}, zoom: 8});
                     let features = map.queryRenderedFeatures(e.point);
-
-                    $('.preloader').addClass('preloader-visible');
                     let elems = $('.dropdown-building-area1').find('input');
-                    let count = 0;
                     elems.each(function (index) {
-
                         let data = $(this).data()
-                        if ($(this).prop("checked")) {
-                            if (data.valued !== features[0]['properties']['MUN_HE']) {
-                                $(this).trigger('click')
-
-                            } else {
-                                if (data.valued === features[0]['properties']['MUN_HE']) {
-                                    $(this).trigger('click')
-                                }
-                            }
-                        }
                         if (data.valued === features[0]['properties']['MUN_HE']) {
-                            count++;
-                            $(this).trigger('click')
-                            let item = this;
-                            setTimeout(function () {
-                                getLink(item);
-                            }, 1000);
-
-
+                            $(this).attr("checked", true);
+                        } else {
+                            $(this).attr("checked", false);
                         }
+                    });
+                    filterItems();
+                });
 
-                    })
-                    if (count === 0) {
-                        $('.preloader').removeClass('preloader-visible');
-                    }
-
-                })
                 map.addLayer({
                     'id': '1-level-area1',
                     'type': 'fill',
@@ -789,42 +635,20 @@
                 });
 
                 map.on('click', '1-level-area1', (e) => {
-
                     map.flyTo({center: {lng: 35.4259031056865, lat: 32.90573889477902}, zoom: 8});
                     let features = map.queryRenderedFeatures(e.point);
-
-                    $('.preloader').addClass('preloader-visible');
                     let elems = $('.dropdown-building-area1').find('input');
-                    let count = 0;
                     elems.each(function (index) {
-
-                        let data = $(this).data()
-                        if ($(this).prop("checked")) {
-                            if (data.valued !== features[0]['properties']['MUN_HE']) {
-                                $(this).trigger('click')
-
-                            } else {
-                                if (data.valued === features[0]['properties']['MUN_HE']) {
-                                    $(this).trigger('click')
-                                }
-                            }
-                        }
+                        let data = $(this).data();
                         if (data.valued === features[0]['properties']['MUN_HE']) {
-                            count++;
-                            $(this).trigger('click')
-                            let item = this;
-                            setTimeout(function () {
-                                getLink(item);
-                            }, 1000);
-
-
+                            $(this).attr("checked", true);
+                        } else {
+                            $(this).attr("checked", false);
                         }
+                    });
+                    filterItems();
+                });
 
-                    })
-                    if (count === 0) {
-                        $('.preloader').removeClass('preloader-visible');
-                    }
-                })
                 map.addLayer({
                     'id': 'earthquakess-layer',
                     'type': 'fill',
@@ -850,7 +674,6 @@
 
                 map.on('mousemove', 'earthquakess-layer', (e) => {
                     let features = map.queryRenderedFeatures(e.point);
-
                     if (features[0].layer.id === "earthquakess-layer") {
                         if (features.length > 0) {
                             if (hoveredStateId !== null) {
@@ -901,7 +724,6 @@
                             ['get', 'point_count'], 15, 50, 25, 350, 35, 500, 45]
                     }
                 });
-                const stateDataLayer = map.getLayer('abu-gosh');
 
                 map.addLayer({
                     id: 'cluster-count',
