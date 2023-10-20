@@ -1,71 +1,18 @@
-<? if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
-use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
+<?php if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 
+/** @var array $arResult */
+/** @var array $arParams */
 
-global $mapArray;
 $mapArray = [
-    "type" => "FeatureCollection"
+    "type" => "FeatureCollection",
+    'features' => $arResult['MARKS']['features']
 ];
-global $mapArrayVip;
+
+
 $mapArrayVip = [
-    "type" => "FeatureCollection"
+    "type" => "FeatureCollection",
+    'features' => $arResult['VIP_MARKS']['features']
 ];
-foreach ($arResult['ITEMS'] as $arItem) {
-    $counterJson = 0;
-
-    $res = CIBlockElement::GetByID($arItem["ID"]);
-    if($ar_res = $res->GetNext())
-        $counterJson =  $ar_res['SHOW_COUNTER'];
-
-    $nameSection = '';
-    $res = CIBlockSection::GetByID($_GET["GID"]);
-    if($ar_res = $res->GetNext())
-        $nameSection =  $ar_res['NAME'];
-
-    $mapLatlnt = json_decode($arItem['PROPERTIES']['MAP_LATLNG']['~VALUE'], true);
-    if($arItem['PROPERTIES']['VIP_DATE']['VALUE'] && strtotime($arItem['PROPERTIES']['VIP_DATE']['VALUE']) > time()) {
-        $mapArrayVip['features'][] = [
-            'type' => 'Feature',
-            'properties' => [
-                'href' => $arItem['DETAIL_PAGE_URL'],
-                'image' => $arItem['PREVIEW_PICTURE']['SAFE_SRC'] ?? '/no-image.svg',
-                'title' => $arItem['NAME'],
-                'price' => '₪ '.$arItem['PROPERTIES']['PRICE']['VALUE'],
-                'addres' => $arItem['NAME'],
-                'category' => $nameSection,
-                'views' => $counterJson,
-                'date' => $arItem['DATE_CREATE'],
-                'isVipCard' => false,
-            ],
-            'geometry' => [
-                'type' => 'Point',
-                'coordinates' =>
-                    [$mapLatlnt[0], $mapLatlnt[1]]
-            ]
-        ];
-    }else{
-        $mapArray['features'][] = [
-            'type' => 'Feature',
-            'properties' => [
-                'href' => $arItem['DETAIL_PAGE_URL'],
-                'image' => $arItem['PREVIEW_PICTURE']['SAFE_SRC'] ?? '/no-image.svg',
-                'title' => $arItem['NAME'],
-                'price' => '₪ '.$arItem['PROPERTIES']['PRICE']['VALUE'],
-                'addres' => $arItem['NAME'],
-                'category' => $nameSection,
-                'views' => $counterJson,
-                'date' => $arItem['DATE_CREATE'],
-                'isVipCard' => false,
-            ],
-            'geometry' => [
-                'type' => 'Point',
-                'coordinates' =>
-                    [$mapLatlnt[0], $mapLatlnt[1]]
-            ]
-        ];
-    }
-
-}
 
 ?><div class="container">
     <h1 class="h2 mb-4 subtitle">
@@ -75,9 +22,8 @@ foreach ($arResult['ITEMS'] as $arItem) {
 <div class="property-full-map">
     <div class="d-block">
         <div class="map-box">
-            <div class="mapboxgl-map" id="map" style="width: 100%; height: 100%"><div class="mapboxgl-canary" style="visibility: hidden;"></div><div class="mapboxgl-canvas-container mapboxgl-interactive mapboxgl-touch-drag-pan mapboxgl-touch-zoom-rotate"><canvas class="mapboxgl-canvas" tabindex="0" aria-label="Map" role="region" width="979" height="785" style="width: 979px; height: 785px;"></canvas></div><div class="mapboxgl-control-container"><div class="mapboxgl-ctrl-top-left"></div><div class="mapboxgl-ctrl-top-right"></div><div class="mapboxgl-ctrl-bottom-left"><div class="mapboxgl-ctrl" style="display: block;"><a class="mapboxgl-ctrl-logo" target="_blank" rel="noopener nofollow" href="https://www.mapbox.com/" aria-label="Mapbox logo"></a></div></div><div class="mapboxgl-ctrl-bottom-right"><div class="mapboxgl-ctrl mapboxgl-ctrl-attrib"><button class="mapboxgl-ctrl-attrib-button" type="button" title="Toggle attribution" aria-label="Toggle attribution"></button><div class="mapboxgl-ctrl-attrib-inner" role="list"><a href="https://www.mapbox.com/about/maps/" target="_blank" title="Mapbox" aria-label="Mapbox" role="listitem">© Mapbox</a> <a href="https://www.openstreetmap.org/about/" target="_blank" title="OpenStreetMap" aria-label="OpenStreetMap" role="listitem">© OpenStreetMap</a> <a class="mapbox-improve-map" href="https://apps.mapbox.com/feedback/?owner=mapbox&amp;id=streets-v11&amp;access_token=pk.eyJ1IjoiYS1rbGltb2YiLCJhIjoiY2themVqYzI4MGlrZDJxbWlvaDBlMzF6MyJ9.QXFKypM1BnCkQaUZKTuP0g" target="_blank" title="Map feedback" aria-label="Map feedback" role="listitem" rel="noopener nofollow">Improve this map</a></div></div></div></div></div>
+            <div class="mapboxgl-map" id="map" style="width: 100%; height: 100%"></div>
         </div>
-
         <div class="d-flex justify-content-end">
             <div class="d-flex justify-content-between justify-content-lg-end products-sort">
                 <button onclick="window.location.href = document.location.pathname" class="d-block d-lg-none btn btn-closer">
@@ -95,7 +41,6 @@ foreach ($arResult['ITEMS'] as $arItem) {
                 </div>
             </div>
         </div>
-
         <div class="cord-container" id="rendorMapItemCard">
             <div class="preloader">
                 <div class="preloader__row">
@@ -103,23 +48,21 @@ foreach ($arResult['ITEMS'] as $arItem) {
                     <div class="preloader__item"></div>
                 </div>
             </div>
-<?if(count($arResult['ITEMS']) < 1){?>
-    <h1 class="h2 mb-4 subtitle">המדור ריק</h1>
-<?}else{?>
-            <?
+            <?if(empty($arResult['ITEMS'])){?>
+                <h1 class="h2 mb-4 subtitle">המדור ריק</h1>
+            <?}else{
+
             $arNotVip = [];
               $count = 0;
-            foreach ($arResult['ITEMS'] as $arItem){
+            foreach ($arResult['ITEMS'] as $key => $arItem){
                 if ($arItem['PROPERTIES']['VIP_DATE']['VALUE'] && strtotime($arItem['PROPERTIES']['VIP_DATE']['VALUE']) > time()) {
                     $arResult['VIPS'][] = $arItem;
+                    unset($arResult['ITEMS'][$key]);
                 }
             }
 
-           /* usort($arResult['VIPS'], function ($arr1, $arr2) {
-                return $arr1['PROPERTIES']['TIME_RAISE']['VALUE'] < $arr2['PROPERTIES']['TIME_RAISE']['VALUE'];
-            });*/
-            foreach($arResult['VIPS'] as $arItem){?>
-                <?
+            foreach($arResult['VIPS'] as $arItem){
+
                 $color = '';
                 $vip = '';
                 if($arItem['PROPERTIES']['COLOR_DATE']['VALUE'] && strtotime($arItem['PROPERTIES']['COLOR_DATE']['VALUE']) > time()) {

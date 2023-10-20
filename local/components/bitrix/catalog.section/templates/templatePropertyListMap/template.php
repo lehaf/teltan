@@ -1,78 +1,20 @@
-<? if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
+<?php if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 
-use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
+/** @var array $arResult */
+/** @var array $arParams */
 
-
-?>
-
-<?
-
-global $mapArray;
 $mapArray = [
-    "type" => "FeatureCollection"
+    "type" => "FeatureCollection",
+    'features' => $arResult['MARKS']['features']
 ];
-global $mapArrayVip;
+
+
 $mapArrayVip = [
-    "type" => "FeatureCollection"
+    "type" => "FeatureCollection",
+    'features' => $arResult['VIP_MARKS']['features']
 ];
-if (!empty($arResult['ITEMS'])) {
-    foreach ($arResult['ITEMS'] as $arItem) {
-        $counterJson = 0;
 
-        $res = CIBlockElement::GetByID($arItem["ID"]);
-        if ($ar_res = $res->GetNext()) $counterJson = $ar_res['SHOW_COUNTER'];
-
-        $nameSection = '';
-        $res = CIBlockSection::GetByID($arItem["IBLOCK_SECTION_ID"]);
-        if ($ar_res = $res->GetNext()) $nameSection = $ar_res['NAME'];
-
-        $mapLatlnt = json_decode($arItem['PROPERTIES']['MAP_LATLNG']['~VALUE'], true);
-        if ($arItem['PROPERTIES']['VIP_DATE']['VALUE'] && strtotime($arItem['PROPERTIES']['VIP_DATE']['VALUE']) > time()) {
-            $mapArrayVip['features'][] = [
-                'type' => 'Feature',
-                'properties' => [
-                    'href' => $arItem['DETAIL_PAGE_URL'],
-                    'image' => $arItem['PREVIEW_PICTURE']['SAFE_SRC'] ?? '/no-image.svg',
-                    'title' => $arItem['NAME'],
-                    'price' => '₪ '.$arItem['PROPERTIES']['PRICE']['VALUE'],
-                    'addres' => $arItem['NAME'],
-                    'category' => $nameSection,
-                    'views' => $counterJson,
-                    'date' => $arItem['DATE_CREATE'],
-                    'isVipCard' => false,
-                ],
-                'geometry' => [
-                    'type' => 'Point',
-                    'coordinates' =>
-                        [$mapLatlnt[0], $mapLatlnt[1]]
-                ]
-            ];
-        } else {
-            $mapArray['features'][] = [
-                'type' => 'Feature',
-                'properties' => [
-                    'href' => $arItem['DETAIL_PAGE_URL'],
-                    'image' => $arItem['PREVIEW_PICTURE']['SAFE_SRC'] ?? '/no-image.svg',
-                    'title' => $arItem['NAME'],
-                    'price' => '₪ '.$arItem['PROPERTIES']['PRICE']['VALUE'],
-                    'addres' => $arItem['NAME'],
-                    'category' => $nameSection,
-                    'views' => $counterJson,
-                    'date' => $arItem['DATE_CREATE'],
-                    'isVipCard' => false,
-                ],
-                'geometry' => [
-                    'type' => 'Point',
-                    'coordinates' =>
-                        [$mapLatlnt[0], $mapLatlnt[1]]
-                ]
-            ];
-        }
-
-    }
-}
 ?>
-
 
     <div class="container">
         <h1 class="h2 mb-4 subtitle">
@@ -112,10 +54,9 @@ if (!empty($arResult['ITEMS'])) {
                         <div class="preloader__item"></div>
                     </div>
                 </div>
-                <? if (count($arResult['ITEMS']) < 1){ ?>
+                <? if (empty($arResult['ITEMS'])){ ?>
                     <h1 class="h2 mb-4 subtitle">המדור ריק</h1>
-                <? }else{ ?>
-                <?
+                <? }else{
                 $arNotVip = [];
                 $count = 0;
                 foreach ($arResult['ITEMS'] as $arItem) {
@@ -124,12 +65,8 @@ if (!empty($arResult['ITEMS'])) {
                     }
                 }
 
-                /*usort($arResult['VIPS'], function ($arr1, $arr2) {
-                    return $arr1['PROPERTIES']['TIME_RAISE']['VALUE'] < $arr2['PROPERTIES']['TIME_RAISE']['VALUE'];
-                });*/
                 foreach ($arResult['VIPS'] as $arItem) {
-                    ?>
-                    <?
+
                     $color = '';
                     $vip = '';
                     if ($arItem['PROPERTIES']['COLOR_DATE']['VALUE'] && strtotime($arItem['PROPERTIES']['COLOR_DATE']['VALUE']) > time()) {
@@ -141,34 +78,34 @@ if (!empty($arResult['ITEMS'])) {
 
                     <? if ($vip != '') {
                         ?>
-                        <div class="row row-cols-1 <? if ($count == 0) {
-                            ?> databefore<? } ?>">
-
+                        <div class="row row-cols-1 <?=$count == 0 ? 'databefore' : ''?>">
                             <div class="mb-3 col 1">
                                 <? $count++ ?>
                                 <div class="card product-card product-line <?= $vip; ?>"
-                                     style="background-color: <?= $color; ?>">
+                                     style="background-color: <?=$color?>">
                                     <div class="card-link">
                                         <div class="image-block">
                                             <div class="i-box">
-                                                <a href="#"><img
-                                                            src="<?= $arItem['PREVIEW_PICTURE']['SAFE_SRC'] ?? '/no-image.svg' ?>"
-                                                            alt="no-img"></a>
+                                                <a href="#">
+                                                    <img src="<?=$arItem['PREVIEW_PICTURE']['SAFE_SRC'] ?? '/no-image.svg'?>"
+                                                         title="<?=$arItem['NAME']?>"
+                                                         alt="<?=$arItem['NAME']?>"
+                                                    >
+                                                </a>
                                             </div>
                                         </div>
-
                                         <div class="px-2 px-lg-3 d-flex justify-content-between like-price">
-                                            <p class="mb-0 like followThisItem" data-ad_id="<?= $arItem['ID']; ?>>
-                        <svg id=" iconLike" class="iconLike" viewBox="0 0 612 792">
-                                            <path d="M562.413,284.393c-9.68,41.044-32.121,78.438-64.831,108.07L329.588,542.345l-165.11-149.843 c-32.771-29.691-55.201-67.076-64.892-108.12c-6.965-29.484-4.103-46.14-4.092-46.249l0.147-0.994 c6.395-72.004,56.382-124.273,118.873-124.273c46.111,0,86.703,28.333,105.965,73.933l9.061,21.477l9.061-21.477 c18.958-44.901,61.694-73.922,108.896-73.922c62.481,0,112.478,52.27,119,125.208C566.517,238.242,569.379,254.908,562.413,284.393z"/>
-                                            </svg>
+                                            <p class="mb-0 like followThisItem" data-ad_id="<?= $arItem['ID']; ?>">
+                                                <svg id=" iconLike" class="iconLike" viewBox="0 0 612 792">
+                                                    <path d="M562.413,284.393c-9.68,41.044-32.121,78.438-64.831,108.07L329.588,542.345l-165.11-149.843 c-32.771-29.691-55.201-67.076-64.892-108.12c-6.965-29.484-4.103-46.14-4.092-46.249l0.147-0.994 c6.395-72.004,56.382-124.273,118.873-124.273c46.111,0,86.703,28.333,105.965,73.933l9.061,21.477l9.061-21.477 c18.958-44.901,61.694-73.922,108.896-73.922c62.481,0,112.478,52.27,119,125.208C566.517,238.242,569.379,254.908,562.413,284.393z"/>
+                                                </svg>
                                             </p>
-                                            <? if ($arItem['PROPERTIES']['PRICE']['VALUE'] != null) {
-                                                ?>
-                                                <p class="mb-0 price"><?= ICON_CURRENCY; ?> <?= number_format($arItem['PROPERTIES']['PRICE']['VALUE'], 0, '.', ' '); ?></p>
+                                            <? if ($arItem['PROPERTIES']['PRICE']['VALUE'] != null) {?>
+                                                <p class="mb-0 price">
+                                                    <?= ICON_CURRENCY; ?> <?= number_format($arItem['PROPERTIES']['PRICE']['VALUE'], 0, '.', ' '); ?>
+                                                </p>
                                             <? } ?>
-                                            <? if ($vip != '') {
-                                                ?>
+                                            <? if ($vip != '') {?>
                                                 <div class="vip-marker">
                                                     <div class="mr-2 icon">
                                                         <svg width="14" height="13" viewBox="0 0 14 13" fill="none"
@@ -191,13 +128,13 @@ if (!empty($arResult['ITEMS'])) {
                                                 <p class="mb-2 mb-lg-3 location">
                                                     <span class="addres"><?=$arItem['PROPERTIES']['MAP_LAYOUT']['VALUE'];?> <?=(!empty($arItem['PROPERTIES']['MAP_LAYOUT']['VALUE']))? ',' : ''?> <?=$arItem['PROPERTIES']['MAP_LAYOUT_BIG']['VALUE'];?></span>
                                                     <svg class="icon-local" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 513.597 513.597" xml:space="preserve">
-              <g>
-                  <path d="M263.278,0.107C158.977-3.408,73.323,80.095,73.323,183.602c0,117.469,112.73,202.72,175.915,325.322
-                c3.208,6.225,12.169,6.233,15.388,0.009c57.16-110.317,154.854-184.291,172.959-290.569
-                C456.331,108.387,374.776,3.866,263.278,0.107z M256.923,279.773c-53.113,0-96.171-43.059-96.171-96.171
-                s43.059-96.171,96.171-96.171c53.113,0,96.172,43.059,96.172,96.171S310.036,279.773,256.923,279.773z"></path>
-              </g>
-            </svg>
+                                                      <g>
+                                                          <path d="M263.278,0.107C158.977-3.408,73.323,80.095,73.323,183.602c0,117.469,112.73,202.72,175.915,325.322
+                                                        c3.208,6.225,12.169,6.233,15.388,0.009c57.16-110.317,154.854-184.291,172.959-290.569
+                                                        C456.331,108.387,374.776,3.866,263.278,0.107z M256.923,279.773c-53.113,0-96.171-43.059-96.171-96.171
+                                                        s43.059-96.171,96.171-96.171c53.113,0,96.172,43.059,96.172,96.171S310.036,279.773,256.923,279.773z"></path>
+                                                      </g>
+                                                    </svg>
                                                 </p>
                                                 <a href="<?= $arItem['DETAIL_PAGE_URL'] ?>"
                                                    class="mb-2 mb-lg-4 category"><?= mb_strimwidth($arItem['PREVIEW_TEXT'], 0, 300, " ..."); ?></a>
@@ -205,25 +142,27 @@ if (!empty($arResult['ITEMS'])) {
 
                                             <div class="border-top py-2 d-flex justify-content-between align-items-center text-nowrap product-line__data-viwe">
                                                 <div class="d-flex">
-                            <span class="mr-0 mr-lg-2 views"><span><? $res = CIBlockElement::GetByID($arItem["ID"]);
-                                    if ($ar_res = $res->GetNext())
-                                        echo $ar_res['SHOW_COUNTER'];
-                                    ?></span> <i class="icon-visibility"></i></span>
-
+                                                    <span class="mr-0 mr-lg-2 views">
+                                                        <span>
+                                                            <? $res = CIBlockElement::GetByID($arItem["ID"]);
+                                                            if ($ar_res = $res->GetNext())
+                                                                echo $ar_res['SHOW_COUNTER'];
+                                                            ?>
+                                                        </span><i class="icon-visibility"></i>
+                                                    </span>
                                                     <? if ($USER->IsAuthorized()) { ?>
-                                                        <span data-ad_id="<?= $arItem['ID']; ?>"
-                                                              class="product-line__like">To favorites
-            <svg id="iconLike" class="iconLike" viewBox="0 0 612 792"><path
-                        d="M562.413,284.393c-9.68,41.044-32.121,78.438-64.831,108.07L329.588,542.345l-165.11-149.843 c-32.771-29.691-55.201-67.076-64.892-108.12c-6.965-29.484-4.103-46.14-4.092-46.249l0.147-0.994 c6.395-72.004,56.382-124.273,118.873-124.273c46.111,0,86.703,28.333,105.965,73.933l9.061,21.477l9.061-21.477 c18.958-44.901,61.694-73.922,108.896-73.922c62.481,0,112.478,52.27,119,125.208C566.517,238.242,569.379,254.908,562.413,284.393z"/></svg>
-          </span>
+                                                        <span data-ad_id="<?= $arItem['ID']; ?>" class="product-line__like">To favorites
+                                                            <svg id="iconLike" class="iconLike" viewBox="0 0 612 792">
+                                                                <path d="M562.413,284.393c-9.68,41.044-32.121,78.438-64.831,108.07L329.588,542.345l-165.11-149.843 c-32.771-29.691-55.201-67.076-64.892-108.12c-6.965-29.484-4.103-46.14-4.092-46.249l0.147-0.994 c6.395-72.004,56.382-124.273,118.873-124.273c46.111,0,86.703,28.333,105.965,73.933l9.061,21.477l9.061-21.477 c18.958-44.901,61.694-73.922,108.896-73.922c62.481,0,112.478,52.27,119,125.208C566.517,238.242,569.379,254.908,562.413,284.393z"/></svg>
+                                                        </span>
                                                     <? } else { ?>
                                                         <a data-toggle="modal" data-target="#logInModal"
                                                            class="d-flex align-items-center mr-3"
                                                         <span data-ad_id="<?= $arItem['ID']; ?>"
                                                               class="product-line__like">To favorites
-            <svg id="iconLike" class="iconLike" viewBox="0 0 612 792"><path
-                        d="M562.413,284.393c-9.68,41.044-32.121,78.438-64.831,108.07L329.588,542.345l-165.11-149.843 c-32.771-29.691-55.201-67.076-64.892-108.12c-6.965-29.484-4.103-46.14-4.092-46.249l0.147-0.994 c6.395-72.004,56.382-124.273,118.873-124.273c46.111,0,86.703,28.333,105.965,73.933l9.061,21.477l9.061-21.477 c18.958-44.901,61.694-73.922,108.896-73.922c62.481,0,112.478,52.27,119,125.208C566.517,238.242,569.379,254.908,562.413,284.393z"/></svg>
-          </span>
+                                                            <svg id="iconLike" class="iconLike" viewBox="0 0 612 792">
+                                                                <path d="M562.413,284.393c-9.68,41.044-32.121,78.438-64.831,108.07L329.588,542.345l-165.11-149.843 c-32.771-29.691-55.201-67.076-64.892-108.12c-6.965-29.484-4.103-46.14-4.092-46.249l0.147-0.994 c6.395-72.004,56.382-124.273,118.873-124.273c46.111,0,86.703,28.333,105.965,73.933l9.061,21.477l9.061-21.477 c18.958-44.901,61.694-73.922,108.896-73.922c62.481,0,112.478,52.27,119,125.208C566.517,238.242,569.379,254.908,562.413,284.393z"/></svg>
+                                                        </span>
                                                         </a>
                                                     <? } ?>
                                                 </div>
@@ -234,12 +173,9 @@ if (!empty($arResult['ITEMS'])) {
                                             </div>
                                         </div>
                                     </div>
-                                    <? if ($arItem['PROPERTIES']['LENTA_DATE']['VALUE'] && strtotime($arItem['PROPERTIES']['LENTA_DATE']['VALUE']) > time()) {
-                                        ?>
+                                    <? if ($arItem['PROPERTIES']['LENTA_DATE']['VALUE'] && strtotime($arItem['PROPERTIES']['LENTA_DATE']['VALUE']) > time()) {?>
                                         <div class="d-flex marker">
-
-                                            <?
-                                            if ($arItem['PROPERTIES']['TYPE_TAPE']['VALUE'] != null) {
+                                            <? if ($arItem['PROPERTIES']['TYPE_TAPE']['VALUE'] != null) {
 
                                                 $entity_data_class = GetEntityDataClass(6);
                                                 $rsData = $entity_data_class::getList(array(
@@ -254,10 +190,7 @@ if (!empty($arResult['ITEMS'])) {
                                                     </div>
                                                     <div class="text"
                                                          style="background-color: <?= $arTypesRise['UF_COLOR'] ?>;"><?= $arTypesRise['UF_NAME_RU'] ?></div>
-                                                <? }
-
-                                                ?>
-
+                                                <? } ?>
                                             <? } ?>
                                         </div>
                                     <? } ?>
@@ -341,13 +274,13 @@ if (!empty($arResult['ITEMS'])) {
                                             <p class="mb-2 mb-lg-3 location">
                                                 <span class="addres"><?=$arItem['PROPERTIES']['MAP_LAYOUT']['VALUE'];?> <?=(!empty($arItem['PROPERTIES']['MAP_LAYOUT']['VALUE']))? ',' : ''?> <?=$arItem['PROPERTIES']['MAP_LAYOUT_BIG']['VALUE'];?></span>
                                                 <svg class="icon-local" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 513.597 513.597" xml:space="preserve">
-              <g>
-                  <path d="M263.278,0.107C158.977-3.408,73.323,80.095,73.323,183.602c0,117.469,112.73,202.72,175.915,325.322
-                c3.208,6.225,12.169,6.233,15.388,0.009c57.16-110.317,154.854-184.291,172.959-290.569
-                C456.331,108.387,374.776,3.866,263.278,0.107z M256.923,279.773c-53.113,0-96.171-43.059-96.171-96.171
-                s43.059-96.171,96.171-96.171c53.113,0,96.172,43.059,96.172,96.171S310.036,279.773,256.923,279.773z"></path>
-              </g>
-            </svg>
+                                                  <g>
+                                                      <path d="M263.278,0.107C158.977-3.408,73.323,80.095,73.323,183.602c0,117.469,112.73,202.72,175.915,325.322
+                                                    c3.208,6.225,12.169,6.233,15.388,0.009c57.16-110.317,154.854-184.291,172.959-290.569
+                                                    C456.331,108.387,374.776,3.866,263.278,0.107z M256.923,279.773c-53.113,0-96.171-43.059-96.171-96.171
+                                                    s43.059-96.171,96.171-96.171c53.113,0,96.172,43.059,96.172,96.171S310.036,279.773,256.923,279.773z"></path>
+                                                  </g>
+                                                </svg>
                                             </p>
                                             <a href="<?= $arItem['DETAIL_PAGE_URL'] ?>"
                                                class="mb-2 mb-lg-4 category"><?= mb_strimwidth($arItem['PREVIEW_TEXT'], 0, 300, " ..."); ?></a>
@@ -355,22 +288,26 @@ if (!empty($arResult['ITEMS'])) {
 
                                         <div class="border-top py-2 d-flex justify-content-between align-items-center text-nowrap product-line__data-viwe">
                                             <div class="d-flex">
-                            <span class="mr-0 mr-lg-2 views"><span><? $res = CIBlockElement::GetByID($arItem["ID"]);
-                                    if ($ar_res = $res->GetNext())
-                                        echo $ar_res['SHOW_COUNTER'];
-                                    ?></span> <i class="icon-visibility"></i></span>
+                                                 <span class="mr-0 mr-lg-2 views">
+                                                     <span>
+                                                        <? $res = CIBlockElement::GetByID($arItem["ID"]);
+                                                        if ($ar_res = $res->GetNext())
+                                                            echo $ar_res['SHOW_COUNTER'];
+                                                        ?>
+                                                     </span> <i class="icon-visibility"></i>
+                                                 </span>
                                                 <? if ($USER->IsAuthorized()) { ?>
                                                     <span data-ad_id="<?= $arItem['ID']; ?>" class="product-line__like">To favorites
-            <svg id="iconLike" class="iconLike" viewBox="0 0 612 792"><path
-                        d="M562.413,284.393c-9.68,41.044-32.121,78.438-64.831,108.07L329.588,542.345l-165.11-149.843 c-32.771-29.691-55.201-67.076-64.892-108.12c-6.965-29.484-4.103-46.14-4.092-46.249l0.147-0.994 c6.395-72.004,56.382-124.273,118.873-124.273c46.111,0,86.703,28.333,105.965,73.933l9.061,21.477l9.061-21.477 c18.958-44.901,61.694-73.922,108.896-73.922c62.481,0,112.478,52.27,119,125.208C566.517,238.242,569.379,254.908,562.413,284.393z"/></svg>
-          </span>
+                                                        <svg id="iconLike" class="iconLike" viewBox="0 0 612 792"><path
+                                                                    d="M562.413,284.393c-9.68,41.044-32.121,78.438-64.831,108.07L329.588,542.345l-165.11-149.843 c-32.771-29.691-55.201-67.076-64.892-108.12c-6.965-29.484-4.103-46.14-4.092-46.249l0.147-0.994 c6.395-72.004,56.382-124.273,118.873-124.273c46.111,0,86.703,28.333,105.965,73.933l9.061,21.477l9.061-21.477 c18.958-44.901,61.694-73.922,108.896-73.922c62.481,0,112.478,52.27,119,125.208C566.517,238.242,569.379,254.908,562.413,284.393z"/></svg>
+                                                      </span>
                                                 <? } else { ?>
                                                     <a data-toggle="modal" data-target="#logInModal"
                                                        class="d-flex align-items-center mr-3">
                                                 <span data-ad_id="<?= $arItem['ID']; ?>" class="product-line__like">To favorites
-            <svg id="iconLike" class="iconLike" viewBox="0 0 612 792"><path
-                        d="M562.413,284.393c-9.68,41.044-32.121,78.438-64.831,108.07L329.588,542.345l-165.11-149.843 c-32.771-29.691-55.201-67.076-64.892-108.12c-6.965-29.484-4.103-46.14-4.092-46.249l0.147-0.994 c6.395-72.004,56.382-124.273,118.873-124.273c46.111,0,86.703,28.333,105.965,73.933l9.061,21.477l9.061-21.477 c18.958-44.901,61.694-73.922,108.896-73.922c62.481,0,112.478,52.27,119,125.208C566.517,238.242,569.379,254.908,562.413,284.393z"/></svg>
-          </span>
+                                                    <svg id="iconLike" class="iconLike" viewBox="0 0 612 792"><path
+                                                                d="M562.413,284.393c-9.68,41.044-32.121,78.438-64.831,108.07L329.588,542.345l-165.11-149.843 c-32.771-29.691-55.201-67.076-64.892-108.12c-6.965-29.484-4.103-46.14-4.092-46.249l0.147-0.994 c6.395-72.004,56.382-124.273,118.873-124.273c46.111,0,86.703,28.333,105.965,73.933l9.061,21.477l9.061-21.477 c18.958-44.901,61.694-73.922,108.896-73.922c62.481,0,112.478,52.27,119,125.208C566.517,238.242,569.379,254.908,562.413,284.393z"/></svg>
+                                                  </span>
                                                     </a>
                                                 <? } ?>
                                             </div>
@@ -384,8 +321,7 @@ if (!empty($arResult['ITEMS'])) {
                                 <? if ($arItem['PROPERTIES']['LENTA_DATE']['VALUE'] && strtotime($arItem['PROPERTIES']['LENTA_DATE']['VALUE']) > time()) { ?>
                                     <div class="d-flex marker">
 
-                                    <?
-                                    if ($arItem['PROPERTIES']['TYPE_TAPE']['VALUE'] != null) {
+                                    <? if ($arItem['PROPERTIES']['TYPE_TAPE']['VALUE'] != null) {
 
                                         $entity_data_class = GetEntityDataClass(6);
                                         $rsData = $entity_data_class::getList(array(
@@ -400,9 +336,7 @@ if (!empty($arResult['ITEMS'])) {
                                             </div>
                                             <div class="text"
                                                  style="background-color: <?= $arTypesRise['UF_COLOR'] ?>;"><?= $arTypesRise['UF_NAME_RU'] ?></div>
-                                        <? }
-
-                                        ?>
+                                        <? } ?>
                                         </div>
                                     <? } ?>
                                 <? } ?>
@@ -412,15 +346,11 @@ if (!empty($arResult['ITEMS'])) {
                     <? }
                     } ?>
                 </div>
-
-
                 <div class="cord_pagination">
                     <?= $arResult['NAV_STRING'] ?>
                 </div>
             </div>
-
         </div>
-
     </div>
-    </main>
-<? require_once $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . '/map3.php'; ?>
+</main>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . '/map3.php'; ?>

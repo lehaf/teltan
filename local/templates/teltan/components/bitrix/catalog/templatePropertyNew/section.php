@@ -125,6 +125,7 @@ if ($_GET['view'] == 'maplist') {
         "bitrix:catalog.section",
         $adsMapTemplate,
         array(
+            "SECTION_NAME" => $sectionName,
             "ACTION_VARIABLE" => "action",    // Название переменной, в которой передается действие
             "ADD_PROPERTIES_TO_BASKET" => "Y",    // Добавлять в корзину свойства товаров и предложений
             "ADD_SECTIONS_CHAIN" => "N",    // Включать раздел в цепочку навигации
@@ -187,7 +188,7 @@ if ($_GET['view'] == 'maplist') {
             "RCM_PROD_ID" => $_REQUEST["PRODUCT_ID"],    // Параметр ID продукта (для товарных рекомендаций)
             "RCM_TYPE" => "personal",    // Тип рекомендации
             "SECTION_CODE" => $_REQUEST["SECTION_CODE"],    // Код раздела
-            "SECTION_ID" => $_REQUEST["SECTION_ID"],    // ID раздела
+            "SECTION_ID" => $arResult["VARIABLES"]["SECTION_ID"],    // ID раздела
             "SECTION_ID_VARIABLE" => "SECTION_ID",    // Название переменной, в которой передается код группы
             "SECTION_URL" => "",    // URL, ведущий на страницу с содержимым раздела
             "SECTION_USER_FIELDS" => array(    // Свойства раздела
