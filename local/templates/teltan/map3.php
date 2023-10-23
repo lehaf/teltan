@@ -41,19 +41,21 @@
                 }
             });
 
-            $('.preloader').addClass('preloader-visible');
-            $.ajax({
-                type: "POST",
-                dataType: "html",
-                data: dataInputs,
-                headers: {"X-Requested-With": "XMLHttpRequest"},
-                url: location.pathname + '?' + url,
-                success: function (data) {
-                    $('#rendorMapItemCard').replaceWith($(data).find('#rendorMapItemCard'));
-                    history.pushState({}, "", location.origin + location.pathname + '?' + url);
-                    $('.preloader').removeClass('preloader-visible');
-                }
-            });
+            if (Object.keys(dataInputs).length > 0) {
+                $('.preloader').addClass('preloader-visible');
+                $.ajax({
+                    type: "POST",
+                    dataType: "html",
+                    data: dataInputs,
+                    headers: {"X-Requested-With": "XMLHttpRequest"},
+                    url: location.pathname + '?' + url,
+                    success: function (data) {
+                        $('#rendorMapItemCard').replaceWith($(data).find('#rendorMapItemCard'));
+                        history.pushState({}, "", location.origin + location.pathname + '?' + url);
+                        $('.preloader').removeClass('preloader-visible');
+                    }
+                });
+            }
         }
 
         mapboxgl.accessToken = 'pk.eyJ1Ijoicm9vdHRlc3QxMjMiLCJhIjoiY2w0ZHppeGJzMDczZDNndGc2eWR0M2R5aSJ9.wz6xj8AGc7s6Ivd09tOZrA';
@@ -227,6 +229,10 @@
                 map.on('click', '1-level-area8', (e) => {
                     map.flyTo({center: {lat: 30.792293462499828, lng: 34.88696429992865}, zoom: 8});
                     let features = map.queryRenderedFeatures(e.point);
+                    let disctricts = $('.dropdown-building-area2').find('input');
+                    disctricts.each(function () {
+                        $(this).attr("checked", false);
+                    });
                     let elems = $('.dropdown-building-area1').find('input');
                     elems.each(function (index) {
                         let data = $(this).data()
@@ -296,6 +302,10 @@
                 map.on('click', '1-level-area7', (e) => {
                     map.flyTo({center: {lng: 34.68506737325703, lat: 31.616011520099917}, zoom: 8});
                     let features = map.queryRenderedFeatures(e.point);
+                    let disctricts = $('.dropdown-building-area2').find('input');
+                    disctricts.each(function () {
+                        $(this).attr("checked", false);
+                    });
                     let elems = $('.dropdown-building-area1').find('input');
                     elems.each(function (index) {
                         let data = $(this).data()
@@ -333,7 +343,6 @@
 
                 map.on('mousemove', '1-level-area6', (e) => {
                     let features = map.queryRenderedFeatures(e.point);
-
                     if (features[0].layer.id === "1-level-area6") {
                         if (features.length > 0) {
                             if (hoveredStateId6 !== null) {
@@ -365,6 +374,10 @@
                 map.on('click', '1-level-area6', (e) => {
                     map.flyTo({center: {lng: 34.98752305903815, lat: 31.6928666963656}, zoom: 8});
                     let features = map.queryRenderedFeatures(e.point);
+                    let disctricts = $('.dropdown-building-area2').find('input');
+                    disctricts.each(function () {
+                        $(this).attr("checked", false);
+                    });
                     let elems = $('.dropdown-building-area1').find('input');
                     elems.each(function (index) {
                         let data = $(this).data()
@@ -433,6 +446,10 @@
                 map.on('click', '1-level-area5', (e) => {
                     map.flyTo({center: {lng: 34.903915804879404, lat: 32.05794313480354}, zoom: 8});
                     let features = map.queryRenderedFeatures(e.point);
+                    let disctricts = $('.dropdown-building-area2').find('input');
+                    disctricts.each(function () {
+                        $(this).attr("checked", false);
+                    });
                     let elems = $('.dropdown-building-area1').find('input');
                     elems.each(function (index) {
                         let data = $(this).data()
@@ -469,7 +486,6 @@
                 });
                 map.on('mousemove', '1-level-area3', (e) => {
                     let features = map.queryRenderedFeatures(e.point);
-
                     if (features[0].layer.id === "1-level-area3") {
                         if (features.length > 0) {
                             if (hoveredStateId3 !== null) {
@@ -501,6 +517,10 @@
                 map.on('click', '1-level-area3', (e) => {
                     map.flyTo({center: {lng: 35.346581583016246, lat: 31.954594298007592}, zoom: 8});
                     let features = map.queryRenderedFeatures(e.point);
+                    let disctricts = $('.dropdown-building-area2').find('input');
+                    disctricts.each(function () {
+                        $(this).attr("checked", false);
+                    });
                     let elems = $('.dropdown-building-area1').find('input');
                     elems.each(function (index) {
                         let data = $(this).data()
@@ -569,6 +589,10 @@
                 map.on('click', '1-level-area2', (e) => {
                     map.flyTo({center: {lng: 35.24984065244277, lat: 32.59322837411284}, zoom: 8});
                     let features = map.queryRenderedFeatures(e.point);
+                    let disctricts = $('.dropdown-building-area2').find('input');
+                    disctricts.each(function () {
+                        $(this).attr("checked", false);
+                    });
                     let elems = $('.dropdown-building-area1').find('input');
                     elems.each(function (index) {
                         let data = $(this).data()
@@ -625,20 +649,19 @@
                 });
 
                 map.on('mouseleave', '1-level-area1', () => {
-
-                    map.setFeatureState(
-                        {source: '1_source-1', sourceLayer: '1', id: hoveredStateId1},
-                        {hover: false}
-                    );
-
+                    map.setFeatureState({source: '1_source-1', sourceLayer: '1', id: hoveredStateId1}, {hover: false});
                     hoveredStateId1 = null;
                 });
 
                 map.on('click', '1-level-area1', (e) => {
                     map.flyTo({center: {lng: 35.4259031056865, lat: 32.90573889477902}, zoom: 8});
                     let features = map.queryRenderedFeatures(e.point);
-                    let elems = $('.dropdown-building-area1').find('input');
-                    elems.each(function (index) {
+                    let disctricts = $('.dropdown-building-area2').find('input');
+                    disctricts.each(function () {
+                        $(this).attr("checked", false);
+                    });
+                    let regions = $('.dropdown-building-area1').find('input');
+                    regions.each(function () {
                         let data = $(this).data();
                         if (data.valued === features[0]['properties']['MUN_HE']) {
                             $(this).attr("checked", true);
@@ -703,10 +726,39 @@
                 });
 
                 map.on('click', 'earthquakess-layer', (e) => {
+                    const district = e.features[0];
+                    let districts = $('.dropdown-building-area2').find('input');
+                    let regions = $('.dropdown-building-area1').find('input');
+                    regions.each(function () {
+                        $(this).attr("checked", false);
+                    });
+                    let needAjax = false;
+                    districts.each(function () {
+                        let data = $(this).data();
+                        if (data.valued === district['properties']['MUN_HEB']) {
+                            $(this).attr("checked", true);
+                            needAjax = true;
+                        } else {
+                            $(this).attr("checked", false);
+                        }
+                    });
+
+                    if (needAjax === true) {
+                        filterItems();
+                    } else {
+                        document.querySelector('div.product-card').parentNode.parentNode.innerHTML = `
+                            <div style="padding-left: 35px;">В данной области нет объявлений!</div>
+                        `;
+                    }
+
                     map.setFeatureState(
                         {source: '2_source', sourceLayer: 'abu_gosh', id: hoveredStateId},
                         {select: true}
                     );
+
+                    // let features = map.queryRenderedFeatures({layers: ['unclustered-point']});
+                    // console.log(district.geometry.coordinates);
+                    // console.log(features);
                     //   map.flyTo({center: e.features[0].geometry.coordinates[0][0], zoom: 12});
                 })
 
@@ -787,15 +839,9 @@
 
                 map.on('mouseenter', 'unclustered-point', (e) => {
                     const coordinates = e.features[0].geometry.coordinates.slice();
-                    let paramItem = e.features[0].properties
-
-                    // Ensure that if the map is zoomed out such that
-                    // multiple copies of the feature are visible, the
-                    // popup appears over the copy being pointed to.
                     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                     }
-
                     clearMapItemPLace();
                 });
 
@@ -847,8 +893,7 @@
                     popup.setLngLat(coordinates).setHTML(description).addTo(map);
                     $('.cross').click(function () {
                         popup.remove();
-                    })
-
+                    });
                 });
 
                 map.on('mouseenter', 'clusters', () => {
@@ -865,18 +910,15 @@
 
                 map.on('mouseleave', 'unclustered-point', () => {
                     map.getCanvas().style.cursor = '';
-                    // popup.remove();
                     clearMapItemPLace();
                 });
 
                 map.on('mouseenter', 'unclustered-vipPoint', (e) => {
                     map.getCanvas().style.cursor = 'pointer';
-                    //   clearMapItemPLace();
                 });
 
                 map.on('mouseleave', 'unclustered-vipPoint', () => {
                     map.getCanvas().style.cursor = '';
-                    // popup.remove();
                     clearMapItemPLace();
                 });
 
@@ -931,10 +973,9 @@
 
                     popup.setLngLat(coordinates).setHTML(description).addTo(map);
                     $('.cross').click(() => popup.remove());
-
                 });
-
             });
+
             const geocoder = new MapboxGeocoder({
                 mapboxgl: mapboxgl,
                 language: 'he-HE',
