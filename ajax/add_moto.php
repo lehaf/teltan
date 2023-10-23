@@ -16,17 +16,7 @@ $arPaket = $entity::getList(array(
 
 $arUser = CUser::GetByID($USER->GetID())->Fetch();
 
-$b = false;
-if (!empty($arPaket)) {
-    foreach($arPaket as $arItem){
-        $a = $arItem['UF_COUNT_REMAIN'] - $arItem['UF_COUNT_LESS'] ;
-        if($a > 0 || date("d.m.Y H:i:s") < date("d.m.Y H:i:s", strtotime('+ '. $arItem['UF_DAYS_REMAIN']. ' days'))){
-            $b = true;
-        }
-    }
-}
-
-if($arUser['UF_AUTO'] > $arUser['UF_COUNT_AUTO'] || $b || $_REQUEST['EDIT'] == 'Y') {
+if($arUser['UF_AUTO'] > $arUser['UF_COUNT_AUTO'] || $_REQUEST['EDIT'] == 'Y') {
     $el = new CIBlockElement;
     $checkedVaue = [];
     $count = 0;

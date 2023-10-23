@@ -18,16 +18,7 @@ foreach ($_POST['img'] as $key => $value) {
         $_POST['img'][$key][0] = strstr($value[0], '?', true);
 }
 
-
-$b = false;
-foreach ($arPaket as $arItem) {
-    $a = $arItem['UF_COUNT_REMAIN'] - $arItem['UF_COUNT_LESS'];
-    if ($a > 0 || date("d.m.Y H:i:s") < date("d.m.Y H:i:s", strtotime('+ ' . $arItem['UF_DAYS_REMAIN'] . ' days'))) {
-        $b = true;
-    }
-}
-
-if ($arUser['UF_ANOUNC'] > $arUser['UF_COUNT_FLEA'] || $b || $_REQUEST['EDIT'] == 'Y') {
+if ($arUser['UF_ANOUNC'] > $arUser['UF_COUNT_FLEA'] || $_REQUEST['EDIT'] == 'Y') {
 
     CModule::IncludeModule('iblock');
     $el = new CIBlockElement;

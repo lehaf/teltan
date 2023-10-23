@@ -14,15 +14,7 @@ $arPaket = $entity::getList(array(
 
 $arUser = CUser::GetByID($USER->GetID())->Fetch();
 
-$b = false;
-foreach ($arPaket as $arItem) {
-    $a = $arItem['UF_COUNT_REMAIN'] - $arItem['UF_COUNT_LESS'];
-    if ($a > 0 || date("d.m.Y H:i:s") < date("d.m.Y H:i:s", strtotime('+ ' . $arItem['UF_DAYS_REMAIN'] . ' days'))) {
-        $b = true;
-    }
-}
-
-if ($arUser['UF_COUNT_RENT'] > $arUser['UF_COUNT_APART'] || $b || $_REQUEST['EDIT'] == 'Y') {
+if ($arUser['UF_COUNT_RENT'] > $arUser['UF_COUNT_APART'] || $_REQUEST['EDIT'] == 'Y') {
     CModule::IncludeModule('iblock');
     $el = new CIBlockElement;
     $checkedVaue = [];
@@ -127,7 +119,7 @@ if ($arUser['UF_COUNT_RENT'] > $arUser['UF_COUNT_APART'] || $b || $_REQUEST['EDI
         }
     }
     $PROP['ID_USER'] = $USER->GetID();
-    $PROP['PROP_Completion'] = date("d.m.Y H:i:s", strtotime($_POST['PROP_Completion'] ));
+    if (!empty($_POST['PROP_Completion'])) $PROP['PROP_Completion'] = date("d.m.Y H:i:s", strtotime($_POST['PROP_Completion'] ));
     $arParams = array("replace_space" => "-", "replace_other" => "-");
     $translit = Cutil::translit($NAME, "ru", $arParams) . $USER->GetID(). randString(10);;
     if ($PROP[109] > 1){

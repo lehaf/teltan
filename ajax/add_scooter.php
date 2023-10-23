@@ -16,91 +16,83 @@ $arPaket = $entity::getList(array(
 
 $arUser = CUser::GetByID($USER->GetID())->Fetch();
 
-$b = false;
-foreach($arPaket as $arItem){
-    $a = $arItem['UF_COUNT_REMAIN'] - $arItem['UF_COUNT_LESS'] ;
-    if($a > 0 || date("d.m.Y H:i:s") < date("d.m.Y H:i:s", strtotime('+ '. $arItem['UF_DAYS_REMAIN']. ' days'))){
-        $b = true;
-    }
-}
+if ($arUser['UF_AUTO'] > $arUser['UF_COUNT_AUTO'] || $_REQUEST['EDIT'] == 'Y') {
+    $el = new CIBlockElement;
+    $checkedVaue = [];
+    $count = 0;
+    $unCheckedValue = [];
+    $stringValue = [];
+    $PROP = [];
+    foreach($_REQUEST as $arItem){
 
-if ($arUser['UF_AUTO'] > $arUser['UF_COUNT_AUTO'] || $b || $_REQUEST['EDIT'] == 'Y') {
-$el = new CIBlockElement;
-$checkedVaue = [];
-$count = 0;
-$unCheckedValue = [];
-$stringValue = [];
-$PROP = [];
-foreach($_REQUEST as $arItem){
-
-    if(is_string($arItem) == false){
-        if($arItem['val'] == 'true') {
-            $checkedVaue[] = $arItem;
+        if(is_string($arItem) == false){
+            if($arItem['val'] == 'true') {
+                $checkedVaue[] = $arItem;
+            }else{
+                $stringValue[] = $arItem;
+            }
         }else{
             $stringValue[] = $arItem;
         }
-    }else{
-        $stringValue[] = $arItem;
+        $count++;
     }
-    $count++;
-}
 
-foreach($stringValue as $arItem){
-    if(is_string($arItem) == false && $arItem['val'] != 'on'){
-        $PROP[$arItem["data"]["id_prop"]] = $arItem["val"];
+    foreach($stringValue as $arItem){
+        if(is_string($arItem) == false && $arItem['val'] != 'on'){
+            $PROP[$arItem["data"]["id_prop"]] = $arItem["val"];
+        }
     }
-}
-foreach($checkedVaue as $arItem){
-    $PROP[$arItem["data"]["id_prop"]] = $arItem["data"]["idSelf"];
-}
-
-//var_dump($stringValue);
-$FILENAME = $USER->GetID();
-
-$data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $_POST["img-base64"]));
-
-file_put_contents($_SERVER["DOCUMENT_ROOT"].'/imgbs64.png', $data);
-
-$arFile = CFile::MakeFileArray($_SERVER["DOCUMENT_ROOT"]."/imgbs64.png");
-    if($_REQUEST['anytime']['val'] == 'true'){
-        $PROP['UF_CALL_ANYTIME'] = 1;
-    }else{
-        $PROP['UF_CALL_TO'] = $_REQUEST['$data2']['callTo'][1] . ':00';
-        $PROP['UF_CALL_FROM'] = $_REQUEST['$data2']['callFrom'][1] . ':00';
+    foreach($checkedVaue as $arItem){
+        $PROP[$arItem["data"]["id_prop"]] = $arItem["data"]["idSelf"];
     }
-    if($_REQUEST['PriceExchangeIsPossible']['val'] == 'true'){
-        $PROP['UF_WITH_EXCHANGE'] = 1;
-    }else{
-        $PROP['UF_WITH_EXCHANGE'] = '';
+
+    $FILENAME = $USER->GetID();
+
+    $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $_POST["img-base64"]));
+
+    file_put_contents($_SERVER["DOCUMENT_ROOT"].'/imgbs64.png', $data);
+
+    $arFile = CFile::MakeFileArray($_SERVER["DOCUMENT_ROOT"]."/imgbs64.png");
+        if($_REQUEST['anytime']['val'] == 'true'){
+            $PROP['UF_CALL_ANYTIME'] = 1;
+        }else{
+            $PROP['UF_CALL_TO'] = $_REQUEST['$data2']['callTo'][1] . ':00';
+            $PROP['UF_CALL_FROM'] = $_REQUEST['$data2']['callFrom'][1] . ':00';
+        }
+        if($_REQUEST['PriceExchangeIsPossible']['val'] == 'true'){
+            $PROP['UF_WITH_EXCHANGE'] = 1;
+        }else{
+            $PROP['UF_WITH_EXCHANGE'] = '';
+        }
+        if($_REQUEST['PriceExchangeIsPossible']['val'] == 'true'){
+            $PROP['UF_WITH_VAT'] = 1;
+        }else{
+            $PROP['UF_WITH_VAT'] = '';
+        }
+    $PROP['PRICE'] = $_POST['userItemPrice']['val'];
+    $PROP['TIME_RAISE'] = date("d.m.Y H:i:s");
+    $PROP['PROP_MODIFICATION'] = $_POST['Modification']['val'];
+    $PROP['UF_PHONE_1'] = $_POST['phone1']['val'];
+    $PROP['UF_PHONE_2'] = $_POST['phone2']['val'];
+    $PROP['UF_PHONE_3'] = $_POST['phone3']['val'];
+    $PROP['UF_NAME'] = $_POST['Legalname']['val'];
+    $PROP['LOCATION'] = $_POST['LOCATION'];
+    $SECTION_ID = $PROP['PROP_BRAND'];
+    if (isset($PROP['PROP_MODEL'])){
+        $SECTION_ID = $PROP['PROP_MODEL'];
     }
-    if($_REQUEST['PriceExchangeIsPossible']['val'] == 'true'){
-        $PROP['UF_WITH_VAT'] = 1;
-    }else{
-        $PROP['UF_WITH_VAT'] = '';
-    }
-$PROP['PRICE'] = $_POST['userItemPrice']['val'];
-$PROP['TIME_RAISE'] = date("d.m.Y H:i:s");
-$PROP['PROP_MODIFICATION'] = $_POST['Modification']['val'];
-$PROP['UF_PHONE_1'] = $_POST['phone1']['val'];
-$PROP['UF_PHONE_2'] = $_POST['phone2']['val'];
-$PROP['UF_PHONE_3'] = $_POST['phone3']['val'];
-$PROP['UF_NAME'] = $_POST['Legalname']['val'];
-$PROP['LOCATION'] = $_POST['LOCATION'];
-$SECTION_ID = $PROP['PROP_BRAND'];
-if (isset($PROP['PROP_MODEL'])){
-    $SECTION_ID = $PROP['PROP_MODEL'];
-}
-    $res = CIBlockSection::GetByID($PROP['PROP_BRAND']);
-    if($ar_res = $res->GetNext())
-        $PROP['PROP_BRAND'] = $ar_res['NAME'];
-    $res = CIBlockSection::GetByID($PROP['PROP_MODEL']);
-    if($ar_res = $res->GetNext())
-        $PROP['PROP_MODEL'] = $ar_res['NAME'];
-$NAME = $PROP['PROP_BRAND'] . ' ' . $PROP['PROP_MODEL'] . ' ' .   $_POST['Modification']['val'] .' '. $PROP['PROP_YAERH'];
-//$PROP[146] = $_POST['phone3']['val'];
-$PROP['ID_USER'] = $USER->GetID();
-$arParams = array("replace_space"=>"-","replace_other"=>"-");
-$translit = Cutil::translit($NAME,"ru",$arParams) . $USER->GetID(). randString(10);;
+        $res = CIBlockSection::GetByID($PROP['PROP_BRAND']);
+        if($ar_res = $res->GetNext())
+            $PROP['PROP_BRAND'] = $ar_res['NAME'];
+        $res = CIBlockSection::GetByID($PROP['PROP_MODEL']);
+        if($ar_res = $res->GetNext())
+            $PROP['PROP_MODEL'] = $ar_res['NAME'];
+    $NAME = $PROP['PROP_BRAND'] . ' ' . $PROP['PROP_MODEL'] . ' ' .   $_POST['Modification']['val'] .' '. $PROP['PROP_YAERH'];
+    //$PROP[146] = $_POST['phone3']['val'];
+    $PROP['ID_USER'] = $USER->GetID();
+    $arParams = array("replace_space"=>"-","replace_other"=>"-");
+    $translit = Cutil::translit($NAME,"ru",$arParams) . $USER->GetID(). randString(10);
+
     foreach ($_POST['$data2'] as $key => $data){
         if ($data[0] != '') {
             $PROP[$data[0]] = $data[1];
