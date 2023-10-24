@@ -4,11 +4,19 @@ use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\Page\Asset;
 
 Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . "/css/add-page.css");
-
 Loc::loadMessages(__FILE__);
+
+$deletingChairs = [
+    "<br />",
+    "<br/>",
+    "<br>",
+    "&lt;br /&gt;",
+    "&lt;br/&gt;",
+    "&lt;br&gt;",
+];
+
 $APPLICATION->SetTitle("Добавить объявление");
 global $arSetting;
-
 // Если нет номера телефона, то редиректим на форму с его добавлением
 $userPhone = getUserInfoByID()['PERSONAL_PHONE'];
 if (!$userPhone) LocalRedirect($GLOBALS['arSetting'][SITE_ID]['href'] . 'personal/edit/');
@@ -379,7 +387,7 @@ $rentType = $entity_data_class::getList(array(
                                               placeholder="תיאור"
                                               name="discriptions"
                                               id="text-discriptions"
-                                              rows="4"><?=$arFields['PREVIEW_TEXT']?></textarea>
+                                              rows="4"><?=str_replace($deletingChairs, "",$arFields['PREVIEW_TEXT'])?></textarea>
                                 </div>
                             </div>
                         </div>
