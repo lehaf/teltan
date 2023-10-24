@@ -12,6 +12,7 @@ const NEW_BUILDINGS_PROP_SECTIONS_ID = [31, 30];
 
 // Highload-блоки
 const LENTA_TYPES_HL_ID = 6;
+const PERSONAL_VIP_TYPES_HL_ID = 22;
 const MAP_REGIONS_HL_ID = 34;
 const BOUGHT_RATE_HL_ID = 28;
 const PERSONAL_RISE_HL_ID = 21;

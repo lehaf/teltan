@@ -17,7 +17,6 @@
         function filterItems() {
             const itemsAjaxContainer = document.querySelector('div#rendorMapItemCard');
             const preloader = createPreloader();
-            console.log(preloader);
 
             $(this).trigger('click')
             let url = 'view=maplist&set_filter=y';
@@ -76,16 +75,21 @@
             }
         }
 
-        mapboxgl.accessToken = 'pk.eyJ1Ijoicm9vdHRlc3QxMjMiLCJhIjoiY2w0ZHppeGJzMDczZDNndGc2eWR0M2R5aSJ9.wz6xj8AGc7s6Ivd09tOZrA';
-
-        let mapCoordinate = [34.886226654052734, 31.95340028021316] //default coordinate map
-
         if ($('#map').length > 0) {
+
+            mapboxgl.accessToken = 'pk.eyJ1Ijoicm9vdHRlc3QxMjMiLCJhIjoiY2w0ZHppeGJzMDczZDNndGc2eWR0M2R5aSJ9.wz6xj8AGc7s6Ivd09tOZrA';
+            const mapCoordinate = [34.886226654052734, 31.95340028021316] //default coordinate map
+
             const map = new mapboxgl.Map({
                 container: 'map',
                 style: 'mapbox://styles/roottest123/cl6erwd1b000w14papxnk52l0',
                 center: mapCoordinate,
                 zoom: 6
+            });
+
+            const popup = new mapboxgl.Popup({
+                closeButton: false, // отображать ли кнопку закрытия попапа
+                closeOnClick: true // Закрытие при клике на карту
             });
 
             let hoveredStateId = null;
@@ -856,7 +860,7 @@
 
 
                 map.on('mouseenter', 'unclustered-point', (e) => {
-                    const coordinates = e.features[0].geometry.coordinates.slice();
+                    const coordinates = e.features[0].geometry.coordinates;
                     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                     }
@@ -864,13 +868,13 @@
                 });
 
                 map.on('click', 'unclustered-vipPoint', (e) => {
-                    const coordinates = e.features[0].geometry.coordinates.slice();
+                    const coordinates = e.features[0].geometry.coordinates;
                     let description = '';
                     let i = 0;
-                    let adsNames = [];
+                    let adsUniqHref = [];
                     e.features.forEach(function (index) {
-                        if (!adsNames.includes(index.properties.addres)) {
-                            adsNames.push(index.properties.addres);
+                        if (!adsUniqHref.includes(index.properties.href)) {
+                            adsUniqHref.push(index.properties.href);
                             if (i < 1) {
                                 description = description + `
                                     <div class="cross" style="display: inline-block; margin-left: 10px; padding-right: 20px; cursor: pointer; width: 20px; height: 20px; background-color: #ccc; border-radius: 50%; position: relative;">
@@ -940,20 +944,16 @@
                     clearMapItemPLace();
                 });
 
-                const popup = new mapboxgl.Popup({
-                    closeButton: false, // отображать ли кнопку закрытия попапа
-                    closeOnClick: true // Закрытие при клике на карту
-                });
-
                 map.on('click', 'unclustered-point', (e) => {
-                    const coordinates = e.features[0].geometry.coordinates.slice();
+                    const coordinates = e.features[0].geometry.coordinates;
+                    console.log(e.features);
                     let description = '';
                     let i = 0;
-                    let adsNames = [];
+                    let adsUniqHref = [];
                     e.features.forEach(function (index) {
-                        if (!adsNames.includes(index.properties.addres)) {
-                            adsNames.push(index.properties.addres);
-                            if (i < 1) {
+                        if (!adsUniqHref.includes(index.properties.href)) {
+                            adsUniqHref.push(index.properties.href);
+                            if (i === 0) {
                                 description = description + `
                                     <div class="cross" style="display: inline-block; margin-left: 10px; padding-right: 20px; cursor: pointer; width: 20px; height: 20px; background-color: #ccc; border-radius: 50%; position: relative;">
                                         <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 2px; background-color: #fff; transform: rotate(45deg);"></span>

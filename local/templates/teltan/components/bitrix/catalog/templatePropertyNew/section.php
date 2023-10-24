@@ -11,7 +11,8 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/vendor/autoload.php");
 $detect = new Mobile_Detect;
 $dir = $APPLICATION->GetCurDir();
 $dirName = str_replace('/', '', $dir); // PHP код
-$curSection = getSectionData($arResult["VARIABLES"]["SECTION_ID"], $arParams["IBLOCK_ID"]);
+if (!empty($arResult["VARIABLES"]["SECTION_ID"]))
+    $curSection = getSectionData($arResult["VARIABLES"]["SECTION_ID"], $arParams["IBLOCK_ID"]);
 
 switch (LANGUAGE_ID) {
     case 'he':
