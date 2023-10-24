@@ -335,23 +335,18 @@ else
         </div>
     </div>
 </div>
-
-
-     <? if(CSite::InDir('/property/')) {?>
-        <main class="mb-5 wrapper flex-grow-1">
-     <? }else {?>
-        <main class="mb-5">
-         <?
-         if (!CSite::InDir('/index.php')) {
-             $APPLICATION->IncludeComponent(
-                 "bitrix:breadcrumb",
-                 "template_breadcrumbs",
-                 array(
-                     "PATH" => "",
-                     "SITE_ID" => SITE_ID,
-                     "START_FROM" => "0"
-                 )
-             );
-         }
+ <? if(!CSite::InDir('/property/')) {?>
+    <main class="mb-5">
+     <? if (!CSite::InDir('/index.php')) {
+         $APPLICATION->IncludeComponent(
+             "bitrix:breadcrumb",
+             "template_breadcrumbs",
+             array(
+                 "PATH" => "",
+                 "SITE_ID" => SITE_ID,
+                 "START_FROM" => "0"
+             )
+         );
      }
-    ?>
+ }
+?>

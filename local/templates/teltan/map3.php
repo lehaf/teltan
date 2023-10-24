@@ -1,7 +1,24 @@
 <script>
     $(document).ready(function () {
         // MAPS START
+        function createPreloader() {
+            let preloader = document.createElement('div');
+            preloader.classList.add('preloader');
+            let preloaderRow = document.createElement('div');
+            preloaderRow.classList.add('preloader__row');
+            let preloaderItem = document.createElement('div');
+            preloaderItem.classList.add('preloader__item');
+            preloaderRow.append(preloaderItem);
+            preloaderRow.append(preloaderItem);
+            preloader.append(preloaderRow);
+            return preloader;
+        }
+
         function filterItems() {
+            const itemsAjaxContainer = document.querySelector('div#rendorMapItemCard');
+            const preloader = createPreloader();
+            console.log(preloader);
+
             $(this).trigger('click')
             let url = 'view=maplist&set_filter=y';
             let dataInputs = {};
@@ -42,6 +59,7 @@
             });
 
             if (Object.keys(dataInputs).length > 0) {
+                itemsAjaxContainer.prepend(preloader);
                 $('.preloader').addClass('preloader-visible');
                 $.ajax({
                     type: "POST",
@@ -746,8 +764,8 @@
                     if (needAjax === true) {
                         filterItems();
                     } else {
-                        document.querySelector('div.product-card').parentNode.parentNode.innerHTML = `
-                            <div style="padding-left: 35px;">В данной области нет объявлений!</div>
+                        document.querySelector('div#rendorMapItemCard').innerHTML = `
+                            <div class="empty-ads">В данной области нет объявлений!</div>
                         `;
                     }
 
