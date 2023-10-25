@@ -119,7 +119,8 @@ if ($arUser['UF_COUNT_RENT'] > $arUser['UF_COUNT_APART'] || $_REQUEST['EDIT'] ==
         }
     }
     $PROP['ID_USER'] = $USER->GetID();
-    if (!empty($_POST['PROP_Completion'])) $PROP['PROP_Completion'] = date("d.m.Y H:i:s", strtotime($_POST['PROP_Completion'] ));
+    $PROP['PROP_Completion'] = !empty($_POST['PROP_Completion']) ?
+        date("d.m.Y H:i:s", strtotime($_POST['PROP_Completion'])) : '';
     $arParams = array("replace_space" => "-", "replace_other" => "-");
     $translit = Cutil::translit($NAME, "ru", $arParams) . $USER->GetID(). randString(10);;
     if ($PROP[109] > 1){
@@ -264,11 +265,7 @@ if ($arUser['UF_COUNT_RENT'] > $arUser['UF_COUNT_APART'] || $_REQUEST['EDIT'] ==
 
         $arLoadProductProp = [];
         foreach ($arLoadProductArray['PROPERTY_VALUES'] as $key => $value) {
-            if ($value == '' && $key !== 'UF_CALL_ANYTIME') {
-                unset($arLoadProductArray['PROPERTY_VALUES'][$key]);
-            } else {
-                $arLoadProductProp[$key] = $value;
-            }
+            $arLoadProductProp[$key] = $value;
         }
         unset($arLoadProductArray['PROPERTY_VALUES']);
 
