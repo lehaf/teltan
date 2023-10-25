@@ -19,7 +19,7 @@ if($_GET['SORT'] != '' && $_GET['ORDER'] != ''){
 
 $APPLICATION->IncludeComponent(
     "bitrix:catalog",
-    "templatePropertyNew",
+    "property",
     Array(
         "ACTION_VARIABLE" => "action",
         "ADD_ELEMENT_CHAIN" => "Y",

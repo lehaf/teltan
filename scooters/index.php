@@ -19,7 +19,7 @@ if($_GET['SORT'] != '' && $_GET['ORDER'] != ''){
 }
 ?><?php $APPLICATION->IncludeComponent(
 	"bitrix:catalog",
-	"templateAuto",
+	"auto",
 	Array(
 		"ACTION_VARIABLE" => "action",
 		"ADD_ELEMENT_CHAIN" => "N",
