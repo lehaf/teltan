@@ -43,7 +43,7 @@ $sectionName = $langId === false ? $curSection['NAME'] : $curSection['UF_NAME_'.
     <?php
     $APPLICATION->IncludeComponent(
         "bitrix:catalog.smart.filter",
-        "NewPropertyDesktopFilter",
+        "property_desktop",
         array(
             "COMPONENT_TEMPLATE" => "PropertyFilter",
             "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
@@ -94,7 +94,7 @@ $sectionName = $langId === false ? $curSection['NAME'] : $curSection['UF_NAME_'.
     if ($detect->isMobile()) {
         $APPLICATION->IncludeComponent(
             "bitrix:catalog.smart.filter",
-            "PropertyFilter",
+            "property_mobile",
             array(
                 "COMPONENT_TEMPLATE" => "PropertyFilter",
                 "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],

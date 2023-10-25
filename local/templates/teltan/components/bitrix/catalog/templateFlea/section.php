@@ -202,12 +202,10 @@
 
     <div class="row row-cols-1 row-cols-lg-2">
         <div id="target_container" class="col col-lg-9">
-
-
-            <?
+            <?php
             $APPLICATION->IncludeComponent(
                 "bitrix:catalog.smart.filter",
-                "bootstrap_v4",
+                "right_strip",
                 array(
                     "COMPONENT_TEMPLATE" => "bootstrap_v5",
                     "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],

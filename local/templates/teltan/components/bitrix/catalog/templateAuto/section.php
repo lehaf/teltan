@@ -201,7 +201,7 @@ if ($_SESSION['view'] == 'block') $adsViewTemplate = 'templateAutoBlock';
             <?
             $APPLICATION->IncludeComponent(
                 "bitrix:catalog.smart.filter",
-                "bootstrap_v4",
+                "right_strip",
                 array(
                     "COMPONENT_TEMPLATE" => "bootstrap_v4",
                     "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],

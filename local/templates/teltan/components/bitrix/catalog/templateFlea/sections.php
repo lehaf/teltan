@@ -1,4 +1,4 @@
-<? if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
+<?php if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 $dir = $APPLICATION->GetCurDir();
 $dirName = str_replace('/', '', $dir); // PHP код
 ?>
@@ -166,34 +166,9 @@ $dirName = str_replace('/', '', $dir); // PHP код
     ),
         false
     );
-    //костыль для сортировки
-//    $arSelect = Array("ID", "IBLOCK_ID", "NAME", "PROPERTY_VIP_DATE");
-//    $arFilter = Array("IBLOCK_ID"=>1);
-//    $res = CIblockElement::GetList(Array("DATE_CREATE" => "DESC"), $arFilter, false, false, $arSelect);
-//    while($ob = $res->GetNextElement()){
-//        $arFields = $ob->GetFields();
-//        if($arFields['PROPERTY_VIP_DATE_VALUE'] != null && strtotime($arFields['PROPERTY_VIP_DATE_VALUE']) < time() ){
-//            $el = new CIBlockElement;
-//            $PROP = array();
-//            $PROP['VIP_DATE'] = "";
-//            $arLoadProductArray = Array(
-//                "IBLOCK_SECTION" => false,
-//                "PROPERTY_VALUES"=> $PROP,
-//            );
-//            $PRODUCT_ID = $arFields['ID'];
-//          //  $res = $el->Update($PRODUCT_ID, $arLoadProductArray);
-//            CIBlockElement::SetPropertyValueCode($PRODUCT_ID, "VIP_FLAG", 0);
-//            CIBlockElement::SetPropertyValues($PRODUCT_ID, $arParams["IBLOCK_ID"], '', 'VIP_DATE');
-//
-//        }
-//    }
-
     ?>
-
-
     <h1 class="h2 mb-4 subtitle">
-        <?
-        $APPLICATION->IncludeComponent(
+        <? $APPLICATION->IncludeComponent(
             "bitrix:main.include",
             "",
             Array(
@@ -201,22 +176,14 @@ $dirName = str_replace('/', '', $dir); // PHP код
                 "PATH" => "/include-area/".mb_strtolower($dirName)."-h1-ru.php",
                 "EDIT_TEMPLATE" => ""
             )
-        );
-        // символы для удаления
-
-
-        ?>
+        ); ?>
     </h1>
-
     <div class="row row-cols-1 row-cols-lg-2">
         <div id="target_container" class="col col-lg-9">
-
-
-            <?
-
+            <?php
             $APPLICATION->IncludeComponent(
                 "bitrix:catalog.smart.filter",
-                "bootstrap_v4",
+                "right_strip",
                 array(
                     "COMPONENT_TEMPLATE" => "bootstrap_v4",
                     "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
@@ -392,14 +359,12 @@ $dirName = str_replace('/', '', $dir); // PHP код
         ?>
 
     </div>
-
     <div class="col col-lg-3">
         <div class="p-3 pt-4 pb-4 card text-right filter-select filter" id="filterModalContent">
             <div class="pb-3 mb-2 mb-lg-4 d-flex d-lg-none justify-content-between border-bottom filter-header">
                 <a class="filter-closer filterTogglerMobile" type="button"><i class="mr-1 mr-lg-3 icon-clear"></i> Close</a>
                 <p class="m-0 d-inline-block text-uppercase font-weight-bolder filter-title">Filters</p>
             </div>
-
             <div class="border-bottom mb-lg-4">
                 <p class="filter-select__collapse-title h5 d-block d-lg-none text-uppercase" data-toggle="collapse" href="#collapseDepartment" role="button" aria-expanded="true" aria-controls="collapseDepartment">
                     <span class="d-flex justify-content-between align-items-center"><i class="icone-filter-title icon-arrow-down-sign-to-navigate-3"></i></span>
@@ -408,14 +373,11 @@ $dirName = str_replace('/', '', $dir); // PHP код
 
             </div>
             <?=$APPLICATION->ShowViewContent("smart_filter_HTML");?>
-
         </div>
     </div>
 </div>
 </div>
 <script>
-
-
     new RangeSlider('rangeSlider');
     new RangeSlider('rangeSliderMainFilterMobile');
 </script>
