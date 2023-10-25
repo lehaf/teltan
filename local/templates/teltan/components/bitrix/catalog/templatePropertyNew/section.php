@@ -6,6 +6,18 @@
 
 use Bitrix\Main\Localization\Loc;
 
+switch ($arParams['SECTION_ID']) {
+    case RESIDENTIAL_SECTION_ID:
+        LocalRedirect('/property/zhilaya/snyat-j/');
+        break;
+    case COMMERCIAL_SECTION_ID:
+        LocalRedirect('/property/kommercheskaya/snyat-kom/');
+        break;
+    case NEW_SECTION_ID:
+        LocalRedirect('/property/novostroyki/snyat/');
+        break;
+}
+
 Loc::loadMessages(__FILE__);
 require_once($_SERVER["DOCUMENT_ROOT"]."/vendor/autoload.php");
 $detect = new Mobile_Detect;

@@ -746,41 +746,31 @@ $(document).ready(function () {
         }
     }
 
+    function getParams()
+    {
+        let params = window
+            .location
+            .search
+            .replace('?','')
+            .split('&')
+            .reduce(
+                function(p,e){
+                    var a = e.split('=');
+                    p[ decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
+                    return p;
+                },
+                {}
+            );
+
+        return params;
+    }
+
 
     $('.submit-btn-search').click(function (e) {
-        let SECTION_ID = localStorage.getItem('FILTER_SECTION_ID');
-        if ($('#categoryRentInput').is(':checked')) {
-            switch (SECTION_ID) {
-                case '35':
-                    var sectionUrl = '/property/zhilaya/snyat-j/'
-                    break;
-                case '33':
-                    var sectionUrl = '/property/kommercheskaya/snyat-kom/'
-                    break;
-                case '34':
-                    var sectionUrl = '/property/zhilaya/snyat-j/'
-                    break;
-                case '32':
-                    var sectionUrl = '/property/kommercheskaya/snyat-kom/'
-                    break;
-            }
-        } else {
-            switch (SECTION_ID) {
-                case '35':
-                    var sectionUrl = '/property/zhilaya/kupit-j/'
-                    break;
-                case '33':
-                    var sectionUrl = '/property/kommercheskaya/kupit-kom/'
-                    break;
-                case '34':
-                    var sectionUrl = '/property/zhilaya/kupit-j/'
-                    break;
-                case '32':
-                    var sectionUrl = '/property/kommercheskaya/kupit-kom/'
-                    break;
-            }
-        }
-        let url = 'set_filter=y';
+        let url = '';
+        let prams = getParams();
+        if (prams['view'] === 'maplist')  url += 'view=maplist&'
+        url += 'set_filter=y';
         $('#mainFiltersRent').find('input').each(function (index) {
             if ($(this).is(':checkbox')) {
                 if ($(this).is(':checked')) {
@@ -813,42 +803,10 @@ $(document).ready(function () {
                 }
             }
         })
-        location.href = sectionUrl + '?'+ url;
+        location.href = location.pathname + '?'+ url;
     })
 
     $('.submitFilterAll').click(function (e) {
-        let SECTION_ID = localStorage.getItem('FILTER_SECTION_ID');
-        if ($('#categoryRentInput').is(':checked')) {
-            switch (SECTION_ID) {
-                case '35':
-                    var sectionUrl = '/property/zhilaya/snyat-j/'
-                    break;
-                case '33':
-                    var sectionUrl = '/property/kommercheskaya/snyat-kom/'
-                    break;
-                case '34':
-                    var sectionUrl = '/property/zhilaya/snyat-j/'
-                    break;
-                case '32':
-                    var sectionUrl = '/property/kommercheskaya/snyat-kom/'
-                    break;
-            }
-        } else {
-            switch (SECTION_ID) {
-                case '35':
-                    var sectionUrl = '/property/zhilaya/kupit-j/'
-                    break;
-                case '33':
-                    var sectionUrl = '/property/kommercheskaya/kupit-kom/'
-                    break;
-                case '34':
-                    var sectionUrl = '/property/zhilaya/kupit-j/'
-                    break;
-                case '32':
-                    var sectionUrl = '/property/kommercheskaya/kupit-kom/'
-                    break;
-            }
-        }
         let url = 'set_filter=y';
         $('#mainFiltersRent').find('input').each(function (index) {
             if ($(this).is(':checkbox')) {
@@ -882,42 +840,10 @@ $(document).ready(function () {
             }}
         })
 
-        location.href = sectionUrl + '?'+ url;
-    })
+        location.href = location.pathname + '?'+ url;
+    });
 
     $('.btn-show-map').click(function (e) {
-        let SECTION_ID = localStorage.getItem('FILTER_SECTION_ID');
-        if ($('#categoryRentInput').is(':checked')) {
-            switch (SECTION_ID) {
-                case '35':
-                    var sectionUrl = '/property/zhilaya/snyat-j/'
-                    break;
-                case '33':
-                    var sectionUrl = '/property/kommercheskaya/snyat-kom/'
-                    break;
-                case '34':
-                    var sectionUrl = '/property/zhilaya/snyat-j/'
-                    break;
-                case '32':
-                    var sectionUrl = '/property/kommercheskaya/snyat-kom/'
-                    break;
-            }
-        } else {
-            switch (SECTION_ID) {
-                case '35':
-                    var sectionUrl = '/property/zhilaya/kupit-j/'
-                    break;
-                case '33':
-                    var sectionUrl = '/property/kommercheskaya/kupit-kom/'
-                    break;
-                case '34':
-                    var sectionUrl = '/property/zhilaya/kupit-j/'
-                    break;
-                case '32':
-                    var sectionUrl = '/property/kommercheskaya/kupit-kom/'
-                    break;
-            }
-        }
         let url = 'set_filter=y&view=maplist';
         $('#mainFiltersRent').find('input').each(function (index) {
             if ($(this).is(':checkbox')) {
@@ -949,42 +875,12 @@ $(document).ready(function () {
                     }
                 }
             }
-        })
-        location.href = sectionUrl + '?'+ url;
-    })
+        });
+
+        location.href = location.pathname + '?'+ url;
+    });
+
     $('.btn-show-catalog').click(function (e) {
-        let SECTION_ID = localStorage.getItem('FILTER_SECTION_ID');
-        if ($('#categoryRentInput').is(':checked')) {
-            switch (SECTION_ID) {
-                case '35':
-                    var sectionUrl = '/property/zhilaya/snyat-j/'
-                    break;
-                case '33':
-                    var sectionUrl = '/property/kommercheskaya/snyat-kom/'
-                    break;
-                case '34':
-                    var sectionUrl = '/property/zhilaya/snyat-j/'
-                    break;
-                case '32':
-                    var sectionUrl = '/property/kommercheskaya/snyat-kom/'
-                    break;
-            }
-        } else {
-            switch (SECTION_ID) {
-                case '35':
-                    var sectionUrl = '/property/zhilaya/kupit-j/'
-                    break;
-                case '33':
-                    var sectionUrl = '/property/kommercheskaya/kupit-kom/'
-                    break;
-                case '34':
-                    var sectionUrl = '/property/zhilaya/kupit-j/'
-                    break;
-                case '32':
-                    var sectionUrl = '/property/kommercheskaya/kupit-kom/'
-                    break;
-            }
-        }
         let url = 'set_filter=y';
         $('#mainFiltersRent').find('input').each(function (index) {
             if ($(this).is(':checkbox')) {
@@ -1020,7 +916,7 @@ $(document).ready(function () {
                 }
             }
         })
-        location.href = sectionUrl + '?'+ url;
+        location.href = location.pathname + '?'+ url;
     })
 
     $('#categoryRentInput').parent('label').click(function () {

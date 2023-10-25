@@ -1,5 +1,8 @@
 <?php require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 
+/** @global object $APPLICATION */
+/** @global object $USER */
+
 use Bitrix\Main\Localization\Loc;
 
 Loc::loadMessages(__FILE__);
@@ -7,13 +10,13 @@ $APPLICATION->SetTitle("Персональный раздел");
 
 if (!$USER->IsAuthorized()) LocalRedirect("/");
 
-
 $arTypesVip = getHLData(PERSONAL_VIP_TYPES_HL_ID, ['*']);
 $arTypesRise = getHLData(PERSONAL_RISE_HL_ID, ['*']);
 $arTypesColour = getHLData(PERSONAL_COLOR_HL_ID, ['*']);
 $arTypesLent = getHLData(PERSONAL_RIBBON_HL_ID, ['*']);
 $arTypesPaket = getHLData(PERSONAL_PACKET_HL_ID, ['*']);
 $arPaket = getHLData(BOUGHT_RATE_HL_ID, ['*'],['UF_USER_ID' => $USER->GetID()]);
+
 
 $arUser = CUser::GetByID($USER->GetID())->Fetch();
 
@@ -313,7 +316,10 @@ $allElements = array_reverse($allElements);
                                 <td class="d-flex flex-column flex-lg-row justify-content-end">
                                     <div class="m-0 mr-lg-4 d-flex align-items-center justify-content-end justify-content-lg-center category">
                                         <img src="<?= SITE_TEMPLATE_PATH ?>/assets/announsment-list-free.svg"
-                                             alt=""></div>
+                                             title="free"
+                                             alt="free"
+                                        >
+                                    </div>
 
                                     <div class="d-flex justify-content-end align-items-center justify-content-lg-center font-weight-bold">
                                         <span class="ml-1"><?= $arUser['UF_DAYS_FREE3'] ?></span> <?= Loc::getMessage('OF_COUNT'); ?>

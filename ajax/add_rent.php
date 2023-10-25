@@ -259,10 +259,6 @@ if ($arUser['UF_COUNT_RENT'] > $arUser['UF_COUNT_APART'] || $_REQUEST['EDIT'] ==
             unset($arLoadProductArray['NAME']);
         }
 
-//        foreach ($arLoadProductArray as $key => $value) {
-//            if ($value == '') unset($arLoadProductArray[$key]);
-//        }
-
         $arLoadProductProp = [];
         foreach ($arLoadProductArray['PROPERTY_VALUES'] as $key => $value) {
             $arLoadProductProp[$key] = $value;

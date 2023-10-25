@@ -15,23 +15,7 @@ $curPage = $APPLICATION->GetCurPage();
 $isLiveBuyPage = strpos($curPage,'/property/zhilaya/kupit-j/') !== false;
 $isСommercialRentPage = strpos($curPage,'/property/kommercheskaya/snyat-kom/') !== false;
 $isСommercialBuyPage = strpos($curPage,'/property/kommercheskaya/kupit-kom/') !== false;
-
-switch ($arParams['SECTION_ID']) {
-    case RESIDENTIAL_SECTION_ID:
-        LocalRedirect('/property/zhilaya/snyat-j/');
-        break;
-    case COMMERCIAL_SECTION_ID:
-        LocalRedirect('/property/kommercheskaya/snyat-kom/');
-        break;
-    case NEW_SECTION_ID:
-        LocalRedirect('/property/novostroyki/snyat/');
-        break;
-}
 ?>
-
-<script>
-    localStorage.setItem('FILTER_SECTION_ID', <?=$arParams['SECTION_ID']?>);
-</script>
 <div class="header-property-type-menu">
     <div class="bg-header-filter">
         <img src="/local/templates/teltan/assets/property-header-bg-progressive.jpeg" alt="">
