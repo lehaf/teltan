@@ -3,57 +3,54 @@
 /** @var array $arParams */
 /** @var array $arResult */
 
-$iblock = \Bitrix\Iblock\Iblock::wakeUp(PROPERTY_ADS_IBLOCK_ID);
-$propertyClass = $iblock->getEntityDataClass();
-$ads = $propertyClass::getList(array(
-    'select' => [
-        'ID',
-        'CODE',
-        'IBLOCK',
-        'IBLOCK_SECTION_ID',
-        'NAME',
-        'MAP_LATLNG',
-        'PRICE',
-        'SHOW_COUNTER',
-        'DATE_CREATE',
-        'VIP_DATE',
-        'PREVIEW_PICTURE'
-    ],
-    'filter' => [
-        'IBLOCK_SECTION_ID' => $arParams['SECTION_ID'],
-        'ACTIVE' => 'Y'
-    ]
-))->fetchCollection();
+$select = [
+    'ID',
+    'CODE',
+    'IBLOCK_SECTION_ID',
+    'NAME',
+    'PROPERTY_MAP_LATLNG',
+    'PROPERTY_PRICE',
+    'DETAIL_PAGE_URL',
+    'SHOW_COUNTER',
+    'DATE_CREATE',
+    'PROPERTY_VIP_DATE',
+    'PREVIEW_PICTURE'
+];
+$filter = [
+    "IBLOCK_ID" => PROPERTY_ADS_IBLOCK_ID,
+    'IBLOCK_SECTION_ID' => $arParams['SECTION_ID'],
+    'ACTIVE' => 'Y',
+];
+global $arrFilter;
+if (!empty($arrFilter)) $filter = array_merge($filter,$arrFilter);
+$res = CIBlockElement::GetList([], $filter, $select);
+$ads = [];
+while($markData = $res->GetNext()) if (!empty($markData)) $ads[] = $markData;
 
 foreach ($ads as $addProperty) {
-    $mapLatlnt = !empty($addProperty->getMapLatlng()) ? json_decode($addProperty->getMapLatlng()->getValue(), true) : [];
-    $price = !empty($addProperty->getPrice()) ? '₪ '.$addProperty->getPrice()->getValue() : '';
-    $previewImg = CFile::GetPath($addProperty->getPreviewPicture());
-    $detailPageRaw = $addProperty->getIblock()->getDetailPageUrl();
+    $mapLatlnt = !empty($addProperty['~PROPERTY_MAP_LATLNG_VALUE']) ? json_decode($addProperty['~PROPERTY_MAP_LATLNG_VALUE'], true) : [];
+    $price = !empty($addProperty['PROPERTY_PRICE_VALUE']) ? '₪ '.$addProperty['PROPERTY_PRICE_VALUE'] : '';
+    $previewImg = !empty($addProperty['PREVIEW_PICTURE']) ? CFile::GetPath($addProperty['PREVIEW_PICTURE']) : '/no-image.svg';
     $detailPageUrl = CIBlock::ReplaceDetailUrl(
-        $detailPageRaw,
-        [
-            'ID' => $addProperty->getId(),
-            'CODE' => $addProperty->getCode(),
-            'IBLOCK_SECTION_ID' => $addProperty->getIblockSectionId(),
-        ],
+        $addProperty['DETAIL_PAGE_URL'],
+        $addProperty,
         false,
         'E'
     );
 
 
-    if ($addProperty->getVipDate() && strtotime($addProperty->getVipDate()->getValue()) > time()) {
+    if (!empty($addProperty['PROPERTY_VIP_DATE_VALUE']) && strtotime($addProperty['PROPERTY_VIP_DATE_VALUE']) > time()) {
         $arResult['VIP_MARKS']['features'][] = [
             'type' => 'Feature',
             'properties' => [
                 'href' => $detailPageUrl,
-                'image' => $previewImg ?? '/no-image.svg',
-                'title' => $addProperty->getName(),
+                'image' => $previewImg,
+                'title' => $addProperty['NAME'],
                 'price' => $price,
-                'addres' => $addProperty->getName(),
+                'addres' => $addProperty['NAME'],
                 'category' => $arParams['SECTION_NAME'],
-                'views' => $addProperty->getShowCounter(),
-                'date' => $addProperty->getDateCreate(),
+                'views' => $addProperty['SHOW_COUNTER'],
+                'date' => $addProperty['DATE_CREATE'],
                 'isVipCard' => true,
             ],
             'geometry' => [
@@ -70,13 +67,13 @@ foreach ($ads as $addProperty) {
             'type' => 'Feature',
             'properties' => [
                 'href' => $detailPageUrl,
-                'image' => $previewImg ?? '/no-image.svg',
-                'title' => $addProperty->getName(),
+                'image' => $previewImg,
+                'title' => $addProperty['NAME'],
                 'price' => $price,
-                'addres' => $addProperty->getName(),
+                'addres' => $addProperty['NAME'],
                 'category' => $arParams['SECTION_NAME'],
-                'views' => $addProperty->getShowCounter(),
-                'date' => $addProperty->getDateCreate(),
+                'views' => $addProperty['SHOW_COUNTER'],
+                'date' => $addProperty['DATE_CREATE'],
                 'isVipCard' => false,
             ],
             'geometry' => [
@@ -91,6 +88,8 @@ foreach ($ads as $addProperty) {
     }
 }
 
+$iblock = \Bitrix\Iblock\Iblock::wakeUp(PROPERTY_ADS_IBLOCK_ID);
+$propertyClass = $iblock->getEntityDataClass();
 $elements = $propertyClass::getList(array( // $ELEMENT_ID - id елемента
     'select' => array('ID', 'NAME', 'SHOW_COUNTER'),
     'filter' => array('ID' => $arResult['ELEMENTS']),

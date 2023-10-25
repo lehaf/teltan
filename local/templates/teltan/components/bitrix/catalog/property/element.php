@@ -21,7 +21,7 @@ $this->setFrameMode(true);
     <?php
     $APPLICATION->IncludeComponent(
         "bitrix:catalog.smart.filter",
-        "NewPropertyDesktopFilter",
+        "property_desktop",
         array(
             "COMPONENT_TEMPLATE" => "PropertyFilter",
             "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
