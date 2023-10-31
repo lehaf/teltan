@@ -1,5 +1,7 @@
 <?php
 
+use \Bitrix\Main\Type\DateTime;
+
 function pr($o, $show = false, $die = false, $fullBackTrace = false)
 {
     global $USER;
@@ -177,4 +179,52 @@ function getSectionData(int $sectionId, int $iblockId) : ?array
         }
     }
     return $section ?? NULL;
+}
+
+function getOptimalActiveUserRate(string $adsCategory) : ?array
+{
+    if (CModule::IncludeModule('highloadblock')) {
+        $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
+
+        $typeRatesClass = GetEntityDataClass(TYPE_RATES_HL_ID);
+        $typesRate = $typeRatesClass::getList(array(
+            'order' => array(),
+            'select' => array('*'),
+            'filter' => array('UF_SECTION'=> $adsCategory)
+        ))->fetchAll();
+        $editRates = [];
+        if (!empty($typesRate)) {
+            foreach ($typesRate as $rate) {
+                $editRates[$rate['ID']] = $rate;
+            }
+        }
+
+        $boughtRateEntity = GetEntityDataClass(BOUGHT_RATE_HL_ID);
+        $userRates = $boughtRateEntity::getList(array(
+            'order' => array('ID' => 'DESC'),
+            'select' => array('*'),
+            'filter' => array('UF_USER_ID'=> $userId, 'UF_TYPE'=> $adsCategory)
+        ))->fetchAll();
+
+        $curTime = new DateTime();
+        $notExpiredRates = [];
+        $notExpiredRatesId = [];
+        if (!empty($userRates)) {
+            foreach ($userRates as $userRate) {
+                $chosenRate = $editRates[$userRate['UF_PARENT_XML']];
+                $purchaseRateDate = $userRate['UF_DATE_PURCHASE'];
+                $dateExpiredCurRate = !empty($purchaseRateDate) ?
+                    DateTime::createFromTimestamp(strtotime($purchaseRateDate.' + '.$chosenRate['UF_DAYS'].' days')) : '';
+                if ($curTime < $dateExpiredCurRate) {
+                    $notExpiredRatesId[] = $userRate['ID'];
+                    $notExpiredRates[$userRate['ID']] = $userRate;
+                }
+            }
+            $earlyActiveUserRateId = min($notExpiredRatesId);
+            $userActiveRate = $notExpiredRates[$earlyActiveUserRateId];
+            $userActiveRate['RATE_INFO'] = $editRates[$userActiveRate['UF_PARENT_XML']];
+        }
+    }
+
+    return $userActiveRate ?? NULL;
 }

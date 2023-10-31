@@ -1,7 +1,6 @@
-<?require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
-use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
-CModule::IncludeModule('iblock');
+<?php require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
 
+CModule::IncludeModule('iblock');
 CModule::IncludeModule('highloadblock');
 
 $entity_data_class = GetEntityDataClass(30);
@@ -79,5 +78,5 @@ if($_REQUEST['type'] != 'getData') {
 }else{
     echo $arUser['UF_TCOINS'];
 }
-require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/epilog_after.php");
-?>
+
+require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/epilog_after.php"); ?>

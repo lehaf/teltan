@@ -18,8 +18,7 @@ $userId = $USER->GetID();
 $this->setFrameMode(true);
 ?>
 <main>
-    <?php
-    $APPLICATION->IncludeComponent(
+    <?php $APPLICATION->IncludeComponent(
         "bitrix:catalog.smart.filter",
         "property_desktop",
         array(

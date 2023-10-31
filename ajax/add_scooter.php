@@ -1,22 +1,11 @@
 <?php require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_before.php");
 
-global $USER;
-
 CModule::IncludeModule('highloadblock');
+$userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
+$arUser = CUser::GetByID($userId)->Fetch();
+$countAdsAbleToCreate = $arUser['UF_AUTO'] + $arUser['UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'];
 
-$entity = GetEntityDataClass(BOUGHT_RATE_HL_ID);
-$arPaket = $entity::getList(array(
-    'select' => array('*'),
-    'filter' => array('UF_USER_ID'=> $USER->GetID(), 'UF_TYPE'=> 'AUTO'),
-    'cache' => [
-        'ttl' => 360000,
-        'cache_joins' => true
-    ]
-))->fetchAll();
-
-$arUser = CUser::GetByID($USER->GetID())->Fetch();
-
-if ($arUser['UF_AUTO'] > $arUser['UF_COUNT_AUTO'] || $_REQUEST['EDIT'] == 'Y') {
+if ($countAdsAbleToCreate > 0 || $_REQUEST['EDIT'] == 'Y') {
     $el = new CIBlockElement;
     $checkedVaue = [];
     $count = 0;
@@ -24,8 +13,7 @@ if ($arUser['UF_AUTO'] > $arUser['UF_COUNT_AUTO'] || $_REQUEST['EDIT'] == 'Y') {
     $stringValue = [];
     $PROP = [];
     foreach($_REQUEST as $arItem){
-
-        if(is_string($arItem) == false){
+        if (is_string($arItem) == false){
             if($arItem['val'] == 'true') {
                 $checkedVaue[] = $arItem;
             }else{
@@ -46,29 +34,29 @@ if ($arUser['UF_AUTO'] > $arUser['UF_COUNT_AUTO'] || $_REQUEST['EDIT'] == 'Y') {
         $PROP[$arItem["data"]["id_prop"]] = $arItem["data"]["idSelf"];
     }
 
-    $FILENAME = $USER->GetID();
+    $FILENAME = $userId;
 
     $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $_POST["img-base64"]));
 
     file_put_contents($_SERVER["DOCUMENT_ROOT"].'/imgbs64.png', $data);
 
     $arFile = CFile::MakeFileArray($_SERVER["DOCUMENT_ROOT"]."/imgbs64.png");
-        if($_REQUEST['anytime']['val'] == 'true'){
-            $PROP['UF_CALL_ANYTIME'] = 1;
-        }else{
-            $PROP['UF_CALL_TO'] = $_REQUEST['$data2']['callTo'][1] . ':00';
-            $PROP['UF_CALL_FROM'] = $_REQUEST['$data2']['callFrom'][1] . ':00';
-        }
-        if($_REQUEST['PriceExchangeIsPossible']['val'] == 'true'){
-            $PROP['UF_WITH_EXCHANGE'] = 1;
-        }else{
-            $PROP['UF_WITH_EXCHANGE'] = '';
-        }
-        if($_REQUEST['PriceExchangeIsPossible']['val'] == 'true'){
-            $PROP['UF_WITH_VAT'] = 1;
-        }else{
-            $PROP['UF_WITH_VAT'] = '';
-        }
+    if($_REQUEST['anytime']['val'] == 'true'){
+        $PROP['UF_CALL_ANYTIME'] = 1;
+    }else{
+        $PROP['UF_CALL_TO'] = $_REQUEST['$data2']['callTo'][1] . ':00';
+        $PROP['UF_CALL_FROM'] = $_REQUEST['$data2']['callFrom'][1] . ':00';
+    }
+    if($_REQUEST['PriceExchangeIsPossible']['val'] == 'true'){
+        $PROP['UF_WITH_EXCHANGE'] = 1;
+    }else{
+        $PROP['UF_WITH_EXCHANGE'] = '';
+    }
+    if($_REQUEST['PriceExchangeIsPossible']['val'] == 'true'){
+        $PROP['UF_WITH_VAT'] = 1;
+    }else{
+        $PROP['UF_WITH_VAT'] = '';
+    }
     $PROP['PRICE'] = $_POST['userItemPrice']['val'];
     $PROP['TIME_RAISE'] = date("d.m.Y H:i:s");
     $PROP['PROP_MODIFICATION'] = $_POST['Modification']['val'];
@@ -81,17 +69,16 @@ if ($arUser['UF_AUTO'] > $arUser['UF_COUNT_AUTO'] || $_REQUEST['EDIT'] == 'Y') {
     if (isset($PROP['PROP_MODEL'])){
         $SECTION_ID = $PROP['PROP_MODEL'];
     }
-        $res = CIBlockSection::GetByID($PROP['PROP_BRAND']);
-        if($ar_res = $res->GetNext())
-            $PROP['PROP_BRAND'] = $ar_res['NAME'];
-        $res = CIBlockSection::GetByID($PROP['PROP_MODEL']);
-        if($ar_res = $res->GetNext())
-            $PROP['PROP_MODEL'] = $ar_res['NAME'];
+    $res = CIBlockSection::GetByID($PROP['PROP_BRAND']);
+    if ($ar_res = $res->GetNext())
+        $PROP['PROP_BRAND'] = $ar_res['NAME'];
+    $res = CIBlockSection::GetByID($PROP['PROP_MODEL']);
+    if ($ar_res = $res->GetNext())
+        $PROP['PROP_MODEL'] = $ar_res['NAME'];
     $NAME = $PROP['PROP_BRAND'] . ' ' . $PROP['PROP_MODEL'] . ' ' .   $_POST['Modification']['val'] .' '. $PROP['PROP_YAERH'];
-    //$PROP[146] = $_POST['phone3']['val'];
-    $PROP['ID_USER'] = $USER->GetID();
+    $PROP['ID_USER'] = $userId;
     $arParams = array("replace_space"=>"-","replace_other"=>"-");
-    $translit = Cutil::translit($NAME,"ru",$arParams) . $USER->GetID(). randString(10);
+    $translit = Cutil::translit($NAME,"ru",$arParams) . $userId. randString(10);
 
     foreach ($_POST['$data2'] as $key => $data){
         if ($data[0] != '') {
@@ -103,7 +90,6 @@ if ($arUser['UF_AUTO'] > $arUser['UF_COUNT_AUTO'] || $_REQUEST['EDIT'] == 'Y') {
     if ($_REQUEST['EDIT'] != 'Y') {
         $arLoadProductArray = array(
             'MODIFIED_BY' => $GLOBALS['USER']->GetID(),
-            // 'IBLOCK_SECTION_ID' => (int)$_POST['section_id']['id_section'],
             'IBLOCK_ID' => SCOOTER_IBLOCK_ID,
             'IBLOCK_SECTION_ID' => $SECTION_ID,
             'CODE' => $translit,
@@ -112,13 +98,10 @@ if ($arUser['UF_AUTO'] > $arUser['UF_COUNT_AUTO'] || $_REQUEST['EDIT'] == 'Y') {
             'ACTIVE' => 'Y',
             'PREVIEW_TEXT' => $_POST['itemDescription'],
             'DETAIL_TEXT' => $_POST['itemDescription'],
-           /* 'PREVIEW_PICTURE' => $arFile,
-            'DETAIL_PICTURE' => $arFile*/
         );
     }else{
         $arLoadProductArray = array(
             'MODIFIED_BY' => $GLOBALS['USER']->GetID(),
-            // 'IBLOCK_SECTION_ID' => (int)$_POST['section_id']['id_section'],
             'IBLOCK_ID' => SCOOTER_IBLOCK_ID,
             'IBLOCK_SECTION_ID' => $SECTION_ID,
             'CODE' => $translit,
@@ -126,15 +109,11 @@ if ($arUser['UF_AUTO'] > $arUser['UF_COUNT_AUTO'] || $_REQUEST['EDIT'] == 'Y') {
             'NAME' => $NAME,
             'PREVIEW_TEXT' => $_POST['itemDescription'],
             'DETAIL_TEXT' => $_POST['itemDescription'],
-            /*'PREVIEW_PICTURE' => $arFile,
-            'DETAIL_PICTURE' => $arFile*/
         );
     }
-    if($arFile["type"]== "image/png" || $arFile["type"]== "image/jpeg" ) {
 
-    }else{
-        unset($arLoadProductArray['PREVIEW_PICTURE']);
-    }
+    if($arFile["type"] !== "image/png" || $arFile["type"] !== "image/jpeg" ) unset($arLoadProductArray['PREVIEW_PICTURE']);
+
 
     // Создание элемента
     if ($_REQUEST['EDIT'] != 'Y') {
@@ -170,25 +149,28 @@ if ($arUser['UF_AUTO'] > $arUser['UF_COUNT_AUTO'] || $_REQUEST['EDIT'] == 'Y') {
                 'UF_COUNT_AUTO' => ++$arUser['UF_COUNT_AUTO'],
                 'UF_COUNT_ITEM_AUTO' =>  $arUser['UF_COUNT_ITEM_AUTO']
             );
-            $user->Update($USER->GetID(), $fields);
+            $user->Update($userId, $fields);
 
-            if ($arUser['UF_UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] <= 0) {
-                foreach ($arPaket as $arItem) {
-                    $a = $arItem['UF_COUNT_REMAIN'] - $arItem['UF_COUNT_LESS'];
-                    if ($a > 0 || date("d.m.Y H:i:s") < date("d.m.Y H:i:s", strtotime('+ ' . $arItem['UF_DAYS_REMAIN'] . ' days'))) {
-                        $idForUpdate = $arItem['ID'];
-                        $arItem['UF_ID_ANONC'][] = intval($PRODUCT_ID);
-                        $entity_data_class = GetEntityDataClass(28);
-                        $result = $entity_data_class::update($idForUpdate, array(
-                            'UF_COUNT_LESS' => ++$arItem['UF_COUNT_LESS'],
-                            'UF_ID_ANONC' => $arItem['UF_ID_ANONC']
-                        ));
-                        break;
-                    }
-                }
-                $mainPhoto = 0;
+            // Обновление пользовательских пакетов (Кпленных тарифов)
+            $optimalUserRate = getOptimalActiveUserRate(AUTO_ADS_TYPE_CODE);
+            $countAvailableAds = $optimalUserRate['UF_COUNT_REMAIN'] - $optimalUserRate['UF_COUNT_LESS'];
+            $unixTimeUserRate = strtotime($optimalUserRate['UF_DATE_PURCHASE'].'+ '.$optimalUserRate['RATE_INFO']['UF_DAYS'].' days');
+            $countActiveRateDays = floor(($unixTimeUserRate - time()) / (60 * 60 * 24));
 
-                $i = 1;
+            if (!empty($optimalUserRate['RATE_INFO']['UF_DAYS']) && !empty($optimalUserRate['UF_DATE_PURCHASE']) &&
+                $countAvailableAds > 0 && time() < $unixTimeUserRate) {
+                $optimalUserRate['UF_ID_ANONC'][] = intval($PRODUCT_ID);
+                $boughtRateEntity = GetEntityDataClass(BOUGHT_RATE_HL_ID);
+                $boughtRateEntity::update($optimalUserRate['ID'], array(
+                    'UF_COUNT_LESS' => ++$optimalUserRate['UF_COUNT_LESS'],
+                    'UF_ID_ANONC' => $optimalUserRate['UF_ID_ANONC'],
+                    'UF_DAYS_REMAIN' => $countActiveRateDays
+                ));
+            }
+
+            $mainPhoto = 0;
+            $i = 1;
+            if (!empty($_POST['img'])) {
                 foreach ($_POST['img'] as $item) {
                     $FILENAME = rand();
                     $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $item[0]));
@@ -223,6 +205,7 @@ if ($arUser['UF_AUTO'] > $arUser['UF_COUNT_AUTO'] || $_REQUEST['EDIT'] == 'Y') {
                     $i++;
                 }
             }
+
             echo json_encode(array('success' => 1));
         } else {
             echo json_encode(array('success' => 0, 'responseBitrix' => $el->LAST_ERROR), JSON_UNESCAPED_UNICODE);
@@ -441,4 +424,3 @@ if ($arUser['UF_AUTO'] > $arUser['UF_COUNT_AUTO'] || $_REQUEST['EDIT'] == 'Y') {
 }else{
     echo json_encode(array('success' => 0, 'responseBitrix' => 'У вас закончились объявления!'), JSON_UNESCAPED_UNICODE);
 }
-require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/epilog_after.php");

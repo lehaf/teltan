@@ -28,7 +28,7 @@ if(isset($_POST) && !empty($_POST) && check_bitrix_sessid()) {
             $strError = 'שלחנו הודעה לדואר אלקטרוני שלך כדי לאשר את הפעולה';
             $arEventFields = array(
                 "EMAIL"  => $curEmail,
-                "URL" => 'http://650739-cm41399.tmweb.ru/personal/edit/?update_email=Y&email='.$user_email.'&str='.md5('54h7ghrt'.$USER->GetID().$user_email),
+                "URL" => '/personal/edit/?update_email=Y&email='.$user_email.'&str='.md5('54h7ghrt'.$USER->GetID().$user_email),
             );
             CEvent::Send("UPDATE_EMAIL", SITE_ID, $arEventFields);
         }

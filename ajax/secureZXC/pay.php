@@ -1,5 +1,4 @@
-<?require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
-use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
+<?php require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
 
 global $USER;
 
@@ -47,7 +46,7 @@ $totalArray = [
     ],
    'refURL_success' => $sucsessUrl,
   //  'refURL_callback'=> 'http://650739-cm41399.tmweb.ru/test4.php',
-   'refURL_failure' => 'http://650739-cm41399.tmweb.ru/test4.php?failure=Y',
+   'refURL_failure' => '/test4.php?failure=Y',
     'amount' =>$amountPrice ,
     'payments' => 1,
     'currency_code' => 'ILS',
