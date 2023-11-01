@@ -3,9 +3,9 @@
 CModule::IncludeModule('highloadblock');
 $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
 $arUser = CUser::GetByID($userId)->Fetch();
-$countAdsAbleToCreate = $arUser['UF_AVAILABLE_PROPERTY'] + $arUser['UF_FREE_PROPERTY'] - $arUser['UF_COUNT_PROPERTY'];
+$canUserCreateAds = canUserCreateAds(PROPERTY_ADS_IBLOCK_ID,PROPERTY_ADS_TYPE_CODE);
 
-if ($countAdsAbleToCreate > 0 || $_REQUEST['EDIT'] == 'Y') {
+if ($canUserCreateAds || $_REQUEST['EDIT'] == 'Y') {
     CModule::IncludeModule('iblock');
     $el = new CIBlockElement;
     $checkedVaue = [];
@@ -132,6 +132,17 @@ if ($countAdsAbleToCreate > 0 || $_REQUEST['EDIT'] == 'Y') {
             'PREVIEW_TEXT' => $_POST['itemDescription'],
             'DETAIL_TEXT' => $_POST['itemDescription'],
         );
+
+        // Получаем всю инфу о самом первом активном купленном пакете
+        $optimalUserRate = getOptimalActiveUserRate(PROPERTY_ADS_TYPE_CODE);
+        // Если пользователь еще не создавал объявления то первое объявление будет бесплатным
+        if (empty($arUser['UF_COUNT_FLEA']) || $arUser['UF_COUNT_FLEA'] == 0) {
+            $arLoadProductArray['PROPERTY_VALUES']['FREE_AD'] = getPropertyFreeAdValueId(PROPERTY_ADS_IBLOCK_ID);
+            $unixTime = strtotime('+ '.DAYS_EXPIRED_FREE_ADS.' days');
+            $arLoadProductArray['DATE_ACTIVE_TO'] = \Bitrix\Main\Type\DateTime::createFromTimestamp($unixTime);
+        } else {
+            $arLoadProductArray['DATE_ACTIVE_TO'] = $optimalUserRate['UF_DATE_EXPIRED'];
+        }
     } else {
         $arLoadProductArray = array(
             'MODIFIED_BY' => $GLOBALS['USER']->GetID(),
@@ -182,13 +193,10 @@ if ($countAdsAbleToCreate > 0 || $_REQUEST['EDIT'] == 'Y') {
             $user->Update($USER->GetID(), $fields);
 
             // Обновление пользовательских пакетов (Кпленных тарифов)
-            $optimalUserRate = getOptimalActiveUserRate(PROPERTY_ADS_TYPE_CODE);
             $countAvailableAds = $optimalUserRate['UF_COUNT_REMAIN'] - $optimalUserRate['UF_COUNT_LESS'];
-            $unixTimeUntilUserRate = strtotime($optimalUserRate['RATE_INFO']['UF_DATE_EXPIRED']);
+            $unixTimeUntilUserRate = strtotime($optimalUserRate['UF_DATE_EXPIRED']);
             $countActiveRateDays = floor(($unixTimeUntilUserRate - time()) / (60 * 60 * 24));
-
-            if (!empty($optimalUserRate['RATE_INFO']['UF_DAYS']) && !empty($optimalUserRate['UF_DATE_PURCHASE']) &&
-                $countAvailableAds > 0 && time() < $unixTimeUntilUserRate) {
+            if (!empty($optimalUserRate['UF_DATE_PURCHASE']) && $countAvailableAds > 0 && time() < $unixTimeUntilUserRate) {
                 $optimalUserRate['UF_ID_ANONC'][] = intval($PRODUCT_ID);
                 $boughtRateEntity = GetEntityDataClass(BOUGHT_RATE_HL_ID);
                 $boughtRateEntity::update($optimalUserRate['ID'], array(

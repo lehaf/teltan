@@ -183,12 +183,14 @@ function getOptimalActiveUserRate(string $adsCategory) : ?array
 {
     if (CModule::IncludeModule('highloadblock')) {
         $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
-
         $typeRatesClass = GetEntityDataClass(TYPE_RATES_HL_ID);
         $typesRate = $typeRatesClass::getList(array(
-            'order' => array(),
             'select' => array('*'),
-            'filter' => array('UF_SECTION'=> $adsCategory)
+            'filter' => array('UF_SECTION'=> $adsCategory),
+            'cache' => [
+                'ttl' => 3600000,
+                'cache_joins' => true
+            ]
         ))->fetchAll();
         $editRates = [];
         if (!empty($typesRate)) {
@@ -207,13 +209,23 @@ function getOptimalActiveUserRate(string $adsCategory) : ?array
                 'UF_TYPE'=> $adsCategory,
                 '>UF_DATE_EXPIRED'=> $curTime
             )
-        ))->fetch();
+        ))->fetchAll();
 
-        if (!empty($userRates)) $userRates['RATE_INFO'] = $editRates[$userRates['UF_PARENT_XML']];
+        if (!empty($userRates)) {
+            $optimalRate = [];
+            $createdRateAds = NULL;
+            foreach ($userRates as $rate) {
+                $createdRateAds += $rate['UF_COUNT_REMAIN'];
+                if ($rate['UF_COUNT_REMAIN'] <= $rate['UF_COUNT_LESS']) continue;
+                $optimalRate = $rate;
+            }
 
+            $optimalRate['ADS_USED'] = $createdRateAds;
+            $optimalRate['RATE_INFO'] = $editRates[$optimalRate['UF_PARENT_XML']];
+        }
     }
 
-    return $userRates ?? NULL;
+    return !empty($optimalRate) ? $optimalRate : NULL;
 }
 
 function getRateInfoById(int $rateId) : ?array
@@ -221,9 +233,12 @@ function getRateInfoById(int $rateId) : ?array
     if (CModule::IncludeModule('highloadblock')) {
         $typeRatesClass = GetEntityDataClass(TYPE_RATES_HL_ID);
         $rateInfo = $typeRatesClass::getList(array(
-            'order' => array(),
             'select' => array('*'),
-            'filter' => array('ID'=> $rateId)
+            'filter' => array('ID'=> $rateId),
+            'cache' => [
+                'ttl' => 3600000,
+                'cache_joins' => true
+            ]
         ))->fetch();
     }
 
@@ -262,6 +277,7 @@ function deleteAdFromUserRate(int $adId, int $iblockId) : bool
                     if ($key !== false) {
                         unset($rate['UF_ID_ANONC'][$key]);
                         $boughtRateEntity::update($rate['ID'], [
+                            'UF_COUNT_LESS' => $rate['UF_COUNT_LESS'] > 0 ? --$rate['UF_COUNT_LESS'] : 0,
                             'UF_ID_ANONC' => $rate['UF_ID_ANONC']
                         ]);
                         return true;
@@ -272,4 +288,44 @@ function deleteAdFromUserRate(int $adId, int $iblockId) : bool
     }
 
     return false;
+}
+
+function getPropertyFreeAdValueId(int $iblockId) : ?int
+{
+    $propInfo = \Bitrix\Iblock\PropertyTable::getList(array(
+        'select' => array('*'),
+        'filter' => array('CODE' => 'FREE_AD','IBLOCK_ID' => $iblockId),
+        'cache' => array(
+            'ttl' => 360000,
+            'cache_joins' => true
+        ),
+    ))->fetch();
+
+    if (!empty($propInfo)) {
+        $propValue = \Bitrix\Iblock\PropertyEnumerationTable::getList(array(
+            'select' => array('*'),
+            'filter' => array('PROPERTY_ID' => $propInfo['ID']),
+            'cache' => array(
+                'ttl' => 3600000,
+                'cache_joins' => true
+            ),
+        ))->fetch();
+    }
+
+    return $propValue['ID'] ?? NULL;
+}
+
+function canUserCreateAds(int $iblockId, string $categoryCode) : bool
+{
+    $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
+    $arUser = \CUser::GetByID($userId)->Fetch();
+    $optimalUserRate = getOptimalActiveUserRate($categoryCode);
+    $iblockClass = \Bitrix\Iblock\Iblock::wakeUp($iblockId)->getEntityDataClass();
+    $elements = $iblockClass::getList(array(
+        'select' => array('ID', 'NAME'),
+        'filter' => ['ID_USER.VALUE' => $userId, '!FREE_AD.VALUE' => false]
+    ))->fetchCollection();
+    $countUserFreeAds = $elements->count();
+    $countRatesAds = !empty($optimalUserRate['ADS_USED']) ? $optimalUserRate['ADS_USED'] : 0;
+    return ($countRatesAds + $countUserFreeAds - $arUser['UF_COUNT_'.$categoryCode]) > 0;
 }
