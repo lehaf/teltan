@@ -1,4 +1,4 @@
-<?
+<?php
 use Bitrix\Main\Loader;
 use Bitrix\Main\Config\Option;
 
@@ -6,9 +6,7 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_admi
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_admin_after.php");
 Loader::includeModule("iblock");
 $APPLICATION->SetTitle('Настройки сайта');
-?>
 
-<?
 if(isset($_POST['submit_form']))
 {
     // Сохраняем настройки

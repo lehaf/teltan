@@ -464,12 +464,10 @@ while ($arTypes = $rsData->fetch()) {
             <? include $_SERVER['DOCUMENT_ROOT'] . '/personal/left.php' ?>
             <script>
                 $('.controlPanelPaket').click(function () {
-
                     let $data;
                     $('#paketControl').find('input, textearea, select').each(function () {
                         if ($(this).is(':checked')) {
-
-                            $data = $(this).data()
+                            $data = $(this).data();
                         }
                     });
 
@@ -479,6 +477,7 @@ while ($arTypes = $rsData->fetch()) {
                         async: false,
                         data: {type: 'getData'},
                         success: function (data) {
+                            console.log(data);
                             $('#payTcoinsBalance').text(data);
                             $('#payTcoinsNeedle').text($data.price);
                             $('#payTcoinsNeedleRes').text(data- $data.price)
@@ -499,8 +498,7 @@ while ($arTypes = $rsData->fetch()) {
 
                     $('#paketControl').find('input, textearea, select').each(function () {
                         if ($(this).is(':checked')) {
-
-                            $data = $(this).data()
+                            $data = $(this).data();
                         }
                     });
 
@@ -515,7 +513,7 @@ while ($arTypes = $rsData->fetch()) {
                             url: '/ajax/buy-rate-ajax.php',
                             method: 'post',
                             async: false,
-                            data: {data: $data},
+                            data: $data,
                             success: function (data) {
                                 window.location.href = '/personal/';
                             }
@@ -525,16 +523,15 @@ while ($arTypes = $rsData->fetch()) {
                 });
 
                 $('.payCardPayPlus').click(function () {
-                    var $data;
+                    let $data;
 
                     $('#paketControl').find('input, textearea, select').each(function () {
                         if ($(this).is(':checked')) {
-
                             $data = $(this).data()
                         }
                     });
 
-                    if($data == undefined){
+                    if ($data == undefined) {
                         $('.allert__text').html('не выбран тариф');
 
                         $('.del_all_in_chat').html('ok');
@@ -558,7 +555,6 @@ while ($arTypes = $rsData->fetch()) {
                             }
                         });
                     }
-
                 });
             </script>
         </div>

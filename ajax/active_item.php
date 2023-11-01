@@ -29,7 +29,8 @@ switch ($_REQUEST['data']['iblockId']){
                 $b = true;
             }
         }
-        if($arUser['UF_DAYS_FREE1'] - $arUser['UF_COUNT_FLEA'] > 0 || $b) {
+
+        if($arUser['UF_FREE_FLEA'] - $arUser['UF_COUNT_FLEA'] > 0 || $b) {
 
         }else{
             $error = true;
@@ -53,7 +54,7 @@ switch ($_REQUEST['data']['iblockId']){
                 $b = true;
             }
         }
-        if($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0 || $b) {
+        if($arUser['UF_FREE_PROPERTY'] - $arUser['UF_COUNT_PROPERTY'] > 0 || $b) {
 
         }else{
             $error = true;
@@ -78,7 +79,7 @@ switch ($_REQUEST['data']['iblockId']){
             $b = true;
         }
     }
-    if($arUser['UF_UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0 || $b) {
+    if($arUser['UF_FREE_AUTO'] - $arUser['UF_COUNT_AUTO'] > 0 || $b) {
 
     }else{
         $error = true;
@@ -86,13 +87,7 @@ switch ($_REQUEST['data']['iblockId']){
         break;
 }
 
-
-
-
-
-$PRODUCT_ID = IntVal($_REQUEST['data']['itemId']);
-
-
+    $PRODUCT_ID = IntVal($_REQUEST['data']['itemId']);
 
     $el = new CIBlockElement;
     if ($_REQUEST['value'] == 'green') {
@@ -155,10 +150,10 @@ $PRODUCT_ID = IntVal($_REQUEST['data']['itemId']);
                         unset($arUser['UF_COUNT_ITEM_PROP'][$key]);
 
                         $fields = array(
-                            'UF_COUNT_APART' => --$arUser['UF_COUNT_APART'],
+                            'UF_COUNT_PROPERTY' => --$arUser['UF_COUNT_PROPERTY'],
                             'UF_COUNT_ITEM_PROP' =>  $arUser['UF_COUNT_ITEM_PROP']
                         );
-                        if($fields['UF_COUNT_APART'] == 0){
+                        if($fields['UF_COUNT_PROPERTY'] == 0){
                             $fields['UF_DAYS_PROP_REMAIN'] = 30;
                         }
                         $user->Update($USER->GetID(), $fields);
@@ -249,7 +244,7 @@ echo Loc::getMessage('DEACTIVATE_ITEM');
                 $return = 'отображать';
                 switch ($typeOperand) {
                     case 'FLEA':
-                        if ($arUser['UF_DAYS_FREE1'] - $arUser['UF_COUNT_FLEA'] > 0) {
+                        if ($arUser['UF_FREE_FLEA'] - $arUser['UF_COUNT_FLEA'] > 0) {
                             $user = new CUser;
                             $arUser['UF_COUNT_ITEM_FLEA'][] = intval($PRODUCT_ID);
                             $fields = array(
@@ -275,12 +270,12 @@ echo Loc::getMessage('DEACTIVATE_ITEM');
                         }
                         break;
                     case 'Prop':
-                        if ($arUser['UF_DAYS_FREE3'] - $arUser['UF_COUNT_APART'] > 0) {
-                            print_r(++$arUser['UF_COUNT_APART']);
+                        if ($arUser['UF_FREE_PROPERTY'] - $arUser['UF_COUNT_PROPERTY'] > 0) {
+                            print_r(++$arUser['UF_COUNT_PROPERTY']);
                             $user = new CUser;
                             $arUser['UF_COUNT_ITEM_PROP'][] = intval($PRODUCT_ID);
                             $fields = array(
-                                'UF_COUNT_APART' => ++$arUser['UF_COUNT_APART'],
+                                'UF_COUNT_PROPERTY' => ++$arUser['UF_COUNT_PROPERTY'],
                                 'UF_COUNT_ITEM_PROP' => $arUser['UF_COUNT_ITEM_PROP']
                             );
                             $user->Update($USER->GetID(), $fields);
@@ -303,7 +298,7 @@ echo Loc::getMessage('DEACTIVATE_ITEM');
                         break;
                     case 'AUTO':
 
-                        if ($arUser['UF_UF_DAYS_FREE2'] - $arUser['UF_COUNT_AUTO'] > 0) {
+                        if ($arUser['UF_FREE_AUTO'] - $arUser['UF_COUNT_AUTO'] > 0) {
                             // print_r(++$arUser['UF_COUNT_AUTO']);
                             $user = new CUser;
                             $arUser['UF_COUNT_ITEM_AUTO'][] = intval($PRODUCT_ID);

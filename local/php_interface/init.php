@@ -30,7 +30,6 @@ function GetEntityDataClass($HlBlockId)
 function searchForId($id, $array) {
 
     foreach ($array as $key => $val) {
-        ps($val);
         if ($val['CODE'] == $id) {
             return $key;
         }
@@ -274,14 +273,6 @@ function resizeImg($id, $width, $height, $type = 0)
         return false;
     }
 }
-
-/*
- * array(
-      'select' => array('ID','UF_NAME','UF_MESSAGE','UF_DATETIME'),
-      'order' => array('ID' => 'ASC'),
-      'limit' => '50',
-   )
- * */
 
 function getHighloadInfo($hlblock_id, $arSelect)
 {
@@ -565,24 +556,6 @@ function getCountUnreadMessages($IDUser)
 
     return $count;
 
-    /*$params = array(
-        'select' => array('ID'),
-        'filter' => array(
-            array(
-                'UF_ID_USER' => $IDUser,
-                'UF_READ' => 0,
-                'UF_DEL_AUTOR' => 0,
-                'UF_DEL_USER' => 0,
-            ),
-        ),
-    );
-
-    $result = getHighloadInfo(7, $params);
-
-    if($result)
-        return count($result);
-
-    return 0;*/
 }
 
 // Получаем название объявления для чата
@@ -707,53 +680,6 @@ function sendSMS($msgBody, $mobile, $msgName = false)
     $response = json_decode(urldecode($result));
     print_r($error);
     print_r($response);
-}
-
-AddEventHandler("main", "OnAfterUserAdd", array("MyClass", "OnAfterUserAddHandler"));
-AddEventHandler("iblock", "OnAfterIBlockElementDelete", array("MyClass", "OnAfterIBlockElementDeleteHandler"));
-
-class MyClass
-{
-    public static function OnAfterIBlockElementDeleteHandler($arFields)
-    {
-
-        $hlbl = 5;
-        $hlblock = HL\HighloadBlockTable::getById($hlbl)->fetch();
-
-        $entity = HL\HighloadBlockTable::compileEntity($hlblock);
-        $entity_data_class = $entity->getDataClass();
-
-        $rsData = $entity_data_class::getList(array(
-            "select" => array("*"),
-            "order" => array("ID" => "ASC"),
-            "filter" => array("UF_ID_AD" => $arFields['ID'])  // Задаем параметры фильтра выборки
-        ));
-
-        while ($arData = $rsData->Fetch()) {
-            $entity_data_class::Delete($arData['ID']);
-        }
-    }
-
-    // создаем обработчик события "OnAfterUserAdd"
-    function OnAfterUserAddHandler(&$arFields)
-    {
-
-        $user = new CUser;
-        $fields = array(
-            "UF_DAYS_FREE1" => 1,
-            "UF_UF_DAYS_FREE2" => 1,
-            "UF_DAYS_FREE3" => 1,
-            'UF_DAYS_FLEA_REMAIN' => 30,
-            'UF_DAYS_AUTO_REMAIN' => 30,
-            'UF_DAYS_PROP_REMAIN' => 30,
-            "UF_COUNT_RENT" => 1,
-            "UF_AUTO" => 1,
-            "UF_ANOUNC" => 1,
-        );
-        $user->Update($arFields['ID'], $fields);
-
-
-    }
 }
 
 function drawElement($arItem, $arLink, $arProps)
@@ -889,4 +815,3 @@ function drawElement($arItem, $arLink, $arProps)
 }
 
 require_once($_SERVER['DOCUMENT_ROOT'] . "/local/php_interface/include/events.php");
-?>

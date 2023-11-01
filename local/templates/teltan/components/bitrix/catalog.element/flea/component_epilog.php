@@ -1,7 +1,6 @@
-<? if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
-ps($arResult);
-use Bitrix\Main\Loader;
-if ($arResult['IBLOCK_SECTION_ID']) {
+<?php if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
+
+if (!empty($arResult['IBLOCK_SECTION_ID'])) {
     CModule::includeModule('iblock');
     $navChain = CIBlockSection::GetNavChain(
         false,

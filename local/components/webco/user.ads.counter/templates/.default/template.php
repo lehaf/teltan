@@ -6,8 +6,8 @@ use Bitrix\Main\Localization\Loc;
 
 ?>
 <div class="mb-1 p-3 card d-flex flex-column-reverse flex-lg-row announcement-list">
-    <a class="p-3 d-flex justify-content-center align-items-center" data-toggle="collapse"
-       href="#userAnnouncementList" role="button" aria-expanded="false"
+    <a class="p-3 d-flex justify-content-center align-items-center"
+       data-toggle="collapse" href="#userAnnouncementList" role="button" aria-expanded="false"
        aria-controls="collapseExample">
         <i class="icon-arrow-down-sign-to-navigate-3"></i>
     </a>
@@ -45,43 +45,41 @@ use Bitrix\Main\Localization\Loc;
             <div class="mb-2">
                 <table class="w-100">
                     <tbody>
-                    <th class="text-right pr-3"><?=$adsType?></th>
-                    <tr class="d-flex">
-                        <td class="d-flex flex-column flex-lg-row justify-content-end">
-                            <div class="m-0 mr-lg-4 d-flex align-items-center justify-content-end justify-content-lg-center category">
-                                <img src="<?= SITE_TEMPLATE_PATH ?>/assets/announsment-list-free.svg"
-                                     title="free"
-                                     alt="free"
-                                >
-                            </div>
-                            <div class="d-flex justify-content-end align-items-center justify-content-lg-center font-weight-bold">
-                                <span class="ml-1"><?=!empty($adsData['FREE_ADS_COUNT']) ? $adsData['FREE_ADS_COUNT'] : 0 ?></span>
-                                <?=Loc::getMessage('OF_COUNT')?>
-                                <span class="mr-1"><?=!empty($arResult['COUNTER'][$adsType]['FREE_LIMIT']) ? $arResult['COUNTER'][$adsType]['FREE_LIMIT'] : 0 ?></span>
-                            </div>
-                        </td>
-                        <td class="d-flex justify-content-center align-items-center date-announcment">
-                            <span>
-                                <? if (reCount($arUser['UF_COUNT_ITEM_AUTO']) > 0) { ?>
-                                    (  <?= date("d.m.Y H:i:s", strtotime('+ ' . $arItem['UF_DAYS_AUTO_REMAIN'] . ' days')) ?>)
-                                <? } else { ?>
-                                    -
-                                <? } ?>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr class="d-flex">
-                        <td class="d-flex flex-column flex-lg-row justify-content-center">
-                            <div class="ml-auto d-flex justify-content-end align-items-center justify-content-lg-center font-weight-bold">
-                                <span class="ml-1"><?=!empty($adsData['COST_ADS_COUNT']) ? $adsData['COST_ADS_COUNT'] : 0 ?></span>
-                                <?=Loc::getMessage('OF_COUNT')?>
-                                <span class="mr-1"><?=!empty($arResult['COUNTER'][$adsType]['COST_LIMIT']) ? $arResult['COUNTER'][$adsType]['COST_LIMIT'] : 0 ?></span>
-                            </div>
-                        </td>
-                        <td class="d-flex justify-content-center align-items-center date-announcment">
-                            <span><?= date("d.m.Y H:i:s", strtotime('+ ' . $arItem['UF_DAYS_REMAIN'] . ' days')) ?></span>
-                        </td>
-                    </tr>
+                        <th class="text-right pr-3"><?=$adsType?></th>
+                        <tr class="d-flex">
+                            <td class="d-flex flex-column flex-lg-row justify-content-end">
+                                <div class="m-0 mr-lg-4 d-flex align-items-center justify-content-end justify-content-lg-center category">
+                                    <img src="<?= SITE_TEMPLATE_PATH ?>/assets/announsment-list-free.svg"
+                                         title="free"
+                                         alt="free"
+                                    >
+                                </div>
+                                <div class="d-flex justify-content-end align-items-center justify-content-lg-center font-weight-bold">
+                                    <span class="mr-1"><?=!empty($adsData['FREE_ADS_COUNT']) ? $adsData['FREE_ADS_COUNT'] : 0 ?></span>
+                                    <span class="mr-1"><?=Loc::getMessage('OF_COUNT')?></span>
+                                    <span class="mr-1"><?=!empty($arResult['COUNTER'][$adsType]['FREE_LIMIT']) ? $arResult['COUNTER'][$adsType]['FREE_LIMIT'] : 0 ?></span>
+                                </div>
+                            </td>
+                            <td class="d-flex justify-content-center align-items-center date-announcment">
+                                <span><?=!empty($adsData['FREE_DATE_EXPIRED']) ? $adsData['FREE_DATE_EXPIRED'] : '-'?></span>
+                            </td>
+                        </tr>
+                        <?php if (!empty($adsData['COST_ADS'])):?>
+                            <?php foreach ($adsData['COST_ADS'] as $rateData):?>
+                                <tr class="d-flex">
+                                    <td class="d-flex flex-column flex-lg-row justify-content-center">
+                                        <div class="ml-auto d-flex justify-content-end align-items-center justify-content-lg-center font-weight-bold">
+                                            <span class="mr-1"><?=!empty($rateData['COUNT']) ? $rateData['COUNT'] : 0 ?></span>
+                                            <span class="mr-1"><?=Loc::getMessage('OF_COUNT')?></span>
+                                            <span class="mr-1"><?=!empty($rateData['LIMIT']) ? $rateData['LIMIT'] : 0 ?></span>
+                                        </div>
+                                    </td>
+                                    <td class="d-flex justify-content-center align-items-center date-announcment">
+                                        <span><?=$rateData['DATE_EXPIRED']?></span>
+                                    </td>
+                                </tr>
+                            <?php endforeach;?>
+                        <?php endif;?>
                     </tbody>
                 </table>
             </div>

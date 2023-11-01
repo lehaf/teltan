@@ -293,7 +293,6 @@ $arLink = CIBlockSectionPropertyLink::GetArray(AUTO_IBLOCK_ID, 80);
                                                 }
                                             }
                                         }
-                                        ps($arSubSections);
                                         ?>
                                         <? foreach ($arSections as $arSection) { ?>
                                             <div class="mb-3 mb-lg-4 col" data-filter-for="#brandFilter"
@@ -1012,7 +1011,6 @@ $arLink = CIBlockSectionPropertyLink::GetArray(AUTO_IBLOCK_ID, 80);
                                                 "CACHE_GROUPS" => "Y"
                                             )
                                         );
-                                        ps($arProps);
                                         ?>
 
                                         <div class="mb-4 row __colum-reverse flex-lg-row property-step-contact__time">

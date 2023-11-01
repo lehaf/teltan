@@ -60,7 +60,6 @@ if ($arResult['ITEMS']) {
 
                     <div class="px-2 px-lg-3 content-block">
                         <div class="text-right">
-                            <? ps($arItem); ?>
                             <a href="<?= $arItem['DETAIL_PAGE_URL']; ?>"
                                class="mb-2 mb-lg-3 title"><?= $arItem['NAME']; ?></a>
                             <? if ($arItem['PROPERTIES']['PROP_PROBEG']['VALUE'] != null) {

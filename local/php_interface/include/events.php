@@ -1,4 +1,4 @@
-<?
+<?php
 
 AddEventHandler("main", "OnBuildGlobalMenu", "ModifiAdminMenu");
 AddEventHandler("main", "OnBeforeProlog", "setUserLastActivityDate");
@@ -25,4 +25,47 @@ function setUserLastActivityDate() {
         CUser::SetLastActivityDate($USER->GetID());
     }
 }
-?>
+
+
+AddEventHandler("main", "OnAfterUserAdd", array("MyClass", "OnAfterUserAddHandler"));
+AddEventHandler("iblock", "OnAfterIBlockElementDelete", array("MyClass", "OnAfterIBlockElementDeleteHandler"));
+
+class MyClass
+{
+    public static function OnAfterIBlockElementDeleteHandler($arFields)
+    {
+        $hlbl = 5;
+        $hlblock = \Bitrix\Highloadblock\HighloadBlockTable::getById($hlbl)->fetch();
+
+        $entity = \Bitrix\Highloadblock\HighloadBlockTable::compileEntity($hlblock);
+        $entity_data_class = $entity->getDataClass();
+
+        $rsData = $entity_data_class::getList(array(
+            "select" => array("*"),
+            "order" => array("ID" => "ASC"),
+            "filter" => array("UF_ID_AD" => $arFields['ID'])  // Задаем параметры фильтра выборки
+        ));
+
+        while ($arData = $rsData->Fetch()) {
+            $entity_data_class::Delete($arData['ID']);
+        }
+    }
+
+    // создаем обработчик события "OnAfterUserAdd"
+    function OnAfterUserAddHandler(&$arFields)
+    {
+        $user = new CUser;
+        $fields = array(
+            "UF_FREE_PROPERTY" => 1,
+            "UF_FREE_AUTO" => 1,
+            "UF_FREE_FLEA" => 1,
+            "UF_AVAILABLE_PROPERTY" => 1,
+            "UF_AVAILABLE_AUTO" => 1,
+            "UF_AVAILABLE_FLEA" => 1,
+            'UF_DAYS_FLEA_REMAIN' => 30,
+            'UF_DAYS_AUTO_REMAIN' => 30,
+            'UF_DAYS_PROP_REMAIN' => 30,
+        );
+        $user->Update($arFields['ID'], $fields);
+    }
+}

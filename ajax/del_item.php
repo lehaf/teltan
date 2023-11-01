@@ -14,7 +14,7 @@ if (Loader::includeModule("iblock") && Loader::includeModule("highloadblock") &&
 
     $iblockIdToPropCountAds = [
         1 => "UF_COUNT_FLEA",
-        2 => "UF_COUNT_APART",
+        2 => "UF_COUNT_PROPERTY",
         3 => "UF_COUNT_AUTO",
         7 => "UF_COUNT_AUTO",
         8 => "UF_COUNT_AUTO",
@@ -53,6 +53,7 @@ if (Loader::includeModule("iblock") && Loader::includeModule("highloadblock") &&
             $user->Update($USER->GetID(), $fields);
         }
         CIBlockElement::Delete($itemId);
+        deleteAdFromUserRate($itemId, $item['IBLOCK_ID']);
     }
 
     // Удаляем объявление из таблицы избранного пользователей

@@ -35,9 +35,7 @@ function pr($o, $show = false, $die = false, $fullBackTrace = false)
             </div>
             <pre style='padding:10px;'><? is_array($o) ? print_r($o) :  print_r(htmlspecialcharsbx($o)) ?></pre>
         </div>
-        <?if ($die == true) {
-            die();
-        }?>
+        <?if ($die == true) die(); ?>
         <?
     } else {
         return false;
@@ -199,32 +197,79 @@ function getOptimalActiveUserRate(string $adsCategory) : ?array
             }
         }
 
+        $curTime = new DateTime();
+        $boughtRateEntity = GetEntityDataClass(BOUGHT_RATE_HL_ID);
+        $userRates = $boughtRateEntity::getList(array(
+            'order' => array('ID' => 'ASC'),
+            'select' => array('*'),
+            'filter' => array(
+                'UF_USER_ID'=> $userId,
+                'UF_TYPE'=> $adsCategory,
+                '>UF_DATE_EXPIRED'=> $curTime
+            )
+        ))->fetch();
+
+        if (!empty($userRates)) $userRates['RATE_INFO'] = $editRates[$userRates['UF_PARENT_XML']];
+
+    }
+
+    return $userRates ?? NULL;
+}
+
+function getRateInfoById(int $rateId) : ?array
+{
+    if (CModule::IncludeModule('highloadblock')) {
+        $typeRatesClass = GetEntityDataClass(TYPE_RATES_HL_ID);
+        $rateInfo = $typeRatesClass::getList(array(
+            'order' => array(),
+            'select' => array('*'),
+            'filter' => array('ID'=> $rateId)
+        ))->fetch();
+    }
+
+    return $rateInfo ?? NULL;
+}
+
+function deleteAdFromUserRate(int $adId, int $iblockId) : bool
+{
+    $categoryType = [
+        1 => "FLEA",
+        2 => "PROPERTY",
+        3 => "AUTO",
+        7 => "AUTO",
+        8 => "AUTO",
+    ];
+
+    if (!empty($categoryType[$iblockId])) {
+        $curTime = new \Bitrix\Main\Type\DateTime();
+        $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
         $boughtRateEntity = GetEntityDataClass(BOUGHT_RATE_HL_ID);
         $userRates = $boughtRateEntity::getList(array(
             'order' => array('ID' => 'DESC'),
             'select' => array('*'),
-            'filter' => array('UF_USER_ID'=> $userId, 'UF_TYPE'=> $adsCategory)
+            'filter' => array(
+                'UF_USER_ID'=> $userId,
+                '>UF_DATE_EXPIRED'=> $curTime,
+                'UF_TYPE'=> $categoryType[$iblockId]
+            )
         ))->fetchAll();
 
-        $curTime = new DateTime();
-        $notExpiredRates = [];
-        $notExpiredRatesId = [];
         if (!empty($userRates)) {
-            foreach ($userRates as $userRate) {
-                $chosenRate = $editRates[$userRate['UF_PARENT_XML']];
-                $purchaseRateDate = $userRate['UF_DATE_PURCHASE'];
-                $dateExpiredCurRate = !empty($purchaseRateDate) ?
-                    DateTime::createFromTimestamp(strtotime($purchaseRateDate.' + '.$chosenRate['UF_DAYS'].' days')) : '';
-                if ($curTime < $dateExpiredCurRate) {
-                    $notExpiredRatesId[] = $userRate['ID'];
-                    $notExpiredRates[$userRate['ID']] = $userRate;
+            foreach ($userRates as $rate) {
+                if (!empty($rate['UF_ID_ANONC']) && in_array($adId, $rate['UF_ID_ANONC'])) {
+                    $key = array_search($adId, $rate['UF_ID_ANONC']);
+
+                    if ($key !== false) {
+                        unset($rate['UF_ID_ANONC'][$key]);
+                        $boughtRateEntity::update($rate['ID'], [
+                            'UF_ID_ANONC' => $rate['UF_ID_ANONC']
+                        ]);
+                        return true;
+                    }
                 }
             }
-            $earlyActiveUserRateId = min($notExpiredRatesId);
-            $userActiveRate = $notExpiredRates[$earlyActiveUserRateId];
-            $userActiveRate['RATE_INFO'] = $editRates[$userActiveRate['UF_PARENT_XML']];
         }
     }
 
-    return $userActiveRate ?? NULL;
+    return false;
 }

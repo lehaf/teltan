@@ -1,12 +1,5 @@
 <?php if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
-
-use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
-ps($arResult);
-?><?php if ($_GET['TEST'] == 'Y') { ?>
-    <pre>
-    <?= print_r($arResult['NAV_STRING']) ?>
-</pre>
-<?php } ?>
+?>
 <div class="mb-5 row d-flex align-items-center">
 
     <?= $arResult['NAV_STRING'] ?>
