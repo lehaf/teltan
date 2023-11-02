@@ -380,7 +380,7 @@ function addEntryToUserBuyHistory(int $id, string $entryType) : void
     switch ($entryType) {
         case 'RATE':
             $rateInfo = getRateInfoById($id);
-            $newEntryData['UF_NAME'] = $rateInfo['UF_NAME'];
+            $newEntryData['UF_NAME'] = $rateInfo['UF_NAME'].' ('.$rateInfo['UF_SECTION'].')';
             break;
         case 'RISE':
             $newEntryData['UF_ITEM_ID'] = $id;
