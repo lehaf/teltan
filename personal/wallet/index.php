@@ -1,30 +1,24 @@
-<?
-require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
+<?php require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
+
 use Bitrix\Main\Localization\Loc;
-use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
+
 Loc::loadMessages(__FILE__);
 CModule::IncludeModule('iblock');
+$userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
 
-$entity_data_class = GetEntityDataClass(28);
+$entity_data_class = GetEntityDataClass(BOUGHT_RATE_HL_ID);
 $rsData = $entity_data_class::getList(array(
     'select' => array('*'),
-    'filter' => array('UF_USER_ID'=> $USER->GetID())
+    'filter' => array('UF_USER_ID'=> $userId)
 ));
-$entity_data_class = GetEntityDataClass(29);
-$rsexData = $entity_data_class::getList(array(
+
+$entity_data_class = GetEntityDataClass(EXCHANGE_RATE_HL_ID);
+$exchanghe = $entity_data_class::getList(array(
     'select' => array('*'),
     'filter' => array('ID'=> 1)
-));
-$exchanghe = $rsexData->fetch();
-$entity_data_class = GetEntityDataClass(30);
-$rshiData = $entity_data_class::getList(array(
-    'select' => array('*'),
-    'filter' => array('UF_USER_ID'=> $USER->GetID())
-));
+))->fetch();
 
-while($history[] = $rshiData->fetch()){
 
-}
 $count = 0;
 while ($arPaket[] = $rsData->fetch()) {
     $entity_data_class = GetEntityDataClass(27);
@@ -36,8 +30,8 @@ while ($arPaket[] = $rsData->fetch()) {
     }
     $count++;
 }
-arsort($history);
-$rsUser = CUser::GetByID($USER->GetID());
+
+$rsUser = CUser::GetByID($userId);
 $arUser = $rsUser->Fetch();
 function resGetter($id, $userId)
 {
@@ -58,19 +52,17 @@ function resGetter($id, $userId)
     }
     return $arResult;
 }
-$ar1 = resGetter(1, $USER->GetID());
-$ar2 = resGetter(2, $USER->GetID());
-$ar3 = resGetter(3, $USER->GetID());
-$ar7 = resGetter(7, $USER->GetID());
-$ar8 = resGetter(8, $USER->GetID());
+$ar1 = resGetter(1, $userId);
+$ar2 = resGetter(2, $userId);
+$ar3 = resGetter(3, $userId);
+$ar7 = resGetter(7, $userId);
+$ar8 = resGetter(8, $userId);
 $result = array_merge_recursive($ar1, $ar2,$ar3, $ar7,$ar8);
+$userActiveRates = getCurUserActiveRates();
 ?>
     <div class="container">
-        <h2 class="mb-4 subtitle">
-            <?= $APPLICATION->ShowTitle(); ?>
-        </h2>
+        <h2 class="mb-4 subtitle"><?= $APPLICATION->ShowTitle(); ?></h2>
         <div class="row">
-
             <div class="col-12 col-lg-8 col-xl-9">
                 <div class="wallet-history">
                     <div class="current-balance">
@@ -159,85 +151,68 @@ $result = array_merge_recursive($ar1, $ar2,$ar3, $ar7,$ar8);
 
                             <div class="row">
                                 <div class="mb-4 col-12 col-xl-4">
-                                    <span class="m-0 text-uppercase font-weight-bolder wallet-balance-name"><?=Loc::getMessage('My_subscriptions:')?></span>
+                                    <span class="m-0 text-uppercase font-weight-bolder wallet-balance-name">
+                                        <?=Loc::getMessage('My_subscriptions:')?>
+                                    </span>
                                 </div>
-
                                 <div class="col">
                                     <div class="d-flex flex-column">
-                                    <?foreach ($arPaket as $arItem){?>
-                                        <?if($arItem['UF_USER_ID'] != null){?>
-
-                                        <div class="mb-4 d-flex justify-content-end align-items-center">
-                                            <div class="d-flex flex-column text-right">
-                                                <p href="#" class="mb-2 text-primary"><?=$arItem['TARIF'][0]['UF_NAME']?></p>
-                                                <p class="mb-0 text-secondary">(<?=Loc::getMessage('until')?> <?=date("d.m.Y H:i:s", strtotime('+ '. $arItem['UF_DAYS_REMAIN'] . ' days'))?>)</p>
-                                            </div>
-                                        </div>
-                                        <?}}?>
-                                    <?foreach ($result['ITEMS'] as $arItem){?>
-                                        <?if($arItem['ACTIVE'] == 'Y'){?>
-                                            <?if($arItem['PROPERTY']['COUNT_RAISE']['VALUE'] > 0){?>
+                                        <?php if (!empty($userActiveRates)):?>
+                                            <?php foreach ($userActiveRates as $rateName => $rateUntilDate):?>
                                                 <div class="mb-4 d-flex justify-content-end align-items-center">
                                                     <div class="d-flex flex-column text-right">
-                                                        <p href="#" class="mb-2 text-primary"><?=Loc::getMessage('rise_item'). ' ' . $arItem['NAME'] . '</p><p class="mb-0 text-secondary"> '. Loc::getMessage('remain'). ' ' .$arItem['PROPERTY']['COUNT_RAISE']['VALUE']?></p>
+                                                        <p href="#" class="mb-2 text-primary"><?=$rateName?></p>
+                                                        <p class="mb-0 text-secondary">(<?=Loc::getMessage('until').' '.$rateUntilDate?>)</p>
                                                     </div>
                                                 </div>
-                                            <?}?>
-                                            <?if($arItem['PROPERTY']['COLOR_DATE']['VALUE'] && strtotime($arItem['PROPERTY']['COLOR_DATE']['VALUE']) > time()){?>
-                                                <div class="mb-4 d-flex justify-content-end align-items-center">
-                                                    <div class="d-flex flex-column text-right">
-                                                        <p href="#" class="mb-2 text-primary"><?=Loc::getMessage('color_item'). ' ' . $arItem['NAME'] . '</p><p class="mb-0 text-secondary">'. Loc::getMessage('until'). ' ' . date("d.m.Y H:i:s", strtotime($arItem['PROPERTY']['COLOR_DATE']['VALUE']))?></p>
+                                            <?php endforeach;?>
+                                        <?endif;?>
+                                        <?foreach ($result['ITEMS'] as $arItem){?>
+                                            <?if($arItem['ACTIVE'] == 'Y'){?>
+                                                <?if($arItem['PROPERTY']['COUNT_RAISE']['VALUE'] > 0){?>
+                                                    <div class="mb-4 d-flex justify-content-end align-items-center">
+                                                        <div class="d-flex flex-column text-right">
+                                                            <p href="#" class="mb-2 text-primary"><?=Loc::getMessage('rise_item'). ' ' . $arItem['NAME'] . '</p><p class="mb-0 text-secondary"> '. Loc::getMessage('remain'). ' ' .$arItem['PROPERTY']['COUNT_RAISE']['VALUE']?></p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            <?}?>
-                                            <?if($arItem['PROPERTY']['VIP_DATE']['VALUE'] && strtotime($arItem['PROPERTY']['VIP_DATE']['VALUE']) > time()){?>
-                                                <div class="mb-4 d-flex justify-content-end align-items-center">
-                                                    <div class="d-flex flex-column text-right">
-                                                        <p href="#" class="mb-2 text-primary"><?=Loc::getMessage('vip_item'). ' ' . $arItem['NAME'] . '</p><p class="mb-0 text-secondary">' . Loc::getMessage('until'). ' ' .date("d.m.Y H:i:s", strtotime($arItem['PROPERTY']['VIP_DATE']['VALUE']))?></p>
+                                                <?}?>
+                                                <?if($arItem['PROPERTY']['COLOR_DATE']['VALUE'] && strtotime($arItem['PROPERTY']['COLOR_DATE']['VALUE']) > time()){?>
+                                                    <div class="mb-4 d-flex justify-content-end align-items-center">
+                                                        <div class="d-flex flex-column text-right">
+                                                            <p href="#" class="mb-2 text-primary"><?=Loc::getMessage('color_item'). ' ' . $arItem['NAME'] . '</p><p class="mb-0 text-secondary">'. Loc::getMessage('until'). ' ' . date("d.m.Y H:i:s", strtotime($arItem['PROPERTY']['COLOR_DATE']['VALUE']))?></p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            <?}?>
-                                            <?if($arItem['PROPERTY']['LENTA_DATE']['VALUE'] && strtotime($arItem['PROPERTY']['LENTA_DATE']['VALUE']) > time()){?>
-                                                <div class="mb-4 d-flex justify-content-end align-items-center">
-                                                    <div class="d-flex flex-column text-right">
-                                                        <p href="#" class="mb-2 text-primary"><?=Loc::getMessage('lent_item'). ' ' . $arItem['NAME'] . '</p><p class="mb-0 text-secondary"> '. Loc::getMessage('until'). ' ' .date("d.m.Y H:i:s", strtotime($arItem['PROPERTY']['LENTA_DATE']['VALUE']))?></p>
+                                                <?}?>
+                                                <?if($arItem['PROPERTY']['VIP_DATE']['VALUE'] && strtotime($arItem['PROPERTY']['VIP_DATE']['VALUE']) > time()){?>
+                                                    <div class="mb-4 d-flex justify-content-end align-items-center">
+                                                        <div class="d-flex flex-column text-right">
+                                                            <p href="#" class="mb-2 text-primary"><?=Loc::getMessage('vip_item'). ' ' . $arItem['NAME'] . '</p><p class="mb-0 text-secondary">' . Loc::getMessage('until'). ' ' .date("d.m.Y H:i:s", strtotime($arItem['PROPERTY']['VIP_DATE']['VALUE']))?></p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            <?}?>
-                                    <?}
-                                    }?>
+                                                <?}?>
+                                                <?if($arItem['PROPERTY']['LENTA_DATE']['VALUE'] && strtotime($arItem['PROPERTY']['LENTA_DATE']['VALUE']) > time()){?>
+                                                    <div class="mb-4 d-flex justify-content-end align-items-center">
+                                                        <div class="d-flex flex-column text-right">
+                                                            <p href="#" class="mb-2 text-primary"><?=Loc::getMessage('lent_item'). ' ' . $arItem['NAME'] . '</p><p class="mb-0 text-secondary"> '. Loc::getMessage('until'). ' ' .date("d.m.Y H:i:s", strtotime($arItem['PROPERTY']['LENTA_DATE']['VALUE']))?></p>
+                                                        </div>
+                                                    </div>
+                                                <?}?>
+                                            <?}
+                                        }?>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
-                    <div class="card purchase-history">
-                        <div class="mb-4 pb-3 wallet-history__title border-bottom">
-                            <?=Loc::getMessage('purchase_history')?>
-                        </div>
-
-<?foreach ($history as $arItem){?>
-    <?if($arItem['UF_NAME'] != null){?>
-        <?$res = CIBlockElement::GetByID($arItem['UF_ITEM_ID']);
-    if($ar_res = $res->GetNext())
-        $nameNew = $ar_res['NAME'];?>
-            <?if($arItem['UF_NAME'] == 'buy_pjet_anon' || $arItem['UF_NAME'] == 'buy_t_coins' || $arItem['UF_NAME'] == 'buy_shekel') {
-            $nameNew = '';
-            $forMessage = '';
-        }else{
-            $forMessage = 'for';
-        }
-                ?>
-                        <div class="pb-2 mb-2 d-flex justify-content-between align-items-center border-bottom">
-                            <div class="text-uppercase purchase-history__name"><?=Loc::getMessage($arItem["UF_NAME"]) . ' '. Loc::getMessage($forMessage) . ' ' . $nameNew?></div>
-
-                            <div class="text-uppercase purchase-history__date"><?=$arItem['UF_DATE_BUY']?></div>
-                        </div>
-    <?}}?>
-
-                    </div>
+                    <?php
+                    $APPLICATION->IncludeComponent(
+                        "webco:user.history",
+                        "",
+                        array(
+                            'MAX_PAGE_ELEMENTS' => 20
+                        )
+                    );
+                    ?>
                 </div>
             </div>
             <div class="modal fade" id="payTcoins" tabindex="-1" aria-labelledby="payTcoins" aria-hidden="true">
@@ -246,19 +221,16 @@ $result = array_merge_recursive($ar1, $ar2,$ar3, $ar7,$ar8);
                         <div class="p-0 mb-4 border-bottom-0 modal-header justify-content-end">
                             <h2 class="subtitle" id="exampleModalLabel">Оплата</h2>
                         </div>
-
                         <div class="p-0 modal-body text-right">
                             <p  class="mb-4 text-uppercase font-weight-bold">MY BALANCE: <span id="payTcoinsBalance" class="text-primary">100 </span>TCOIN
                             </p>
                             <p class="mb-0 text-uppercase font-weight-bold">К списанию: <span id="payTcoinsNeedle" class="text-primary">80 </span>TCOIN
                             </p>
-
                             <hr>
-
                             <p class="mb-3 text-uppercase font-weight-bold text-secondary">Остаток:
-                                <span>20 TCOIN</span></p>
+                                <span>20 TCOIN</span>
+                            </p>
                         </div>
-
                         <div class="p-0 border-top-0 modal-footer">
                             <button type="button" class="btn" data-dismiss="modal">Close</button>
                             <button id="formControlTcoins" type="submit" class="btn btn-primary">Оплатить</button>

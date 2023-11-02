@@ -329,3 +329,89 @@ function canUserCreateAds(int $iblockId, string $categoryCode) : bool
     $countRatesAds = !empty($optimalUserRate['ADS_USED']) ? $optimalUserRate['ADS_USED'] : 0;
     return ($countRatesAds + $countUserFreeAds - $arUser['UF_COUNT_'.$categoryCode]) > 0;
 }
+
+function getCurUserActiveRates() : array
+{
+    $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
+    $typeRatesClass = GetEntityDataClass(TYPE_RATES_HL_ID);
+    $typesRate = $typeRatesClass::getList(array(
+        'select' => array('*'),
+        'cache' => [
+            'ttl' => 3600000,
+            'cache_joins' => true
+        ]
+    ))->fetchAll();
+    $editRates = [];
+    if (!empty($typesRate)) {
+        foreach ($typesRate as $rate) {
+            $editRates[$rate['ID']] = $rate;
+        }
+    }
+
+    $curTime = new \Bitrix\Main\Type\DateTime();
+    $boughtRateEntity = GetEntityDataClass(BOUGHT_RATE_HL_ID);
+    $userRates = $boughtRateEntity::getList(array(
+        'order' => array('ID' => 'ASC'),
+        'select' => array('*'),
+        'filter' => array(
+            'UF_USER_ID'=> $userId,
+            '>UF_DATE_EXPIRED'=> $curTime
+        )
+    ))->fetchAll();
+
+
+    $activeUserRates = [];
+    foreach ($userRates as $rateInfo) {
+        $activeUserRates[$editRates[$rateInfo['UF_PARENT_XML']]['UF_NAME']] = $rateInfo['UF_DATE_EXPIRED'];
+    }
+
+    return $activeUserRates;
+}
+
+function addEntryToUserBuyHistory(int $id, string $entryType) : void
+{
+    $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
+    $newEntryData = [
+        'UF_TYPE' => $entryType,
+        'UF_USER_ID' => $userId,
+        'UF_DATE_BUY' => new \Bitrix\Main\Type\DateTime()
+    ];
+
+    switch ($entryType) {
+        case 'RATE':
+            $rateInfo = getRateInfoById($id);
+            $newEntryData['UF_NAME'] = $rateInfo['UF_NAME'];
+            break;
+        case 'RISE':
+            $newEntryData['UF_ITEM_ID'] = $id;
+            $itemInfo = \Bitrix\Iblock\ElementTable::getById($id)->fetch();
+            $newEntryData['UF_NAME'] = 'Покупка поднятия для '.$itemInfo['NAME'];
+            break;
+        case 'VIP':
+            $newEntryData['UF_ITEM_ID'] = $id;
+            $itemInfo = \Bitrix\Iblock\ElementTable::getById($id)->fetch();
+            $newEntryData['UF_NAME'] = 'Покупка VIP для '.$itemInfo['NAME'];
+            break;
+        case 'COLOR':
+            $newEntryData['UF_ITEM_ID'] = $id;
+            $itemInfo = \Bitrix\Iblock\ElementTable::getById($id)->fetch();
+            $newEntryData['UF_NAME'] = 'Покупка выделения цветом для '.$itemInfo['NAME'];
+            break;
+        case 'RIBBON':
+            $newEntryData['UF_ITEM_ID'] = $id;
+            $itemInfo = \Bitrix\Iblock\ElementTable::getById($id)->fetch();
+            $newEntryData['UF_NAME'] = 'Покупка выделения лентой для '.$itemInfo['NAME'];
+            break;
+        case 'PROMOTION':
+            $newEntryData['UF_ITEM_ID'] = $id;
+            $itemInfo = \Bitrix\Iblock\ElementTable::getById($id)->fetch();
+            $newEntryData['UF_NAME'] = 'Покупка пакета продвижения для '.$itemInfo['NAME'];
+            break;
+        case 'SHEKEL':
+            $newEntryData['UF_NAME'] = 'Покупка валюты '.$id;
+            break;
+    }
+
+    $userHistoryClass = GetEntityDataClass(USER_BUY_HISTORY_HL_ID);
+    $userHistoryClass::add($newEntryData);
+}
