@@ -151,9 +151,7 @@ switch ($_REQUEST['data']['iblockId']){
                             'UF_COUNT_PROPERTY' => --$arUser['UF_COUNT_PROPERTY'],
                             'UF_COUNT_ITEM_PROP' =>  $arUser['UF_COUNT_ITEM_PROP']
                         );
-                        if($fields['UF_COUNT_PROPERTY'] == 0){
-                            $fields['UF_DAYS_PROP_REMAIN'] = 30;
-                        }
+
                         $user->Update($USER->GetID(), $fields);
                         $VIO++;
                     }
@@ -196,7 +194,7 @@ switch ($_REQUEST['data']['iblockId']){
                                 'UF_COUNT_AUTO' => --$arUser['UF_COUNT_AUTO'],
                                 'UF_COUNT_ITEM_AUTO' =>  $arUser['UF_COUNT_ITEM_AUTO']
                             );
-                     
+
                             $user->Update($USER->GetID(), $fields);
                             $VIO++;
                         }

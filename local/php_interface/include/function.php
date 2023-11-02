@@ -327,7 +327,7 @@ function canUserCreateAds(int $iblockId, string $categoryCode) : bool
     ))->fetchCollection();
     $countUserFreeAds = $elements->count();
     $countRatesAds = !empty($optimalUserRate['ADS_USED']) ? $optimalUserRate['ADS_USED'] : 0;
-    return ($countRatesAds + $countUserFreeAds - $arUser['UF_COUNT_'.$categoryCode]) > 0;
+    return ($countRatesAds + $arUser['UF_FREE_'.$categoryCode] - $arUser['UF_COUNT_'.$categoryCode] - $countUserFreeAds) > 0;
 }
 
 function getCurUserActiveRates() : array
