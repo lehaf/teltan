@@ -1,5 +1,7 @@
 <?php require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 
+/** @global object $APPLICATION */
+
 use Bitrix\Main\Localization\Loc;
 
 Loc::loadMessages(__FILE__);
@@ -61,13 +63,13 @@ $result = array_merge_recursive($ar1, $ar2,$ar3, $ar7,$ar8);
 $userActiveRates = getCurUserActiveRates();
 ?>
     <div class="container">
-        <h2 class="mb-4 subtitle"><?= $APPLICATION->ShowTitle(); ?></h2>
+        <h2 class="mb-4 subtitle"><?=$APPLICATION->ShowTitle()?></h2>
         <div class="row">
             <div class="col-12 col-lg-8 col-xl-9">
                 <div class="wallet-history">
                     <div class="current-balance">
                         <div class="card mb-4">
-                            <div class="wallet-history__title border-bottom">
+                            <div id="exchange-rate" class="wallet-history__title border-bottom" data-exchange="<?=$exchanghe['UF_VALUE']?>">
                                 1 Tcoin = <?=$exchanghe['UF_VALUE']?> <span class="currency-sign">₪</span>
                             </div>
 
@@ -103,45 +105,6 @@ $userActiveRates = getCurUserActiveRates();
                         <div class="mb-4 card">
                             <div class="pb-4 mb-4 d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center border-bottom">
                                 <span class="mb-4 mb-lg-0 m-0 text-nowrap text-uppercase font-weight-bolder wallet-balance-name">  <span id="convertorCurentBalance" class="ml-3 mb-md-0 state-of-an-account"><?=$arUser['UF_COUNT_SHEK']?> <span class="currency-sign">₪</span></span> <?=Loc::getMessage('My_balance:')?></span>
-                                <script>
-                                    $('#numberT').change(function () {
-                                        var a = $(this).val()
-                                        $('#numberS').val(a * 0.1)
-                                    })
-                                    $('#numberS').change(function () {
-                                        var b = $(this).val()
-                                        $('#numberT').val(b / 0.1)
-                                    })
-                                    $('#sendCovertorData').click(function () {
-                                        var a = $('#numberT').val()
-                                        var b =  $('#numberS').val()
-                                        var c = $('#convertorCurentBalance').text()
-                                        if(b <= c){
-                                            $.ajax({
-                                                url: '/ajax/buy_t_coins.php',
-                                                method: 'post',
-                                                data: {tcoins: a, shekel: b},
-                                                success: function (data) {
-                                                    if(data == 'ok'){
-                                                        window.location.reload();
-                                                    }else{
-                                                        $('#convertorError').css({
-                                                            'border':'2px solid #ff4d4d',
-                                                            'border-radius':'10px',
-                                                            'box-shadow': '0px 0px 5px red'
-                                                        });
-                                                    }
-                                                }
-                                            });
-                                        }else {
-                                            $('#convertorError').css({
-                                                'border':'2px solid #ff4d4d',
-                                                'border-radius':'10px',
-                                                'box-shadow': '0px 0px 5px red'
-                                            });
-                                        }
-                                    })
-                                </script>
                                 <div class="d-flex justify-content-center align-items-center w-100-mobile">
                                     <button  data-toggle="modal" data-target="#addCoins" id="buyOrderCoins" type="submit" class="mr-4 btn btn-primary text-uppercase font-weight-bolder"><?=Loc::getMessage('add')?></button>
 
@@ -268,18 +231,70 @@ $userActiveRates = getCurUserActiveRates();
         </div>
     </div>
     <script>
-
+        // Покупка валюты
         $('#formControlPayPlus').click(function () {
             $.ajax({
                 url: '/ajax/secureZXC/pay.php',
                 method: 'post',
                 dataType: 'json',
                 async: false,
-                data: {url: 'http://650739-cm41399.tmweb.ru/ajax/buy_shek.php', price: $('#shekValPayPlus').val(), shekel: $('#shekValPayPlus').val(), withoutcourse: 'Y'},
+                data: {
+                    url: '/ajax/buy_shek.php',
+                    price: $('#shekValPayPlus').val(),
+                    shekel: $('#shekValPayPlus').val(),
+                    withoutcourse: 'Y'
+                },
                 success: function (data) {
                     window.location.href = data.data.payment_page_link
                 }
             });
-        })
+        });
+
+        // Конвертация валюты в TCOINS
+        const exchangeRate = Number(document.querySelector('#exchange-rate').getAttribute('data-exchange'));
+
+        $('#numberT').keyup(function () {
+            let tCoins = $(this).val();
+            $('#numberS').val(tCoins * exchangeRate);
+        });
+
+        $('#numberS').keyup(function () {
+            let sekel = $(this).val();
+            let convetToTCoins = Math.ceil(sekel / exchangeRate);
+            $('#numberT').val(convetToTCoins);
+        });
+
+        $('#sendCovertorData').click(function () {
+            let tCoins = $('#numberT').val();
+            let sekel =  $('#numberS').val();
+            let balance = $('#convertorCurentBalance').text();
+            if (sekel <= balance) {
+                $.ajax({
+                    url: '/ajax/buy_t_coins.php',
+                    method: 'post',
+                    data: {
+                        tcoins: tCoins,
+                        shekel: sekel
+                    },
+                    success: function (data) {
+                        if(data === 'ok'){
+                            window.location.reload();
+                        }else{
+                            $('#convertorError').css({
+                                'border':'2px solid #ff4d4d',
+                                'border-radius':'10px',
+                                'box-shadow': '0px 0px 5px red'
+                            });
+                        }
+                    }
+                });
+            } else {
+                $('#convertorError').css({
+                    'border':'2px solid #ff4d4d',
+                    'border-radius':'10px',
+                    'box-shadow': '0px 0px 5px red'
+                });
+            }
+        });
     </script>
 <? require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php"); ?>

@@ -17,21 +17,22 @@ foreach ($_REQUEST as $key => $value){
 
     $count++;
 }
+
 $sucsessUrl .= '&' . 'success' . '=' . 'Y';
 if($_REQUEST['withoutcourse'] == 'Y'){
     $amountPrice = (double)$_REQUEST["price"];
 }else{
     CModule::IncludeModule('highloadblock');
    
-    $entity_data_class = GetEntityDataClass(29);
-    $rsexData = $entity_data_class::getList(array(
+    $entity_data_class = GetEntityDataClass(EXCHANGE_RATE_HL_ID);
+    $exchanghe = $entity_data_class::getList(array(
         'select' => array('*'),
         'filter' => array('ID'=> 1)
-    ));
-    $exchanghe = $rsexData->fetch();
+    ))->fetch();
     $NeedShek = (double)$_REQUEST['price'];
     $amountPrice = $NeedShek * (double)$exchanghe['UF_VALUE'];
 }
+
 $errorUrl = '';
 $totalArray = [
     'payment_page_uid' => '573196a5-32ad-4b4a-afbe-4ee81323f6e2',
@@ -54,14 +55,12 @@ $totalArray = [
     'sendEmailFailure' => false
 
 ];
+
 curl_setopt($ch, CURLOPT_URL, "https://restapidev.payplus.co.il/api/v1.0/PaymentPages/generateLink");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 curl_setopt($ch, CURLOPT_HEADER, FALSE);
-
 curl_setopt($ch, CURLOPT_POST, TRUE);
-
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($totalArray));
-
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
         "Content-Type: application/json",
         "Authorization:" . json_encode($keyApi)
@@ -72,5 +71,3 @@ $response = curl_exec($ch);
 curl_close($ch);
 
 echo($response);
-require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/epilog_after.php");
-?>

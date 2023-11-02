@@ -408,7 +408,10 @@ function addEntryToUserBuyHistory(int $id, string $entryType) : void
             $newEntryData['UF_NAME'] = 'Покупка пакета продвижения для '.$itemInfo['NAME'];
             break;
         case 'SHEKEL':
-            $newEntryData['UF_NAME'] = 'Покупка валюты '.$id;
+            $newEntryData['UF_NAME'] = 'Покупка валюты ';
+            break;
+        case 'EXCHANGE':
+            $newEntryData['UF_NAME'] = 'Обмен валюты на TCOINS ';
             break;
     }
 

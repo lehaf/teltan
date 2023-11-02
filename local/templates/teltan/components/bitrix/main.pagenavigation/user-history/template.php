@@ -9,7 +9,6 @@ $component = $this->getComponent();
 $this->setFrameMode(true);
 
 ?>
-
 <div class="history-pagenavigation justify-content-center">
     <nav class="mb-4 mb-xl-0 justify-content-between justify-content-md-center pagination" aria-label="pagination">
         <?if($arResult["REVERSED_PAGES"] === true):?>

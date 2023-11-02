@@ -12,7 +12,7 @@ class UserHistory extends \CBitrixComponent
 
             $nav = new \Bitrix\Main\UI\PageNavigation("history");
             $maxPageElements = !empty($this->arParams['MAX_PAGE_ELEMENTS']) ? $this->arParams['MAX_PAGE_ELEMENTS'] : 20;
-            
+
             $nav->allowAllRecords(false)
                 ->setPageSize($maxPageElements)
                 ->initFromUri();
