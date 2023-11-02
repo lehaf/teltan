@@ -62,9 +62,6 @@ class MyClass
             "UF_AVAILABLE_PROPERTY" => 1,
             "UF_AVAILABLE_AUTO" => 1,
             "UF_AVAILABLE_FLEA" => 1,
-            'UF_DAYS_FLEA_REMAIN' => 30,
-            'UF_DAYS_AUTO_REMAIN' => 30,
-            'UF_DAYS_PROP_REMAIN' => 30,
         );
         $user->Update($arFields['ID'], $fields);
     }
