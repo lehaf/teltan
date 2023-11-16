@@ -179,6 +179,31 @@ function getSectionData(int $sectionId, int $iblockId) : ?array
     return $section ?? NULL;
 }
 
+function isAdBelongToActiveRate(int $adId, string $adsCategory) : bool
+{
+    if (CModule::IncludeModule('highloadblock')) {
+        $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
+        $boughtRateEntity = GetEntityDataClass(BOUGHT_RATE_HL_ID);
+        $userRates = $boughtRateEntity::getList(array(
+            'order' => array('ID' => 'ASC'),
+            'select' => array('*'),
+            'filter' => array(
+                'UF_USER_ID'=> $userId,
+                'UF_TYPE'=> $adsCategory,
+                '>UF_DATE_EXPIRED'=> new \Bitrix\Main\Type\DateTime()
+            )
+        ))->fetchAll();
+
+        if (!empty($userRates)) {
+            foreach ($userRates as $rate) {
+                if (!empty($rate['UF_ID_ANONC']) && in_array($adId,$rate['UF_ID_ANONC']))  return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 function getOptimalActiveUserRate(string $adsCategory) : ?array
 {
     if (CModule::IncludeModule('highloadblock')) {
@@ -216,7 +241,7 @@ function getOptimalActiveUserRate(string $adsCategory) : ?array
             $createdRateAds = NULL;
             foreach ($userRates as $rate) {
                 $createdRateAds += $rate['UF_COUNT_REMAIN'];
-                if ($rate['UF_COUNT_REMAIN'] <= $rate['UF_COUNT_LESS']) continue;
+                if (!empty($optimalRate) || $rate['UF_COUNT_REMAIN'] <= $rate['UF_COUNT_LESS']) continue;
                 $optimalRate = $rate;
             }
 
@@ -417,4 +442,67 @@ function addEntryToUserBuyHistory(int $id, string $entryType) : void
 
     $userHistoryClass = GetEntityDataClass(USER_BUY_HISTORY_HL_ID);
     $userHistoryClass::add($newEntryData);
+}
+
+
+function isFreeAddCreated(string $categoryCode) : bool
+{
+    $res = false;
+    $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
+
+    switch ($categoryCode) {
+        case 'FLEA':
+            $iblockClass = \Bitrix\Iblock\Iblock::wakeUp(SIMPLE_ADS_IBLOCK_ID)->getEntityDataClass();
+            $element = $iblockClass::getList(array(
+                'select' => array('ID', 'NAME'),
+                'filter' => ['ID_USER.VALUE' => $userId, '!FREE_AD.VALUE' => false]
+            ))->fetchObject();
+
+            if (!empty($element) && $element->getId() > 0) $res = true;
+            break;
+        case 'PROPERTY':
+            $iblockClass = \Bitrix\Iblock\Iblock::wakeUp(PROPERTY_ADS_IBLOCK_ID)->getEntityDataClass();
+            $element = $iblockClass::getList(array(
+                'select' => array('ID', 'NAME'),
+                'filter' => ['ID_USER.VALUE' => $userId, '!FREE_AD.VALUE' => false]
+            ))->fetchObject();
+
+            if (!empty($element) && $element->getId() > 0) $res = true;
+            break;
+        case 'AUTO':
+            $autoIblocks = [
+                AUTO_IBLOCK_ID,
+                MOTO_IBLOCK_ID,
+                SCOOTER_IBLOCK_ID
+            ];
+
+            foreach ($autoIblocks as $iblockId) {
+                $iblockClass = \Bitrix\Iblock\Iblock::wakeUp($iblockId)->getEntityDataClass();
+                $element = $iblockClass::getList(array(
+                    'select' => array('ID', 'NAME'),
+                    'filter' => ['ID_USER.VALUE' => $userId, '!FREE_AD.VALUE' => false]
+                ))->fetchObject();
+
+                if (!empty($element) && $element->getId() > 0) {
+                    $res = true;
+                    break;
+                }
+            }
+            break;
+    }
+
+    return $res;
+}
+
+
+function deleteFavoritesUser($adId) : void
+{
+    $favoriteHLClass = GetEntityDataClass(FAVORITES_HL_ID);
+    $favorites = $favoriteHLClass::getList(array(
+        'select' => array('ID'),
+        'filter' => ['UF_ID_AD' => $adId],
+    ))->fetchCollection();
+    foreach ($favorites as $userFavorite) {
+        $userFavorite->delete();
+    }
 }

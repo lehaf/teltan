@@ -342,8 +342,8 @@ function getFavoritesUser($IDUser)
     foreach ($info as $item) {
         $result[] = $item['UF_ID_AD'];
     }
-    return $result;
 
+    return $result;
 }
 
 // Получаем название раздела и ссылку на раздел для объявления

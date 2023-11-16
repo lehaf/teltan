@@ -3,332 +3,77 @@
 use Bitrix\Main\Localization\Loc;
 
 CModule::IncludeModule('iblock');
-use Bitrix\Highloadblock\HighloadBlockTable as HLBT;
-CModule::IncludeModule('highloadblock');
-$rsUser = CUser::GetByID($USER->GetID());
-$arUser = $rsUser->Fetch();
-$arSelect = [];
-$b = false;
+$userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
+$arUser = CUser::GetByID($userId)->Fetch();
+$boughtRateEntity = GetEntityDataClass(BOUGHT_RATE_HL_ID);
+$productId = $_REQUEST['data']['itemId'];
+$iblockId = $_REQUEST['data']['iblockId'];
+$oneDayToSecond = 86400;
+$iblocksIdToCode = [
+    1 => 'FLEA',
+    2 => 'PROPERTY',
+    3 => 'AUTO',
+    7 => 'AUTO',
+    8 => 'AUTO',
+];
 
+$iblockClass = \Bitrix\Iblock\Iblock::wakeUp($iblockId)->getEntityDataClass();
+$element = $iblockClass::getByPrimary($productId, array(
+    'select' => array('ID', 'NAME', 'ACTIVE_TO', 'FREE_AD'),
+))->fetchObject();
 
-switch ($_REQUEST['data']['iblockId']){
-    case 1:
-        $arSelect = ['UF_USER_ID'=> $USER->GetID(),'UF_TYPE'=> 'FLEA'];
-        $typeOperand = 'FLEA';
-        $entity_data_class = GetEntityDataClass(28);
-        $rsData = $entity_data_class::getList(array(
-            'select' => array('*'),
-            'filter' => $arSelect
-        ));
-        while ($arPaket[] = $rsData->fetch()) {
+$isFreeAd = !empty($element->getFreeAd()) && $element->getFreeAd()->getValue() > 0;
+$isAdNotExpired = !empty($element->getActiveTo()) && strtotime($element->getActiveTo()) > time();
+$canUserCreateAds = canUserCreateAds($iblockId, $iblocksIdToCode[$iblockId]) === true ? true : $isAdNotExpired;
 
-        }
-        foreach($arPaket as $arItem){
-            $a = $arItem['UF_COUNT_REMAIN'] - $arItem['UF_COUNT_LESS'] ;
-            if($a > 0 || date("d.m.Y H:i:s") < date("d.m.Y H:i:s", strtotime('+ '. $arItem['UF_DAYS_REMAIN']. ' days'))){
-                $b = true;
+/** ДЕАКТИВАЦИЯ ЭЛЕМЕНТА */
+if ($_REQUEST['value'] == 'green') {
+    $updateFields['ACTIVE'] = "N";
+    echo Loc::getMessage('DEACTIVATE_ITEM');
+    deleteFavoritesUser($productId);
+    /** АКТИВАЦИЯ ЭЛЕМЕНТА */
+} else {
+    if ($isFreeAd) {
+        $newExpiredTimeFreeAdd = time() + DAYS_EXPIRED_FREE_ADS * $oneDayToSecond;
+        $updateFields['ACTIVE'] = "Y";
+        $updateFields['ACTIVE_TO'] = \Bitrix\Main\Type\DateTime::createFromTimestamp($newExpiredTimeFreeAdd);
+        echo Loc::getMessage('ACTIVATE_ITEM');
+    } else {
+        if (isAdBelongToActiveRate($productId, $iblocksIdToCode[$iblockId])) {
+            $updateFields['ACTIVE'] = "Y";
+            echo Loc::getMessage('ACTIVATE_ITEM');
+        } else {
+            if ($canUserCreateAds) {
+                if ($_REQUEST['value'] == 'red') {
+                    $updateFields['ACTIVE'] = "Y";
+                    // Получаем всю инфу о самом первом активном купленном пакете
+                    $optimalUserRate = getOptimalActiveUserRate($iblocksIdToCode[$iblockId]);
+                    // Если пользователь еще не создавал объявления то первое объявление будет бесплатным
+                    if (isFreeAddCreated($iblocksIdToCode[$iblockId]) !== false && !empty($optimalUserRate)) {
+                        // Обновление пользовательских пакетов (Кпленных тарифов)
+                        $countAvailableAds = $optimalUserRate['UF_COUNT_REMAIN'] - $optimalUserRate['UF_COUNT_LESS'];
+                        $unixTimeUntilUserRate = strtotime($optimalUserRate['UF_DATE_EXPIRED']);
+                        $countActiveRateDays = floor(($unixTimeUntilUserRate - time()) / (60 * 60 * 24));
+                        if (!empty($optimalUserRate['UF_DATE_PURCHASE']) && $countAvailableAds > 0 && time() < $unixTimeUntilUserRate) {
+                            $optimalUserRate['UF_ID_ANONC'][] = intval($productId);
+                            $boughtRateEntity = GetEntityDataClass(BOUGHT_RATE_HL_ID);
+                            $boughtRateEntity::update($optimalUserRate['ID'], array(
+                                'UF_COUNT_LESS' => ++$optimalUserRate['UF_COUNT_LESS'],
+                                'UF_ID_ANONC' => $optimalUserRate['UF_ID_ANONC'],
+                                'UF_DAYS_REMAIN' => $countActiveRateDays
+                            ));
+                        }
+                    }
+                    echo Loc::getMessage('ACTIVATE_ITEM');
+                }
+            } else {
+                echo Loc::getMessage('END_RATE');
             }
         }
-
-        if($arUser['UF_FREE_FLEA'] - $arUser['UF_COUNT_FLEA'] > 0 || $b) {
-
-        }else{
-            $error = true;
-        }
-
-        break;
-    case 2:
-        $arSelect = ['UF_USER_ID'=> $USER->GetID(), 'UF_TYPE'=> 'Prop'];
-        $typeOperand = 'Prop';
-        $entity_data_class = GetEntityDataClass(28);
-        $rsData = $entity_data_class::getList(array(
-            'select' => array('*'),
-            'filter' => $arSelect
-        ));
-        while ($arPaket[] = $rsData->fetch()) {
-
-        }
-        foreach($arPaket as $arItem){
-            $a = $arItem['UF_COUNT_REMAIN'] - $arItem['UF_COUNT_LESS'] ;
-            if($a > 0 || date("d.m.Y H:i:s") < date("d.m.Y H:i:s", strtotime('+ '. $arItem['UF_DAYS_REMAIN']. ' days'))){
-                $b = true;
-            }
-        }
-        if($arUser['UF_FREE_PROPERTY'] - $arUser['UF_COUNT_PROPERTY'] > 0 || $b) {
-
-        }else{
-            $error = true;
-        }
-        break;
-    case 7:
-    case 8:
-    case 3:
-        $arSelect = ['UF_USER_ID'=> $USER->GetID(), 'UF_TYPE'=> 'AUTO'];
-        $typeOperand = 'AUTO';
-    $entity_data_class = GetEntityDataClass(28);
-    $rsData = $entity_data_class::getList(array(
-        'select' => array('*'),
-        'filter' => $arSelect
-    ));
-    while ($arPaket[] = $rsData->fetch()) {
-
     }
-    foreach($arPaket as $arItem){
-        $a = $arItem['UF_COUNT_REMAIN'] - $arItem['UF_COUNT_LESS'] ;
-        if($a > 0 || date("d.m.Y H:i:s") < date("d.m.Y H:i:s", strtotime('+ '. $arItem['UF_DAYS_REMAIN']. ' days'))){
-            $b = true;
-        }
-    }
-    if($arUser['UF_FREE_AUTO'] - $arUser['UF_COUNT_AUTO'] > 0 || $b) {
-
-    }else{
-        $error = true;
-    }
-        break;
 }
 
-    $PRODUCT_ID = IntVal($_REQUEST['data']['itemId']);
-
+if (!empty($updateFields)) {
     $el = new CIBlockElement;
-    if ($_REQUEST['value'] == 'green') {
-        $arLoadProductArray = array(
-            "ACTIVE" => "N",
-        );
-        $return = 'не отображать';
-        $VIO = 0;
-        switch ($typeOperand){
-            case 'FLEA':
-                $user = new CUser;
-                foreach($arUser['UF_COUNT_ITEM_FLEA'] as $key => $item){
-                    if ($item == floatval($PRODUCT_ID)){
-                        unset($arUser['UF_COUNT_ITEM_FLEA'][$key]);
-
-                        $fields = array(
-                            'UF_COUNT_FLEA' => --$arUser['UF_COUNT_FLEA'],
-                            'UF_COUNT_ITEM_FLEA' =>  $arUser['UF_COUNT_ITEM_FLEA']
-                        );
-
-                        $user->Update($USER->GetID(), $fields);
-                        $VIO++;
-                    }
-                   if($VIO < 1) {
-                        foreach ($arPaket as $arItem) {
-                            $a = $arItem['UF_COUNT_REMAIN'] - $arItem['UF_COUNT_LESS'];
-                            if ($a >= 0 || date("d.m.Y H:i:s") < date("d.m.Y H:i:s", strtotime('+ ' . $arItem['UF_DAYS_REMAIN'] . ' days'))) {
-                                $idForUpdate = $arItem['ID'];
-                                foreach($arItem['UF_ID_ANONC'] as $key => $item){
-                                    if ($item == $PRODUCT_ID){
-                                        unset($arItem['UF_ID_ANONC'][$key]);
-                                    }
-                                }
-                                $entity_data_class = GetEntityDataClass(28);
-                                if($arItem['UF_COUNT_LESS'] == 0){
-                                    var_dump($idForUpdate);
-                                    $result = $entity_data_class::update($idForUpdate, array(
-                                        'UF_COUNT_LESS' => 0,
-                                        'UF_ID_ANONC' => $arItem['UF_ID_ANONC']
-                                    ));
-                                }else {
-                                    $result = $entity_data_class::update($idForUpdate, array(
-                                        'UF_COUNT_LESS' => --$arItem['UF_COUNT_LESS'],
-                                        'UF_ID_ANONC' => $arItem['UF_ID_ANONC']
-                                    ));
-                                }
-                                break;
-                            }
-                        }
-                    }
-
-                }
-                break;
-            case 'Prop':
-                $user = new CUser;
-                foreach($arUser['UF_COUNT_ITEM_PROP'] as $key => $item){
-                    if ($item == floatval($PRODUCT_ID)){
-                        unset($arUser['UF_COUNT_ITEM_PROP'][$key]);
-
-                        $fields = array(
-                            'UF_COUNT_PROPERTY' => --$arUser['UF_COUNT_PROPERTY'],
-                            'UF_COUNT_ITEM_PROP' =>  $arUser['UF_COUNT_ITEM_PROP']
-                        );
-
-                        $user->Update($USER->GetID(), $fields);
-                        $VIO++;
-                    }
-                    if($VIO < 1) {
-                        foreach ($arPaket as $arItem) {
-                            $a = $arItem['UF_COUNT_REMAIN'] - $arItem['UF_COUNT_LESS'];
-                            if ($a >= 0 || date("d.m.Y H:i:s") < date("d.m.Y H:i:s", strtotime('+ ' . $arItem['UF_DAYS_REMAIN'] . ' days'))) {
-                                $idForUpdate = $arItem['ID'];
-                                foreach($arItem['UF_ID_ANONC'] as $key => $item){
-                                    if ($item == $PRODUCT_ID){
-                                        unset($arItem['UF_ID_ANONC'][$key]);
-                                    }
-                                }
-                                if($arItem['UF_COUNT_LESS'] == 0){
-                                    $result = $entity_data_class::update($idForUpdate, array(
-                                        'UF_COUNT_LESS' => 0,
-                                        'UF_ID_ANONC' => $arItem['UF_ID_ANONC']
-                                    ));
-                                }else {
-                                    $result = $entity_data_class::update($idForUpdate, array(
-                                        'UF_COUNT_LESS' => --$arItem['UF_COUNT_LESS'],
-                                        'UF_ID_ANONC' => $arItem['UF_ID_ANONC']
-                                    ));
-                                }
-                                break;
-                            }
-                        }
-                    }
-
-                }
-                break;
-            case 'AUTO':
-
-                    $user = new CUser;
-                    foreach($arUser['UF_COUNT_ITEM_AUTO'] as $key => $item){
-                        if ($item == floatval($PRODUCT_ID)){
-                            unset($arUser['UF_COUNT_ITEM_AUTO'][$key]);
-
-                            $fields = array(
-                                'UF_COUNT_AUTO' => --$arUser['UF_COUNT_AUTO'],
-                                'UF_COUNT_ITEM_AUTO' =>  $arUser['UF_COUNT_ITEM_AUTO']
-                            );
-
-                            $user->Update($USER->GetID(), $fields);
-                            $VIO++;
-                        }
-                        if($VIO < 1) {
-                            foreach ($arPaket as $arItem) {
-                                $a = $arItem['UF_COUNT_REMAIN'] - $arItem['UF_COUNT_LESS'];
-                                if ($a >= 0 || date("d.m.Y H:i:s") < date("d.m.Y H:i:s", strtotime('+ ' . $arItem['UF_DAYS_REMAIN'] . ' days'))) {
-                                    $idForUpdate = $arItem['ID'];
-                                    foreach($arItem['UF_ID_ANONC'] as $key => $item){
-                                        if ($item == $PRODUCT_ID){
-                                            unset($arItem['UF_ID_ANONC'][$key]);
-                                        }
-                                    }
-                                    $entity_data_class = GetEntityDataClass(28);
-                                    if($arItem['UF_COUNT_LESS'] == 0){
-                                        $result = $entity_data_class::update($idForUpdate, array(
-                                            'UF_COUNT_LESS' => 0,
-                                            'UF_ID_ANONC' => $arItem['UF_ID_ANONC']
-                                        ));
-                                    }else {
-                                        $result = $entity_data_class::update($idForUpdate, array(
-                                            'UF_COUNT_LESS' => --$arItem['UF_COUNT_LESS'],
-                                            'UF_ID_ANONC' => $arItem['UF_ID_ANONC']
-                                        ));
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-
-                    }
-                break;
-        }
-echo Loc::getMessage('DEACTIVATE_ITEM');
-    } else {
-        if ($_REQUEST['value'] == 'red') {
-            if (!$error) {
-                $arLoadProductArray = array(
-                    "ACTIVE" => "Y",
-                );
-                $return = 'отображать';
-                switch ($typeOperand) {
-                    case 'FLEA':
-                        if ($arUser['UF_FREE_FLEA'] - $arUser['UF_COUNT_FLEA'] > 0) {
-                            $user = new CUser;
-                            $arUser['UF_COUNT_ITEM_FLEA'][] = intval($PRODUCT_ID);
-                            $fields = array(
-                                'UF_COUNT_FLEA' => ++$arUser['UF_COUNT_FLEA'],
-                                'UF_COUNT_ITEM_FLEA' => $arUser['UF_COUNT_ITEM_FLEA']
-                            );
-                            $user->Update($USER->GetID(), $fields);
-                        } else {
-
-                            foreach ($arPaket as $arItem) {
-                                $a = $arItem['UF_COUNT_REMAIN'] - $arItem['UF_COUNT_LESS'];
-                                if ($a > 0 || date("d.m.Y H:i:s") < date("d.m.Y H:i:s", strtotime('+ ' . $arItem['UF_DAYS_REMAIN'] . ' days'))) {
-                                    $idForUpdate = $arItem['ID'];
-                                    $arItem['UF_ID_ANONC'][] = intval($PRODUCT_ID);
-                                    $entity_data_class = GetEntityDataClass(28);
-                                    $result = $entity_data_class::update($idForUpdate, array(
-                                        'UF_COUNT_LESS' => ++$arItem['UF_COUNT_LESS'],
-                                        'UF_ID_ANONC' => $arItem['UF_ID_ANONC']
-                                    ));
-                                    break;
-                                }
-                            }
-                        }
-                        break;
-                    case 'Prop':
-                        if ($arUser['UF_FREE_PROPERTY'] - $arUser['UF_COUNT_PROPERTY'] > 0) {
-                            print_r(++$arUser['UF_COUNT_PROPERTY']);
-                            $user = new CUser;
-                            $arUser['UF_COUNT_ITEM_PROP'][] = intval($PRODUCT_ID);
-                            $fields = array(
-                                'UF_COUNT_PROPERTY' => ++$arUser['UF_COUNT_PROPERTY'],
-                                'UF_COUNT_ITEM_PROP' => $arUser['UF_COUNT_ITEM_PROP']
-                            );
-                            $user->Update($USER->GetID(), $fields);
-                        } else {
-
-                            foreach ($arPaket as $arItem) {
-                                $a = $arItem['UF_COUNT_REMAIN'] - $arItem['UF_COUNT_LESS'];
-                                if ($a > 0 || date("d.m.Y H:i:s") < date("d.m.Y H:i:s", strtotime('+ ' . $arItem['UF_DAYS_REMAIN'] . ' days'))) {
-                                    $idForUpdate = $arItem['ID'];
-                                    $arItem['UF_ID_ANONC'][] = intval($PRODUCT_ID);
-                                    $entity_data_class = GetEntityDataClass(28);
-                                    $result = $entity_data_class::update($idForUpdate, array(
-                                        'UF_COUNT_LESS' => ++$arItem['UF_COUNT_LESS'],
-                                        'UF_ID_ANONC' => $arItem['UF_ID_ANONC']
-                                    ));
-                                    break;
-                                }
-                            }
-                        }
-                        break;
-                    case 'AUTO':
-
-                        if ($arUser['UF_FREE_AUTO'] - $arUser['UF_COUNT_AUTO'] > 0) {
-                            // print_r(++$arUser['UF_COUNT_AUTO']);
-                            $user = new CUser;
-                            $arUser['UF_COUNT_ITEM_AUTO'][] = intval($PRODUCT_ID);
-                            $fields = array(
-                                'UF_COUNT_AUTO' => ++$arUser['UF_COUNT_AUTO'],
-                                'UF_COUNT_ITEM_AUTO' => $arUser['UF_COUNT_ITEM_AUTO']
-                            );
-                            $user->Update($USER->GetID(), $fields);
-                        } else {
-
-                            foreach ($arPaket as $arItem) {
-                                $a = $arItem['UF_COUNT_REMAIN'] - $arItem['UF_COUNT_LESS'];
-                                if ($a > 0 || date("d.m.Y H:i:s") < date("d.m.Y H:i:s", strtotime('+ ' . $arItem['UF_DAYS_REMAIN'] . ' days'))) {
-                                    $idForUpdate = $arItem['ID'];
-                                    $arItem['UF_ID_ANONC'][] = intval($PRODUCT_ID);
-                                    $entity_data_class = GetEntityDataClass(28);
-                                    $result = $entity_data_class::update($idForUpdate, array(
-                                        'UF_COUNT_LESS' => ++$arItem['UF_COUNT_LESS'],
-                                        'UF_ID_ANONC' => $arItem['UF_ID_ANONC']
-                                    ));
-                                    break;
-                                }
-                            }
-                        }
-                        break;
-                }
-                echo Loc::getMessage('ACTIVATE_ITEM');
-            }else{
-                echo'error';
-            }
-        }
-    }
-
-    $res = $el->Update($PRODUCT_ID, $arLoadProductArray);
-
-
-
-require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/epilog_after.php");
-?>
+    $el->Update($productId, $updateFields);
+}

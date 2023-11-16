@@ -119,7 +119,7 @@ class UserAdsCounter extends \CBitrixComponent
             $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
             $boughtRateEntity = GetEntityDataClass(BOUGHT_RATE_HL_ID);
             $userRates = $boughtRateEntity::getList(array(
-                'order' => array('ID' => 'DESC'),
+                'order' => array('ID' => 'ASC'),
                 'select' => array('*'),
                 'filter' => array(
                     'UF_USER_ID'=> $userId,

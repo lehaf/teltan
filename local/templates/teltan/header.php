@@ -1,4 +1,4 @@
-<?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
+<?php if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
 
 use Bitrix\Main\Page\Asset;
 use Bitrix\Main\Localization\Loc;
@@ -41,16 +41,14 @@ else
 
 
 <header class="header">
-    <?
-        // Избранное
+    <?// Избранное
     if($USER->IsAuthorized()){
         $favorites = getFavoritesUser($IDUser);
 
         ?>
-        <script>var favorites = <?=json_encode($favorites);?>;</script>
+        <script>let favorites = <?=json_encode($favorites);?>;</script>
         <?
-    }
-    ?>
+    } ?>
 
     <?$APPLICATION->IncludeComponent(
         "bitrix:catalog.section.list",

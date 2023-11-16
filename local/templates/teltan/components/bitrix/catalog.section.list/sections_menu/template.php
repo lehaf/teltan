@@ -33,8 +33,10 @@ $activeMainSectionId = array_key_first($arResult['SECTIONS']);
                 <ul>
                     <?foreach ($sectionMain['ITEMS'] as $subKey => $subsection):?>
                         <li>
-                            <a data-id_section="<?=$subsection['ID']?>"
-                               class="section_id_a">
+                            <a href="<?=$subsection['SECTION_PAGE_URL']?>"
+                               data-id_section="<?=$subsection['ID']?>"
+                               class="section_id_a"
+                            >
                                 <?=$subsection['NAME'];?>
                             </a>
                         </li>
