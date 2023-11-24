@@ -110,7 +110,7 @@ if ($pos !== false):?>
         <div class="pop-up__text"></div>
     </div>
 </footer>
-<?
+<?php
 // Modal window auth
 include $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . "/includes/footer/auth_modal.php";
 // Modal window register

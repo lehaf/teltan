@@ -8,7 +8,7 @@ $APPLICATION->SetTitle("Недвижимость");
 
 CModule::IncludeModule('highloadblock');
 $secondSort = [
-    'SORT' => 'property_TIME_RAISE',
+    'SORT' => 'PROPERTY_TIME_RAISE',
     'ORDER' => 'DESC'
 ];
 
@@ -33,7 +33,7 @@ $APPLICATION->IncludeComponent(
         "AJAX_OPTION_STYLE" => "Y",
         "BASKET_URL" => "/personal/basket.php",
         "CACHE_FILTER" => "Y",
-        "CACHE_GROUPS" => "Y",
+        "CACHE_GROUPS" => "N",
         "CACHE_TIME" => "36000000",
         "CACHE_TYPE" => "A",
         "COMPATIBLE_MODE" => "Y",
@@ -75,7 +75,7 @@ $APPLICATION->IncludeComponent(
         "FILTER_PRICE_CODE" => array(),
         "FILTER_PROPERTY_CODE" => array("",""),
         "FILTER_VIEW_MODE" => "VERTICAL",
-        "IBLOCK_ID" => "2",
+        "IBLOCK_ID" => PROPERTY_ADS_IBLOCK_ID,
         "IBLOCK_TYPE" => "announcements",
         "INCLUDE_SUBSECTIONS" => "Y",
         "INSTANT_RELOAD" => "N",

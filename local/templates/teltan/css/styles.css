@@ -14255,3 +14255,30 @@ div[data-filter=unActiveAnnouncement] .product-card.product-line.user-product .r
   top: calc(50% - 1.5px) !important;
 }
 
+/*footer {*/
+/*  margin-top: calc(100vh - 431px);*/
+/*}*/
+
+/*@media (max-width: 960px) {*/
+/*  footer {*/
+/*    margin-top: calc(100vh - 470px);*/
+/*  }*/
+/*}*/
+
+/*@media (max-width: 750px) {*/
+/*  footer {*/
+/*    margin-top: calc(100vh - 428px);*/
+/*  }*/
+/*}*/
+
+/*@media (max-width: 570px) {*/
+/*  footer {*/
+/*    margin-top: calc(100vh - 434px);*/
+/*  }*/
+/*}*/
+
+/*@media (max-width: 390px) {*/
+/*  footer {*/
+/*    margin-top: calc(100vh - 468px);*/
+/*  }*/
+/*}*/

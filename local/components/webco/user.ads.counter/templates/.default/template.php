@@ -13,15 +13,15 @@ use Bitrix\Main\Localization\Loc;
     </a>
     <div class="w-100 d-flex flex-column flex-xl-row align-items-xl-center justify-content-between">
         <div class="pl-lg-3 d-flex flex-column text-right">
-            <p class="header-title font-weight-bold"><?= Loc::getMessage('FREE_ADS_1'); ?></p>
+            <p class="header-title font-weight-bold"><?= Loc::getMessage('AVAILABLE_ADS')?>:</p>
             <p>
                 <?php if (!empty($arResult['COUNTER'])):?>
                     <?php $lastKey = array_key_last($arResult['COUNTER'])?>
                     <?php foreach ($arResult['COUNTER'] as $categoryName => $countAds):?>
                         <?=$categoryName?>
-                        <span class="counters"><?=$countAds['USED']?></span>
+                        <span class="counters"><?=!empty($countAds['USED']) ? $countAds['USED'] : 0?></span>
                         <?=Loc::getMessage('OF_COUNT')?>
-                        <span class="counters"><?=$countAds['POSSIBLE']?></span>
+                        <span class="counters"><?=!empty($countAds['POSSIBLE']) ? $countAds['POSSIBLE'] : 0?></span>
                         <?=$lastKey !== $categoryName ? '/' : ''?>
                     <?php endforeach;?>
                 <?php endif;?>

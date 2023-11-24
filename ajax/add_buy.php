@@ -96,6 +96,8 @@ if ($canUserCreateAds || $_REQUEST['EDIT'] == 'Y') {
     } elseif ($_REQUEST['forAgency']['val'] == 'true') {
         $PROP['UF_SELLER_TYPE'] = 313;
     }
+
+    $PROP['TIME_RAISE'] = date("d.m.Y H:i:s");
     $PROP['UF_NAME'] = $_REQUEST['Legalname']['val'];
     $PROP[61] = $_POST['sellPrice']['val'];
     $PROP[114] = date("d.m.Y H:i:s");

@@ -2,7 +2,8 @@
 
 use Bitrix\Main\Localization\Loc;
 
-$APPLICATION->SetPageProperty("title", "Teltan");
+/** @global object $APPLICATION */
+
 $APPLICATION->SetTitle("Teltan - main");
 ?>
         <div class="container-fluid mb-4 mb-lg-5">
@@ -33,7 +34,7 @@ $APPLICATION->SetTitle("Teltan - main");
                         "FIELD_CODE" => array("", ""),
                         "FILTER_NAME" => "",
                         "HIDE_LINK_WHEN_NO_DETAIL" => "N",
-                        "IBLOCK_ID" => "4",
+                        "IBLOCK_ID" => SLIDER_IBLOCK_ID,
                         "IBLOCK_TYPE" => "content",
                         "INCLUDE_IBLOCK_INTO_CHAIN" => "N",
                         "INCLUDE_SUBSECTIONS" => "Y",
@@ -77,7 +78,7 @@ $APPLICATION->SetTitle("Teltan - main");
                         "COUNT_ELEMENTS" => "N",
                         "COUNT_ELEMENTS_FILTER" => "CNT_ACTIVE",
                         "FILTER_NAME" => "sectionsFilter",
-                        "IBLOCK_ID" => "1",
+                        "IBLOCK_ID" => SIMPLE_ADS_IBLOCK_ID,
                         "IBLOCK_TYPE" => "announcements",
                         "SECTION_CODE" => "",
                         "SECTION_FIELDS" => array("", ""),
@@ -120,7 +121,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "AJAX_OPTION_STYLE" => "N",
                             "CACHE_FILTER" => "Y",
                             "CACHE_GROUPS" => "N",
-                            "CACHE_TIME" => "360",
+                            "CACHE_TIME" => "36000000",
                             "CACHE_TYPE" => "A",
                             "CHECK_DATES" => "Y",
                             "DETAIL_URL" => "",
@@ -133,7 +134,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "FIELD_CODE" => array("SHOW_COUNTER", "DATE_CREATE"),
                             "FILTER_NAME" => "arrFilterPropVip",
                             "HIDE_LINK_WHEN_NO_DETAIL" => "N",
-                            "IBLOCK_ID" => "2",
+                            "IBLOCK_ID" => PROPERTY_ADS_IBLOCK_ID,
                             "IBLOCK_TYPE" => "announcements",
                             "INCLUDE_IBLOCK_INTO_CHAIN" => "N",
                             "INCLUDE_SUBSECTIONS" => "Y",
@@ -157,7 +158,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "SET_STATUS_404" => "N",
                             "SET_TITLE" => "N",
                             "SHOW_404" => "N",
-                            "SORT_BY1" => "TIMESTAMP_X",
+                            "SORT_BY1" => "PROPERTY_TIME_RAISE",
                             "SORT_BY2" => "ID",
                             "SORT_ORDER1" => "DESC",
                             "SORT_ORDER2" => "DESC",
@@ -187,7 +188,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "AJAX_OPTION_STYLE" => "N",
                             "CACHE_FILTER" => "Y",
                             "CACHE_GROUPS" => "N",
-                            "CACHE_TIME" => "360",
+                            "CACHE_TIME" => "36000000",
                             "CACHE_TYPE" => "A",
                             "CHECK_DATES" => "Y",
                             "DETAIL_URL" => "",
@@ -200,7 +201,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "FIELD_CODE" => array("SHOW_COUNTER", "DATE_CREATE"),
                             "FILTER_NAME" => "arrFilterProp",
                             "HIDE_LINK_WHEN_NO_DETAIL" => "N",
-                            "IBLOCK_ID" => "2",
+                            "IBLOCK_ID" => PROPERTY_ADS_IBLOCK_ID,
                             "IBLOCK_TYPE" => "announcements",
                             "INCLUDE_IBLOCK_INTO_CHAIN" => "N",
                             "INCLUDE_SUBSECTIONS" => "Y",
@@ -224,7 +225,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "SET_STATUS_404" => "N",
                             "SET_TITLE" => "N",
                             "SHOW_404" => "N",
-                            "SORT_BY1" => "TIMESTAMP_X",
+                            "SORT_BY1" => "PROPERTY_TIME_RAISE",
                             "SORT_BY2" => "ID",
                             "SORT_ORDER1" => "DESC",
                             "SORT_ORDER2" => "DESC",
@@ -236,11 +237,8 @@ $APPLICATION->SetTitle("Teltan - main");
 
                 <!-- AUTO MARKET -->
                 <div class="mb-4">
-                    <p class="h2 mb-4 subtitle">
-                        <?=Loc::getMessage('AUTO');?>
-                    </p>
-
-                    <?
+                    <p class="h2 mb-4 subtitle"><?=Loc::getMessage('AUTO');?></p>
+                    <?php
                     global $arrFilterAutoVip;
                     $arrFilterAutoVip = array(
                         ">=PROPERTY_VIP_DATE" => date('Y-m-d H:i:s')
@@ -259,7 +257,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "AJAX_OPTION_STYLE" => "N",
                             "CACHE_FILTER" => "Y",
                             "CACHE_GROUPS" => "N",
-                            "CACHE_TIME" => "360",
+                            "CACHE_TIME" => "3600000",
                             "CACHE_TYPE" => "A",
                             "CHECK_DATES" => "Y",
                             "DETAIL_URL" => "",
@@ -272,7 +270,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "FIELD_CODE" => array("SHOW_COUNTER", "DATE_CREATE"),
                             "FILTER_NAME" => "arrFilterAutoVip",
                             "HIDE_LINK_WHEN_NO_DETAIL" => "N",
-                            "IBLOCK_ID" => "3",
+                            "IBLOCK_ID" => AUTO_IBLOCK_ID,
                             "IBLOCK_TYPE" => "announcements",
                             "INCLUDE_IBLOCK_INTO_CHAIN" => "N",
                             "INCLUDE_SUBSECTIONS" => "Y",
@@ -296,7 +294,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "SET_STATUS_404" => "N",
                             "SET_TITLE" => "N",
                             "SHOW_404" => "N",
-                            "SORT_BY1" => "TIMESTAMP_X",
+                            "SORT_BY1" => "PROPERTY_TIME_RAISE",
                             "SORT_BY2" => "ID",
                             "SORT_ORDER1" => "DESC",
                             "SORT_ORDER2" => "DESC",
@@ -305,57 +303,45 @@ $APPLICATION->SetTitle("Teltan - main");
                     );?>
 
 
-                    <?
+                    <?php
                     global $scooter_vip_ids;
                     global $arrFilterAuto;
 
-                    $arrFilterAuto = array(
-                        '!ID' => $scooter_vip_ids
-                    );
+                    if (!empty($scooter_vip_ids)) $arrFilterAuto = ['!ID' => $scooter_vip_ids];
 
                     $APPLICATION->IncludeComponent(
                         "bitrix:news.list",
                         "template_scooter_main",
                         Array(
-                            "ACTIVE_DATE_FORMAT" => "d.m.Y",
                             "ADD_SECTIONS_CHAIN" => "N",
-                            "AJAX_MODE" => "N",
-                            "AJAX_OPTION_ADDITIONAL" => "",
-                            "AJAX_OPTION_HISTORY" => "N",
-                            "AJAX_OPTION_JUMP" => "N",
-                            "AJAX_OPTION_STYLE" => "N",
                             "CACHE_FILTER" => "Y",
                             "CACHE_GROUPS" => "N",
-                            "CACHE_TIME" => "360",
+                            "CACHE_TIME" => "36000000",
                             "CACHE_TYPE" => "A",
                             "CHECK_DATES" => "Y",
                             "DETAIL_URL" => "",
-                            "DISPLAY_BOTTOM_PAGER" => "N",
                             "DISPLAY_DATE" => "Y",
                             "DISPLAY_NAME" => "Y",
                             "DISPLAY_PICTURE" => "Y",
                             "DISPLAY_PREVIEW_TEXT" => "N",
-                            "DISPLAY_TOP_PAGER" => "N",
-                            "FIELD_CODE" => array("SHOW_COUNTER", "DATE_CREATE"),
+                            "FIELD_CODE" => array(
+                                "SHOW_COUNTER",
+                                "DATE_CREATE"
+                            ),
                             "FILTER_NAME" => "arrFilterAuto",
                             "HIDE_LINK_WHEN_NO_DETAIL" => "N",
-                            "IBLOCK_ID" => "3",
+                            "IBLOCK_ID" => AUTO_IBLOCK_ID,
                             "IBLOCK_TYPE" => "announcements",
                             "INCLUDE_IBLOCK_INTO_CHAIN" => "N",
-                            "INCLUDE_SUBSECTIONS" => "Y",
-                            "MESSAGE_404" => "",
+                            "INCLUDE_SUBSECTIONS" => "N",
                             "NEWS_COUNT" => "4",
-                            "PAGER_BASE_LINK_ENABLE" => "N",
-                            "PAGER_DESC_NUMBERING" => "N",
-                            "PAGER_DESC_NUMBERING_CACHE_TIME" => "36000",
-                            "PAGER_SHOW_ALL" => "N",
-                            "PAGER_SHOW_ALWAYS" => "N",
-                            "PAGER_TEMPLATE" => ".default",
-                            "PAGER_TITLE" => "Новости",
-                            "PARENT_SECTION" => "",
-                            "PARENT_SECTION_CODE" => "",
-                            "PREVIEW_TRUNCATE_LEN" => "",
-                            "PROPERTY_CODE" => array("VIP_DATE", "LENTA_DATE", "COLOR_DATE", "PAKET_DATE", "PRICE", ""),
+                            "PROPERTY_CODE" => array(
+                                "VIP_DATE",
+                                "LENTA_DATE",
+                                "COLOR_DATE",
+                                "PAKET_DATE",
+                                "PRICE"
+                            ),
                             "SET_BROWSER_TITLE" => "N",
                             "SET_LAST_MODIFIED" => "N",
                             "SET_META_DESCRIPTION" => "N",
@@ -363,7 +349,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "SET_STATUS_404" => "N",
                             "SET_TITLE" => "N",
                             "SHOW_404" => "N",
-                            "SORT_BY1" => "TIMESTAMP_X",
+                            "SORT_BY1" => "PROPERTY_TIME_RAISE",
                             "SORT_BY2" => "ID",
                             "SORT_ORDER1" => "DESC",
                             "SORT_ORDER2" => "DESC",
@@ -400,7 +386,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "AJAX_OPTION_STYLE" => "N",
                             "CACHE_FILTER" => "Y",
                             "CACHE_GROUPS" => "N",
-                            "CACHE_TIME" => "360",
+                            "CACHE_TIME" => "36000000",
                             "CACHE_TYPE" => "A",
                             "CHECK_DATES" => "Y",
                             "DETAIL_URL" => "",
@@ -413,7 +399,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "FIELD_CODE" => array("SHOW_COUNTER", "DATE_CREATE"),
                             "FILTER_NAME" => "arrFilterMotoVip",
                             "HIDE_LINK_WHEN_NO_DETAIL" => "N",
-                            "IBLOCK_ID" => "7",
+                            "IBLOCK_ID" => MOTO_IBLOCK_ID,
                             "IBLOCK_TYPE" => "announcements",
                             "INCLUDE_IBLOCK_INTO_CHAIN" => "N",
                             "INCLUDE_SUBSECTIONS" => "Y",
@@ -437,7 +423,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "SET_STATUS_404" => "N",
                             "SET_TITLE" => "N",
                             "SHOW_404" => "N",
-                            "SORT_BY1" => "TIMESTAMP_X",
+                            "SORT_BY1" => "PROPERTY_TIME_RAISE",
                             "SORT_BY2" => "ID",
                             "SORT_ORDER1" => "DESC",
                             "SORT_ORDER2" => "DESC",
@@ -467,7 +453,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "AJAX_OPTION_STYLE" => "N",
                             "CACHE_FILTER" => "Y",
                             "CACHE_GROUPS" => "N",
-                            "CACHE_TIME" => "360",
+                            "CACHE_TIME" => "36000000",
                             "CACHE_TYPE" => "A",
                             "CHECK_DATES" => "Y",
                             "DETAIL_URL" => "",
@@ -480,7 +466,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "FIELD_CODE" => array("SHOW_COUNTER", "DATE_CREATE"),
                             "FILTER_NAME" => "arrFilterMoto",
                             "HIDE_LINK_WHEN_NO_DETAIL" => "N",
-                            "IBLOCK_ID" => "7",
+                            "IBLOCK_ID" => MOTO_IBLOCK_ID,
                             "IBLOCK_TYPE" => "announcements",
                             "INCLUDE_IBLOCK_INTO_CHAIN" => "N",
                             "INCLUDE_SUBSECTIONS" => "Y",
@@ -504,7 +490,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "SET_STATUS_404" => "N",
                             "SET_TITLE" => "N",
                             "SHOW_404" => "N",
-                            "SORT_BY1" => "TIMESTAMP_X",
+                            "SORT_BY1" => "PROPERTY_TIME_RAISE",
                             "SORT_BY2" => "ID",
                             "SORT_ORDER1" => "DESC",
                             "SORT_ORDER2" => "DESC",
@@ -542,7 +528,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "AJAX_OPTION_STYLE" => "N",
                             "CACHE_FILTER" => "Y",
                             "CACHE_GROUPS" => "N",
-                            "CACHE_TIME" => "360",
+                            "CACHE_TIME" => "3600000",
                             "CACHE_TYPE" => "A",
                             "CHECK_DATES" => "Y",
                             "DETAIL_URL" => "",
@@ -555,7 +541,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "FIELD_CODE" => array("SHOW_COUNTER", "DATE_CREATE"),
                             "FILTER_NAME" => "arrFilterScooterVip",
                             "HIDE_LINK_WHEN_NO_DETAIL" => "N",
-                            "IBLOCK_ID" => "8",
+                            "IBLOCK_ID" => SCOOTER_IBLOCK_ID,
                             "IBLOCK_TYPE" => "announcements",
                             "INCLUDE_IBLOCK_INTO_CHAIN" => "N",
                             "INCLUDE_SUBSECTIONS" => "Y",
@@ -579,7 +565,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "SET_STATUS_404" => "N",
                             "SET_TITLE" => "N",
                             "SHOW_404" => "N",
-                            "SORT_BY1" => "TIMESTAMP_X",
+                            "SORT_BY1" => "PROPERTY_TIME_RAISE",
                             "SORT_BY2" => "ID",
                             "SORT_ORDER1" => "DESC",
                             "SORT_ORDER2" => "DESC",
@@ -609,7 +595,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "AJAX_OPTION_STYLE" => "N",
                             "CACHE_FILTER" => "Y",
                             "CACHE_GROUPS" => "N",
-                            "CACHE_TIME" => "360",
+                            "CACHE_TIME" => "36000000",
                             "CACHE_TYPE" => "A",
                             "CHECK_DATES" => "Y",
                             "DETAIL_URL" => "",
@@ -622,7 +608,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "FIELD_CODE" => array("SHOW_COUNTER", "DATE_CREATE"),
                             "FILTER_NAME" => "arrFilterScooter",
                             "HIDE_LINK_WHEN_NO_DETAIL" => "N",
-                            "IBLOCK_ID" => "8",
+                            "IBLOCK_ID" => SCOOTER_IBLOCK_ID,
                             "IBLOCK_TYPE" => "announcements",
                             "INCLUDE_IBLOCK_INTO_CHAIN" => "N",
                             "INCLUDE_SUBSECTIONS" => "Y",
@@ -646,7 +632,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "SET_STATUS_404" => "N",
                             "SET_TITLE" => "N",
                             "SHOW_404" => "N",
-                            "SORT_BY1" => "TIMESTAMP_X",
+                            "SORT_BY1" => "PROPERTY_TIME_RAISE",
                             "SORT_BY2" => "ID",
                             "SORT_ORDER1" => "DESC",
                             "SORT_ORDER2" => "DESC",
@@ -682,7 +668,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "AJAX_OPTION_STYLE" => "N",
                             "CACHE_FILTER" => "Y",
                             "CACHE_GROUPS" => "N",
-                            "CACHE_TIME" => "360",
+                            "CACHE_TIME" => "36000000",
                             "CACHE_TYPE" => "A",
                             "CHECK_DATES" => "Y",
                             "DETAIL_URL" => "",
@@ -695,7 +681,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "FIELD_CODE" => array("SHOW_COUNTER", "DATE_CREATE"),
                             "FILTER_NAME" => "arrFilterADVip",
                             "HIDE_LINK_WHEN_NO_DETAIL" => "N",
-                            "IBLOCK_ID" => "1",
+                            "IBLOCK_ID" => SIMPLE_ADS_IBLOCK_ID,
                             "IBLOCK_TYPE" => "announcements",
                             "INCLUDE_IBLOCK_INTO_CHAIN" => "N",
                             "INCLUDE_SUBSECTIONS" => "Y",
@@ -719,7 +705,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "SET_STATUS_404" => "N",
                             "SET_TITLE" => "N",
                             "SHOW_404" => "N",
-                            "SORT_BY1" => "TIMESTAMP_X",
+                            "SORT_BY1" => "PROPERTY_TIME_RAISE",
                             "SORT_BY2" => "ID",
                             "SORT_ORDER1" => "DESC",
                             "SORT_ORDER2" => "DESC",
@@ -749,7 +735,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "AJAX_OPTION_STYLE" => "N",
                             "CACHE_FILTER" => "Y",
                             "CACHE_GROUPS" => "N",
-                            "CACHE_TIME" => "360",
+                            "CACHE_TIME" => "36000000",
                             "CACHE_TYPE" => "A",
                             "CHECK_DATES" => "Y",
                             "DETAIL_URL" => "",
@@ -762,7 +748,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "FIELD_CODE" => array("SHOW_COUNTER", "DATE_CREATE"),
                             "FILTER_NAME" => "arrFilterAD",
                             "HIDE_LINK_WHEN_NO_DETAIL" => "N",
-                            "IBLOCK_ID" => "1",
+                            "IBLOCK_ID" => SIMPLE_ADS_IBLOCK_ID,
                             "IBLOCK_TYPE" => "announcements",
                             "INCLUDE_IBLOCK_INTO_CHAIN" => "N",
                             "INCLUDE_SUBSECTIONS" => "Y",
@@ -786,7 +772,7 @@ $APPLICATION->SetTitle("Teltan - main");
                             "SET_STATUS_404" => "N",
                             "SET_TITLE" => "N",
                             "SHOW_404" => "N",
-                            "SORT_BY1" => "TIMESTAMP_X",
+                            "SORT_BY1" => "PROPERTY_TIME_RAISE",
                             "SORT_BY2" => "ID",
                             "SORT_ORDER1" => "DESC",
                             "SORT_ORDER2" => "DESC",

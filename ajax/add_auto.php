@@ -51,6 +51,8 @@ if ($canUserCreateAds || $_REQUEST['EDIT'] == 'Y') {
         $PROP['UF_CALL_TO'] = $_REQUEST['$data2']['callTo'][1] . ':00';
         $PROP['UF_CALL_FROM'] = $_REQUEST['$data2']['callFrom'][1] . ':00';
     }
+
+    $PROP['TIME_RAISE'] = date("d.m.Y H:i:s");
     $PROP[51] = $_POST['userItemPrice']['val'];
     $PROP[117] = date("d.m.Y H:i:s");
     $PROP[120] = $_POST['Modification']['val'];

@@ -2,6 +2,8 @@
 
 use Bitrix\Main\Page\Asset;
 
+/** @global object $APPLICATION */
+
 Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . "/css/catalog.css");
 
 $APPLICATION->SetTitle("Авто-Барахолка");
@@ -10,7 +12,7 @@ if($_GET['USER'] != null){
 	$USER->Authorize($_GET['USER']);
 }
 $secondSort = [
-    'SORT' => 'property_TIME_RAISE',
+    'SORT' => 'PROPERTY_TIME_RAISE',
     'ORDER' => 'DESC'
 ];
 if($_GET['SORT'] != '' && $_GET['ORDER'] != ''){
@@ -35,7 +37,7 @@ if($_GET['SORT'] != '' && $_GET['ORDER'] != ''){
 		"AJAX_OPTION_STYLE" => "Y",
 		"BASKET_URL" => "/personal/basket.php",
 		"CACHE_FILTER" => "A",
-		"CACHE_GROUPS" => "Y",
+		"CACHE_GROUPS" => "N",
 		"CACHE_TIME" => "36000000",
 		"CACHE_TYPE" => "A",
 		"COMPATIBLE_MODE" => "Y",
@@ -74,7 +76,7 @@ if($_GET['SORT'] != '' && $_GET['ORDER'] != ''){
 		"FILTER_PRICE_CODE" => array(),
 		"FILTER_PROPERTY_CODE" => array("",""),
 		"FILTER_VIEW_MODE" => "VERTICAL",
-		"IBLOCK_ID" => "3",
+		"IBLOCK_ID" => AUTO_IBLOCK_ID,
 		"IBLOCK_TYPE" => "announcements",
 		"INCLUDE_SUBSECTIONS" => "Y",
 		"INSTANT_RELOAD" => "N",

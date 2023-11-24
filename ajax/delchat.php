@@ -1,37 +1,45 @@
-<?if(!$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') die();
+<?php if(!$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') die();
 require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
 
-if(isset($_POST) && isset($_POST['ad']) && isset($_POST['au'])) {
+$error = ['TYPE' => 'ERROR'];
+if (!empty($_POST) && !empty($_POST['adId']) && !empty($_POST['recipientId'])) {
+    $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
+    $adId = (int)$_POST['adId'];
+    $recipientId = (int)$_POST['recipientId'];
 
-    global $USER;
-    $error = array();
+    if (\Bitrix\Main\Loader::includeModule("highloadblock") && defined('USERS_CHAT_MESSAGES_HL_ID')) {
+        $hlblock = \Bitrix\Highloadblock\HighloadBlockTable::getById(USERS_CHAT_MESSAGES_HL_ID)->fetch();
+        $entityClass = \Bitrix\Highloadblock\HighloadBlockTable::compileEntity($hlblock)->getDataClass();
+        $messages = $entityClass::getList([
+            'select' => array(
+                'ID',
+                'UF_AUTOR_ID',
+                'UF_ID_USER',
+                'UF_DEL_AUTOR',
+                'UF_DEL_USER'
+            ),
+            'filter' => array(
+                'LOGIC' => 'OR',
+                array('UF_AUTOR_ID' => $userId, 'UF_ID_AD' => $adId, 'UF_ID_USER' => $recipientId),
+                array('UF_AUTOR_ID' => $recipientId, 'UF_ID_AD' => $adId, 'UF_ID_USER' => $userId),
+            ),
+        ])->fetchCollection();
 
-    $IDUser = $USER->GetID();
-    $IDAd = (int)$_POST['ad'];
-    $IDAu = (int)$_POST['au'];
-
-    if($IDAd && $IDAu)
-    {
-        $messages = getMessagesChat($IDAd, $IDUser, $IDAu);
-        if($messages)
-        {
-            foreach ($messages as $message) {
-                if($message['UF_AUTOR_ID'] == $IDUser)
-                {
-                    UpdateHlItem(7, $message['ID'], array('UF_DEL_AUTOR' => 1));
-                    $error['TYPE'] = 'OK';
-                }
-                elseif($message['UF_ID_USER'] == $IDUser)
-                {
-                    UpdateHlItem(7, $message['ID'], array('UF_DEL_USER' => 1));
-                    $error['TYPE'] = 'OK';
+        foreach ($messages as $mess) {
+            if ($mess->getUfAutorId() == $userId) {
+                $mess->setUfDelAutor(true);
+            } else {
+                if ($mess->getUfIdUser() == $userId) {
+                    $mess->setUfDelUser(true);
                 }
             }
         }
-    }
 
-    header('Content-type: application/json; charset=utf-8');
-    print json_encode($error);
+        $res = $messages->save();
+        if ($res->isSuccess()) $error['TYPE'] = 'OK';
+    }
 }
-require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/epilog_after.php");
-?>
+
+header('Content-type: application/json; charset=utf-8');
+echo json_encode($error);
+

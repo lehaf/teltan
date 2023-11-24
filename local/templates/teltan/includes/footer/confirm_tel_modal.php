@@ -42,8 +42,6 @@ Loc::loadMessages(__FILE__);
                 <h3 class="subtitle" id="exampleModalLabel">
                     <?=Loc::getMessage('want');?>
                 </h3>
-
-
                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
                     <div class="mb-4 mb-md-0 d-flex justify-content-between w-100 align-items-center">
                         <button type="button" class="btn btn-transparent btn-close" data-dismiss="modal"><?=Loc::getMessage('close');?></button>
