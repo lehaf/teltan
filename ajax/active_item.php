@@ -2,7 +2,8 @@
 
 use Bitrix\Main\Localization\Loc;
 
-CModule::IncludeModule('iblock');
+\CModule::IncludeModule('iblock');
+$operationResult = '';
 $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
 $arUser = CUser::GetByID($userId)->Fetch();
 $boughtRateEntity = GetEntityDataClass(BOUGHT_RATE_HL_ID);
@@ -19,9 +20,14 @@ $iblocksIdToCode = [
 
 $iblockClass = \Bitrix\Iblock\Iblock::wakeUp($iblockId)->getEntityDataClass();
 $element = $iblockClass::getByPrimary($productId, array(
-    'select' => array('ID', 'NAME', 'ACTIVE_TO', 'FREE_AD'),
+    'select' => [
+        'ID',
+        'NAME',
+        'ACTIVE',
+        'ACTIVE_TO',
+        'FREE_AD'
+    ],
 ))->fetchObject();
-
 $isFreeAd = !empty($element->getFreeAd()) && $element->getFreeAd()->getValue() > 0;
 $isAdNotExpired = !empty($element->getActiveTo()) && strtotime($element->getActiveTo()) > time();
 $canUserCreateAds = canUserCreateAds($iblockId, $iblocksIdToCode[$iblockId]) === true ? true : $isAdNotExpired;
@@ -29,20 +35,30 @@ $canUserCreateAds = canUserCreateAds($iblockId, $iblocksIdToCode[$iblockId]) ===
 /** ДЕАКТИВАЦИЯ ЭЛЕМЕНТА */
 if ($_REQUEST['value'] == 'green') {
     $updateFields['ACTIVE'] = "N";
-    echo Loc::getMessage('DEACTIVATE_ITEM');
-    deleteFavoritesUser($productId);
+    $operationResult = Loc::getMessage('DEACTIVATE_ITEM');
+    deleteFavoritesUser($productId); // удаляем из избранного
+    deleteAdFromUserRate($productId, $iblockId); // удаляем из купленного тарифа
     /** АКТИВАЦИЯ ЭЛЕМЕНТА */
 } else {
+    // Если объявление бесплатное
     if ($isFreeAd) {
         $newExpiredTimeFreeAdd = time() + DAYS_EXPIRED_FREE_ADS * $oneDayToSecond;
-        $updateFields['ACTIVE'] = "Y";
+        $updateFields['ACTIVE'] = true;
         $updateFields['ACTIVE_TO'] = \Bitrix\Main\Type\DateTime::createFromTimestamp($newExpiredTimeFreeAdd);
-        echo Loc::getMessage('ACTIVATE_ITEM');
+        $operationResult = Loc::getMessage('ACTIVATE_ITEM');
     } else {
-        if (isAdBelongToActiveRate($productId, $iblocksIdToCode[$iblockId])) {
-            $updateFields['ACTIVE'] = "Y";
-            echo Loc::getMessage('ACTIVATE_ITEM');
+        // Если не существует бесплатных объявлений
+        if (!isExistActiveFreeAd($iblocksIdToCode[$iblockId])) {
+            $newExpiredTimeFreeAdd = time() + DAYS_EXPIRED_FREE_ADS * $oneDayToSecond;
+            if ($freeAdPropVal = getPropertyFreeAdValueId($iblockId)) $updateFields['FREE_AD'] = $freeAdPropVal;
+            $updateFields['ACTIVE'] = true;
+            $updateFields['ACTIVE_TO'] = \Bitrix\Main\Type\DateTime::createFromTimestamp($newExpiredTimeFreeAdd);
+            // удаляем у всех существуещих объявлений этого пользователя чекбокс "бесплатное объявление"
+            removeFreeAdPropOnAds($iblocksIdToCode[$iblockId]);
+            if ($canUserCreateAds)  deleteAdFromUserRate($productId, $iblockId); // удаляем из купленного тарифа (если это объявление там было)
+            $operationResult = Loc::getMessage('ACTIVATE_ITEM');
         } else {
+            // если у пользователя активен платный тариф
             if ($canUserCreateAds) {
                 if ($_REQUEST['value'] == 'red') {
                     // Получаем всю инфу о самом первом активном купленном пакете
@@ -61,26 +77,33 @@ if ($_REQUEST['value'] == 'green') {
                                 'UF_DAYS_REMAIN' => $countActiveRateDays
                             ));
 
-                            $updateFields['ACTIVE'] = "Y";
+                            $updateFields['ACTIVE'] = true;
                             $time = strtotime($optimalUserRate['UF_DATE_EXPIRED']);
                             $updateFields['ACTIVE_TO'] = \Bitrix\Main\Type\DateTime::createFromTimestamp($time);
 
-                            echo Loc::getMessage('ACTIVATE_ITEM');
+                            $operationResult = Loc::getMessage('ACTIVATE_ITEM');
                         } else {
-                            echo Loc::getMessage('END_RATE');
+                            $operationResult = Loc::getMessage('END_RATE');
                         }
                     } else {
-                        echo Loc::getMessage('END_RATE');
+                        $operationResult = Loc::getMessage('END_RATE');
                     }
                 }
             } else {
-                echo Loc::getMessage('END_RATE');
+                $operationResult = Loc::getMessage('END_RATE');
             }
         }
     }
 }
 
+// Обновляем элемент
 if (!empty($updateFields)) {
-    $el = new CIBlockElement;
-    $el->Update($productId, $updateFields);
+    if (!empty($element)) {
+        foreach ($updateFields as $propCode => $propVal) {
+            $element->set($propCode, $propVal);
+        }
+        $element->save();
+    }
 }
+
+echo $operationResult;

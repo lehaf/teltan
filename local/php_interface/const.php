@@ -6,6 +6,11 @@ const DAYS_EXPIRED_FREE_ADS = 30;
 const PROPERTY_ADS_TYPE_CODE = 'PROPERTY';
 const AUTO_ADS_TYPE_CODE = 'AUTO';
 const FLEA_ADS_TYPE_CODE = 'FLEA';
+const CATEGORY_TO_IBLOCK_ID = [
+    'FLEA' => 1,
+    'PROPERTY' => 2,
+    'AUTO' => [3, 7, 8]
+];;
 
 // IBLOCKS
 const SIMPLE_ADS_IBLOCK_ID = 1;
