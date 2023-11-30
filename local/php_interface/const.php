@@ -10,7 +10,7 @@ const CATEGORY_TO_IBLOCK_ID = [
     'FLEA' => 1,
     'PROPERTY' => 2,
     'AUTO' => [3, 7, 8]
-];;
+];
 
 // IBLOCKS
 const SIMPLE_ADS_IBLOCK_ID = 1;

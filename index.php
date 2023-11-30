@@ -98,10 +98,7 @@ $APPLICATION->SetTitle("Teltan - main");
             <div class="d-flex flex-column">
                 <!-- PROPERTY MARKET -->
                 <div class="mb-4">
-                    <p class="h2 mb-4 subtitle">
-                        <?=Loc::getMessage('PROPERTY');?>
-                    </p>
-
+                    <p class="h2 mb-4 subtitle"><?=Loc::getMessage('PROPERTY')?></p>
                     <?
                     global $arrFilterPropVip;
                     $arrFilterPropVip = array(
