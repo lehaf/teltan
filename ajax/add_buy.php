@@ -138,7 +138,8 @@ if ($canUserCreateAds || $_REQUEST['EDIT'] == 'Y') {
         // Получаем всю инфу о самом первом активном купленном пакете
         $optimalUserRate = getOptimalActiveUserRate(PROPERTY_ADS_TYPE_CODE);
         // Если пользователь еще не создавал объявления то первое объявление будет бесплатным
-        if (isFreeAddCreated(PROPERTY_ADS_TYPE_CODE) === false) {
+        if (isExistActiveFreeAd(PROPERTY_ADS_TYPE_CODE) === false) {
+            removeFreeAdPropOnAds(PROPERTY_ADS_TYPE_CODE);
             $isFreeAdd = true;
             $arLoadProductArray['PROPERTY_VALUES']['FREE_AD'] = getPropertyFreeAdValueId(PROPERTY_ADS_IBLOCK_ID);
             $unixTime = strtotime('+ '.DAYS_EXPIRED_FREE_ADS.' days');
