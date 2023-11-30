@@ -274,23 +274,13 @@ function resizeImg($id, $width, $height, $type = 0)
     }
 }
 
-function getHighloadInfo($hlblock_id, $arSelect)
+function getHighloadInfo(int $hlblock_id, array $arSelect)
 {
     Loader::includeModule("highloadblock");
-
     $hlblock = HL\HighloadBlockTable::getById($hlblock_id)->fetch();
-
     $entity = HL\HighloadBlockTable::compileEntity($hlblock);
     $entity_data_class = $entity->getDataClass();
-
-    $rsData = $entity_data_class::getList($arSelect);
-
-    while ($arData = $rsData->Fetch()) {
-        $result[] = $arData;
-    }
-
-    return $result;
-
+    return $entity_data_class::getList($arSelect)->fetchAll();
 }
 
 function addHLItem($hlblock_id, $arData)
@@ -513,8 +503,8 @@ function getMessagesChat($IDAd, $IDUser, $IDUser2)
             array('UF_AUTOR_ID' => $IDUser2, 'UF_ID_AD' => $IDAd, 'UF_ID_USER' => $IDUser, 'UF_DEL_USER' => 0),
         ),
     );
-    return getHighloadInfo(7, $params);
 
+    return getHighloadInfo(USERS_CHAT_MESSAGES_HL_ID, $params);
 }
 
 // Получаем количество непрочитанных сообщений

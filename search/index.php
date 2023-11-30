@@ -1,7 +1,9 @@
-<?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
-$APPLICATION->SetTitle("חיפוש");?>
+<?php require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 
-<?
+/** @global object $APPLICATION */
+
+$APPLICATION->SetTitle("חיפוש");
+
 $template = 'search';
 
 if($_GET['display'] == 'list')
@@ -59,5 +61,4 @@ $APPLICATION->IncludeComponent(
 		"arrWHERE" => array(0=>"iblock_announcements",)
 	)
 );?>
-
-<?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
+<?php require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

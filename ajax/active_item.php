@@ -45,11 +45,9 @@ if ($_REQUEST['value'] == 'green') {
         } else {
             if ($canUserCreateAds) {
                 if ($_REQUEST['value'] == 'red') {
-                    $updateFields['ACTIVE'] = "Y";
                     // Получаем всю инфу о самом первом активном купленном пакете
                     $optimalUserRate = getOptimalActiveUserRate($iblocksIdToCode[$iblockId]);
-                    // Если пользователь еще не создавал объявления то первое объявление будет бесплатным
-                    if (isFreeAddCreated($iblocksIdToCode[$iblockId]) !== false && !empty($optimalUserRate)) {
+                    if (!empty($optimalUserRate)) {
                         // Обновление пользовательских пакетов (Кпленных тарифов)
                         $countAvailableAds = $optimalUserRate['UF_COUNT_REMAIN'] - $optimalUserRate['UF_COUNT_LESS'];
                         $unixTimeUntilUserRate = strtotime($optimalUserRate['UF_DATE_EXPIRED']);
@@ -62,9 +60,18 @@ if ($_REQUEST['value'] == 'green') {
                                 'UF_ID_ANONC' => $optimalUserRate['UF_ID_ANONC'],
                                 'UF_DAYS_REMAIN' => $countActiveRateDays
                             ));
+
+                            $updateFields['ACTIVE'] = "Y";
+                            $time = strtotime($optimalUserRate['UF_DATE_EXPIRED']);
+                            $updateFields['ACTIVE_TO'] = \Bitrix\Main\Type\DateTime::createFromTimestamp($time);
+
+                            echo Loc::getMessage('ACTIVATE_ITEM');
+                        } else {
+                            echo Loc::getMessage('END_RATE');
                         }
+                    } else {
+                        echo Loc::getMessage('END_RATE');
                     }
-                    echo Loc::getMessage('ACTIVATE_ITEM');
                 }
             } else {
                 echo Loc::getMessage('END_RATE');

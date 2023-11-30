@@ -11,10 +11,8 @@
 /** @var string $componentPath */
 /** @var CBitrixComponent $component */
 $this->setFrameMode(true);
-?>
-<?
 global $arSetting;
-if ($arResult['ITEMS']) {
+if (!empty($arResult['ITEMS'])) {
     ?>
     <div class="row row-cols-2 row-cols-lg-4">
         <? foreach ($arResult['ITEMS'] as $arItem) {

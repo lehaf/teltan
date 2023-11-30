@@ -4,13 +4,15 @@ use Bitrix\Main\Page\Asset;
 
 Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . "/css/catalog.css");
 
+/** @global object $APPLICATION */
+
 $APPLICATION->SetTitle("Авто-Барахолка");
 global $USER;
 if($_GET['USER'] != null){
 	$USER->Authorize($_GET['USER']);
 }
 $secondSort = [
-    'SORT' => 'property_TIME_RAISE',
+    'SORT' => 'PROPERTY_TIME_RAISE',
     'ORDER' => 'DESC'
 ];
 if($_GET['SORT'] != '' && $_GET['ORDER'] != ''){
@@ -33,7 +35,7 @@ if($_GET['SORT'] != '' && $_GET['ORDER'] != ''){
 		"AJAX_OPTION_STYLE" => "Y",
 		"BASKET_URL" => "/personal/basket.php",
 		"CACHE_FILTER" => "Y ",
-		"CACHE_GROUPS" => "Y",
+		"CACHE_GROUPS" => "N",
 		"CACHE_TIME" => "36000000",
 		"CACHE_TYPE" => "A",
 		"COMPATIBLE_MODE" => "Y",

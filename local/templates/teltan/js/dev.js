@@ -432,13 +432,13 @@ $(document).ready(function () {
     })
 
     $(document).on('click', '.del_all_in_chat', function () {
-        let ad = $(this).data('pr1');
-        let au = $(this).data('pr2');
+        let adId = $(this).data('pr1');
+        let recipientId = $(this).data('pr2');
 
         $.ajax({
             type: "POST",
             url: "/ajax/delchat.php",
-            data: 'ad=' + ad + '&au=' + au + '',
+            data: 'adId=' + adId + '&recipientId=' + recipientId + '',
             success: function (msg) {
                 getCountMess();
                 if (msg['TYPE'] == "OK") {
@@ -480,17 +480,17 @@ $(document).ready(function () {
     })
 
     $(document).on('click', '.del_chat', function () {
-        var ad = $(this).attr('data-pr1');
-        var au = $(this).attr('data-pr2');
+        let adId = $(this).attr('data-pr1');
+        let recipientId = $(this).attr('data-pr2');
 
         $.ajax({
             type: "POST",
             url: "/ajax/delchat.php",
-            data: 'ad=' + ad + '&au=' + au + '',
+            data: 'adId=' + adId + '&recipientId=' + recipientId + '',
             success: function (msg) {
                 if (msg['TYPE'] == "OK") {
                     getCountMess();
-                    $('.deleteChatPopup[data-ad=' + ad + '][data-au=' + au + ']').parent().parent().parent().parent().remove();
+                    $('.deleteChatPopup[data-ad=' + adId + '][data-au=' + recipientId + ']').parent().parent().parent().parent().remove();
                     $('.allert').removeClass('show');
                 }
             }

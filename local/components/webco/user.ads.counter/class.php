@@ -83,14 +83,32 @@ class UserAdsCounter extends \CBitrixComponent
                 if ($userProps['NAME'] === 'AUTO') {
                     if ($autoAdded === false) {
                         $autoAdded = true;
-                        $this->arResult['COUNTER'][$userProps['NAME']]['USED'] = $user[$userProps['COUNT_ADS_USER_PROP']];
+                        $costAdsCount = 0;
+                        if (!empty($this->arResult['USER_ADS'][$userProps['NAME']]['COST_ADS'])) {
+                            foreach ($this->arResult['USER_ADS'][$userProps['NAME']]['COST_ADS'] as $rateAds) {
+                                $costAdsCount += $rateAds['COUNT'];
+                            }
+                        }
+                        $this->arResult['COUNTER'][$userProps['NAME']]['USED'] =
+                            $costAdsCount + $this->arResult['USER_ADS'][$userProps['NAME']]['FREE_ADS_COUNT'];
+
+
                         $this->arResult['COUNTER'][$userProps['NAME']]['POSSIBLE'] =
                             $user[$userProps['FREE_USER_PROP']] + $rateLimits[$userProps['NAME']];
                         $this->arResult['COUNTER'][$userProps['NAME']]['FREE_LIMIT'] = $user[$userProps['FREE_USER_PROP']];
                         $this->arResult['COUNTER'][$userProps['NAME']]['COST_LIMIT'] = $user[$userProps['COST_USER_PROP']];
                     }
                 } else {
-                    $this->arResult['COUNTER'][$userProps['NAME']]['USED'] = $user[$userProps['COUNT_ADS_USER_PROP']];
+                    $costAdsCount = 0;
+                    if (!empty($this->arResult['USER_ADS'][$userProps['NAME']]['COST_ADS'])) {
+                        foreach ($this->arResult['USER_ADS'][$userProps['NAME']]['COST_ADS'] as $rateAds) {
+                            $costAdsCount += $rateAds['COUNT'];
+                        }
+                    }
+                    $this->arResult['COUNTER'][$userProps['NAME']]['USED'] =
+                        $costAdsCount + $this->arResult['USER_ADS'][$userProps['NAME']]['FREE_ADS_COUNT'];
+
+
                     $this->arResult['COUNTER'][$userProps['NAME']]['POSSIBLE'] =
                         $user[$userProps['FREE_USER_PROP']] + $rateLimits[$userProps['NAME']];
                     $this->arResult['COUNTER'][$userProps['NAME']]['FREE_LIMIT'] = $user[$userProps['FREE_USER_PROP']];
@@ -108,7 +126,10 @@ class UserAdsCounter extends \CBitrixComponent
                 'select' => array('ID', ...$this->userSelectParams),
                 'filter' => array('ID' => \Bitrix\Main\Engine\CurrentUser::get()->getId()),
             ))->fetch();
-            if (!empty($user)) $this->setUserCounters($user);
+            if (!empty($user)) {
+                $this->getUserAds();
+                $this->setUserCounters($user);
+            }
         }
     }
 
@@ -144,6 +165,7 @@ class UserAdsCounter extends \CBitrixComponent
                 $collection = $iblockClass::getList(array(
                     'select' => ['ID', 'ACTIVE_TO'],
                     'filter' => [
+                        'ACTIVE' => 'Y',
                         'ID_USER.VALUE' => \Bitrix\Main\Engine\CurrentUser::get()->getId(),
                         '!FREE_AD.VALUE' => false
                     ]
@@ -166,7 +188,6 @@ class UserAdsCounter extends \CBitrixComponent
     public function executeComponent()
     {
         $this->getUserCountAdsAndLimits();
-        $this->getUserAds();
         $this->includeComponentTemplate();
     }
 }

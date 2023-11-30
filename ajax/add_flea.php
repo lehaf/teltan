@@ -34,6 +34,7 @@ if ($canUserCreateAds || $_REQUEST['EDIT'] == 'Y') {
         $PROP['UF_CALL_FROM'] = $_REQUEST['callFrom']["val"] . ':00';
     }
 
+    $PROP['TIME_RAISE'] = date("d.m.Y H:i:s");
     $PROP['LOCATION'] = $_POST['LOCATION'];
     $PROP['UF_REGION'] = $_POST['region'];
     $PROP['UF_CITY'] = $_POST['city'];

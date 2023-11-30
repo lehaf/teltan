@@ -1,38 +1,35 @@
-<?require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
-CModule::IncludeModule('iblock');
+<?php require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
 
+use Bitrix\Main\Loader;
 
+if (Loader::includeModule('iblock')) {
 
-$ELEMENT_ID = intval($_REQUEST['id']);
-$PROPERTY_CODE = "TIME_RAISE";
-$PROPERTY_VALUE = date("Y-m-d H:i:s");
+    $iblockClass = \Bitrix\Iblock\Iblock::wakeUp($_REQUEST['iblockId'])->getEntityDataClass();
+    $element = $iblockClass::getByPrimary($_REQUEST['id'], array(
+        'select' => array('ID', 'TIME_RAISE', 'COUNT_RAISE'),
+    ))->fetchObject();
+    $element->setTimeRaise(date('Y-m-d H:i:s'));
+    $countRaise = !empty($element->getCountRaise()) && $element->getCountRaise()->getValue() > 0 ?
+        $element->getCountRaise()->getValue() - 1 : 0;
+    $element->setCountRaise($countRaise);
+    $element->save();
+    $taggedCache = \Bitrix\Main\Application::getInstance()->getTaggedCache();
+    $taggedCache->clearByTag('iblock_id_'.$_REQUEST['iblockId']);
 
+    if (LANGUAGE_ID == 'he') {
+        if ($countRaise <= 0) {
+            echo 'none';
+        } else {
+            echo '(' .$countRaise . ') '.'להקפיץ' ;
+        }
 
-CIBlockElement::SetPropertyValuesEx($ELEMENT_ID, false, array($PROPERTY_CODE => $PROPERTY_VALUE));
-$db_props = CIBlockElement::GetProperty(intval($_REQUEST['iblockId']), $ELEMENT_ID, array("sort" => "asc"), Array("CODE"=>"COUNT_RAISE"));
-if($ar_props = $db_props->Fetch())
-    $TOPIC_ID = IntVal($ar_props["VALUE"]);
-else
-    $TOPIC_ID = false;
-$newvalue =  $TOPIC_ID -1;
-$PROPERTY_CODE = "COUNT_RAISE";
-$PROPERTY_VALUE = IntVal($newvalue);
-
-
-CIBlockElement::SetPropertyValuesEx($ELEMENT_ID, false, array($PROPERTY_CODE => $PROPERTY_VALUE));
-if(LANGUAGE_ID == 'he') {
-    if ($newvalue <= 0) {
-        echo 'none';
-    } else {
-        echo '(' .$newvalue . ') '.'להקפיץ' ;
-    }
-
-}else{
-    if ($newvalue <= 0) {
-        echo 'none';
-    } else {
-        echo 'Raise (' . $newvalue . ')';
+    }else{
+        if ($countRaise <= 0) {
+            echo 'none';
+        } else {
+            echo 'Raise (' . $countRaise . ')';
+        }
     }
 }
-require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/epilog_after.php");
-?>
+
+

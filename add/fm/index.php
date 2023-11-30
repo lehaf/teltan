@@ -832,6 +832,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray(SIMPLE_ADS_IBLOCK_ID, $_GET['ids'
     </div>`,
         )
 
+        // Sections
         $('.section_id_a').click(function (e) {
             $('.activeSection').each(function () {
                 if (e.target != this) {
@@ -842,7 +843,11 @@ $arLink = CIBlockSectionPropertyLink::GetArray(SIMPLE_ADS_IBLOCK_ID, $_GET['ids'
             $(this).toggleClass('activeSection')
             let id_section = $(this).attr('data-id_section');
             $('input#section_id').val(id_section);
-        })
+        });
+
+        $('div.nav-pills a.nav-link').click(function (e) {
+            $('input#section_id').val('');
+        });
 
 
         function submitForm(event) {
