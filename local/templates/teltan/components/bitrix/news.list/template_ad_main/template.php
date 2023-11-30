@@ -11,11 +11,8 @@
 /** @var string $componentPath */
 /** @var CBitrixComponent $component */
 $this->setFrameMode(true);
-?>
-<?
-global $arSetting;
-if ($arResult['ITEMS']) {
-    ?>
+
+if ($arResult['ITEMS']) :?>
     <div class="row row-cols-2 row-cols-lg-4">
         <? foreach ($arResult['ITEMS'] as $arItem) {
             $this->AddEditAction($arItem['ID'], $arItem['EDIT_LINK'], $arItem["EDIT_LINK_TEXT"]);
@@ -95,25 +92,24 @@ if ($arResult['ITEMS']) {
                             <span class="date"><?= ($strDate['MES']) ? GetMessage($strDate['MES']) . ', ' . $strDate['HOURS'] : $strDate['HOURS']; ?></span>
                         </div>
                     </div>
-
-                    <?
-                    if ($arItem['TAPE'] && (strtotime($arItem['PROPERTIES']['LENTA_DATE']['VALUE']) > time())) {
-                        ?>
+                    <?php if($arItem['TAPE'] && (strtotime($arItem['PROPERTIES']['LENTA_DATE']['VALUE']) > time())):?>
                         <div class="d-flex marker">
                             <div class="d-flex flex-column decor-rec"
-                                 style="border-color: <?= $arItem['TAPE']['UF_COLOR']; ?>;">
+                                 style="border-color: <?='#'.$arItem['TAPE']['UF_COLOR']?>;"
+                            >
                                 <div class="rec-top"></div>
                                 <div class="rec-bottom"></div>
                             </div>
                             <div class="text"
-                                 style="background-color: <?= $arItem['TAPE']['UF_COLOR']; ?>;"><?= $arItem['TAPE']['UF_NAME_' . mb_strtoupper($arSetting[SITE_ID]['lang'])]; ?></div>
+                                 style="background-color: <?='#'.$arItem['TAPE']['UF_COLOR']?>;"
+                            >
+                                <?=$arItem['TAPE']['UF_NAME'];?>
+                            </div>
                         </div>
-                        <?
-                    }
-                    ?>
+                    <?php endif;?>
                 </div>
             </div>
 
         <? } ?>
     </div>
-<? } ?>
+<?php endif;?>

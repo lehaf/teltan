@@ -1,10 +1,6 @@
-<?php if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
-?>
+<?php if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die(); ?>
 <div class="mb-5 row d-flex align-items-center">
-
     <?= $arResult['NAV_STRING'] ?>
-
-
     <div class="col-12 col-xl-6 justify-content-center">
         <div class="d-flex justify-content-between justify-content-xl-end products-sort">
             <div class="d-flex">
@@ -62,10 +58,6 @@
             $arResult['VIPS'][] = $arItem;
         }
     }
-
-    /*usort($arResult['VIPS'], function ($arr1, $arr2) {
-        return $arr1['PROPERTIES']['TIME_RAISE']['VALUE'] < $arr2['PROPERTIES']['TIME_RAISE']['VALUE'];
-    });*/
     foreach ($arResult['VIPS'] as $arItem) { ?>
         <?php
         $this->AddEditAction($arItem['ID'], $arItem['EDIT_LINK'], $arItem["EDIT_LINK_TEXT"]);
@@ -214,28 +206,25 @@
                     <?php if ($arItem['PROPERTIES']['LENTA_DATE']['VALUE'] && strtotime($arItem['PROPERTIES']['LENTA_DATE']['VALUE']) > time()) {
                         ?>
                         <div class="d-flex marker">
-
-                            <?php
-                            if ($arItem['PROPERTIES']['TYPE_TAPE']['VALUE'] != null) {
-
-                                $entity_data_class = GetEntityDataClass(6);
-                                $rsData = $entity_data_class::getList(array(
+                            <?php if ($arItem['PROPERTIES']['TYPE_TAPE']['VALUE'] != null):
+                                $entity_data_class = GetEntityDataClass(PERSONAL_RIBBON_HL_ID);
+                                $arTypesRise = $entity_data_class::getList(array(
                                     'select' => array('*'),
                                     'filter' => array('UF_XML_ID' => $arItem['PROPERTIES']['TYPE_TAPE']['VALUE'])
-                                ));
-                                while ($arTypesRise = $rsData->fetch()) { ?>
+                                ))->fetchAll();
+                                foreach ($arTypesRise as $ribbon): ?>
                                     <div class="d-flex flex-column decor-rec"
-                                         style="border-color: <?= $arTypesRise['UF_COLOR'] ?>;">
+                                         style="border-color: <?='#'.$ribbon['UF_COLOR']?>;"
+                                    >
                                         <div class="rec-top"></div>
                                         <div class="rec-bottom"></div>
                                     </div>
                                     <div class="text"
-                                         style="background-color: <?= $arTypesRise['UF_COLOR'] ?>;"><?= $arTypesRise['UF_NAME_RU'] ?></div>
-                                <?php }
-
-                                ?>
-
-                            <?php } ?>
+                                         style="background-color: <?='#'.$ribbon['UF_COLOR']?>">
+                                        <?=$ribbon['UF_NAME']?>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </div>
                     <?php } ?>
                 </div>
@@ -395,28 +384,25 @@
                     <?php if ($arItem['PROPERTIES']['LENTA_DATE']['VALUE'] && strtotime($arItem['PROPERTIES']['LENTA_DATE']['VALUE']) > time()) {
                         ?>
                         <div class="d-flex marker">
-
-                            <?php
-                            if ($arItem['PROPERTIES']['TYPE_TAPE']['VALUE'] != null) {
-
-                                $entity_data_class = GetEntityDataClass(6);
-                                $rsData = $entity_data_class::getList(array(
+                            <?php if ($arItem['PROPERTIES']['TYPE_TAPE']['VALUE'] != null):
+                                $entity_data_class = GetEntityDataClass(PERSONAL_RIBBON_HL_ID);
+                                $arTypesRise = $entity_data_class::getList(array(
                                     'select' => array('*'),
                                     'filter' => array('UF_XML_ID' => $arItem['PROPERTIES']['TYPE_TAPE']['VALUE'])
-                                ));
-                                while ($arTypesRise = $rsData->fetch()) { ?>
+                                ))->fetchAll();
+                                foreach ($arTypesRise as $ribbon): ?>
                                     <div class="d-flex flex-column decor-rec"
-                                         style="border-color: <?= $arTypesRise['UF_COLOR'] ?>;">
+                                         style="border-color: <?='#'.$ribbon['UF_COLOR']?>;"
+                                    >
                                         <div class="rec-top"></div>
                                         <div class="rec-bottom"></div>
                                     </div>
                                     <div class="text"
-                                         style="background-color: <?= $arTypesRise['UF_COLOR'] ?>;"><?= $arTypesRise['UF_NAME_RU'] ?></div>
-                                <?php }
-
-                                ?>
-
-                            <?php } ?>
+                                         style="background-color: <?='#'.$ribbon['UF_COLOR']?>">
+                                        <?=$ribbon['UF_NAME']?>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </div>
                     <?php } ?>
                 </div>

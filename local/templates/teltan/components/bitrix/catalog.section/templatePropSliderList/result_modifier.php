@@ -3,13 +3,12 @@
 if (!empty($arResult['ITEMS'])) {
     $dateTime = new \Bitrix\Main\Type\DateTime();
     // Получаем типы лент-лейблов для vip объявлений
-    $lentaTypes = getHLData(LENTA_TYPES_HL_ID);
-    if (!empty($lentaTypes)) {
-        $editedLentaTypes = [];
-        foreach ($lentaTypes as $lenta) {
-            $editedLentaTypes[$lenta['UF_XML_ID']] = $lenta;
+    $ribbonTypes = getHLData(PERSONAL_RIBBON_HL_ID);
+    if (!empty($ribbonTypes)) {
+        $ribbonTypes = [];
+        foreach ($ribbonTypes as $lenta) {
+            $ribbonTypes[$lenta['UF_XML_ID']] = $lenta;
         }
-        $lentaTypes = $editedLentaTypes;
     }
 
     foreach ($arResult['ITEMS'] as &$item) {
@@ -18,12 +17,12 @@ if (!empty($arResult['ITEMS'])) {
         }
 
         if (!empty($item['PROPERTIES']['LENTA_DATE']['VALUE']) && strtotime($item['PROPERTIES']['LENTA_DATE']['VALUE']) > time() &&
-            !empty($item['PROPERTIES']['TYPE_TAPE']['VALUE']) && !empty($lentaTypes)) {
+            !empty($item['PROPERTIES']['TYPE_TAPE']['VALUE']) && !empty($ribbonTypes)) {
             $lentaXmlId = $item['PROPERTIES']['TYPE_TAPE']['VALUE'];
 
             $item['PROPERTIES']['TYPE_TAPE']['VALUE'] = [
-                'NAME' => $lentaTypes[$lentaXmlId]['UF_NAME_RU'],
-                'COLOR' => $lentaTypes[$lentaXmlId]['UF_COLOR']
+                'NAME' => $ribbonTypes[$lentaXmlId]['UF_NAME'],
+                'COLOR' => $ribbonTypes[$lentaXmlId]['UF_COLOR']
             ];
         }
 

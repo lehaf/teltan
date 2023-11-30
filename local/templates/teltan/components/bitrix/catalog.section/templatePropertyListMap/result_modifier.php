@@ -100,13 +100,12 @@ if (!empty($elements)) {
     }
 }
 
-$typesLent = getHLData(LENTA_TYPES_HL_ID, ['*']);
-if (!empty($typesLent)) {
-    $newTypesLent = [];
-    foreach ($typesLent as $lent) {
-        $newTypesLent[$lent['UF_XML_ID']] = $lent;
+$typesRibbons = getHLData(PERSONAL_RIBBON_HL_ID, ['*']);
+if (!empty($typesRibbons)) {
+    $typesRibbon = [];
+    foreach ($typesRibbons as $lent) {
+        $typesRibbon[$lent['UF_XML_ID']] = $lent;
     }
-    $typesLent = $newTypesLent;
 }
 
 
@@ -115,7 +114,7 @@ if (!empty($arResult['ITEMS'])) {
     foreach ($arResult['ITEMS'] as &$item) {
         if (!empty($item['PROPERTIES']['TYPE_TAPE']['VALUE']) && !empty($item['PROPERTIES']['LENTA_DATE']['VALUE']) &&
             strtotime($item['PROPERTIES']['LENTA_DATE']['VALUE']) > time())
-            $item['PROPERTIES']['TYPE_TAPE']['VALUE'] = $typesLent[$item['PROPERTIES']['TYPE_TAPE']['VALUE']];
+            $item['PROPERTIES']['TYPE_TAPE']['VALUE'] = $typesRibbon[$item['PROPERTIES']['TYPE_TAPE']['VALUE']];
 
         if (!empty($item['PROPERTIES']['VIP_DATE']['VALUE']) && strtotime($item['PROPERTIES']['VIP_DATE']['VALUE']) > time()) {
             $newItems['VIP_ITEMS'][] = $item;

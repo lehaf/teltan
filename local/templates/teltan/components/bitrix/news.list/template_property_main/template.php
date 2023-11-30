@@ -1,4 +1,4 @@
-<?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
+<?php if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
 /** @var array $arParams */
 /** @var array $arResult */
 /** @global CMain $APPLICATION */
@@ -11,12 +11,10 @@
 /** @var string $componentPath */
 /** @var CBitrixComponent $component */
 $this->setFrameMode(true);
-?>
-<?
-global $arSetting;
-if($arResult['ITEMS']){?>
+
+if ($arResult['ITEMS']):?>
     <div class="row row-cols-2 row-cols-lg-4">
-        <?foreach ($arResult['ITEMS'] as $arItem){
+        <?php foreach ($arResult['ITEMS'] as $arItem):
             $this->AddEditAction($arItem['ID'], $arItem['EDIT_LINK'], $arItem["EDIT_LINK_TEXT"]);
             $this->AddDeleteAction($arItem['ID'], $arItem['DELETE_LINK'], $arItem["DELETE_LINK_TEXT"], array("CONFIRM" => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM')));
             ?>
@@ -81,29 +79,31 @@ if($arResult['ITEMS']){?>
 
                             <div class="border-top py-2 py-lg-3 d-flex justify-content-between align-items-center text-nowrap">
                                     <span class="mr-0 mr-lg-2 views"><span><?=$arItem['SHOW_COUNTER'];?></span> <i class="icon-visibility"></i></span>
-                                <?
-                                $strDate = getStringDate($arItem['DATE_CREATE']);
-                                ?>
-                                <span class="date"><?=($strDate['MES']) ? GetMessage($strDate['MES']).', '.$strDate['HOURS'] : $strDate['HOURS'];?></span>
+                                <? $strDate = getStringDate($arItem['DATE_CREATE']); ?>
+                                <span class="date">
+                                    <?=isset($strDate['MES']) ? GetMessage($strDate['MES']).', '.$strDate['HOURS'] : $strDate['HOURS']?>
+                                </span>
                             </div>
                         </div>
                     </div>
 
-                    <?
-                    if($arItem['TAPE'] && (strtotime($arItem['PROPERTIES']['LENTA_DATE']['VALUE']) > time()))
-                    {?>
+                    <?php if($arItem['TAPE'] && (strtotime($arItem['PROPERTIES']['LENTA_DATE']['VALUE']) > time())):?>
                         <div class="d-flex marker">
-                            <div class="d-flex flex-column decor-rec" style="border-color: <?=$arItem['TAPE']['UF_COLOR'];?>;">
+                            <div class="d-flex flex-column decor-rec"
+                                 style="border-color: <?='#'.$arItem['TAPE']['UF_COLOR']?>;"
+                            >
                                 <div class="rec-top"></div>
                                 <div class="rec-bottom"></div>
                             </div>
-                            <div class="text" style="background-color: <?=$arItem['TAPE']['UF_COLOR'];?>;"><?=$arItem['TAPE']['UF_NAME_'.mb_strtoupper($arSetting[SITE_ID]['lang'])];?></div>
+                            <div class="text"
+                                 style="background-color: <?='#'.$arItem['TAPE']['UF_COLOR']?>;"
+                            >
+                                <?=$arItem['TAPE']['UF_NAME'];?>
+                            </div>
                         </div>
-                    <?}
-                    ?>
+                    <?php endif;?>
                 </div>
             </div>
-
-        <?}?>
+        <?php endforeach;?>
     </div>
-<?}?>
+<?php endif;?>

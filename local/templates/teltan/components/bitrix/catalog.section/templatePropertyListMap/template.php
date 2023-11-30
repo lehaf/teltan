@@ -152,14 +152,14 @@ $mapArrayVip = [
                                                     </div>
                                                 </div>
                                             </div>
-                                            <?php if (!empty($arItem['PROPERTIES']['TYPE_TAPE']['VALUE']['UF_NAME_RU'])):?>
+                                            <?php if (!empty($arItem['PROPERTIES']['TYPE_TAPE']['VALUE']['UF_NAME'])):?>
                                                 <div class="d-flex marker">
                                                     <div class="d-flex flex-column decor-rec" style="border-color: <?=$arItem['PROPERTIES']['TYPE_TAPE']['VALUE']['UF_COLOR']?>">
                                                         <div class="rec-top"></div>
                                                         <div class="rec-bottom"></div>
                                                     </div>
                                                     <div class="text" style="background-color: <?= $arItem['PROPERTIES']['TYPE_TAPE']['VALUE']['UF_COLOR'] ?>">
-                                                        <?= $arItem['PROPERTIES']['TYPE_TAPE']['VALUE']['UF_NAME_RU']?>
+                                                        <?= $arItem['PROPERTIES']['TYPE_TAPE']['VALUE']['UF_NAME']?>
                                                     </div>
                                                 </div>
                                             <?php endif; ?>

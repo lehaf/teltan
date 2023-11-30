@@ -822,17 +822,17 @@ $allElements = array_reverse($allElements);
                                                                                            value="<?= $arRise["UF_COUNT"] ?>"
                                                                                            data-price="<?= $arRise["UF_PRICE"] ?>"
                                                                                            data-price-shek="<?= $arRise["UF_PRICE_SHEK"] ?>"
-                                                                                           data-xml-id="<?= $arRise["UF_XML_ID_LENT"] ?>"
+                                                                                           data-xml-id="<?= $arRise["UF_XML_ID"] ?>"
                                                                                            name="riseProduct">
                                                                                     <div class="d-flex marker">
                                                                                         <div class="d-flex flex-column decor-rec"
-                                                                                             style="border-color: #<?= $arRise["UF_COLOUR"] ?>;">
+                                                                                             style="border-color: <?='#'.$arRise["UF_COLOR"] ?>;">
                                                                                             <div class="rec-top"></div>
                                                                                             <div class="rec-bottom"></div>
                                                                                         </div>
 
                                                                                         <div class="text"
-                                                                                             style="background-color: #<?= $arRise["UF_COLOUR"] ?>;">
+                                                                                             style="background-color: <?='#'.$arRise["UF_COLOR"] ?>;">
                                                                                             <?= $arRise["UF_NAME"] ?>
                                                                                         </div>
                                                                                     </div>
