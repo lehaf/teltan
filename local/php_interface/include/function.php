@@ -179,31 +179,6 @@ function getSectionData(int $sectionId, int $iblockId) : ?array
     return $section ?? NULL;
 }
 
-function isAdBelongToActiveRate(int $adId, string $adsCategory) : bool
-{
-    if (CModule::IncludeModule('highloadblock')) {
-        $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
-        $boughtRateEntity = GetEntityDataClass(BOUGHT_RATE_HL_ID);
-        $userRates = $boughtRateEntity::getList(array(
-            'order' => array('ID' => 'ASC'),
-            'select' => array('*'),
-            'filter' => array(
-                'UF_USER_ID'=> $userId,
-                'UF_TYPE'=> $adsCategory,
-                '>UF_DATE_EXPIRED'=> new \Bitrix\Main\Type\DateTime()
-            )
-        ))->fetchAll();
-
-        if (!empty($userRates)) {
-            foreach ($userRates as $rate) {
-                if (!empty($rate['UF_ID_ANONC']) && in_array($adId,$rate['UF_ID_ANONC']))  return true;
-            }
-        }
-    }
-
-    return false;
-}
-
 function getOptimalActiveUserRate(string $adsCategory) : ?array
 {
     if (CModule::IncludeModule('highloadblock')) {
@@ -504,5 +479,68 @@ function deleteFavoritesUser($adId) : void
     ))->fetchCollection();
     foreach ($favorites as $userFavorite) {
         $userFavorite->delete();
+    }
+}
+
+function isExistActiveFreeAd(string $adCategory) : bool
+{
+    if (!empty(CATEGORY_TO_IBLOCK_ID[$adCategory])) {
+        $iblockId = CATEGORY_TO_IBLOCK_ID[$adCategory];
+        $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
+
+        if (is_array($iblockId)) {
+            foreach ($iblockId as $ibId) {
+                $iblockClass = \Bitrix\Iblock\Iblock::wakeUp($ibId)->getEntityDataClass();
+                $element = $iblockClass::getList(array(
+                    'select' => array('ID', 'NAME'),
+                    'filter' => ['ID_USER.VALUE' => $userId, '!FREE_AD.VALUE' => false, 'ACTIVE' => 'Y']
+                ))->fetchObject();
+
+                if (!empty($element)) return true;
+            }
+        } else {
+            $iblockClass = \Bitrix\Iblock\Iblock::wakeUp($iblockId)->getEntityDataClass();
+            $element = $iblockClass::getList(array(
+                'select' => array('ID', 'NAME'),
+                'filter' => ['ID_USER.VALUE' => $userId, '!FREE_AD.VALUE' => false, 'ACTIVE' => 'Y']
+            ))->fetchObject();
+
+            if (!empty($element)) return true;
+        }
+    }
+
+    return false;
+}
+
+function removeFreeAdPropOnAds(string $adCategory) : void
+{
+    if (!empty(CATEGORY_TO_IBLOCK_ID[$adCategory])) {
+        $iblockId = CATEGORY_TO_IBLOCK_ID[$adCategory];
+        $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
+
+        if (is_array($iblockId)) {
+            foreach ($iblockId as $ibId) {
+                $iblockClass = \Bitrix\Iblock\Iblock::wakeUp($ibId)->getEntityDataClass();
+                $collection = $iblockClass::getList(array(
+                    'select' => array('ID', 'NAME'),
+                    'filter' => ['ID_USER.VALUE' => $userId, '!FREE_AD.VALUE' => false]
+                ))->fetchCollection();
+
+                foreach ($collection as $item) {
+                    $item->setFreeAd(false);
+                }
+                $collection->save();
+            }
+        } else {
+            $iblockClass = \Bitrix\Iblock\Iblock::wakeUp($iblockId)->getEntityDataClass();
+            $collection = $iblockClass::getList(array(
+                'select' => array('ID', 'NAME'),
+                'filter' => ['ID_USER.VALUE' => $userId, '!FREE_AD.VALUE' => false]
+            ))->fetchCollection();
+            foreach ($collection as $item) {
+                $item->setFreeAd(false);
+            }
+            $collection->save();
+        }
     }
 }
