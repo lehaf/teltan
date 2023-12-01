@@ -13,6 +13,7 @@
 /** @var CBitrixComponent $component */
 
 $this->setFrameMode(true);
+$this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
 
 if ($arResult['ITEMS']):?>
     <div class="row row-cols-2 row-cols-lg-4">
@@ -28,9 +29,12 @@ if ($arResult['ITEMS']):?>
                         <div class="image-block">
                             <div class="i-box">
                                 <a href="<?=$item['DETAIL_PAGE_URL'];?>">
-                                    <img src="<?=$item['PREVIEW_PICTURE']['src']?>"
-                                         alt="<?=$item['NAME'];?>"
-                                         title="<?=$item['NAME'];?>"
+                                    <img
+                                        class="thumbnail defer"
+                                        src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
+                                        data-defer-src="<?=$item['PREVIEW_PICTURE']['src']?>"
+                                        alt="<?=$item['NAME'];?>"
+                                        title="<?=$item['NAME'];?>"
                                     >
                                 </a>
                             </div>

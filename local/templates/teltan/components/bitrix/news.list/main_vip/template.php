@@ -11,6 +11,8 @@
 /** @var string $templateFolder */
 /** @var string $componentPath */
 /** @var CBitrixComponent $component */
+
+$this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
 $this->setFrameMode(true);
 
 if ($arResult['ITEMS']):?>
@@ -23,9 +25,12 @@ if ($arResult['ITEMS']):?>
                 <div class="big-card-product auto-product">
                     <a href="<?=$item['DETAIL_PAGE_URL'];?>" class="fake-link-card"></a>
                     <div   class="image-box">
-                        <img src="<?=$item['PREVIEW_PICTURE']['src']?>"
-                             alt="<?=$item['NAME']?>"
-                             title="<?=$item['NAME']?>"
+                        <img
+                            class="thumbnail defer"
+                            src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
+                            data-defer-src="<?=$item['PREVIEW_PICTURE']['src']?>"
+                            alt="<?=$item['NAME']?>"
+                            title="<?=$item['NAME']?>"
                         >
                     </div>
                     <div class="data">
