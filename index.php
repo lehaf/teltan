@@ -8,9 +8,9 @@ $APPLICATION->SetTitle("Teltan - main");
 ?>
         <div class="container-fluid mb-4 mb-lg-5">
             <div class="container">
-                <?$APPLICATION->IncludeComponent(
+                <?php $APPLICATION->IncludeComponent(
                     "bitrix:news.list",
-                    "template_slider",
+                    "slider",
                     Array(
                         "ACTIVE_DATE_FORMAT" => "d.m.Y",
                         "ADD_SECTIONS_CHAIN" => "N",
@@ -66,9 +66,9 @@ $APPLICATION->SetTitle("Teltan - main");
                     )
                 );?>
 
-                <?$APPLICATION->IncludeComponent(
+                <?php $APPLICATION->IncludeComponent(
                     "bitrix:catalog.section.list",
-                    "template_sections",
+                    "main_sections",
                     Array(
                         "ADD_SECTIONS_CHAIN" => "N",
                         "CACHE_FILTER" => "N",
@@ -99,7 +99,7 @@ $APPLICATION->SetTitle("Teltan - main");
                 <!-- PROPERTY MARKET -->
                 <div class="mb-4">
                     <p class="h2 mb-4 subtitle"><?=Loc::getMessage('PROPERTY')?></p>
-                    <?
+                    <?php
                     global $arrFilterPropVip;
                     $arrFilterPropVip = array(
                         ">=PROPERTY_VIP_DATE" => date('Y-m-d H:i:s')
@@ -164,7 +164,7 @@ $APPLICATION->SetTitle("Teltan - main");
                     );?>
 
 
-                    <?
+                    <?php
                     global $property_vip_ids;
                     global $arrFilterProp;
 
@@ -364,7 +364,7 @@ $APPLICATION->SetTitle("Teltan - main");
                         <?=Loc::getMessage('MOTO');?>
                     </p>
 
-                    <?
+                    <?php
                     global $arrFilterMotoVip;
                     $arrFilterMotoVip = array(
                         ">=PROPERTY_VIP_DATE" => date('Y-m-d H:i:s')
@@ -429,7 +429,7 @@ $APPLICATION->SetTitle("Teltan - main");
                     );?>
 
 
-                    <?
+                    <?php
                     global $scooter_vip_ids;
                     global $arrFilterMoto;
 
@@ -506,7 +506,7 @@ $APPLICATION->SetTitle("Teltan - main");
                         <?=Loc::getMessage('SCOOTER');?>
                     </p>
 
-                    <?
+                    <?php
                     global $arrFilterScooterVip;
                     $arrFilterScooterVip = array(
                         ">=PROPERTY_VIP_DATE" => date('Y-m-d H:i:s')
@@ -571,7 +571,7 @@ $APPLICATION->SetTitle("Teltan - main");
                     );?>
 
 
-                    <?
+                    <?php
                     global $scooter_vip_ids;
                     global $arrFilterScooter;
 
@@ -646,7 +646,7 @@ $APPLICATION->SetTitle("Teltan - main");
                         <?=Loc::getMessage('FLEA_MARKET');?>
                     </p>
 
-                    <?
+                    <?php
                     global $arrFilterADVip;
                     $arrFilterADVip = array(
                         ">=PROPERTY_VIP_DATE" => date('Y-m-d H:i:s')
@@ -711,7 +711,7 @@ $APPLICATION->SetTitle("Teltan - main");
                     );?>
 
 
-                    <?
+                    <?php
                     global $ad_vip_ids;
                     global $arrFilterAD;
 
@@ -782,4 +782,4 @@ $APPLICATION->SetTitle("Teltan - main");
         </div>
 
 
-<?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
+<?php require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

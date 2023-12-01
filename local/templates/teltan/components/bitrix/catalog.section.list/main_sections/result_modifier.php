@@ -18,5 +18,20 @@ if (!empty($arResult['SECTIONS'])) {
             $newSections[$section['IBLOCK_SECTION_ID']]['ITEMS'][$section['ID']] = $section;
         }
     }
-    $arResult['SECTIONS'] = $newSections;
+
+    $counter = 0;
+    $box = [];
+    $sectionTree = [];
+    foreach($newSections as $section){
+        $box[] = $section;
+
+        if ($counter === 3) {
+            $sectionTree[] = $box;
+            $box = [];
+            $counter = 0;
+        } else {
+            $counter++;
+        }
+    }
+    $arResult['SECTIONS'] = $sectionTree;
 }
