@@ -5,7 +5,7 @@ $(document).ready(function () {
         $.ajax({
             type: "POST",
             url: "/ajax/catalog_ajax.php",
-            data: {view: "block"}
+            data: {view: "tile"}
         }).done(function (msg) {
             window.location.reload();
             console.log(msg);

@@ -133,7 +133,7 @@ $sectionName = $langId === false ? $curSection['NAME'] : $curSection['UF_NAME_'.
     if ($_GET['view'] == 'maplist') {
         $adsMapTemplate = 'templatePropertyListMap';
         if ($detect->isMobile()) $adsMapTemplate = 'templatePropertyBlockMap';
-        if ($_SESSION['view'] == 'block') $adsMapTemplate = 'templatePropertyBlockMap';
+        if ($_SESSION['view'] == 'tile') $adsMapTemplate = 'templatePropertyBlockMap';
 
         $APPLICATION->IncludeComponent(
             "bitrix:catalog.section",
@@ -352,7 +352,7 @@ $sectionName = $langId === false ? $curSection['NAME'] : $curSection['UF_NAME_'.
                 <div class="col d-flex flex-column">
                     <?php
                     $adsTemplate = 'templatePropertyList';
-                    if ($_SESSION['view'] == 'block') $adsTemplate = 'templatePropertyBlock';
+                    if ($_SESSION['view'] == 'tile') $adsTemplate = 'templatePropertyBlock';
                     $APPLICATION->IncludeComponent(
                         "bitrix:catalog.section",
                         $adsTemplate,
