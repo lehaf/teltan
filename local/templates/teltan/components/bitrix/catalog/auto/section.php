@@ -31,6 +31,11 @@ if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
         </div>
     </div>
     <?php
+    global $arVipSliderFilter;
+    $arVipSliderFilter = [
+        ">=PROPERTY_VIP_DATE" => date('Y-m-d H:i:s')
+    ];
+
     $APPLICATION->IncludeComponent(
         "bitrix:catalog.section",
         "vip_slider",
@@ -61,7 +66,7 @@ if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
             "ELEMENT_SORT_ORDER" => "asc",    // Порядок сортировки элементов
             "ELEMENT_SORT_ORDER2" => "desc",    // Порядок второй сортировки элементов
             "ENLARGE_PRODUCT" => "STRICT",    // Выделять товары в списке
-            "FILTER_NAME" => "arrFilter",    // Имя массива со значениями фильтра для фильтрации элементов
+            "FILTER_NAME" => "arVipSliderFilter",    // Имя массива со значениями фильтра для фильтрации элементов
             "IBLOCK_ID" => $arParams["IBLOCK_ID"],    // Инфоблок
             "IBLOCK_TYPE" => "announcements",    // Тип инфоблока
             "INCLUDE_SUBSECTIONS" => "Y",    // Показывать элементы подразделов раздела
