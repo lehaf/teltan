@@ -116,7 +116,7 @@ $APPLICATION->SetTitle("Teltan - main");
                     "AJAX_OPTION_JUMP" => "N",
                     "AJAX_OPTION_STYLE" => "N",
                     "CACHE_FILTER" => "Y",
-                    "CACHE_GROUPS" => "N",
+                    "CACHE_GROUPS" => "Y",
                     "CACHE_TIME" => "36000000",
                     "CACHE_TYPE" => "A",
                     "CHECK_DATES" => "Y",
@@ -161,15 +161,18 @@ $APPLICATION->SetTitle("Teltan - main");
                     "STRICT_SECTION_CHECK" => "N",
                     "CATEGORY" => PROPERTY_ADS_TYPE_CODE
                 )
-            );?>
+            );
+            ?>
 
 
             <?php
-            global $property_vip_ids;
             global $arrFilterProp;
-
             $arrFilterProp = array(
-                '!ID' => $property_vip_ids
+                array(
+                    "LOGIC" => "OR",
+                    "PROPERTY_VIP_DATE" => false,
+                    "<PROPERTY_VIP_DATE" => date('Y-m-d H:i:s')
+                )
             );
 
             $APPLICATION->IncludeComponent(
@@ -303,10 +306,14 @@ $APPLICATION->SetTitle("Teltan - main");
 
 
             <?php
-            global $scooter_vip_ids;
             global $arrFilterAuto;
-
-            if (!empty($scooter_vip_ids)) $arrFilterAuto = ['!ID' => $scooter_vip_ids];
+            $arrFilterAuto = array(
+                array(
+                    "LOGIC" => "OR",
+                    "PROPERTY_VIP_DATE" => false,
+                    "<PROPERTY_VIP_DATE" => date('Y-m-d H:i:s')
+                )
+            );
 
             $APPLICATION->IncludeComponent(
                 "bitrix:news.list",
@@ -314,7 +321,7 @@ $APPLICATION->SetTitle("Teltan - main");
                 Array(
                     "ADD_SECTIONS_CHAIN" => "N",
                     "CACHE_FILTER" => "Y",
-                    "CACHE_GROUPS" => "N",
+                    "CACHE_GROUPS" => "Y",
                     "CACHE_TIME" => "36000000",
                     "CACHE_TYPE" => "A",
                     "CHECK_DATES" => "Y",
@@ -431,11 +438,13 @@ $APPLICATION->SetTitle("Teltan - main");
 
 
             <?php
-            global $scooter_vip_ids;
             global $arrFilterMoto;
-
             $arrFilterMoto = array(
-                '!ID' => $scooter_vip_ids
+                array(
+                    "LOGIC" => "OR",
+                    "PROPERTY_VIP_DATE" => false,
+                    "<PROPERTY_VIP_DATE" => date('Y-m-d H:i:s')
+                )
             );
 
             $APPLICATION->IncludeComponent(
@@ -450,7 +459,7 @@ $APPLICATION->SetTitle("Teltan - main");
                     "AJAX_OPTION_JUMP" => "N",
                     "AJAX_OPTION_STYLE" => "N",
                     "CACHE_FILTER" => "Y",
-                    "CACHE_GROUPS" => "N",
+                    "CACHE_GROUPS" => "Y",
                     "CACHE_TIME" => "36000000",
                     "CACHE_TYPE" => "A",
                     "CHECK_DATES" => "Y",
@@ -568,11 +577,13 @@ $APPLICATION->SetTitle("Teltan - main");
 
 
             <?php
-            global $scooter_vip_ids;
             global $arrFilterScooter;
-
             $arrFilterScooter = array(
-                '!ID' => $scooter_vip_ids
+                array(
+                    "LOGIC" => "OR",
+                    "PROPERTY_VIP_DATE" => false,
+                    "<PROPERTY_VIP_DATE" => date('Y-m-d H:i:s')
+                )
             );
 
             $APPLICATION->IncludeComponent(
@@ -587,7 +598,7 @@ $APPLICATION->SetTitle("Teltan - main");
                     "AJAX_OPTION_JUMP" => "N",
                     "AJAX_OPTION_STYLE" => "N",
                     "CACHE_FILTER" => "Y",
-                    "CACHE_GROUPS" => "N",
+                    "CACHE_GROUPS" => "Y",
                     "CACHE_TIME" => "36000000",
                     "CACHE_TYPE" => "A",
                     "CHECK_DATES" => "Y",
@@ -656,7 +667,7 @@ $APPLICATION->SetTitle("Teltan - main");
                     "AJAX_OPTION_JUMP" => "N",
                     "AJAX_OPTION_STYLE" => "N",
                     "CACHE_FILTER" => "Y",
-                    "CACHE_GROUPS" => "N",
+                    "CACHE_GROUPS" => "Y",
                     "CACHE_TIME" => "36000000",
                     "CACHE_TYPE" => "A",
                     "CHECK_DATES" => "Y",
@@ -705,11 +716,13 @@ $APPLICATION->SetTitle("Teltan - main");
 
 
             <?php
-            global $ad_vip_ids;
             global $arrFilterAD;
-
             $arrFilterAD = array(
-                    '!ID' => $ad_vip_ids
+                array(
+                    "LOGIC" => "OR",
+                    "PROPERTY_VIP_DATE" => false,
+                    "<PROPERTY_VIP_DATE" => date('Y-m-d H:i:s')
+                )
             );
 
             $APPLICATION->IncludeComponent(
@@ -724,7 +737,7 @@ $APPLICATION->SetTitle("Teltan - main");
                     "AJAX_OPTION_JUMP" => "N",
                     "AJAX_OPTION_STYLE" => "N",
                     "CACHE_FILTER" => "Y",
-                    "CACHE_GROUPS" => "N",
+                    "CACHE_GROUPS" => "Y",
                     "CACHE_TIME" => "36000000",
                     "CACHE_TYPE" => "A",
                     "CHECK_DATES" => "Y",

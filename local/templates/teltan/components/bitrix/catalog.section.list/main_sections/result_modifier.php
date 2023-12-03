@@ -12,6 +12,18 @@ if (!empty($arResult['SECTIONS'])) {
                 break;
         }
 
+        // Ресайз картинок
+        if (!empty($section['PICTURE']['ID'])) {
+            $section['PICTURE'] = \CFile::ResizeImageGet(
+                $section['PICTURE']['ID'],
+                array(
+                    'width' => 250,
+                    'height' => 120
+                ),
+                BX_RESIZE_IMAGE_PROPORTIONAL
+            );
+        }
+
         if (empty($section['IBLOCK_SECTION_ID'])) {
             $newSections[$section['ID']] = $section;
         } else {

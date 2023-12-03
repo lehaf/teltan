@@ -26,7 +26,7 @@ $this->setFrameMode(true);
                     ?>
                         <div id="<?=$this->GetEditAreaID($section['ID'])?>" class="col-3 mb-4 accordion-main__btn">
                             <a href="<?=$section['SECTION_PAGE_URL']?>"
-                               style="background-image: url('<?=$section['PICTURE']['SRC'];?>');<?=($section['UF_FON']) ? ' background-color: '.$section['UF_FON'].' !important;' : '';?>"
+                               style="background-image: url('<?=$section['PICTURE']['src'];?>');<?=($section['UF_FON']) ? ' background-color: '.$section['UF_FON'].' !important;' : '';?>"
                                class="card h-100"
                                data-toggle="collapse"
                                <?php if (!empty($section['UF_URL'])):?>
