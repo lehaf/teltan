@@ -4,6 +4,8 @@
 /** @var array $arParams */
 /** @global object $APPLICATION */
 
+$request = \Bitrix\Main\Application::getInstance()->getContext()->getRequest();
+
 if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
     $sectionData = getSectionData($arResult["VARIABLES"]["SECTION_ID"], $arParams['IBLOCK_ID']);
     switch (LANGUAGE_ID) {
@@ -135,15 +137,52 @@ if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
         <h1 class="h2 mb-4 subtitle"><?=$sectionName?></h1>
     <?php endif;?>
     <div class="row row-cols-1 row-cols-lg-2">
+        <?php if ($request->get('isAjax') === 'y') $APPLICATION->RestartBuffer()?>
         <div id="target_container" class="col col-lg-9">
+            <div class="mb-5 row d-flex align-items-center">
+                <?php $APPLICATION->ShowViewContent('upper_nav');?>
+                <?php $APPLICATION->IncludeComponent(
+                    "webco:sort.panel",
+                    "",
+                    array(
+                        'SORTS' => [
+                            [
+                                'NAME' => 'Price: Low to High',
+                                'SORT' => 'property_PRICE',
+                                'ORDER' => 'ASC'
+                            ],
+                            [
+                                'NAME' => 'Price: High to Low',
+                                'SORT' => 'property_PRICE',
+                                'ORDER' => 'DESC'
+                            ],
+                            [
+                                'NAME' => 'Date: Low to High',
+                                'SORT' => 'property_TIME_RAISE',
+                                'ORDER' => 'ASC'
+                            ],
+                            [
+                                'NAME' => 'Date: High to Low',
+                                'SORT' => 'property_TIME_RAISE',
+                                'ORDER' => 'DESC'
+                            ]
+                        ],
+                        'VIEWS' => [
+                            'list' => [
+                                'CLASS' => 'icon-sirting_line'
+                            ],
+                            'tile' => [
+                                'CLASS' => 'icon-sirting_block'
+                            ],
+                        ]
+                    )
+                );?>
+            </div>
             <?php
-
-            $adsViewTemplate = 'list';
-            if ($_SESSION['view'] == 'block') $adsViewTemplate = 'tile';
-
+            $session = \Bitrix\Main\Application::getInstance()->getSession();
             $APPLICATION->IncludeComponent(
                     "bitrix:catalog.section",
-                $adsViewTemplate,
+                $session->get('view'),
                 array(
                 "CATEGORY" => FLEA_ADS_TYPE_CODE,
                 "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
@@ -181,13 +220,11 @@ if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
                 "PRICE_CODE" => $arParams["~PRICE_CODE"],
                 "USE_PRICE_COUNT" => $arParams["USE_PRICE_COUNT"],
                 "SHOW_PRICE_COUNT" => $arParams["SHOW_PRICE_COUNT"],
-
                 "PRICE_VAT_INCLUDE" => $arParams["PRICE_VAT_INCLUDE"],
                 "USE_PRODUCT_QUANTITY" => $arParams['USE_PRODUCT_QUANTITY'],
                 "ADD_PROPERTIES_TO_BASKET" => (isset($arParams["ADD_PROPERTIES_TO_BASKET"]) ? $arParams["ADD_PROPERTIES_TO_BASKET"] : ''),
                 "PARTIAL_PRODUCT_PROPERTIES" => (isset($arParams["PARTIAL_PRODUCT_PROPERTIES"]) ? $arParams["PARTIAL_PRODUCT_PROPERTIES"] : ''),
                 "PRODUCT_PROPERTIES" => (isset($arParams["PRODUCT_PROPERTIES"]) ? $arParams["PRODUCT_PROPERTIES"] : []),
-
                 "DISPLAY_TOP_PAGER" => $arParams["DISPLAY_TOP_PAGER"],
                 "DISPLAY_BOTTOM_PAGER" => $arParams["DISPLAY_BOTTOM_PAGER"],
                 "PAGER_TITLE" => $arParams["PAGER_TITLE"],
@@ -202,7 +239,6 @@ if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
                 "LAZY_LOAD" => $arParams["LAZY_LOAD"],
                 "MESS_BTN_LAZY_LOAD" => $arParams["~MESS_BTN_LAZY_LOAD"],
                 "LOAD_ON_SCROLL" => $arParams["LOAD_ON_SCROLL"],
-
                 "OFFERS_CART_PROPERTIES" => (isset($arParams["OFFERS_CART_PROPERTIES"]) ? $arParams["OFFERS_CART_PROPERTIES"] : []),
                 "OFFERS_FIELD_CODE" => $arParams["LIST_OFFERS_FIELD_CODE"],
                 "OFFERS_PROPERTY_CODE" => (isset($arParams["LIST_OFFERS_PROPERTY_CODE"]) ? $arParams["LIST_OFFERS_PROPERTY_CODE"] : []),
@@ -221,7 +257,6 @@ if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
                 'CURRENCY_ID' => $arParams['CURRENCY_ID'],
                 'HIDE_NOT_AVAILABLE' => $arParams["HIDE_NOT_AVAILABLE"],
                 'HIDE_NOT_AVAILABLE_OFFERS' => $arParams["HIDE_NOT_AVAILABLE_OFFERS"],
-
                 'LABEL_PROP' => $arParams['LABEL_PROP'],
                 'LABEL_PROP_MOBILE' => $arParams['LABEL_PROP_MOBILE'],
                 'LABEL_PROP_POSITION' => $arParams['LABEL_PROP_POSITION'],
@@ -234,7 +269,6 @@ if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
                 'SHOW_SLIDER' => $arParams['LIST_SHOW_SLIDER'],
                 'SLIDER_INTERVAL' => isset($arParams['LIST_SLIDER_INTERVAL']) ? $arParams['LIST_SLIDER_INTERVAL'] : '',
                 'SLIDER_PROGRESS' => isset($arParams['LIST_SLIDER_PROGRESS']) ? $arParams['LIST_SLIDER_PROGRESS'] : '',
-
                 'OFFER_ADD_PICT_PROP' => $arParams['OFFER_ADD_PICT_PROP'],
                 'OFFER_TREE_PROPS' => (isset($arParams['OFFER_TREE_PROPS']) ? $arParams['OFFER_TREE_PROPS'] : []),
                 'PRODUCT_SUBSCRIPTION' => $arParams['PRODUCT_SUBSCRIPTION'],
@@ -252,14 +286,11 @@ if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
                 'MESS_BTN_DETAIL' => (isset($arParams['~MESS_BTN_DETAIL']) ? $arParams['~MESS_BTN_DETAIL'] : ''),
                 'MESS_NOT_AVAILABLE' => (isset($arParams['~MESS_NOT_AVAILABLE']) ? $arParams['~MESS_NOT_AVAILABLE'] : ''),
                 'MESS_BTN_COMPARE' => (isset($arParams['~MESS_BTN_COMPARE']) ? $arParams['~MESS_BTN_COMPARE'] : ''),
-
                 'USE_ENHANCED_ECOMMERCE' => (isset($arParams['USE_ENHANCED_ECOMMERCE']) ? $arParams['USE_ENHANCED_ECOMMERCE'] : ''),
                 'DATA_LAYER_NAME' => (isset($arParams['DATA_LAYER_NAME']) ? $arParams['DATA_LAYER_NAME'] : ''),
                 'BRAND_PROPERTY' => (isset($arParams['BRAND_PROPERTY']) ? $arParams['BRAND_PROPERTY'] : ''),
-
                 'TEMPLATE_THEME' => (isset($arParams['TEMPLATE_THEME']) ? $arParams['TEMPLATE_THEME'] : ''),
                 "ADD_SECTIONS_CHAIN" => "N",
-                'ADD_TO_BASKET_ACTION' => $basketAction,
                 'SHOW_CLOSE_POPUP' => isset($arParams['COMMON_SHOW_CLOSE_POPUP']) ? $arParams['COMMON_SHOW_CLOSE_POPUP'] : '',
                 'COMPARE_PATH' => $arResult['FOLDER'].$arResult['URL_TEMPLATES']['compare'],
                 'COMPARE_NAME' => $arParams['COMPARE_NAME'],
@@ -271,6 +302,7 @@ if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
                 false
             );?>
         </div>
+        <?php if ($request->get('isAjax') === 'y') die()?>
         <div class="col col-lg-3">
             <div class="p-3 pt-4 pb-4 card text-right filter-select filter" id="filterModalContent">
                 <div class="pb-3 mb-2 mb-lg-4 d-flex d-lg-none justify-content-between border-bottom filter-header">

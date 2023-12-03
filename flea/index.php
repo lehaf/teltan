@@ -8,15 +8,10 @@ Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . "/css/catalog.css");
 
 $APPLICATION->SetTitle("Барахолка");
 
-$secondSort = [
-    'SORT' => 'PROPERTY_TIME_RAISE',
-    'ORDER' => 'DESC'
-];
-if ($_GET['SORT'] != '' && $_GET['ORDER'] != '') {
-    $secondSort['SORT'] = $_GET['SORT'];
-    $secondSort['ORDER'] = $_GET['ORDER'];
-}
-?><?php $APPLICATION->IncludeComponent(
+$session = \Bitrix\Main\Application::getInstance()->getSession();
+if ($session->has('sort')) $secondSort = $session->get('sort');
+?>
+<?php $APPLICATION->IncludeComponent(
     "bitrix:catalog",
     "flea",
     array(
@@ -60,10 +55,6 @@ if ($_GET['SORT'] != '' && $_GET['ORDER'] != '') {
         "DISABLE_INIT_JS_IN_COMPONENT" => "N",
         "DISPLAY_BOTTOM_PAGER" => "Y",
         "DISPLAY_TOP_PAGER" => "N",
-        // "ELEMENT_SORT_FIELD" => "property_TIME_RAISE",	// По какому полю сортируем элементы
-        // "ELEMENT_SORT_FIELD2" => $secondSort['SORT'],	// Поле для второй сортировки элементов
-        //"ELEMENT_SORT_ORDER" => "desc",	// Порядок сортировки элементов
-        // "ELEMENT_SORT_ORDER2" => $secondSort['ORDER'],
         "ELEMENT_SORT_FIELD" =>"PROPERTY_VIP_FLAG",    // По какому полю сортируем элементы
         "ELEMENT_SORT_FIELD2" => $secondSort['SORT'],    // Поле для второй сортировки элементов
         "ELEMENT_SORT_ORDER" => "desc,nulls",    // Порядок сортировки элементов

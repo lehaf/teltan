@@ -6,6 +6,8 @@
 
 $dir = $APPLICATION->GetCurDir();
 $dirName = str_replace('/', '', $dir); // PHP код
+$request = \Bitrix\Main\Application::getInstance()->getContext()->getRequest();
+
 ?>
 <div class="container">
     <div class="preloader">
@@ -134,14 +136,52 @@ $dirName = str_replace('/', '', $dir); // PHP код
         ); ?>
     </h1>
     <div class="row row-cols-1 row-cols-lg-2">
+        <?php if ($request->get('isAjax') === 'y') $APPLICATION->RestartBuffer()?>
         <div id="target_container" class="col col-lg-9">
+            <div class="mb-5 row d-flex align-items-center">
+                <?php $APPLICATION->ShowViewContent('upper_nav');?>
+                <?php $APPLICATION->IncludeComponent(
+                    "webco:sort.panel",
+                    "",
+                    array(
+                        'SORTS' => [
+                            [
+                                'NAME' => 'Price: Low to High',
+                                'SORT' => 'property_PRICE',
+                                'ORDER' => 'ASC'
+                            ],
+                            [
+                                'NAME' => 'Price: High to Low',
+                                'SORT' => 'property_PRICE',
+                                'ORDER' => 'DESC'
+                            ],
+                            [
+                                'NAME' => 'Date: Low to High',
+                                'SORT' => 'property_TIME_RAISE',
+                                'ORDER' => 'ASC'
+                            ],
+                            [
+                                'NAME' => 'Date: High to Low',
+                                'SORT' => 'property_TIME_RAISE',
+                                'ORDER' => 'DESC'
+                            ]
+                        ],
+                        'VIEWS' => [
+                            'list' => [
+                                'CLASS' => 'icon-sirting_line'
+                            ],
+                            'tile' => [
+                                'CLASS' => 'icon-sirting_block'
+                            ],
+                        ]
+                    )
+                );?>
+            </div>
             <?php
-            $adsViewTemplate = 'list';
-            if ($_SESSION['view'] == 'block') $adsViewTemplate = 'tile';
-
+            $session = \Bitrix\Main\Application::getInstance()->getSession();
             $APPLICATION->IncludeComponent(
                 "bitrix:catalog.section",
-                $adsViewTemplate,
+                $session->get('view'),
                 array(
                 "CATEGORY" => FLEA_ADS_TYPE_CODE,
                 "ACTION_VARIABLE" => "action",    // Название переменной, в которой передается действие
@@ -171,7 +211,7 @@ $dirName = str_replace('/', '', $dir); // PHP код
                 "ELEMENT_SORT_ORDER2" => $arParams["ELEMENT_SORT_ORDER2"],
                 "ENLARGE_PRODUCT" => "STRICT",    // Выделять товары в списке
                 "FILTER_NAME" => "arrFilter",    // Имя массива со значениями фильтра для фильтрации элементов
-                "IBLOCK_ID" => "1",    // Инфоблок
+                "IBLOCK_ID" => $arParams['IBLOCK_ID'],    // Инфоблок
                 "IBLOCK_TYPE" => "announcements",    // Тип инфоблока
                 "INCLUDE_SUBSECTIONS" => "Y",    // Показывать элементы подразделов раздела
                 "LAZY_LOAD" => "N",    // Показать кнопку ленивой загрузки Lazy Load
@@ -240,6 +280,7 @@ $dirName = str_replace('/', '', $dir); // PHP код
                 $component
             ); ?>
         </div>
+        <?php if ($request->get('isAjax') === 'y') die()?>
         <div class="col col-lg-3">
             <div class="p-3 pt-4 pb-4 card text-right filter-select filter" id="filterModalContent">
                 <div class="pb-3 mb-2 mb-lg-4 d-flex d-lg-none justify-content-between border-bottom filter-header">

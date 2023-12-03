@@ -1,0 +1,34 @@
+div.products-sort button {
+    border: none;
+}
+
+div.products-sort button i:hover{
+    color: #33e56d;
+}
+
+div.products-sort button i:active{
+    color: #3fb465;
+}
+
+div.products-sort button.active i{
+    color: #3fb465;
+}
+
+div.products-sort button.active{
+    pointer-events: none;
+    cursor: auto;
+}
+
+div.preloader {
+    position: fixed;
+}
+
+div.preloader.active {
+    opacity: 1;
+    z-index: 100;
+}
+
+.sort-item.active {
+    pointer-events: none;
+    cursor: auto;
+}

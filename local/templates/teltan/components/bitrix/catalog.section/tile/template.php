@@ -12,16 +12,14 @@ $pixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEA
 
 $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
 ?>
-<div class="mb-5 row d-flex align-items-center">
+<?php $this->SetViewTarget('upper_nav');?>
     <?=$arResult['NAV_STRING']?>
-    <?php include_once $_SERVER['DOCUMENT_ROOT'].SITE_TEMPLATE_PATH.'/includes/sort.php'?>
-</div>
+<?php $this->EndViewTarget();?>
 <?php if (!empty($arResult['VIP'])):
     foreach($arResult['VIP'] as $item):
         $itemCounter++;
         $this->AddEditAction($item['ID'], $item['EDIT_LINK'], $item["EDIT_LINK_TEXT"]);
         $this->AddDeleteAction($item['ID'], $item['DELETE_LINK'], $item["DELETE_LINK_TEXT"], array("CONFIRM" => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM')));
-
 
         if ($item['PROPERTIES']['VIP_DATE']['VALUE'] && strtotime($item['PROPERTIES']['VIP_DATE']['VALUE']) > time()):?>
             <div class="row row-cols-1" id="<?=$this->GetEditAreaID($item['ID'])?>">

@@ -7,19 +7,12 @@ Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . "/css/catalog.css");
 /** @global object $APPLICATION */
 
 $APPLICATION->SetTitle("Авто-Барахолка");
-global $USER;
-if($_GET['USER'] != null){
-	$USER->Authorize($_GET['USER']);
-}
-$secondSort = [
-    'SORT' => 'PROPERTY_TIME_RAISE',
-    'ORDER' => 'DESC'
-];
-if($_GET['SORT'] != '' && $_GET['ORDER'] != ''){
-    $secondSort['SORT'] = $_GET['SORT'];
-    $secondSort['ORDER'] = $_GET['ORDER'];
-}
-?><?php $APPLICATION->IncludeComponent(
+
+$session = \Bitrix\Main\Application::getInstance()->getSession();
+if ($session->has('sort')) $secondSort = $session->get('sort');
+
+?>
+<?php $APPLICATION->IncludeComponent(
 	"bitrix:catalog",
 	"auto",
 	Array(

@@ -136,12 +136,6 @@ function getFileIdBySrc($strFilename)
     return \Bitrix\Main\Application::getConnection()->query($strSql)->fetch()['ID'];
 }
 
-
-function ps($array)
-{
-    echo "<script>console.log(".json_encode($array).")</script>";
-}
-
 function sort_date($a_new, $b_new)
 {
 

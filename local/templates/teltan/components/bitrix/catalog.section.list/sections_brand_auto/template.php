@@ -20,7 +20,6 @@ foreach ($arResult['SECTIONS'] as $arSection) {
     }
 }
 ?>
-<script>console.log(<?=json_encode($arResult)?>)</script>
 <div class="mb-5 card auto-mark-list">
     <ul class="mb-3 nav text-right">
         <? foreach ($arShow as $item) {

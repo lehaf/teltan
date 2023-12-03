@@ -8,6 +8,8 @@ if (!empty($arResult['ITEMS'])) {
     foreach ($arResult['ITEMS'] as $k => &$item) {
         $sectionsId[] = $item['IBLOCK_SECTION_ID'];
     }
+    unset($item);
+
     // Получаем разделы элементов
     if ($arParams['CATEGORY'] !== AUTO_ADS_TYPE_CODE) {
         $sections = \Bitrix\Iblock\SectionTable::getList(array(
