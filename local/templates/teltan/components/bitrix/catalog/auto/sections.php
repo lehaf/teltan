@@ -6,67 +6,6 @@ $dir = $APPLICATION->GetCurDir();
 $dirName = str_replace('/', '', $dir); // PHP код
 
 ?>
-<script>
-    class RangeSlider {
-
-        constructor(elementId) {
-            this.elementId = elementId;
-            const element = document.getElementById(this.elementId);
-            this.element = element;
-            this.init();
-        }
-
-        init() {
-            const {rangeMin = 0, rangeMax = 100} = this.element.dataset;
-            const minInput = document.querySelector(`[data-range-min-connected="${this.elementId}"]`);
-            const maxInput = document.querySelector(`[data-range-max-connected="${this.elementId}"]`);
-
-            this.slider = noUiSlider.create(this.element, {
-                start: [
-                     Number(minInput.value),
-                     Number(maxInput.value)
-                ],
-                connect: true,
-                step: 1,
-                direction: 'rtl',
-                range: {
-                    min: Number(rangeMin),
-                    max: Number(rangeMax),
-                },
-                format: {
-                    to: (value) => Math.round(value),
-                    from: (value) => Number(value) || 0,
-                },
-            });
-
-            if (minInput && maxInput) {
-                this.slider.on('update', () => {
-                    const [minValue, maxValue] = this.slider.get();
-                    minInput.value = minValue;
-                    maxInput.value = maxValue;
-                })
-
-                minInput.addEventListener('change', (e) => {
-                    this.slider.set([e.target.value, null])
-                })
-
-                maxInput.addEventListener('change', (e) => {
-                    this.slider.set([null, e.target.value])
-                })
-            }
-
-            const setters = document.querySelectorAll(`[data-range-connected="${this.elementId}"]`);
-
-            if (setters.length) {
-                setters.forEach((node) => {
-                    node.addEventListener('click', (e) => {
-                        this.slider.set(e.target.dataset.rangeSet.split(','))
-                    })
-                })
-            }
-        }
-    }
-</script>
 <div class="container">
     <div class="preloader">
         <div class="preloader__row">
@@ -74,31 +13,8 @@ $dirName = str_replace('/', '', $dir); // PHP код
             <div class="preloader__item"></div>
         </div>
     </div>
-    <?
-//    //костыль для сортировки
-//    $idIblock = $arParams["IBLOCK_ID"];
-//    $arSelect = Array("ID", "IBLOCK_ID", "NAME", "PROPERTY_VIP_DATE");
-//    $arFilter = Array("IBLOCK_ID"=> (int)$idIblock);
-//    $res = CIblockElement::GetList(Array("DATE_CREATE" => "DESC"), $arFilter, false, false, $arSelect);
-//    while($ob = $res->GetNextElement()){
-//        $arFields = $ob->GetFields();
-//        if($arFields['PROPERTY_VIP_DATE_VALUE'] != null && strtotime($arFields['PROPERTY_VIP_DATE_VALUE']) < time() ){
-//            $el = new CIBlockElement;
-//            $PROP = array();
-//            $PROP['VIP_DATE'] = "";
-//            $arLoadProductArray = Array(
-//                "IBLOCK_SECTION" => false,
-//                "PROPERTY_VALUES"=> $PROP,
-//            );
-//            $PRODUCT_ID = $arFields['ID'];
-//           // $res = $el->Update($PRODUCT_ID, $arLoadProductArray);
-//            CIBlockElement::SetPropertyValueCode($PRODUCT_ID, "VIP_FLAG", 0);
-//            CIBlockElement::SetPropertyValues($PRODUCT_ID, $arParams["IBLOCK_ID"], '', 'VIP_DATE');
-//        }
-//    }
-    ?>
     <h1 class="h2 mb-4 subtitle">
-        <? $APPLICATION->IncludeComponent(
+        <?php $APPLICATION->IncludeComponent(
             "bitrix:main.include",
             "",
             Array(
@@ -110,7 +26,7 @@ $dirName = str_replace('/', '', $dir); // PHP код
     </h1>
     <div class="row row-cols-1 row-cols-lg-2">
         <div id="target_container"  class="col col-lg-9">
-            <? $APPLICATION->IncludeComponent(
+            <?php $APPLICATION->IncludeComponent(
                 "bitrix:catalog.section.list",
                 "sections_brand_auto",
                 array(
@@ -133,52 +49,17 @@ $dirName = str_replace('/', '', $dir); // PHP код
                     "TOP_DEPTH" => "1",
                     "VIEW_MODE" => "LINE"
                 )
-            ); ?>
-            <?php
-            $APPLICATION->IncludeComponent(
-                "bitrix:catalog.smart.filter",
-                "right_strip",
-                array(
-                    "COMPONENT_TEMPLATE" => "bootstrap_v4",
-                    "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
-                    "IBLOCK_ID" => $arParams["IBLOCK_ID"],
-                    "SECTION_ID" => $arResult["VARIABLES"]["SECTION_ID"],
-                    "SECTION_CODE" => $arResult["VARIABLES"]["SECTION_CODE"],
-                    "FILTER_NAME" => "arrFilter",
-                    "HIDE_NOT_AVAILABLE" => "N",
-                    "TEMPLATE_THEME" => "blue",
-                    "FILTER_VIEW_MODE" => "horizontal",
-                    "DISPLAY_ELEMENT_COUNT" => "Y",
-                    "SEF_MODE" => "N",
-                    "CACHE_TYPE" => "A",
-                    "CACHE_TIME" => "36000000",
-                    "CACHE_GROUPS" => "Y",
-                    "SAVE_IN_SESSION" => "Y",
-                    "INSTANT_RELOAD" => "Y",
-                    "PAGER_PARAMS_NAME" => "arrPager",
-                    "PRICE_CODE" => array(
-                        0 => "BASE",
-                    ),
-                    "CONVERT_CURRENCY" => "Y",
-                    "XML_EXPORT" => "N",
-                    "SECTION_TITLE" => "-",
-                    "SECTION_DESCRIPTION" => "-",
-                    "POPUP_POSITION" => "left",
-                    "SEF_RULE" => "/flea/#SECTION_CODE_PATH#/filter/#SMART_FILTER_PATH#/apply/",
-                    "SECTION_CODE_PATH" => "",
-                    "SMART_FILTER_PATH" => '#SECTION_CODE_PATH#/filter/#SMART_FILTER_PATH#/apply/',
-                    "CURRENCY_ID" => "RUB"
-                ),
-                false
             );
 
-            $template = 'templateAutoList';
-            if ($_SESSION['view'] == 'block') $template = 'templateAutoBlock';
+
+            $adsViewTemplate = 'list';
+            if ($_SESSION['view'] == 'block') $adsViewTemplate = 'tile';
 
             $APPLICATION->IncludeComponent(
                 "bitrix:catalog.section",
-                $template,
+                $adsViewTemplate,
                 array(
+                    "CATEGORY" => AUTO_ADS_TYPE_CODE,
                     "ACTION_VARIABLE" => "action",    // Название переменной, в которой передается действие
                     "ADD_PROPERTIES_TO_BASKET" => "Y",    // Добавлять в корзину свойства товаров и предложений
                     "ADD_SECTIONS_CHAIN" => "N",    // Включать раздел в цепочку навигации
@@ -274,174 +155,51 @@ $dirName = str_replace('/', '', $dir); // PHP код
                  ),
                 false
             ); ?>
-
-
         </div>
-        <?php
-        $url = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-        $needle   = 'PAGEN';
-        $pos      = strripos($url, $needle);
-
-        if ($pos === false) {?>
-            <div class="flex-column">
-
-                    <?
-
-                    $APPLICATION->IncludeComponent(
-                        "bitrix:main.include",
-                        "",
-                        Array(
-                            "AREA_FILE_SHOW" => "file",
-                            "PATH" => "/include-area/".mb_strtolower($dirName)."-h1-sub-ru.php",
-                            "EDIT_TEMPLATE" => ""
-                        )
-                    );?>
-                    <?
-                    $APPLICATION->IncludeComponent(
-                        "bitrix:main.include",
-                        "",
-                        Array(
-                            "AREA_FILE_SHOW" => "file",
-                            "PATH" => "/include-area/".mb_strtolower($dirName)."-text-ru.php",
-                            "EDIT_TEMPLATE" => ""
-                        )
-                    );?>
-
-            </div>
-       <? } else {?>
-
-      <?  }
-        ?>
-
-    </div>
-
-    <div class="col col-lg-3">
-        <div class="p-3 pt-4 pb-4 card text-right filter-select filter" id="filterModalContent">
-            <div class="pb-3 mb-2 mb-lg-4 d-flex d-lg-none justify-content-between border-bottom filter-header">
-                <a class="filter-closer filterTogglerMobile" type="button"><i class="mr-1 mr-lg-3 icon-clear"></i> Close</a>
-                <p class="m-0 d-inline-block text-uppercase font-weight-bolder filter-title">Filters</p>
-            </div>
-
-            <div class="border-bottom mb-lg-4">
-                <p class="filter-select__collapse-title h5 d-block d-lg-none text-uppercase" data-toggle="collapse" href="#collapseDepartment" role="button" aria-expanded="true" aria-controls="collapseDepartment">
-                    <span class="d-flex justify-content-between align-items-center"><i class="icone-filter-title icon-arrow-down-sign-to-navigate-3"></i>Categories</span>
-                </p>
-                <p style="display: none!important;" class="filter-select__collapse-title h5 d-none d-lg-block text-uppercase">Department</p>
-
-                <div class="collapse show" id="collapseDepartment">
-                    <form class="d-block d-lg-none" action="/">
-                        <ul>
-                            <li class="mb-0 checkbox">
-                                <label class="mb-0">
-                                    <span class="mr-2">Computer Components</span>
-                                    <input type="checkbox" value="">
-                                    <span class="cr"></span>
-                                </label>
-                            </li>
-                            <li class="mb-0 checkbox">
-                                <label class="mb-0">
-                                    <span class="mr-2">Computers & Tablets</span>
-                                    <input type="checkbox" value="">
-                                    <span class="cr"></span>
-                                </label>
-                            </li>
-                            <li class="mb-0 checkbox">
-                                <label class="mb-0">
-                                    <span class="mr-2">Data Storage</span>
-                                    <input type="checkbox" value="">
-                                    <span class="cr"></span>
-                                </label>
-                            </li>
-                            <li class="mb-0 checkbox">
-                                <label class="mb-0">
-                                    <span class="mr-2">Laptop Accessories</span>
-                                    <input type="checkbox" value="">
-                                    <span class="cr"></span>
-                                </label>
-                            </li>
-                            <li class="mb-0 checkbox">
-                                <label class="mb-0">
-                                    <span class="mr-2">Laptop Accessories</span>
-                                    <input type="checkbox" value="">
-                                    <span class="cr"></span>
-                                </label>
-                            </li>
-                            <li class="mb-0 checkbox">
-                                <label class="mb-0">
-                                    <span class="mr-2">Monitors</span>
-                                    <input type="checkbox" value="">
-                                    <span class="cr"></span>
-                                </label>
-                            </li>
-                            <li class="mb-0 checkbox">
-                                <label class="mb-0">
-                                    <span class="mr-2">Networking Products</span>
-                                    <input type="checkbox" value="">
-                                    <span class="cr"></span>
-                                </label>
-                            </li>
-
-                            <li class="border-0">
-                                <span class="h5 font-weight-bold show-all-categories-btn">Show all</span>
-                            </li>
-
-                            <li class="mb-0 checkbox show-more-categories">
-                                <label class="mb-0">
-                                    <span class="mr-2">Power Strips & Surge Protectors</span>
-                                    <input type="checkbox" value="">
-                                    <span class="cr"></span>
-                                </label>
-                            </li>
-                            <li class="mb-0 checkbox show-more-categories">
-                                <label class="mb-0">
-                                    <span class="mr-2">Servers</span>
-                                    <input type="checkbox" value="">
-                                    <span class="cr"></span>
-                                </label>
-                            </li>
-                            <li class="mb-0 checkbox show-more-categories">
-                                <label class="mb-0">
-                                    <span class="mr-2">Tablet Accessories</span>
-                                    <input type="checkbox" value="">
-                                    <span class="cr"></span>
-                                </label>
-                            </li>
-                        </ul>
-                    </form>
-
-                    <ul class="d-block">
-                        <?/*$APPLICATION->IncludeComponent("bitrix:catalog.section.list","sections_menu_flea",
-                            Array(
-                                "VIEW_MODE" => "TEXT",
-                                "SHOW_PARENT_NAME" => "Y",
-                                "IBLOCK_TYPE" => "",
-                                "IBLOCK_ID" => "1",
-                                "SECTION_ID" => $_REQUEST["SECTION_CODE"],
-                                "SECTION_CODE" => "",
-                                "SECTION_URL" => "",
-                                "COUNT_ELEMENTS" => "Y",
-                                "TOP_DEPTH" => "1",
-                                "SECTION_FIELDS" => "",
-                                "SECTION_USER_FIELDS" => "",
-                                "ADD_SECTIONS_CHAIN" => "Y",
-                                "CACHE_TYPE" => "A",
-                                "CACHE_TIME" => "36000000",
-                                "CACHE_NOTES" => "",
-                                "CACHE_GROUPS" => "Y"
-                            )
-                        );*/?>
-                    </ul>
+        <div class="col col-lg-3">
+            <div class="p-3 pt-4 pb-4 card text-right filter-select filter" id="filterModalContent">
+                <div class="pb-3 mb-2 mb-lg-4 d-flex d-lg-none justify-content-between border-bottom filter-header">
+                    <a class="filter-closer filterTogglerMobile" type="button"><i class="mr-1 mr-lg-3 icon-clear"></i> Close</a>
+                    <p class="m-0 d-inline-block text-uppercase font-weight-bolder filter-title">Filters</p>
                 </div>
+                <?php
+                $APPLICATION->IncludeComponent(
+                    "bitrix:catalog.smart.filter",
+                    "right_strip",
+                    array(
+                        "COMPONENT_TEMPLATE" => "bootstrap_v4",
+                        "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
+                        "IBLOCK_ID" => $arParams["IBLOCK_ID"],
+                        "SECTION_ID" => $arResult["VARIABLES"]["SECTION_ID"],
+                        "SECTION_CODE" => $arResult["VARIABLES"]["SECTION_CODE"],
+                        "FILTER_NAME" => "arrFilter",
+                        "HIDE_NOT_AVAILABLE" => "N",
+                        "TEMPLATE_THEME" => "blue",
+                        "FILTER_VIEW_MODE" => "horizontal",
+                        "DISPLAY_ELEMENT_COUNT" => "Y",
+                        "SEF_MODE" => "N",
+                        "CACHE_TYPE" => "A",
+                        "CACHE_TIME" => "36000000",
+                        "CACHE_GROUPS" => "Y",
+                        "SAVE_IN_SESSION" => "Y",
+                        "INSTANT_RELOAD" => "Y",
+                        "PAGER_PARAMS_NAME" => "arrPager",
+                        "PRICE_CODE" => array(
+                            0 => "BASE",
+                        ),
+                        "CONVERT_CURRENCY" => "Y",
+                        "XML_EXPORT" => "N",
+                        "SECTION_TITLE" => "-",
+                        "SECTION_DESCRIPTION" => "-",
+                        "POPUP_POSITION" => "left",
+                        "SEF_RULE" => "/flea/#SECTION_CODE_PATH#/filter/#SMART_FILTER_PATH#/apply/",
+                        "SECTION_CODE_PATH" => "",
+                        "SMART_FILTER_PATH" => '#SECTION_CODE_PATH#/filter/#SMART_FILTER_PATH#/apply/',
+                        "CURRENCY_ID" => "RUB"
+                    ),
+                    false
+                );?>
             </div>
-            <?=$APPLICATION->ShowViewContent("smart_filter_HTML");?>
-
         </div>
     </div>
 </div>
-</div>
-<script>
-
-
-    new RangeSlider('rangeSlider');
-    new RangeSlider('rangeSliderMainFilterMobile');
-</script>

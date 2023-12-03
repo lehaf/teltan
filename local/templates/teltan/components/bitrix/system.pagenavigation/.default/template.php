@@ -1,4 +1,4 @@
-<?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
+<?php if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
 /** @var array $arParams */
 /** @var array $arResult */
 /** @global CMain $APPLICATION */
@@ -25,11 +25,11 @@ $strNavQueryStringFull = ($arResult["NavQueryString"] != "" ? "?".$arResult["Nav
 
 <div class="col-12 col-xl-6 justify-content-center">
     <nav class="mb-4 mb-xl-0 justify-content-between justify-content-md-center pagination" aria-label="pagination">
-        <?
+        <?php
         $strNavQueryString = ($arResult["NavQueryString"] != "" ? $arResult["NavQueryString"]."&amp;" : "");
         $strNavQueryStringFull = ($arResult["NavQueryString"] != "" ? "?".$arResult["NavQueryString"] : "");
         ?>
-        <?
+        <?php
         if($arResult["bDescPageNumbering"] === true):
             $bFirst = true;
             if ($arResult["NavPageNomer"] < $arResult["NavPageCount"]):
@@ -38,17 +38,17 @@ $strNavQueryStringFull = ($arResult["NavQueryString"] != "" ? "?".$arResult["Nav
                     <li class="mr-2 pagination__list-item">
                         <a href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=($arResult["NavPageNomer"]+1)?>"></a>
                     </li>
-                <?else:?>
-                    <?if ($arResult["NavPageCount"] == ($arResult["NavPageNomer"]+1) ):?>
+                <?php else:?>
+                    <?php if ($arResult["NavPageCount"] == ($arResult["NavPageNomer"]+1) ):?>
                         <a class="mr-2 prev" href="<?=$arResult["sUrlPath"]?><?=$strNavQueryStringFull?>">
                             <img src="<?=SITE_TEMPLATE_PATH;?>/assets/paginaton-arrow.svg" alt="">
                         </a>
-                    <?else:?>
+                    <?php else:?>
                         <a class="mr-2 prev" href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=($arResult["NavPageNomer"]-1)?>">
                             <img src="<?=SITE_TEMPLATE_PATH;?>/assets/paginaton-arrow.svg" alt="">
                         </a>
-                    <?endif;?>
-                <?endif;
+                    <?php endif;?>
+                <?php endif;
 
                 if ($arResult["nStartPage"] < $arResult["NavPageCount"]):
                     $bFirst = false;
@@ -60,13 +60,13 @@ $strNavQueryStringFull = ($arResult["NavQueryString"] != "" ? "?".$arResult["Nav
                         </li>
 
 
-                    <?
+                    <?php
                     else:
                         ?>
                         <li class="mr-2 pagination__list-item">
                             <a  href="<?=$arResult["sUrlPath"]?><?=$strNavQueryStringFull?>">1</a>
                         </li>
-                    <?
+                    <?php
                     endif;
                     if ($arResult["nStartPage"] < ($arResult["NavPageCount"] - 1)):?>
 
@@ -75,7 +75,7 @@ $strNavQueryStringFull = ($arResult["NavQueryString"] != "" ? "?".$arResult["Nav
                         </li>
 
 
-                    <?
+                    <?php
                     endif;
                 endif;
             endif;
@@ -87,17 +87,17 @@ $strNavQueryStringFull = ($arResult["NavQueryString"] != "" ? "?".$arResult["Nav
                         <a  href="#"><?=$NavRecordGroupPrint?></a>
                     </li>
 
-                <?elseif($arResult["nStartPage"] == $arResult["NavPageCount"] && $arResult["bSavePage"] == false):?>
+                <?php elseif($arResult["nStartPage"] == $arResult["NavPageCount"] && $arResult["bSavePage"] == false):?>
                     <li class="mr-2 pagination__list-item">
                         <a href="<?=$arResult["sUrlPath"]?><?=$strNavQueryStringFull?>" ><?=$NavRecordGroupPrint?></a>
                     </li>
-                <?else:?>
+                <?php else:?>
                     <li class="mr-2 pagination__list-item">
                         <a href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=$arResult["nStartPage"]?>" >
                             <?=$NavRecordGroupPrint?>
                         </a>
                     </li>
-                <?endif;
+                <?php endif;
 
                 $arResult["nStartPage"]--;
                 $bFirst = false;
@@ -111,81 +111,80 @@ $strNavQueryStringFull = ($arResult["NavQueryString"] != "" ? "?".$arResult["Nav
                             <a  href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=round($arResult["nEndPage"] / 2)?>">...</a>
                         </li>
 
-                    <?endif; ?>
+                    <?php endif; ?>
                     <a class="next" href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=($arResult["NavPageNomer"]+1)?>">
                         <img src="<?=SITE_TEMPLATE_PATH;?>/assets/paginaton-arrow.svg" alt="paginaton">
                     </a>
 
-                <?endif; ?>
+                <?php endif; ?>
                 <li class="mr-2 pagination__list-item">
                     <a  href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=($arResult["NavPageNomer"]-1)?>"><svg class="icon pagination__link-icon" style="width:14px;height:14px;"><use xlink:href="<?=SITE_TEMPLATE_PATH;?>/assets/images/sprite.svg#i-arrow-small"/></svg></a>
                 </li>
 
-            <?endif;?>
+            <?php endif;?>
 
-        <?else:?>
-            <?$bFirst = true;
+        <?php else:?>
+            <?php $bFirst = true;
             if ($arResult["NavPageNomer"] > 1):
                 if($arResult["bSavePage"]):?>
                     <li class="mr-2 pagination__list-item">
                         <a  href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=($arResult["NavPageNomer"]-1)?>"></a>
                     </li>
-                <?else:?>
-                    <?if ($arResult["NavPageNomer"] > 2):?>
+                <?php else:?>
+                    <?php if ($arResult["NavPageNomer"] > 2):?>
                         <a class="mr-2 prev" href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=($arResult["NavPageNomer"]-1)?>">
                             <img src="<?=SITE_TEMPLATE_PATH;?>/assets/paginaton-arrow.svg" alt="">
                         </a>
-                    <?else:?>
+                    <?php else:?>
                         <a class="mr-2 prev" href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=($arResult["NavPageNomer"]-1)?>">
                             <img src="<?=SITE_TEMPLATE_PATH;?>/assets/paginaton-arrow.svg" alt="">
                         </a>
-                    <?endif;?>
-                <?endif;?>
-                <?if ($arResult["nStartPage"] > 1):
+                    <?php endif;?>
+                <?php endif;?>
+                <?php if ($arResult["nStartPage"] > 1):
                     $bFirst = false;
                     if($arResult["bSavePage"]):?>
                         <li class="mr-2 pagination__list-item">
                             <a  href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=1">1</a>
                         </li>
-                    <?else:?>
+                    <?php else:?>
                         <li class="mr-2 pagination__list-item">
                             <a  href="<?=$arResult["sUrlPath"]?><?=$strNavQueryStringFull?>">1</a>
                         </li>
-                    <?endif;?>
-                    <?if ($arResult["nStartPage"] > 2):?>
+                    <?php endif;?>
+                <?php if ($arResult["nStartPage"] > 2):?>
 
                         <li class="mr-2 pagination__list-item paginations__total">
                             <a  href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=round($arResult["nStartPage"] / 2)?>">...</a>
                         </li>
-                    <?endif;?>
-                <?endif;?>
-            <?endif;?>
-            <?do
+            <?php endif;?>
+            <?php endif;?>
+            <?php endif;?>
+            <?php do
             {
                 if ($arResult["nStartPage"] == $arResult["NavPageNomer"]):
                     ?>
                     <li class="mr-2 pagination__list-item active">
                         <a  href="#"><?=$arResult["nStartPage"]?></a>
                     </li>
-                <?
+                <?php
                 elseif($arResult["nStartPage"] == 1 && $arResult["bSavePage"] == false):
                     ?>
                     <li class="mr-2 pagination__list-item">
                         <a href="<?=$arResult["sUrlPath"]?><?=$strNavQueryStringFull?>" ><?=$arResult["nStartPage"]?></a>
                     </li>
 
-                <?
+                <?php
                 else:
                     ?>
 
                     <li class="mr-2 pagination__list-item">
-                        <a href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=$arResult["nStartPage"]?>"<?
+                        <a href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=$arResult["nStartPage"]?>"<?php
                         ?> ><?=$arResult["nStartPage"]?></a>
                     </li>
 
 
-
-                <?
+                <?php
                 endif;
                 $arResult["nStartPage"]++;
                 $bFirst = false;
@@ -202,7 +201,7 @@ $strNavQueryStringFull = ($arResult["NavQueryString"] != "" ? "?".$arResult["Nav
                         <li class="mr-2 pagination__list-item">
                             <a  href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=round($arResult["nEndPage"] + ($arResult["NavPageCount"] - $arResult["nEndPage"]) / 2)?>">...</a>
                         </li>
-                    <?
+                    <?php
                     endif;
                     ?>
 
@@ -211,12 +210,11 @@ $strNavQueryStringFull = ($arResult["NavQueryString"] != "" ? "?".$arResult["Nav
                     </li>
 
 
-
-                <?endif; ?>
+                <?php endif; ?>
                 <a class="next" href="<?=$arResult["sUrlPath"]?>?<?=$strNavQueryString?>PAGEN_<?=$arResult["NavNum"]?>=<?=($arResult["NavPageNomer"]+1)?>">
                     <img src="<?=SITE_TEMPLATE_PATH;?>/assets/paginaton-arrow.svg" alt="paginaton">
                 </a>
-            <?endif;?>
-        <?endif; ?>
+            <?php endif;?>
+        <?php endif; ?>
     </nav>
 </div>

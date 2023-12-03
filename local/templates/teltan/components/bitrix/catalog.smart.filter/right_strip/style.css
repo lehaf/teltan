@@ -691,7 +691,7 @@
 }
 
 /*
-*	BTN result and reset 
+*	BTN result and reset
 *
 */
 
@@ -784,4 +784,8 @@
 	.bx-touch .smart-filter-popup-result br { display: none; }
 
 	.smart-filter-popup-result .arrow { display: none; }
+}
+
+button.btn-more-filter-settings {
+	width: 130%;
 }

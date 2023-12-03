@@ -236,18 +236,19 @@ $sectionName = $langId === false ? $curSection['NAME'] : $curSection['UF_NAME_'.
             false
         );
 
-    }else{?>
+    } else { ?>
         <div class="container">
             <?php
             global $vipSliderFilter;
-            $objDateTime = new \Bitrix\Main\Type\DateTime();
             $vipSliderFilter = [
+                '!=PROPERTY_VIP_FLAG' => false,
                 '!=PROPERTY_VIP_DATE' => false,
-                '>PROPERTY_VIP_DATE' =>  $objDateTime
+                '>PROPERTY_VIP_DATE' =>  new \Bitrix\Main\Type\DateTime()
             ];
+
             $APPLICATION->IncludeComponent(
                 "bitrix:catalog.section",
-                "templatePropSliderList",
+                "vip_slider",
                 array(
                     'SECTION_NAME' => $sectionName,
                     'SECTION_PAGE_URL' => $curSection['SECTION_PAGE_URL'],
@@ -262,7 +263,7 @@ $sectionName = $langId === false ? $curSection['NAME'] : $curSection['UF_NAME_'.
                     "BACKGROUND_IMAGE" => "-",    // Установить фоновую картинку для шаблона из свойства
                     "BASKET_URL" => "/personal/basket.php",    // URL, ведущий на страницу с корзиной покупателя
                     "BROWSER_TITLE" => "-",    // Установить заголовок окна браузера из свойства
-                    "CACHE_FILTER" => "N",    // Кешировать при установленном фильтре
+                    "CACHE_FILTER" => "Y",    // Кешировать при установленном фильтре
                     "CACHE_GROUPS" => "Y",    // Учитывать права доступа
                     "CACHE_TIME" => "36000000",    // Время кеширования (сек.)
                     "CACHE_TYPE" => "A",    // Тип кеширования
