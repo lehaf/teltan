@@ -26,7 +26,7 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
             <a href="?view=maplist"><?=Loc::getMessage('map')?></a>
         </button>
     </div>
-    <?php require_once $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . '/property_section_map.php'; ?>
+    <?php require_once $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . '/map_property_section.php'; ?>
     <?php $this->EndViewTarget();?>
 <?php endif;?>
 <?php $this->SetViewTarget('upper_nav');?>
