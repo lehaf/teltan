@@ -79,6 +79,8 @@ switch ($arResult['IBLOCK_ID']) {
 
         break;
 }
+
+$this->addExternalJs(SITE_TEMPLATE_PATH.'/js/slick.js');
 ?>
 
 <? global $arSetting; ?>

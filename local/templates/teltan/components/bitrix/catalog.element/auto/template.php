@@ -78,11 +78,9 @@ switch ($arResult['IBLOCK_ID']) {
         break;
 }
 global $arSetting;
-if ($_GET['TEST'] == 'Y') { ?>
-    <pre>
-    <?= var_dump($arParams['USER_ID']) ?>
-</pre>
-<? } ?>
+
+$this->addExternalJs(SITE_TEMPLATE_PATH.'/js/slick.js');
+?>
 <div class="container">
     <div class="row flex-column-reverse flex-lg-row mb-4">
         <div class="col-12 col-lg-4 flex-column">

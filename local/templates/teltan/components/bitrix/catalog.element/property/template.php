@@ -126,6 +126,8 @@ if (!empty($arResult['PROPERTIES']['VIP_DATE']['VALUE']) && strtotime($arResult[
 }
 
 global $arSetting;
+
+$this->addExternalJs(SITE_TEMPLATE_PATH.'/js/slick.js');
 ?>
     <div class="container">
         <div class="row flex-column-reverse flex-lg-row mb-4">
