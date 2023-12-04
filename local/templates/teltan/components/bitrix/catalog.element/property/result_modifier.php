@@ -33,7 +33,15 @@ $arFilter = Array("IBLOCK_ID"=> $arResult['IBLOCK_ID'], "ACTIVE"=>"Y", "SECTION_
 $res = CIBlockElement::GetList(Array('RAND' => 'ASC'), $arFilter, false, Array("nTopCount" => 16), $arSelect);
 while($ob = $res->GetNextElement()) {
     $arResult['SIMILAR'][$i] = $ob->GetFields();
-    $arResult['SIMILAR'][$i]['TAPE'] = getHighloadInfo(TYPE_TAPES_ID, array('select' => array('*'), 'filter' => array('UF_ACTIVE' => 1, 'UF_XML_ID' => $arResult['SIMILAR'][$i]['PROPERTY_TYPE_TAPE_VALUE'])))[0];
+    $arResult['SIMILAR'][$i]['TAPE'] = getHighloadInfo(
+        PERSONAL_RIBBON_HL_ID,
+        array(
+            'select' => array('*'),
+            'filter' => array(
+                'UF_XML_ID' => $arResult['SIMILAR'][$i]['PROPERTY_TYPE_TAPE_VALUE']
+            )
+        )
+    )[0];
     $i++;
 }
 
