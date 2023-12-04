@@ -5,13 +5,30 @@
 /** @global object $USER */
 /** @global object $APPLICATION */
 
+use Bitrix\Main\Localization\Loc;
+
 $dir = $APPLICATION->GetCurDir();
 $dirName = str_replace('/', '', $dir); // PHP код
 $itemCounter = 0;
 $pixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
 
+$mapArray = $arResult['MAP_ARRAY'];
+$mapArrayVip = $arResult['MAP_ARRAY_VIP'];
+
 $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
 ?>
+<?// карта для раздела PROPERTY?>
+<?php if (!empty($arResult['MAP_ARRAY']) || !empty($arResult['MAP_ARRAY_VIP'])):?>
+    <?php $this->SetViewTarget('map_points');?>
+    <div class="property-map">
+        <div id="map" style="width: 100%; height: 100%"></div>
+        <button onclick="window.location.href ='?view=maplist'" class="show-all-items">
+            <a href="?view=maplist"><?=Loc::getMessage('map')?></a>
+        </button>
+    </div>
+    <?php require_once $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . '/map2.php'; ?>
+    <?php $this->EndViewTarget();?>
+<?php endif;?>
 <?php $this->SetViewTarget('upper_nav');?>
     <?=$arResult['NAV_STRING']?>
 <?php $this->EndViewTarget();?>

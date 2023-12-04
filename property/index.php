@@ -2,20 +2,15 @@
 
 use Bitrix\Main\Page\Asset;
 
+/** @global object $USER */
+/** @global object $APPLICATION */
+
 Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . "/css/catalog.css");
 
 $APPLICATION->SetTitle("Недвижимость");
 
-CModule::IncludeModule('highloadblock');
-$secondSort = [
-    'SORT' => 'PROPERTY_TIME_RAISE',
-    'ORDER' => 'DESC'
-];
-
-if($_GET['SORT'] != '' && $_GET['ORDER'] != ''){
-    $secondSort['SORT'] = $_GET['SORT'];
-    $secondSort['ORDER'] = $_GET['ORDER'];
-}
+$session = \Bitrix\Main\Application::getInstance()->getSession();
+if ($session->has('sort')) $secondSort = $session->get('sort');
 
 $APPLICATION->IncludeComponent(
     "bitrix:catalog",
@@ -112,7 +107,7 @@ $APPLICATION->IncludeComponent(
         "PAGER_SHOW_ALWAYS" => "N",
         "PAGER_TEMPLATE" => ".default",
         "PAGER_TITLE" => "Товары",
-        "PAGE_ELEMENT_COUNT" => "18",
+        "PAGE_ELEMENT_COUNT" => "3",
         "PARTIAL_PRODUCT_PROPERTIES" => "N",
         "PRICE_CODE" => array(),
         "PRICE_VAT_INCLUDE" => "Y",

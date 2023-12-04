@@ -54,6 +54,18 @@ if (!empty($arResult['ITEMS'])) {
     foreach ($arResult['ITEMS'] as $item) {
         // Ресайз картинок
         if (!empty($item['PREVIEW_PICTURE']['ID'])) {
+            // Для метки карты
+            if (!empty($item['PROPERTIES']['MAP_LATLNG']['~VALUE'])) {
+                $item['MAP_IMG'] = \CFile::ResizeImageGet(
+                    $item['PREVIEW_PICTURE']['ID'],
+                    array(
+                        'width' => 100,
+                        'height' => 80
+                    ),
+                    BX_RESIZE_IMAGE_PROPORTIONAL
+                );
+            }
+
             $item['PREVIEW_PICTURE'] = \CFile::ResizeImageGet(
                 $item['PREVIEW_PICTURE']['ID'],
                 array(
@@ -64,6 +76,9 @@ if (!empty($arResult['ITEMS'])) {
             );
         } else {
             $item['PREVIEW_PICTURE']['src'] = SITE_TEMPLATE_PATH . '/assets/no-image.svg';
+            // Для метки карты
+            if (!empty($item['PROPERTIES']['MAP_LATLNG']['~VALUE']))
+                $item['MAP_IMG']['src'] = SITE_TEMPLATE_PATH . '/assets/no-image.svg';
         }
 
         if (!empty($itemSections[$item['IBLOCK_SECTION_ID']])) $item['SECTION'] = $itemSections[$item['IBLOCK_SECTION_ID']];
@@ -83,6 +98,42 @@ if (!empty($arResult['ITEMS'])) {
             $item['LOCATION'] = isset($city) ? $city . ', ' . $region : $region;
         } else {
             if (!empty($item['PROPERTIES']['LOCATION']['VALUE'])) $item['LOCATION'] = $item['PROPERTIES']['LOCATION']['VALUE'];
+        }
+
+        // Карта (только для раздела PROPERTY)
+        if (!empty($item['PROPERTIES']['MAP_LATLNG']['~VALUE'])) {
+            $mapLatlnt = json_decode($item['PROPERTIES']['MAP_LATLNG']['~VALUE'], true);
+            $nameSection = $arParams['SECTION_NAME'];
+            $itemMark = [
+                'type' => 'Feature',
+                'properties' => [
+                    'href' => $item['DETAIL_PAGE_URL'],
+                    'image' => $item['MAP_IMG']['src'],
+                    'title' => $item['NAME'],
+                    'price' => PROPERTY_CURRENCY_SYMBOL.' '.$item['PROPERTIES']['PRICE']['VALUE'],
+                    'addres' => $item['NAME'],
+                    'category' => $nameSection,
+                    'views' => $item['SHOW_COUNTER'],
+                    'date' => $item['DATE_CREATE'],
+                    'isVipCard' => false,
+                ],
+                'geometry' => [
+                    'type' => 'Point',
+                    'coordinates' =>
+                        [
+                            !empty($mapLatlnt['lng']) ? $mapLatlnt['lng'] : $mapLatlnt[0],
+                            !empty($mapLatlnt['lat']) ? $mapLatlnt['lat'] : $mapLatlnt[1]
+                        ]
+                ]
+            ];
+
+            if (!empty($item['PROPERTIES']['VIP_DATE']['VALUE']) && strtotime($item['PROPERTIES']['VIP_DATE']['VALUE']) > time()) {
+                $arResult['MAP_ARRAY_VIP']["type"] = "FeatureCollection";
+                $arResult['MAP_ARRAY_VIP']['features'][] = $itemMark;
+            } else {
+                $arResult['MAP_ARRAY']["type"] = "FeatureCollection";
+                $arResult['MAP_ARRAY']['features'][] = $itemMark;
+            }
         }
 
         if (!empty($item['PROPERTIES']['VIP_DATE']['VALUE']) && strtotime($item['PROPERTIES']['VIP_DATE']['VALUE']) > time()) {

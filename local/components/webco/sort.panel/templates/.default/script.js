@@ -101,6 +101,8 @@ SortPanel.prototype.sendData = function (typeOfView) {
         _this.init();
         // reinit lazy-load
         if (window.ImageDefer) window.ImageDefer.init();
+        // reinit map
+        if (document.querySelector('div#map')) window.mapInit()
     }).catch(error => {
         console.log(error);
     });

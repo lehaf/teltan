@@ -4,7 +4,7 @@
 /** @var array $arResult */
 /** @var array $arParams */
 
-use Bitrix\Main\Localization\Loc;
+$request = \Bitrix\Main\Application::getInstance()->getContext()->getRequest();
 
 switch ($arParams['SECTION_ID']) {
     case RESIDENTIAL_SECTION_ID:
@@ -18,7 +18,6 @@ switch ($arParams['SECTION_ID']) {
         break;
 }
 
-Loc::loadMessages(__FILE__);
 require_once($_SERVER["DOCUMENT_ROOT"]."/vendor/autoload.php");
 $detect = new Mobile_Detect;
 $dir = $APPLICATION->GetCurDir();
@@ -40,6 +39,12 @@ switch (LANGUAGE_ID) {
 $sectionName = $langId === false ? $curSection['NAME'] : $curSection['UF_NAME_'.$langId];
 ?>
 <main class="mb-5 wrapper flex-grow-1">
+    <div class="preloader">
+        <div class="preloader__row">
+            <div class="preloader__item"></div>
+            <div class="preloader__item"></div>
+        </div>
+    </div>
     <?php
     $APPLICATION->IncludeComponent(
         "bitrix:catalog.smart.filter",
@@ -349,14 +354,55 @@ $sectionName = $langId === false ? $curSection['NAME'] : $curSection['UF_NAME_'.
             ); ?>
             <h1 class="h2 mb-4 subtitle"><?=$sectionName?></h1>
             <div class="row">
-                <div class="col d-flex flex-column">
+                <?php if ($request->get('isAjax') === 'y') $APPLICATION->RestartBuffer()?>
+                <div id="target_container" class="col d-flex flex-column">
+                    <?php $APPLICATION->ShowViewContent('map_points');?>
+                    <div class="mb-5 row d-flex align-items-center">
+                        <?php $APPLICATION->ShowViewContent('upper_nav');?>
+                        <?php $APPLICATION->IncludeComponent(
+                            "webco:sort.panel",
+                            "",
+                            array(
+                                'SORTS' => [
+                                    [
+                                        'NAME' => 'Price: Low to High',
+                                        'SORT' => 'property_PRICE',
+                                        'ORDER' => 'ASC'
+                                    ],
+                                    [
+                                        'NAME' => 'Price: High to Low',
+                                        'SORT' => 'property_PRICE',
+                                        'ORDER' => 'DESC'
+                                    ],
+                                    [
+                                        'NAME' => 'Date: Low to High',
+                                        'SORT' => 'property_TIME_RAISE',
+                                        'ORDER' => 'ASC'
+                                    ],
+                                    [
+                                        'NAME' => 'Date: High to Low',
+                                        'SORT' => 'property_TIME_RAISE',
+                                        'ORDER' => 'DESC'
+                                    ]
+                                ],
+                                'VIEWS' => [
+                                    'list' => [
+                                        'CLASS' => 'icon-sirting_line'
+                                    ],
+                                    'tile' => [
+                                        'CLASS' => 'icon-sirting_block'
+                                    ],
+                                ]
+                            )
+                        );?>
+                    </div>
                     <?php
-                    $adsTemplate = 'templatePropertyList';
-                    if ($_SESSION['view'] == 'tile') $adsTemplate = 'templatePropertyBlock';
+                    $session = \Bitrix\Main\Application::getInstance()->getSession();
                     $APPLICATION->IncludeComponent(
                         "bitrix:catalog.section",
-                        $adsTemplate,
+                        $session->get('view'),
                         array(
+                            "CATEGORY" => PROPERTY_ADS_TYPE_CODE,
                             "SECTION_NAME" => $sectionName,
                             "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
                             "IBLOCK_ID" => $arParams["IBLOCK_ID"],
@@ -473,45 +519,9 @@ $sectionName = $langId === false ? $curSection['NAME'] : $curSection['UF_NAME_'.
                         ),
                         false
                     );?>
-                    <?php
-                    $url = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-                    $needle   = 'PAGEN';
-                    $pos      = strripos($url, $needle);
-
-                    if ($pos === false) :?>
-                        <div class="flex-column">
-                            <?php $APPLICATION->IncludeComponent(
-                                "bitrix:main.include",
-                                "",
-                                array(
-                                    "AREA_FILE_SHOW" => "file",
-                                    "PATH" => "/include-area/".mb_strtolower($dirName)."-h1-sub-ru.php",
-                                    "EDIT_TEMPLATE" => ""
-                                )
-                            );?>
-                            <?php $APPLICATION->IncludeComponent(
-                                "bitrix:main.include",
-                                "",
-                                array(
-                                    "AREA_FILE_SHOW" => "file",
-                                    "PATH" => "/include-area/".mb_strtolower($dirName)."-text-ru.php",
-                                    "EDIT_TEMPLATE" => ""
-                                )
-                            );?>
-                        </div>
-                    <?endif;?>
                 </div>
+                <?php if ($request->get('isAjax') === 'y') die()?>
             </div>
         </div>
-    </div>
-    <?}?>
+    <?php }?>
 </main>
-<script>
-    function routeProperty(event) {
-        event.preventDefault();
-        let href = $('#modef').find('a').attr('href');
-        let href2 = $(event.target).attr('href')
-
-        window.location.href = href2 + '?' + href.split('?').pop();
-    }
-</script>
