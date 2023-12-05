@@ -38,10 +38,10 @@ if($_REQUEST['type'] != 'getData') {
         if ($element->getVipDate()) {
             $oldVipDate = $element->getVipDate()->getValue();
             $newDate = strtotime($oldVipDate. '+ '.$_REQUEST["count"].' days');
-            $element->setVipDate(\Bitrix\Main\Type\DateTime::createFromTimestamp($newDate));
+            $element->setVipDate(date("Y-m-d H:i:s",$newDate));
         } else {
             $vipDateUntil = '+ '. $_REQUEST["count"]. ' days';
-            $element->setVipDate(\Bitrix\Main\Type\DateTime::createFromTimestamp(strtotime($vipDateUntil)));
+            $element->setVipDate(date("Y-m-d H:i:s",strtotime($vipDateUntil)));
         }
 
         $element->save();
@@ -50,6 +50,10 @@ if($_REQUEST['type'] != 'getData') {
         $fields = array('UF_TCOINS' => $arUser['UF_TCOINS'] - $price);
         $user->Update($userId, $fields);
         addEntryToUserBuyHistory($_REQUEST["idItem"],'VIP');
+
+        // чистим кэш
+        $taggedCache = \Bitrix\Main\Application::getInstance()->getTaggedCache();
+        $taggedCache->clearByTag('iblock_id_'.$_REQUEST['iblock']);
     }
 } else {
     echo $arUser['UF_TCOINS'];

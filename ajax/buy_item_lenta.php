@@ -14,10 +14,10 @@ if($_REQUEST['type'] != 'getData') {
         if ($element->getLentaDate()) {
             $oldColorDate = $element->getLentaDate()->getValue();
             $newDate = strtotime($oldColorDate. '+ '.$_REQUEST["count"].' days');
-            $element->setLentaDate(\Bitrix\Main\Type\DateTime::createFromTimestamp($newDate));
+            $element->setLentaDate(date("Y-m-d H:i:s",$newDate));
         } else {
             $countDate = '+ '. $_REQUEST["count"]. ' days';
-            $date = \Bitrix\Main\Type\DateTime::createFromTimestamp(strtotime($countDate));
+            $date = date("Y-m-d H:i:s",strtotime($countDate));
             $element->setLentaDate($date);
         }
 

@@ -10,19 +10,27 @@ if($_REQUEST['type'] != 'getData') {
 
         $iblockClass = \Bitrix\Iblock\Iblock::wakeUp($_REQUEST['iblock'])->getEntityDataClass();
         $element = $iblockClass::getByPrimary($_REQUEST["idItem"], [
-            'select' => ['ID', 'NAME', 'TYPE_TAPE', 'LENTA_DATE', 'VIP_DATE', 'VIP_FLAG', 'COUNT_RAISE','PAKET_DATE']
+            'select' => ['ID', 'NAME', 'TYPE_TAPE', 'LENTA_DATE', 'VIP_DATE', 'VIP_FLAG', 'COUNT_RAISE','PAKET_DATE', 'COLOR_DATE']
         ])->fetchObject();
         // set RIBBON
-        if ($element->getLentaDate()) {
+        if ($element->getLentaDate() && $element->getLentaDate()->getValue()) {
             $oldColorDate = $element->getLentaDate()->getValue();
             $newDate = strtotime($oldColorDate. '+ '.$_REQUEST["all"]["uf_lenta"].' days');
-            $element->setLentaDate(\Bitrix\Main\Type\DateTime::createFromTimestamp($newDate));
+            $element->setLentaDate(date("Y-m-d H:i:s", strtotime($newDate)));
         } else {
             $countDate = '+ '. $_REQUEST["all"]["uf_lenta"]. ' days';
-            $date = \Bitrix\Main\Type\DateTime::createFromTimestamp(strtotime($countDate));
-            $element->setLentaDate($date);
+            $element->setLentaDate(date("Y-m-d H:i:s", strtotime($countDate)));
         }
         $element->setTypeTape($_REQUEST['all']["uf_xml_id_lent"]);
+        // color
+        if ($element->getColorDate() && $element->getColorDate()->getValue()) {
+            $oldColorDate = $element->getColorDate()->getValue();
+            $newDate = strtotime($oldColorDate. '+ '.$_REQUEST['all']["uf_colour"].' days');
+            $element->setColorDate(date("Y-m-d H:i:s", $newDate));
+        } else {
+            $countDate = '+ '. $_REQUEST['all']["uf_colour"]. ' days';
+            $element->setColorDate(date("Y-m-d H:i:s", strtotime($countDate)));
+        }
         // set VIP
         $vipFlagPropInfo = \Bitrix\Iblock\PropertyTable::getList(array(
             'select' => array('*'),
@@ -51,10 +59,10 @@ if($_REQUEST['type'] != 'getData') {
         if ($element->getVipDate()) {
             $oldVipDate = $element->getVipDate()->getValue();
             $newDate = strtotime($oldVipDate. '+ '.$_REQUEST["all"]["uf_vip"].' days');
-            $element->setVipDate(\Bitrix\Main\Type\DateTime::createFromTimestamp($newDate));
+            $element->setVipDate(date("Y-m-d H:i:s", $newDate));
         } else {
             $vipDateUntil = '+ '. $_REQUEST["all"]["uf_vip"]. ' days';
-            $element->setVipDate(\Bitrix\Main\Type\DateTime::createFromTimestamp(strtotime($vipDateUntil)));
+            $element->setVipDate(date("Y-m-d H:i:s", strtotime($vipDateUntil)));
         }
         // set RISE
         if ($element->getCountRaise()) {
@@ -69,10 +77,10 @@ if($_REQUEST['type'] != 'getData') {
             if ($element->getPaketDate()) {
                 $oldPromotionDate = $element->getPaketDate()->getValue();
                 $newDate = strtotime($oldPromotionDate. '+ '.$daysPromotion.' days');
-                $element->setPaketDate(\Bitrix\Main\Type\DateTime::createFromTimestamp($newDate));
+                $element->setPaketDate(date("Y-m-d H:i:s", $newDate));
             } else {
                 $promotionDate = '+ '. $daysPromotion. ' days';
-                $element->setPaketDate(\Bitrix\Main\Type\DateTime::createFromTimestamp(strtotime($promotionDate)));
+                $element->setPaketDate(date("Y-m-d H:i:s", strtotime($promotionDate)));
             }
         }
 
@@ -82,6 +90,10 @@ if($_REQUEST['type'] != 'getData') {
         $fields = array('UF_TCOINS' => $arUser['UF_TCOINS'] - $price);
         $user->Update($userId, $fields);
         addEntryToUserBuyHistory($_REQUEST["idItem"],'PROMOTION');
+
+        // чистим кэш
+        $taggedCache = \Bitrix\Main\Application::getInstance()->getTaggedCache();
+        $taggedCache->clearByTag('iblock_id_'.$_REQUEST['iblock']);
     }
 } else {
     echo $arUser['UF_TCOINS'];
