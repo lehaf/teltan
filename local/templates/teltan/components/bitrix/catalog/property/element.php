@@ -1,5 +1,11 @@
 <?php if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 
+use Bitrix\Main\Page\Asset;
+
+Asset::getInstance()->addString('<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>');
+Asset::getInstance()->addString('<script src="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>');
+Asset::getInstance()->addCss('https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css');
+
 /** @var array $arParams */
 /** @var array $arResult */
 /** @global CMain $APPLICATION */
