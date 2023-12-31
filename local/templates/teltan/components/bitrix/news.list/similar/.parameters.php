@@ -20,11 +20,5 @@ $arTemplateParameters = array(
             "FULL" => 'На всю ширину карточки',
             "CONTAINER" => "В собственном контейнере",
         ),
-    ),
-    "BLOCK_TITLE" => Array(
-        "PARENT" => 'VISUAL',
-        "NAME" => 'Заголовок блока',
-        "TYPE" => "STRING",
-        "DEFAULT" => "",
     )
 );

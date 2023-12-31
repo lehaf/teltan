@@ -1,6 +1,9 @@
-<?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
-CModule::IncludeModule('iblock');
+<?php require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
+
+/** @global object $APPLICATION */
+
 $APPLICATION->SetTitle("Поиск");
+
 $arOrder = array("DATE_CREATE" => "DESC");
 if ($_GET['sort'] == 'price_a') {
 	$arOrder = array('PROPERTY_PRICE' => 'ASC');
@@ -11,6 +14,7 @@ if ($_GET['sort'] == 'price_d') {
 if ($_GET['sort'] == 'popular') {
 	$arOrder = array('SHOW_COUNTER' => 'DESC');
 }
+
 $arResult = [];
 $arSelect = array("ID", "IBLOCK_ID", "NAME", "DATE_ACTIVE_FROM", 'PREVIEW_PICTURE', 'DETAIL_PAGE_URL', 'SHOW_COUNTER', 'PROPERTY_TIME_RISE', 'DATE_CREATE', 'ACTIVE');
 $arFilter = array("IBLOCK_ID" => IntVal($_GET['R']), "ACTIVE" => "Y", "PROPERTY_ID_USER" => $_GET['I']);
@@ -176,7 +180,6 @@ if($arResult['ITEMS']){
 			<?}?>
 		</div>
 		<?}?>
-
 		<?=$arResult['NAV_STRING'];?>
 	</div>
 <?}else{?>
@@ -187,5 +190,4 @@ if($arResult['ITEMS']){
 	</div>
 
 <?}?>
-<?
-require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
+<?php require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
