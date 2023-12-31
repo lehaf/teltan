@@ -18,19 +18,15 @@ else
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
-    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
-    
     <?
-    Asset::getInstance()->addString('<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>');
-    Asset::getInstance()->addString('<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>');
-    Asset::getInstance()->addString('<script src="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>');
+    Asset::getInstance()->addJs(SITE_TEMPLATE_PATH."/js/jquery.min.js");
+    Asset::getInstance()->addJs(SITE_TEMPLATE_PATH."/js/bootstrap.bundle.min.js");
     Asset::getInstance()->addJs(SITE_TEMPLATE_PATH."/js/vendors.js");
     Asset::getInstance()->addJs(SITE_TEMPLATE_PATH."/js/scripts.js");
     Asset::getInstance()->addJs(SITE_TEMPLATE_PATH."/js/dev.js");
     Asset::getInstance()->addCss(SITE_TEMPLATE_PATH.'/css/vendors.css');
     Asset::getInstance()->addCss(SITE_TEMPLATE_PATH.'/css/styles.css');
     Asset::getInstance()->addCss(SITE_TEMPLATE_PATH.'/css/dev.css');
-    Asset::getInstance()->addCss('https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css');
     ?>
     <?$APPLICATION->ShowHead()?>
     <title><?$APPLICATION->ShowTitle()?></title>
