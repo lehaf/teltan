@@ -7,33 +7,13 @@
 
 use Bitrix\Main\Localization\Loc;
 
-$dir = $APPLICATION->GetCurDir();
-$dirName = str_replace('/', '', $dir); // PHP код
 $itemCounter = 0;
 $pixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
 
-$mapArray = $arResult['MAP_ARRAY'];
-$mapArrayVip = $arResult['MAP_ARRAY_VIP'];
-
 $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
 ?>
-<?// карта для раздела PROPERTY?>
-<?php if (!empty($arResult['MAP_ARRAY']) || !empty($arResult['MAP_ARRAY_VIP'])):?>
-    <?php $this->SetViewTarget('map_points');?>
-    <div class="property-map">
-        <div id="map" style="width: 100%; height: 100%"></div>
-        <button onclick="window.location.href ='?view=maplist'" class="show-all-items">
-            <a href="?view=maplist"><?=Loc::getMessage('map')?></a>
-        </button>
-    </div>
-    <?php require_once $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . '/map_property_section.php'; ?>
-    <?php $this->EndViewTarget();?>
-<?php endif;?>
-<?php $this->SetViewTarget('upper_nav');?>
-    <?=$arResult['NAV_STRING']?>
-<?php $this->EndViewTarget();?>
-<?php if (!empty($arResult['VIP'])):
-    foreach($arResult['VIP'] as $item):
+<?php if (!empty($arResult['ITEMS']['VIP'])):
+    foreach($arResult['ITEMS']['VIP'] as $item):
         $itemCounter++;
         $this->AddEditAction($item['ID'], $item['EDIT_LINK'], $item["EDIT_LINK_TEXT"]);
         $this->AddDeleteAction($item['ID'], $item['DELETE_LINK'], $item["DELETE_LINK_TEXT"], array("CONFIRM" => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM')));
@@ -65,7 +45,7 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
                                             <path d="M562.413,284.393c-9.68,41.044-32.121,78.438-64.831,108.07L329.588,542.345l-165.11-149.843 c-32.771-29.691-55.201-67.076-64.892-108.12c-6.965-29.484-4.103-46.14-4.092-46.249l0.147-0.994 c6.395-72.004,56.382-124.273,118.873-124.273c46.111,0,86.703,28.333,105.965,73.933l9.061,21.477l9.061-21.477 c18.958-44.901,61.694-73.922,108.896-73.922c62.481,0,112.478,52.27,119,125.208C566.517,238.242,569.379,254.908,562.413,284.393z"/>
                                         </svg>
                                     </p>
-                                <?php if (!$USER->IsAuthorized()):?></a><?php endif; ?>
+                                    <?php if (!$USER->IsAuthorized()):?></a><?php endif; ?>
                                 <?php if(!empty($item['PROPERTIES']['PRICE']['VALUE'])):?>
                                     <p class="mb-0 price">
                                         <?=ICON_CURRENCY.' '.number_format($item['PROPERTIES']['PRICE']['VALUE'], 0, '.', ' ');?>
@@ -84,7 +64,7 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
                             <div class="px-2 px-lg-3 content-block">
                                 <div class="text-right">
                                     <a href="<?=$item['DETAIL_PAGE_URL']?>" class="mb-2 mb-lg-3 title"><?=$item['NAME']?></a>
-                                     <?php if ($arParams['CATEGORY'] === AUTO_ADS_TYPE_CODE):?>
+                                    <?php if ($arParams['CATEGORY'] === AUTO_ADS_TYPE_CODE):?>
                                         <div class="row">
                                             <div class="col-12 col-xl">
                                                 <p class="d-none d-xl-inline-block engin">
@@ -132,10 +112,10 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
                                             </div>
                                         </div>
                                     <?php else:?>
-                                         <?php if (!empty($item['LOCATION'])):?>
-                                             <p class="mb-2 mb-lg-3 location">
-                                                 <span class="addres"><?=$item['LOCATION']?></span>
-                                                 <svg class="icon-local" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 513.597 513.597" xml:space="preserve">
+                                        <?php if (!empty($item['LOCATION'])):?>
+                                            <p class="mb-2 mb-lg-3 location">
+                                                <span class="addres"><?=$item['LOCATION']?></span>
+                                                <svg class="icon-local" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 513.597 513.597" xml:space="preserve">
                                                             <g>
                                                                 <path d="M263.278,0.107C158.977-3.408,73.323,80.095,73.323,183.602c0,117.469,112.73,202.72,175.915,325.322
                                                                       c3.208,6.225,12.169,6.233,15.388,0.009c57.16-110.317,154.854-184.291,172.959-290.569
@@ -144,8 +124,8 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
                                                                 </path>
                                                             </g>
                                                         </svg>
-                                             </p>
-                                         <?php endif;?>
+                                            </p>
+                                        <?php endif;?>
                                     <?php endif;?>
                                     <?php if ($arParams['CATEGORY'] !== AUTO_ADS_TYPE_CODE && !empty($item['SECTION'])):?>
                                         <br><a class="mb-2 mb-lg-4 category" href="<?=$item['SECTION']['SECTION_PAGE_URL']?>">
@@ -164,11 +144,9 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
                                               <svg id="iconLike" class="iconLike" viewBox="0 0 612 792">
                                                   <path d="M562.413,284.393c-9.68,41.044-32.121,78.438-64.831,108.07L329.588,542.345l-165.11-149.843 c-32.771-29.691-55.201-67.076-64.892-108.12c-6.965-29.484-4.103-46.14-4.092-46.249l0.147-0.994 c6.395-72.004,56.382-124.273,118.873-124.273c46.111,0,86.703,28.333,105.965,73.933l9.061,21.477l9.061-21.477 c18.958-44.901,61.694-73.922,108.896-73.922c62.481,0,112.478,52.27,119,125.208C566.517,238.242,569.379,254.908,562.413,284.393z"/></svg>
                                             </span>
-                                        <?php if (!$USER->IsAuthorized()):?></a><?php endif; ?>
+                                            <?php if (!$USER->IsAuthorized()):?></a><?php endif; ?>
                                     </div>
-                                    <?php
-                                    $strDate = getStringDate($item['DATE_CREATE']);
-                                    ?>
+                                    <?php $strDate = getStringDate($item['DATE_CREATE']); ?>
                                     <span class="date"><?=!empty($strDate['MES']) ? GetMessage($strDate['MES']).', '.$strDate['HOURS'] : $strDate['HOURS'];?></span>
                                 </div>
                             </div>
@@ -193,18 +171,18 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
         <?php endif;?>
     <?php endforeach?>
 <?php endif;?>
-<?php if (!empty($arResult['ITEMS'])):?>
-    <div class="row row-cols-2 row-cols-lg-3">
-        <?php foreach($arResult['ITEMS'] as $item):
+<?php if (!empty($arResult['ITEMS']['COMMON'])):?>
+    <div class="row row-cols-2 row-cols-lg-4">
+        <?php foreach($arResult['ITEMS']['COMMON'] as $item):
             $itemCounter++;
             $this->AddEditAction($item['ID'], $item['EDIT_LINK'], $item["EDIT_LINK_TEXT"]);
             $this->AddDeleteAction($item['ID'], $item['DELETE_LINK'], $item["DELETE_LINK_TEXT"], array("CONFIRM" => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM')));
             ?>
             <div class="mb-4 col" id="<?=$this->GetEditAreaID($item['ID'])?>">
                 <div class="card product-card auto-product <?=$arParams['IMG_VIEW'] !== 'CONTAINER' ? 'property-product' : ''?>"
-                     <?php if (!empty($item['PROPERTIES']['COLOR_DATE']['VALUE'] && strtotime($item['PROPERTIES']['COLOR_DATE']['VALUE']) > time())):?>
-                         style="background-color: <?=PROPERTY_VIP_COLOR;?>"
-                     <?php endif;?>>
+                    <?php if (!empty($item['PROPERTIES']['COLOR_DATE']['VALUE'] && strtotime($item['PROPERTIES']['COLOR_DATE']['VALUE']) > time())):?>
+                        style="background-color: <?=PROPERTY_VIP_COLOR;?>"
+                    <?php endif;?>>
                     <div class="image-block">
                         <div class="i-box">
                             <a href="<?=$item['DETAIL_PAGE_URL']?>">
@@ -218,12 +196,12 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
                     </div>
                     <div class="px-2 px-lg-3 d-flex justify-content-between">
                         <?php if (!$USER->IsAuthorized()):?><a data-toggle="modal" data-target="#logInModal" class="d-flex align-items-center mr-3" href="#"><?php endif; ?>
-                        <p class="mb-0 like followThisItem" data-ad_id="<?= $item['ID']; ?>">
-                            <svg id="iconLike" class="iconLike" viewBox="0 0 612 792">
-                                <path d="M562.413,284.393c-9.68,41.044-32.121,78.438-64.831,108.07L329.588,542.345l-165.11-149.843 c-32.771-29.691-55.201-67.076-64.892-108.12c-6.965-29.484-4.103-46.14-4.092-46.249l0.147-0.994 c6.395-72.004,56.382-124.273,118.873-124.273c46.111,0,86.703,28.333,105.965,73.933l9.061,21.477l9.061-21.477 c18.958-44.901,61.694-73.922,108.896-73.922c62.481,0,112.478,52.27,119,125.208C566.517,238.242,569.379,254.908,562.413,284.393z"/>
-                            </svg>
-                        </p>
-                        <?php if (!$USER->IsAuthorized()):?></a><?php endif; ?>
+                            <p class="mb-0 like followThisItem" data-ad_id="<?= $item['ID']; ?>">
+                                <svg id="iconLike" class="iconLike" viewBox="0 0 612 792">
+                                    <path d="M562.413,284.393c-9.68,41.044-32.121,78.438-64.831,108.07L329.588,542.345l-165.11-149.843 c-32.771-29.691-55.201-67.076-64.892-108.12c-6.965-29.484-4.103-46.14-4.092-46.249l0.147-0.994 c6.395-72.004,56.382-124.273,118.873-124.273c46.111,0,86.703,28.333,105.965,73.933l9.061,21.477l9.061-21.477 c18.958-44.901,61.694-73.922,108.896-73.922c62.481,0,112.478,52.27,119,125.208C566.517,238.242,569.379,254.908,562.413,284.393z"/>
+                                </svg>
+                            </p>
+                            <?php if (!$USER->IsAuthorized()):?></a><?php endif; ?>
                         <?php if(!empty($item['PROPERTIES']['PRICE']['VALUE'])):?>
                             <p class="mb-0 price"><?=ICON_CURRENCY.' '.number_format($item['PROPERTIES']['PRICE']['VALUE'], 0, '.', ' ');?></p>
                         <?php endif;?>
@@ -237,8 +215,8 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
                             <?php if($item['LOCATION']):?>
                                 <p class="mb-2 location">
                                     <span class="addres"><?=$item['LOCATION']?></span>
-                                        <svg class="icon-local" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
-                                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 513.597 513.597" xml:space="preserve">
+                                    <svg class="icon-local" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 513.597 513.597" xml:space="preserve">
                                           <g>
                                               <path d="M263.278,0.107C158.977-3.408,73.323,80.095,73.323,183.602c0,117.469,112.73,202.72,175.915,325.322
                                             c3.208,6.225,12.169,6.233,15.388,0.009c57.16-110.317,154.854-184.291,172.959-290.569
@@ -282,28 +260,4 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
         <?php endforeach;?>
     </div>
 <?php endif; ?>
-<div class="mt-5 mb-5 d-flex justify-content-center">
-    <?=$arResult['NAV_STRING']?>
-</div>
-<?php if (strripos($_SERVER['REQUEST_URI'], 'PAGEN') === false):?>
-    <div class="flex-column">
-        <?php $APPLICATION->IncludeComponent(
-            "bitrix:main.include",
-            "",
-            Array(
-                "AREA_FILE_SHOW" => "file",
-                "PATH" => "/include-area/".mb_strtolower($dirName)."-h1-sub-ru.php",
-                "EDIT_TEMPLATE" => ""
-            )
-        );?>
-        <?php $APPLICATION->IncludeComponent(
-            "bitrix:main.include",
-            "",
-            Array(
-                "AREA_FILE_SHOW" => "file",
-                "PATH" => "/include-area/".mb_strtolower($dirName)."-text-ru.php",
-                "EDIT_TEMPLATE" => ""
-            )
-        );?>
-    </div>
-<?php endif;?>
+

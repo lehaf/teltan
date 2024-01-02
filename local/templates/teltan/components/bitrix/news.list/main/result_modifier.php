@@ -38,7 +38,6 @@ if (!empty($arParams['IBLOCK_ID'])) {
         'PRICE',
         'IBLOCK',
         'IBLOCK_SECTION',
-        'IBLOCK_SECTION',
     ];
 
     // Выборка местоположений элементов

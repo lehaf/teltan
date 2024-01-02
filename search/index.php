@@ -4,15 +4,12 @@
 
 $APPLICATION->SetTitle("חיפוש");
 
-$template = 'search';
+$request = \Bitrix\Main\Application::getInstance()->getContext()->getRequest();
 
-if($_GET['display'] == 'list')
-	$template = 'search_list';
-
-$APPLICATION->IncludeComponent(
-	"bitrix:search.page",
-	$template,
-	Array(
+$searchRes = $APPLICATION->IncludeComponent(
+	"bitrix:search.page", 
+	"search",
+	array(
 		"AJAX_MODE" => "N",
 		"AJAX_OPTION_ADDITIONAL" => "",
 		"AJAX_OPTION_HISTORY" => "N",
@@ -56,9 +53,84 @@ $APPLICATION->IncludeComponent(
 		"USE_SUGGEST" => "Y",
 		"USE_TITLE_RANK" => "Y",
 		"WIDTH" => "100%",
-		"arrFILTER" => array("iblock_announcements"),
-		"arrFILTER_iblock_announcements" => array("1"),
-		"arrWHERE" => array(0=>"iblock_announcements",)
-	)
-);?>
+		"arrFILTER" => array(
+			0 => "iblock_announcements",
+		),
+		"arrFILTER_iblock_announcements" => array(
+			0 => "all",
+		),
+		"arrWHERE" => array(
+			0 => "iblock_announcements",
+		),
+		"COMPONENT_TEMPLATE" => "search"
+	),
+	false
+);
+?>
+<div class="preloader">
+    <div class="preloader__row">
+        <div class="preloader__item"></div>
+        <div class="preloader__item"></div>
+    </div>
+</div>
+<div class="container">
+	<h1 class="h2 mb-4 subtitle">
+		<?=$APPLICATION->ShowTitle();?>
+	</h1>
+    <?php if ($request->get('isAjax') === 'y') $APPLICATION->RestartBuffer()?>
+    <div id="target_container">
+    <?php if (!empty($searchRes)):?>
+        <div class="mb-5 row d-flex align-items-center">
+            <?php $APPLICATION->IncludeComponent(
+                "webco:sort.panel",
+                "",
+                array(
+                    'SORTS' => [
+                        [
+                            'NAME' => 'Price: Low to High',
+                            'SORT' => 'property_PRICE',
+                            'ORDER' => 'ASC'
+                        ],
+                        [
+                            'NAME' => 'Price: High to Low',
+                            'SORT' => 'property_PRICE',
+                            'ORDER' => 'DESC'
+                        ],
+                        [
+                            'NAME' => 'Date: Low to High',
+                            'SORT' => 'property_TIME_RAISE',
+                            'ORDER' => 'ASC'
+                        ],
+                        [
+                            'NAME' => 'Date: High to Low',
+                            'SORT' => 'property_TIME_RAISE',
+                            'ORDER' => 'DESC'
+                        ]
+                    ],
+                    'VIEWS' => [
+                        'list' => [
+                            'CLASS' => 'icon-sirting_line'
+                        ],
+                        'tile' => [
+                            'CLASS' => 'icon-sirting_block'
+                        ],
+                    ]
+                )
+            );?>
+        </div>
+    <?php endif;
+
+    $session = \Bitrix\Main\Application::getInstance()->getSession();
+    $APPLICATION->IncludeComponent(
+        "webco:search.ads.list",
+        $session->get('view'),
+        array(
+            "ITEMS" => $searchRes,
+            "CACHE_TIME" => 3600,
+        ),
+        false
+    ); ?>
+    </div>
+    <?php if ($request->get('isAjax') === 'y') die()?>
+</div>
 <?php require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
