@@ -420,56 +420,6 @@ function addEntryToUserBuyHistory(int $id, string $entryType) : void
 }
 
 
-function isFreeAddCreated(string $categoryCode) : bool
-{
-    $res = false;
-    $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
-
-    switch ($categoryCode) {
-        case 'FLEA':
-            $iblockClass = \Bitrix\Iblock\Iblock::wakeUp(SIMPLE_ADS_IBLOCK_ID)->getEntityDataClass();
-            $element = $iblockClass::getList(array(
-                'select' => array('ID', 'NAME'),
-                'filter' => ['ID_USER.VALUE' => $userId, '!FREE_AD.VALUE' => false]
-            ))->fetchObject();
-
-            if (!empty($element) && $element->getId() > 0) $res = true;
-            break;
-        case 'PROPERTY':
-            $iblockClass = \Bitrix\Iblock\Iblock::wakeUp(PROPERTY_ADS_IBLOCK_ID)->getEntityDataClass();
-            $element = $iblockClass::getList(array(
-                'select' => array('ID', 'NAME'),
-                'filter' => ['ID_USER.VALUE' => $userId, '!FREE_AD.VALUE' => false]
-            ))->fetchObject();
-
-            if (!empty($element) && $element->getId() > 0) $res = true;
-            break;
-        case 'AUTO':
-            $autoIblocks = [
-                AUTO_IBLOCK_ID,
-                MOTO_IBLOCK_ID,
-                SCOOTER_IBLOCK_ID
-            ];
-
-            foreach ($autoIblocks as $iblockId) {
-                $iblockClass = \Bitrix\Iblock\Iblock::wakeUp($iblockId)->getEntityDataClass();
-                $element = $iblockClass::getList(array(
-                    'select' => array('ID', 'NAME'),
-                    'filter' => ['ID_USER.VALUE' => $userId, '!FREE_AD.VALUE' => false]
-                ))->fetchObject();
-
-                if (!empty($element) && $element->getId() > 0) {
-                    $res = true;
-                    break;
-                }
-            }
-            break;
-    }
-
-    return $res;
-}
-
-
 function deleteFavoritesUser($adId) : void
 {
     $favoriteHLClass = GetEntityDataClass(FAVORITES_HL_ID);

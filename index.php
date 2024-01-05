@@ -64,18 +64,18 @@ $APPLICATION->SetTitle("Teltan - main");
                 "SORT_ORDER2" => "DESC",
                 "STRICT_SECTION_CHECK" => "N"
             )
-        );?>
+        );
 
-        <?php $APPLICATION->IncludeComponent(
+        $APPLICATION->IncludeComponent(
             "bitrix:catalog.section.list",
-            "main_sections",
+            "flea",
             Array(
                 "ADD_SECTIONS_CHAIN" => "N",
                 "CACHE_FILTER" => "N",
                 "CACHE_GROUPS" => "N",
                 "CACHE_TIME" => "36000000",
                 "CACHE_TYPE" => "A",
-                "COUNT_ELEMENTS" => "N",
+                "COUNT_ELEMENTS" => "Y",
                 "COUNT_ELEMENTS_FILTER" => "CNT_ACTIVE",
                 "FILTER_NAME" => "sectionsFilter",
                 "IBLOCK_ID" => SIMPLE_ADS_IBLOCK_ID,
@@ -120,8 +120,8 @@ $APPLICATION->SetTitle("Teltan - main");
                 "AJAX_OPTION_STYLE" => "N",
                 "CACHE_FILTER" => "Y",
                 "CACHE_GROUPS" => "N",
-                "CACHE_TIME" => "36000000",
-                "CACHE_TYPE" => "A",
+                "CACHE_TIME" => "3600",
+                "CACHE_TYPE" => "N",
                 "CHECK_DATES" => "Y",
                 "DETAIL_URL" => "",
                 "DISPLAY_BOTTOM_PAGER" => "N",
@@ -185,7 +185,7 @@ $APPLICATION->SetTitle("Teltan - main");
                 "CACHE_FILTER" => "Y",
                 "CACHE_GROUPS" => "Y",
                 "CACHE_TIME" => "36000000",
-                "CACHE_TYPE" => "A",
+                "CACHE_TYPE" => "N",
                 "CHECK_DATES" => "Y",
                 "DETAIL_URL" => "",
                 "DISPLAY_DATE" => "Y",
@@ -251,7 +251,7 @@ $APPLICATION->SetTitle("Teltan - main");
                 "CACHE_FILTER" => "Y",
                 "CACHE_GROUPS" => "Y",
                 "CACHE_TIME" => "36000000",
-                "CACHE_TYPE" => "A",
+                "CACHE_TYPE" => "N",
                 "CHECK_DATES" => "Y",
                 "DETAIL_URL" => "",
                 "DISPLAY_BOTTOM_PAGER" => "N",
@@ -321,7 +321,7 @@ $APPLICATION->SetTitle("Teltan - main");
                 "CACHE_FILTER" => "Y",
                 "CACHE_GROUPS" => "Y",
                 "CACHE_TIME" => "36000000",
-                "CACHE_TYPE" => "A",
+                "CACHE_TYPE" => "N",
                 "CHECK_DATES" => "Y",
                 "DETAIL_URL" => "",
                 "DISPLAY_BOTTOM_PAGER" => "N",
@@ -391,7 +391,7 @@ $APPLICATION->SetTitle("Teltan - main");
                 "CACHE_FILTER" => "Y",
                 "CACHE_GROUPS" => "Y",
                 "CACHE_TIME" => "36000000",
-                "CACHE_TYPE" => "A",
+                "CACHE_TYPE" => "N",
                 "CHECK_DATES" => "Y",
                 "DETAIL_URL" => "",
                 "DISPLAY_BOTTOM_PAGER" => "N",

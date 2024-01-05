@@ -3,6 +3,8 @@
 if (!empty($arResult['SECTIONS'])) {
     $newSections = [];
     foreach($arResult['SECTIONS'] as $section){
+        if ($section['ELEMENT_CNT'] == 0) continue;
+
         switch (LANGUAGE_ID){
             case 'en':
                 $section['NAME'] = $section['UF_NAME_EN'];
@@ -45,5 +47,6 @@ if (!empty($arResult['SECTIONS'])) {
             $counter++;
         }
     }
+    if (!empty($box)) $sectionTree[] = $box;
     $arResult['SECTIONS'] = $sectionTree;
 }

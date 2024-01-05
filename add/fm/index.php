@@ -1,4 +1,7 @@
 <?php require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
+
+/** @global object $APPLICATION */
+
 $APPLICATION->SetTitle("Добавить объявление");
 
 use Bitrix\Main\Localization\Loc;

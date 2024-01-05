@@ -32,7 +32,7 @@ if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
     $arrVipSliderFilter = [
         '!PROPERTY_VIP_FLAG' => false,
         '!PROPERTY_VIP_DATE' => false,
-        '>PROPERTY_VIP_DATE' => new \Bitrix\Main\Type\DateTime()
+        ">PROPERTY_VIP_DATE" => date('Y-m-d H:i:s')
     ];
 
     $APPLICATION->IncludeComponent(

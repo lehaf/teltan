@@ -12,4 +12,8 @@ $APPLICATION->IncludeComponent(
     Array(
     )
 );
+
+global $mapArray;
+require_once $_SERVER["DOCUMENT_ROOT"].'/local/templates/teltan/map.php';
+
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");

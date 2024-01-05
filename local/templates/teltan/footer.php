@@ -1,13 +1,12 @@
 <?php if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
+/** @global object $APPLICATION */
+
 use Bitrix\Main\Localization\Loc;
 
 global $mapArray;
 
 Loc::loadMessages(__FILE__);
-
-
-if (CSite::InDir('/add/')) require_once 'map.php';
 
 $url = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 $needle = '/property/';
@@ -17,7 +16,7 @@ if ($pos !== false):?>
     <button id="btnToTheTop" class="btn-to-top">
         <img src="/local/templates/teltan/assets/settings.svg" alt="filter">
     </button>
-<? endif;?>
+<?php endif;?>
 <footer class="footer py-3"
         bis_size="{&quot;x&quot;:18,&quot;y&quot;:205,&quot;w&quot;:426,&quot;h&quot;:132,&quot;abs_x&quot;:468,&quot;abs_y&quot;:695}">
     <div class="container"
@@ -28,7 +27,7 @@ if ($pos !== false):?>
                  bis_size="{&quot;x&quot;:18,&quot;y&quot;:205,&quot;w&quot;:426,&quot;h&quot;:66,&quot;abs_x&quot;:468,&quot;abs_y&quot;:695}">
                 <div class="mr-4 footer__info text-center text-lg-rigth"
                      bis_size="{&quot;x&quot;:18,&quot;y&quot;:205,&quot;w&quot;:426,&quot;h&quot;:66,&quot;abs_x&quot;:468,&quot;abs_y&quot;:695}">
-                    <? $APPLICATION->IncludeComponent(
+                    <?php $APPLICATION->IncludeComponent(
                         "bitrix:menu",
                         "template_menu_footer",
                         array(
@@ -46,7 +45,7 @@ if ($pos !== false):?>
                     ); ?>
                     <p class="m-0 copyright"
                        bis_size="{&quot;x&quot;:18,&quot;y&quot;:246,&quot;w&quot;:426,&quot;h&quot;:25,&quot;abs_x&quot;:468,&quot;abs_y&quot;:736}">
-                        <? $APPLICATION->IncludeComponent(
+                        <?php $APPLICATION->IncludeComponent(
                             "bitrix:main.include",
                             "",
                             array(
@@ -65,9 +64,9 @@ if ($pos !== false):?>
                      bis_size="{&quot;x&quot;:18,&quot;y&quot;:287,&quot;w&quot;:426,&quot;h&quot;:50,&quot;abs_x&quot;:468,&quot;abs_y&quot;:777}">
                     <div class="mr-4 footer__social"
                          bis_size="{&quot;x&quot;:18,&quot;y&quot;:287,&quot;w&quot;:426,&quot;h&quot;:50,&quot;abs_x&quot;:468,&quot;abs_y&quot;:777}">
-                        <? if ($BXK_OPTIONS['URL_FACEBOOK']) { ?> <a class="mr-2"
-                                                                     href="<?= $BXK_OPTIONS['URL_FACEBOOK']; ?>"
-                                                                     bis_size="{&quot;x&quot;:133,&quot;y&quot;:294,&quot;w&quot;:193,&quot;h&quot;:17,&quot;abs_x&quot;:583,&quot;abs_y&quot;:784}">
+                        <?php if ($BXK_OPTIONS['URL_FACEBOOK']) { ?> <a class="mr-2"
+                                                                        href="<?= $BXK_OPTIONS['URL_FACEBOOK']; ?>"
+                                                                        bis_size="{&quot;x&quot;:133,&quot;y&quot;:294,&quot;w&quot;:193,&quot;h&quot;:17,&quot;abs_x&quot;:583,&quot;abs_y&quot;:784}">
                             <style>.cls-1 {
                                     fill: #1877f2;
                                 }
@@ -81,10 +80,10 @@ if ($pos !== false):?>
                                         class="cls-2"
                                         d="M352.08,326.69l11.23-73.26H293V205.89c0-20,9.81-39.58,41.3-39.58h31.95V104s-29-5-56.73-5c-57.88,0-95.72,35.08-95.72,98.6v55.83H149.48v73.26h64.35V503.78a256.11,256.11,0,0,0,79.2,0V326.69Z"
                                         bis_size="{&quot;x&quot;:322,&quot;y&quot;:294,&quot;w&quot;:4,&quot;h&quot;:17,&quot;abs_x&quot;:772,&quot;abs_y&quot;:784}"> </span></span></a>
-                        <? } ?> <? if ($BXK_OPTIONS['URL_INSTAGRAM']) { ?> <a
+                        <?php } ?> <?php if ($BXK_OPTIONS['URL_INSTAGRAM']) { ?> <a
                                 href="<?= $BXK_OPTIONS['URL_INSTAGRAM']; ?>"
                                 bis_size="{&quot;x&quot;:133,&quot;y&quot;:319,&quot;w&quot;:0,&quot;h&quot;:17,&quot;abs_x&quot;:583,&quot;abs_y&quot;:809}"> </a>
-                        <? } ?>
+                        <?php } ?>
                     </div>
                     <div class="footer__logo"
                          bis_size="{&quot;x&quot;:18,&quot;y&quot;:337,&quot;w&quot;:426,&quot;h&quot;:0,&quot;abs_x&quot;:468,&quot;abs_y&quot;:827}">
@@ -116,4 +115,3 @@ include $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . "/includes/footer/auth_
 // Modal window register
 include $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . "/includes/footer/register_modal.php";
 include $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . "/includes/footer/confirm_tel_modal.php";
-?>

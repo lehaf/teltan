@@ -970,4 +970,4 @@ $rentType = $entity_data_class::getList(array(
     }
 
 </style>
-<? require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php"); ?>
+
