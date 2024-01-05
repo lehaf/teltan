@@ -8561,7 +8561,6 @@ tbody tr:nth-child(even) {
 .subtitle {
   position: relative;
   padding-bottom: 1.5rem;
-  font-weight: 900;
   letter-spacing: 0.085em;
   text-transform: uppercase;
   text-align: right; }

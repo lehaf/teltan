@@ -5,7 +5,7 @@ use Bitrix\Main\Localization\Loc;
 
 Loc::loadMessages(__FILE__);
 
-global $USER;
+global $USER, $APPLICATION;
 if($USER->IsAuthorized())
     $IDUser = $USER->GetID();
 else
@@ -18,7 +18,7 @@ else
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
-    <?
+    <?php
 //    Asset::getInstance()->addCss(SITE_TEMPLATE_PATH."/css/fonts.css");
     Asset::getInstance()->addJs(SITE_TEMPLATE_PATH."/js/jquery.min.js");
     Asset::getInstance()->addJs(SITE_TEMPLATE_PATH."/js/bootstrap.bundle.min.js");
@@ -29,25 +29,25 @@ else
     Asset::getInstance()->addCss(SITE_TEMPLATE_PATH.'/css/styles.css');
     Asset::getInstance()->addCss(SITE_TEMPLATE_PATH.'/css/dev.css');
     ?>
-    <?$APPLICATION->ShowHead()?>
-    <title><?$APPLICATION->ShowTitle()?></title>
+    <?php $APPLICATION->ShowHead()?>
+    <title><?php $APPLICATION->ShowTitle()?></title>
 </head>
 
 <body>
-<div id="panel"><?$APPLICATION->ShowPanel();?></div>
+<div id="panel"><?php $APPLICATION->ShowPanel();?></div>
 
 
 <header class="header">
-    <?// Избранное
+    <?php // Избранное
     if($USER->IsAuthorized()){
         $favorites = getFavoritesUser($IDUser);
 
         ?>
         <script>let favorites = <?=json_encode($favorites);?>;</script>
-        <?
+        <?php
     } ?>
 
-    <?$APPLICATION->IncludeComponent(
+    <?php $APPLICATION->IncludeComponent(
         "bitrix:catalog.section.list",
         "mobile_sections",
         Array(
@@ -73,7 +73,7 @@ else
         )
     );?>
 
-    <?/*$APPLICATION->IncludeComponent(
+    <?php/*$APPLICATION->IncludeComponent(
         "bitrix:main.include",
         "",
         Array(
@@ -88,7 +88,7 @@ else
             <div class="row">
                 <div class="col col-lg-5 col-xl-6">
                     <div class="d-flex h-100 justify-content-between align-items-center">
-                        <?$APPLICATION->IncludeComponent(
+                        <?php $APPLICATION->IncludeComponent(
                             "bitrix:main.include",
                             "",
                             Array(
@@ -128,7 +128,7 @@ else
                                 <i class="icon-free"></i>
                             </a>
                             <div class="fleamarket">
-                                <?$APPLICATION->IncludeComponent(
+                                <?php $APPLICATION->IncludeComponent(
                                     "bitrix:catalog.section.list",
                                     "sections_menu",
                                     Array(
@@ -167,9 +167,9 @@ else
                                 <i class="icon-steering"></i>
                             </a>
                             <div class="dropdown-menu">
-                                <a href="/auto/" class="border-bottom dropdown-item <?echo (CSite::InDir('/auto/')) ? "active" : " "; ?>"><?=Loc::getMessage('AUTO');?></a>
-                                <a href="/moto/" class="border-bottom dropdown-item <?echo (CSite::InDir('/moto/')) ? "active" : " "; ?>">Moto</a>
-                                <a href="/scooters/" class="dropdown-item <?echo (CSite::InDir('/scooters/')) ? "active" : " "; ?>">Scooters</a>
+                                <a href="/auto/" class="border-bottom dropdown-item <?php echo (CSite::InDir('/auto/')) ? "active" : " "; ?>"><?=Loc::getMessage('AUTO');?></a>
+                                <a href="/moto/" class="border-bottom dropdown-item <?php echo (CSite::InDir('/moto/')) ? "active" : " "; ?>">Moto</a>
+                                <a href="/scooters/" class="dropdown-item <?php echo (CSite::InDir('/scooters/')) ? "active" : " "; ?>">Scooters</a>
                             </div>
                         </div>
                         <div class="d-flex d-lg-none hamburger">
@@ -185,14 +185,14 @@ else
             <div class="row">
                 <div class="col-6 col-xl-4 order-1">
                     <div class="header__user-menu-bar d-flex align-items-center h-100">
-                        <? if($IDUser) {
+                        <?php if($IDUser) {
                             include_once $_SERVER['DOCUMENT_ROOT'].SITE_TEMPLATE_PATH."/includes/header/auth_block.php";
                         } else {
                             include_once $_SERVER['DOCUMENT_ROOT']. SITE_TEMPLATE_PATH."/includes/header/not_auth_block.php";
                         } ?>
                     </div>
                 </div>
-                <?$APPLICATION->IncludeComponent(
+                <?php $APPLICATION->IncludeComponent(
                     "bitrix:search.title",
                     "search",
                     array(
@@ -236,7 +236,7 @@ else
 
                         <div class="d-flex flex-column">
                             <div class="logo__section-name text-right text-uppercase">
-                                <?/*
+                                <?php/*
                                 if(CSite::InDir('/property/'))
                                     print 'Property';
                                 if(CSite::InDir('/flea/'))
@@ -330,9 +330,9 @@ else
         </div>
     </div>
 </div>
- <? if(!CSite::InDir('/property/')) {?>
+<?php if(!CSite::InDir('/property/')) {?>
     <main class="mb-5">
-     <? if (!CSite::InDir('/index.php')) {
+        <?php if (!CSite::InDir('/index.php')) {
          $APPLICATION->IncludeComponent(
              "bitrix:breadcrumb",
              "template_breadcrumbs",
