@@ -11123,10 +11123,7 @@ tbody tr:nth-child(even) {
         z-index: 1;
         display: flex;
         background-color: #EEEDED;
-        background-image: url("../assets/no-image.svg");
-        background-position: center;
-        background-size: contain;
-        background-repeat: no-repeat; }
+      }
     @media (max-width: 749.98px) {
       .big-card-product .image-box {
         border-bottom: 1px solid #E7E7E7;
