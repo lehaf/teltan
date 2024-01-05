@@ -7,16 +7,7 @@ use Bitrix\Main\Localization\Loc;
 global $mapArray;
 
 Loc::loadMessages(__FILE__);
-
-$url = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-$needle = '/property/';
-$pos = strripos($url, $needle);
-
-if ($pos !== false):?>
-    <button id="btnToTheTop" class="btn-to-top">
-        <img src="/local/templates/teltan/assets/settings.svg" alt="filter">
-    </button>
-<?php endif;?>
+?>
 <footer class="footer py-3"
         bis_size="{&quot;x&quot;:18,&quot;y&quot;:205,&quot;w&quot;:426,&quot;h&quot;:132,&quot;abs_x&quot;:468,&quot;abs_y&quot;:695}">
     <div class="container"
@@ -110,8 +101,13 @@ if ($pos !== false):?>
     </div>
 </footer>
 <?php
-// Modal window auth
-include $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . "/includes/footer/auth_modal.php";
-// Modal window register
-include $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . "/includes/footer/register_modal.php";
-include $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . "/includes/footer/confirm_tel_modal.php";
+$userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
+
+if (empty($userId)) {
+    // Modal window auth
+    include $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . "/includes/footer/auth_modal.php";
+    // Modal window register
+    include $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . "/includes/footer/register_modal.php";
+    include $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . "/includes/footer/confirm_tel_modal.php";
+}
+

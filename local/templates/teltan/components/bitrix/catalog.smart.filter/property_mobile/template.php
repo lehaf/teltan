@@ -402,3 +402,6 @@ $isСommercialBuyPage = strpos($curPage,'/property/kommercheskaya/kupit-kom/') !
         </div>
     </form>
 </div>
+<button id="btnToTheTop" class="btn-to-top">
+    <img src="<?=SITE_TEMPLATE_PATH?>/assets/settings.svg" alt="filter">
+</button>

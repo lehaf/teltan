@@ -1,8 +1,6 @@
 $(document).ready(function () {
     const $body = $('body');
     const $filterModalContetn = $('#filterModalContent')
-    const $itemSlider = $('#itemSlider');
-
     const scroll = 0;
     const active = "active";
     let prevScrollTop = 0;
@@ -203,12 +201,6 @@ $(document).ready(function () {
     new Filter('#nameFilter')
     new Filter('.dropdown-menu-search')
 
-
-    /**
-     * Range sliders
-     */
-
-
     /**
      * Alerts
      */
@@ -225,16 +217,9 @@ $(document).ready(function () {
         $('.allert').removeClass('show')
     })
 
-    function countRiseBuy() {
-        alert('ok')
-    }
-
     // Dependense lists START
-
-
     $(document).on("click", 'body', function (event) {
         let target = event.target
-
         if (target.classList.contains('second-drop')) {
 
         } else if (target.classList.contains('first-drop')) {
@@ -246,16 +231,11 @@ $(document).ready(function () {
 
     })
 
-    const checkedElement = (name, renderTo) => {
-        renderTo.empty();
-        renderTo.append(name);
-    };
-
-
     $(document).on("click", '.first-drop', function () {
         $(".show-country").toggleClass("active");
         $(".show-city").removeClass("active");
     });
+
     $(document).on("click", ".second-drop", function () {
         if ($(".show-country").hasClass('selected')) {
             $(".show-city").toggleClass("active");
@@ -266,21 +246,22 @@ $(document).ready(function () {
             $(".show-country").toggleClass("active");
         }
     });
+
     $('.regionClassSelector').click(function () {
         $('.first-drop').html($(this).find('input').val())
         $(".show-country").addClass("selected");
         $(".show-city").removeClass("selected");
-    })
+    });
+
     $('.cityClassSelector').click(function () {
         $('.second-drop').html($(this).find('input').val())
         $(".show-country").addClass("selected");
         $(".show-city").addClass("selected");
-    })
+    });
     // Dependense lists END
 
-// Header property filters / dropdown
+    // Header property filters / dropdown
     const dropdownElems = [$('.dropdown-prise'), $('.dropdown-room-number'), $('.dropdown-building-type'), $('.dropdown-area')]
-    const dropdownBtn = [$('.buttonShowPropertyFilterPrice'), $('.buttonShowPropertyFilterRoom'), $('.buttonShowPropertyFilterType'), $('.buttonShowPropertyFilterArea')]
 
     $('.buttonShowPropertyFilterPrice').click(function (e) {
         $(this).toggleClass('active')
@@ -320,15 +301,7 @@ $(document).ready(function () {
     let userPrise = [0, 0];
     let userAreaRange = [0, 0];
     const showUserPrice = document.querySelector('.houseRentUserPrise');
-    const showUserPriceBuy = document.querySelector('.houseBuyUserPrise');
     const showAreaRange = document.querySelector('.rentAreaCommerce');
-    const showAreaRangeBuy = document.querySelector('.buyAreaCommerce');
-
-    const typePropertyRentCommerce = document.querySelector('.typePropertyRentCommerce')
-    const typePropertyBuyCommerce = document.querySelector('.typePropertyBuyCommerce')
-    const typePropertyRent = document.querySelector('.typePropertyRent')
-    const typePropertyBuy = document.querySelector('.typePropertyBuy')
-
 
     function howItPrice(priceElement) {
 
@@ -406,10 +379,7 @@ $(document).ready(function () {
     const rentFormMobile = "#mainFiltersRentMobile";
     const buyFormMobile = "#mainFiltersRentMobile";
     const roomNumer = $('.countRoomNumberFilter');
-    const priceFilter = $('.houseRentUserPrise');
     const typeProperty = $('.typeProperty');
-    const typeArea = $('.typeArea');
-    const typeRegion = $('.typeRegion');
 
     let data = {}
 
@@ -417,7 +387,7 @@ $(document).ready(function () {
     const categoryNameMobile = $(categoryMobileSelector).attr("name");
 
     const forms = $(`${rentForm}, ${buyForm}, ${rentFormMobile}, ${buyFormMobile}, ${formModalNew}`);
-    const formsOld = $(`${rentForm}, ${buyForm}, ${rentFormMobile}, ${buyFormMobile}`);
+
 
     // Handler show full string with tags parameter filter
     const hendleMoreTags = (dataArray) => {
@@ -556,6 +526,7 @@ $(document).ready(function () {
 
         hendleMoreTags(tagProps)
     };
+
     // сохранение данных в скрытую форму для отправки
     const setDataToForm = (data) => {
         $("#mainFiltersRent").val(JSON.stringify(data));
@@ -636,7 +607,7 @@ $(document).ready(function () {
         $(this).parents().filter("form").submit();
     });
 
-// прерываем отправку формы и записываем данные
+    // прерываем отправку формы и записываем данные
     forms.submit(function (e) {
         e.preventDefault();
 
@@ -657,7 +628,7 @@ $(document).ready(function () {
         updateData(formData);
     });
 
-// удаление тега и очистка значений в формах по кликку на него
+    // удаление тега и очистка значений в формах по кликку на него
     $(document).on("click", "[data-clear-name]", function (e) {
         const name = $(this).data("clearName");
 
