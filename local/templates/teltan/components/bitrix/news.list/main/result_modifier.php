@@ -54,7 +54,7 @@ if (!empty($arParams['IBLOCK_ID'])) {
             "VIP_DATE.VALUE" => 'DESC',
         ],
         'select' => $select,
-        'filter' => [ ">=VIP_DATE.VALUE" => date('Y-m-d H:i:s')],
+        'filter' => [ ">=VIP_DATE.VALUE" => date('Y-m-d H:i:s'), 'ACTIVE' => 'Y'],
         'limit' => 2,
     ])->fetchCollection();
 
