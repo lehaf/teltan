@@ -129,7 +129,7 @@ if ($session->has('sort')) $secondSort = $session->get('sort');
         "SEF_URL_TEMPLATES" => array(
             "sections" => "",
             "section" => "#SECTION_CODE_PATH#/",
-            "element" => "#SECTION_CODE_PATH#/#ELEMENT_ID#/",
+            "element" => "#SECTION_CODE_PATH#/#ELEMENT_CODE#/",
             "compare" => "compare/",
             "smart_filter" => "#SECTION_CODE_PATH#/filter/#SMART_FILTER_PATH#/apply/",
         ),
