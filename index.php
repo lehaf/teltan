@@ -110,7 +110,7 @@ $APPLICATION->SetTitle("Teltan - main");
             "bitrix:news.list",
             "main",
             Array(
-                "BLOCK_TITLE" => "PROPERTY",
+                "BLOCK_TITLE" => Loc::getMessage("PROPERTY"),
                 "ACTIVE_DATE_FORMAT" => "d.m.Y",
                 "ADD_SECTIONS_CHAIN" => "N",
                 "AJAX_MODE" => "N",
@@ -180,7 +180,7 @@ $APPLICATION->SetTitle("Teltan - main");
             "bitrix:news.list",
             "main",
             Array(
-                "BLOCK_TITLE" => "AUTO",
+                "BLOCK_TITLE" => Loc::getMessage("AUTO"),
                 "ADD_SECTIONS_CHAIN" => "N",
                 "CACHE_FILTER" => "Y",
                 "CACHE_GROUPS" => "Y",
@@ -240,7 +240,7 @@ $APPLICATION->SetTitle("Teltan - main");
             "bitrix:news.list",
             "main",
             Array(
-                "BLOCK_TITLE" => "MOTO",
+                "BLOCK_TITLE" => Loc::getMessage("MOTO"),
                 "ACTIVE_DATE_FORMAT" => "d.m.Y",
                 "ADD_SECTIONS_CHAIN" => "N",
                 "AJAX_MODE" => "N",
@@ -310,7 +310,7 @@ $APPLICATION->SetTitle("Teltan - main");
             "bitrix:news.list",
             "main",
             Array(
-                "BLOCK_TITLE" => "SCOOTER",
+                "BLOCK_TITLE" => Loc::getMessage("SCOOTER"),
                 "ACTIVE_DATE_FORMAT" => "d.m.Y",
                 "ADD_SECTIONS_CHAIN" => "N",
                 "AJAX_MODE" => "N",
@@ -380,7 +380,7 @@ $APPLICATION->SetTitle("Teltan - main");
             "bitrix:news.list",
             "main",
             Array(
-                "BLOCK_TITLE" => "FLEA MARKET",
+                "BLOCK_TITLE" => Loc::getMessage("FLEA_MARKET"),
                 "ACTIVE_DATE_FORMAT" => "d.m.Y",
                 "ADD_SECTIONS_CHAIN" => "N",
                 "AJAX_MODE" => "N",
