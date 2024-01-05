@@ -6,6 +6,7 @@ use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\Page\Asset;
 
 Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . "/css/add-page.css");
+Asset::getInstance()->addJs(SITE_TEMPLATE_PATH."/js/wizard.js");
 
 Loc::loadMessages(__FILE__);
 
