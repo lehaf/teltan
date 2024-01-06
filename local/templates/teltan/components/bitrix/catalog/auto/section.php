@@ -148,6 +148,7 @@ if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
                     "webco:sort.panel",
                     "",
                     array(
+                        'FILTER_BUTTON' => 'Y',
                         'SORTS' => [
                             [
                                 'NAME' => 'Price: Low to High',

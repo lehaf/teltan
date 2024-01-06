@@ -1,6 +1,7 @@
 <?php if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 
 /** @var array $arResult */
+/** @var array $arParams */
 
 use Bitrix\Main\Localization\Loc;
 
@@ -8,6 +9,13 @@ use Bitrix\Main\Localization\Loc;
 <?php if (!empty($arResult['SORTS']) || !empty($arResult['VIEWS'])):?>
     <div class="col-12 col-xl-6 justify-content-center">
         <div class="d-flex justify-content-between justify-content-xl-end products-sort">
+            <?php if (!empty($arParams['FILTER_BUTTON']) && $arParams['FILTER_BUTTON'] === 'Y'):?>
+                <div class="d-flex">
+                    <a href="#" class="mr-2 d-flex d-lg-none justify-content-center align-items-center products-sort__button filterTogglerMobile">
+                        <img src="<?=SITE_TEMPLATE_PATH?>/assets/settings.svg" alt="">
+                    </a>
+                </div>
+            <?php endif;?>
             <?php if (!empty($arResult['VIEWS'])):?>
                 <div class="d-flex">
                     <?php foreach ($arResult['VIEWS'] as $viewName => $view):?>

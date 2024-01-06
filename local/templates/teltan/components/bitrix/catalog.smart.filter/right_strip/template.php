@@ -16,9 +16,6 @@ use Bitrix\Main\Localization\Loc;
 
 $this->setFrameMode(true);
 
-require_once ($_SERVER["DOCUMENT_ROOT"] . "/vendor/autoload.php");
-$detect = new Mobile_Detect;
-
 $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_ID']);
 
 ?>
@@ -28,15 +25,15 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
             <a class="filter-closer filterTogglerMobile" type="button"><i class="mr-1 mr-lg-3 icon-clear"></i> Close</a>
             <p class="m-0 d-inline-block text-uppercase font-weight-bolder filter-title">Filters</p>
         </div>
-        <form name="<?=$arResult["FILTER_NAME"] . "_form" ?>" action="<?=$arResult["FORM_ACTION"]?>" method="get" class="smart-filter-form">
+        <form name="<?=$arParams["FILTER_NAME"] . "_form" ?>" action="<?=$arResult["FORM_ACTION"]?>" method="get" class="smart-filter-form">
             <?php foreach ($arResult["HIDDEN"] as $arItem): ?>
                 <input type="hidden" name="<?=$arItem["CONTROL_NAME"]?>" id="<?=$arItem["CONTROL_ID"]?>" value="<?=$arItem["HTML_VALUE"]?>">
             <?php endforeach; ?>
             <?php // Блок с брендами авто/ мото / скутеры?>
             <?php if ($arParams['SHOW_SECTIONS'] === 'Y'):?>
                 <?php if (!empty($sectionsData['SECTIONS'])):?>
-                    <div class="border-bottom">
-                        <p class="filter-select__collapse-title h5 d-none d-lg-block text-uppercase mb-3">Brands</p>
+                    <div class="border-bottom filter-brands-list">
+                        <p class="filter-select__collapse-title h5 d-lg-block text-uppercase mb-3">Brands</p>
                         <div class="collapse show" id="collapse<?=$arItem['CODE']?>" style="margin-bottom: 20px;">
                             <div class="smart-filter-input-group-dropdown">
                                 <div class="smart-filter-dropdown-block" onclick="smartFilter.showDropDownPopup(this, '<?= CUtil::JSEscape($key) ?>')">
@@ -46,8 +43,8 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                                     <div class="smart-filter-dropdown-arrow"></div>
                                     <div class="smart-filter-dropdown-popup" data-role="dropdownContent" style="display: none;">
                                         <ul>
-                                            <?php if (!empty($arParams['ROOT_SECTION_URL']) && !empty($sectionsData['ACTIVE']['BRAND'])):?>
-                                                <li>
+                                            <?php if (!empty($arParams['ROOT_SECTION_URL'])):?>
+                                                <li  <?=empty($sectionsData['ACTIVE']['BRAND']) ? 'class="selected"' : ''?>>
                                                     <label class="smart-filter-dropdown-label smart-filter-choice"
                                                            onclick="window.location.href = '<?=$arParams['ROOT_SECTION_URL']?>'"
                                                     >
@@ -56,7 +53,7 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                                                 </li>
                                             <?php endif;?>
                                             <?php foreach ($sectionsData['SECTIONS'] as $sect):?>
-                                                <li>
+                                                <li <?=$sectionsData['ACTIVE']['BRAND']['ID'] == $sect['ID'] ? 'class="selected"' : ''?>>
                                                     <label for="<?= "all_" . $arCur["CONTROL_ID"]?>"
                                                            class="smart-filter-dropdown-label smart-filter-choice"
                                                            data-role="label_<?= "all_" . $arCur["CONTROL_ID"]?>"
@@ -72,7 +69,7 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                             </div>
                         </div>
                         <?php if (!empty($sectionsData['ACTIVE']['BRAND']) && !empty($sectionsData['SECTIONS'][$sectionsData['ACTIVE']['BRAND']['ID']]['ITEMS'])):?>
-                            <p class="filter-select__collapse-title h5 d-none d-lg-block text-uppercase mb-3">Model</p>
+                            <p class="filter-select__collapse-title h5  d-lg-block text-uppercase mb-3">Model</p>
                             <div class="collapse show" id="collapse<?=$arItem['CODE']?>1" style="margin-bottom: 20px;">
                                 <div class="smart-filter-input-group-dropdown smart-filter-dropdown-next">
                                     <div class="smart-filter-dropdown-block">
@@ -80,17 +77,10 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                                             <?=!empty($sectionsData['ACTIVE']['MODEL']) ? $sectionsData['ACTIVE']['MODEL']['NAME'] : Loc::getMessage('SF_ALL') ?>
                                         </div>
                                         <div class="smart-filter-dropdown-arrow"></div>
-                                        <input
-                                                style="display: none"
-                                                type="radio"
-                                                name="<?=$arCur["CONTROL_NAME_ALT"]?>"
-                                                id="<?="all_" . $arCur["CONTROL_ID"]?>2"
-                                                value=""
-                                        >
-                                        <div class="smart-filter-dropdown-popup-new" data-role="dropdownContent" style="display: none;">
+                                        <div class="smart-filter-dropdown-popup-new popup-window" data-role="dropdownContent" style="display: none;">
                                             <ul id="smartFilterChoiceNew">
                                                 <?php if (!empty($sectionsData['ACTIVE']['BRAND']['SECTION_PAGE_URL'])):?>
-                                                    <li>
+                                                    <li <?=empty($sectionsData['ACTIVE']['MODEL']) ? 'class="selected"' : ''?>>
                                                         <label class="smart-filter-dropdown-label smart-filter-choice"
                                                                onclick="window.location.href = '<?=$sectionsData['ACTIVE']['BRAND']['SECTION_PAGE_URL']?>'"
                                                         >
@@ -99,7 +89,7 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                                                     </li>
                                                 <?php endif;?>
                                                 <?php foreach ($sectionsData['SECTIONS'][$sectionsData['ACTIVE']['BRAND']['ID']]['ITEMS'] as $subsection):?>
-                                                    <li>
+                                                    <li <?=$sectionsData['ACTIVE']['MODEL']['ID'] == $subsection['ID'] ? 'class="selected"' : ''?>>
                                                         <label for="<?= "all_" . $arCur["CONTROL_ID"]?>2"
                                                                class="smart-filter-dropdown-label smart-filter-choice"
                                                                data-role="label_<?= "all_" . $arCur["CONTROL_ID"]?>2"
@@ -121,7 +111,7 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
             <?php
             $counter = 0;
             foreach ($arResult["ITEMS"] as $key => $arItem):
-                 if ($counter === FILTER_EXTRA_SHOW_COUNT && !$detect->isMobile()):
+                 if ($counter === FILTER_EXTRA_SHOW_COUNT):
                     $extraOptions = true;?>
                     <div class="collapse <?=$counter?>" id="moreFilterSettings">
                 <?php endif;
@@ -130,8 +120,8 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                     switch ($arItem["DISPLAY_TYPE"]):
                         case "A":?>
                             <?php if ($arItem['CODE'] == 'PRICE' && $arItem['VALUES']['MIN']['VALUE'] != $arItem['VALUES']['MAX']['VALUE']):?>
-                                <div class="d-block mt-4">
-                                    <p class="filter-select__collapse-title h5 d-block d-lg-none text-uppercase mb-3"
+                                <div class="d-block mt-4 border-bottom">
+                                    <p class="filter-select__collapse-title h5 d-block text-uppercase mb-3"
                                        data-toggle="collapse" href="#collapse<?=$arItem['CODE']?>" role="button"
                                        aria-expanded="true"
                                        aria-controls="collapse<?=$arItem['CODE']?>"
@@ -141,7 +131,6 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                                             <?=$arItem['FILTER_HINT']?>
                                         </span>
                                     </p>
-                                    <p class="filter-select__collapse-title h5 d-none d-lg-block text-uppercase  mb-3"><?=$arItem['FILTER_HINT']?></p>
                                     <div id="collapse<?=$arItem['CODE']?>" class="collapse show">
                                         <div class="form-group">
                                             <div class="mb-4 form-row">
@@ -200,22 +189,11 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                                         </div>
                                     </div>
                                 </div>
-                                <div class="border-bottom mt-4">
-                                    <p class="filter-select__collapse-title h5 d-block d-lg-none text-uppercase mb-3"
-                                       data-toggle="collapse"
-                                       href="#collapse<?=$arItem['CODE']?>" role="button" aria-expanded="true"
-                                       aria-controls="collapse<?=$arItem['CODE']?>">
-                                        <span class="d-flex justify-content-between align-items-center">
-                                            <i class="icone-filter-title icon-arrow-down-sign-to-navigate-3"></i>
-                                            <?=$arItem['FILTER_HINT']?>
-                                        </span>
-                                    </p>
-                                </div>
                             <?php endif; ?>
                         <?php break;
                         case "B":?>
                             <div class="d-block mb-3">
-                                <p class="filter-select__collapse-title h5 d-block d-lg-none text-uppercase"
+                                <p class="filter-select__collapse-title h5 d-block text-uppercase"
                                    data-toggle="collapse" href="#collapse<?=$arItem['CODE']?>" role="button"
                                    aria-expanded="true"
                                    aria-controls="collapse<?=$arItem['CODE']?>">
@@ -319,7 +297,7 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                         case "P":
                             $checkedItemExist = false; ?>
                             <div class="border-bottom mt-4">
-                                <p class="filter-select__collapse-title h5 d-block d-lg-none text-uppercase mb-3"
+                                <p class="filter-select__collapse-title h5 d-block text-uppercase mb-3"
                                    data-toggle="collapse"
                                    href="#collapse<?=$arItem['CODE']?>" role="button" aria-expanded="true"
                                    aria-controls="collapse<?=$arItem['CODE']?>"
@@ -329,22 +307,11 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                                         <?=$arItem['FILTER_HINT']?>
                                     </span>
                                 </p>
-                                <p class="filter-select__collapse-title h5 d-none d-lg-block text-uppercase mb-3"><?=$arItem['FILTER_HINT']?></p>
                                 <div class="collapse show" id="collapse<?=$arItem['CODE']?>" style="margin-bottom: 20px;">
                                     <div class="smart-filter-input-group-dropdown">
                                         <div class="smart-filter-dropdown-block" onclick="smartFilter.showDropDownPopup(this, '<?= CUtil::JSEscape($key) ?>')">
-                                            <div class="smart-filter-dropdown-text currentOption<?=$arItem['CODE']?>"
-                                                 data-role="currentOption">
-                                                <?php foreach ($arItem["VALUES"] as $val => $ar) {
-                                                    if ($ar["CHECKED"]) {
-                                                        echo $ar["VALUE"];
-                                                        $checkedItemExist = true;
-                                                    }
-                                                }
-                                                if (!$checkedItemExist) {
-                                                    echo GetMessage("SF_ALL");
-                                                }
-                                                ?>
+                                            <div class="smart-filter-dropdown-text currentOption<?=$arItem['CODE']?>" data-role="currentOption">
+                                                <?=!empty($arItem['CHECKED_VALUE']) ? $arItem['CHECKED_VALUE'] :  Loc::getMessage("SF_ALL"); ?>
                                             </div>
                                             <div class="smart-filter-dropdown-arrow"></div>
                                             <input style="display: none"
@@ -364,29 +331,29 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                                             <?php endforeach ?>
                                             <div class="smart-filter-dropdown-popup" data-role="dropdownContent" style="display: none;">
                                                 <ul>
-                                                    <li>
+                                                    <li <?=empty($arItem['CHECKED_VALUE']) ? 'class="selected"' : ''?>>
                                                         <label for="<?= "all_" . $arCur["CONTROL_ID"]?>"
                                                                class="smart-filter-dropdown-label smart-filter-choice"
                                                                data-role="label_<?= "all_" . $arCur["CONTROL_ID"]?>"
                                                                data-name="<?=$arItem['CODE']?>"
                                                                onclick="smartFilter.selectDropDownItem(this, '<?= CUtil::JSEscape("all_" . $arCur["CONTROL_ID"]) ?>', '.currentOption<?=$arItem['CODE']?>')">
-                                                               <?=GetMessage("SF_ALL"); ?>
+                                                               <?=Loc::getMessage("SF_ALL"); ?>
                                                         </label>
                                                     </li>
-                                                    <?php foreach ($arItem["VALUES"] as $val => $ar):
+                                                    <?php foreach ($arItem["VALUES"] as $code => $value):
                                                         $class = "";
-                                                        if ($ar["CHECKED"])
+                                                        if ($value["CHECKED"])
                                                             $class .= " selected";
-                                                        if ($ar["DISABLED"])
+                                                        if ($value["DISABLED"])
                                                             $class .= " disabled";
                                                         ?>
-                                                        <li>
-                                                            <label for="<?=$ar["CONTROL_ID"]?>"
+                                                        <li <?=!empty($class) ? 'class="'.$class.'"' : ''?>>
+                                                            <label for="<?=$value["CONTROL_ID"]?>"
                                                                    class="smart-filter-dropdown-label<?=$class ?> smart-filter-choice"
-                                                                   data-role="label_<?=$ar["CONTROL_ID"]?>"
+                                                                   data-role="label_<?=$value["CONTROL_ID"]?>"
                                                                    data-name="<?=$arItem['CODE']?>"
-                                                                   onclick="smartFilter.selectDropDownItem(this, '<?= CUtil::JSEscape($ar["CONTROL_ID"]) ?>', '.currentOption<?=$arItem['CODE']?>'); ">
-                                                                <?=$ar["VALUE"]?>
+                                                                   onclick="smartFilter.selectDropDownItem(this, '<?= CUtil::JSEscape($value["CONTROL_ID"]) ?>', '.currentOption<?=$arItem['CODE']?>'); ">
+                                                                <?=$value["VALUE"]?>
                                                             </label>
                                                         </li>
                                                     <?php endforeach ?>
@@ -419,7 +386,7 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                                         if (!$checkedItemExist) {
                                             ?>
                                             <span class="smart-filter-checkbox-btn-image all"></span>
-                                            <span class="smart-filter-dropdown-text"><?= GetMessage("CT_BCSF_FILTER_ALL"); ?></span>
+                                            <span class="smart-filter-dropdown-text"><?=Loc::getMessage("CT_BCSF_FILTER_ALL"); ?></span>
                                             <?php
                                         }
                                         ?>
@@ -453,7 +420,7 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                                                        data-role="label_<?= "all_" . $arCur["CONTROL_ID"]?>"
                                                        onclick="smartFilter.selectDropDownItem(this, '<?= CUtil::JSEscape("all_" . $arCur["CONTROL_ID"]) ?>')">
                                                     <span class="smart-filter-checkbox-btn-image all"></span>
-                                                    <span class="smart-filter-dropdown-text"><?= GetMessage("CT_BCSF_FILTER_ALL"); ?></span>
+                                                    <span class="smart-filter-dropdown-text"><?=Loc::getMessage("CT_BCSF_FILTER_ALL"); ?></span>
                                                 </label>
                                             </li>
                                             <?php
@@ -532,7 +499,7 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                                             'bitrix:main.calendar',
                                             '',
                                             array(
-                                                'FORM_NAME' => $arResult["FILTER_NAME"] . "_form",
+                                                'FORM_NAME' => $arParams["FILTER_NAME"] . "_form",
                                                 'SHOW_INPUT' => 'Y',
                                                 'INPUT_ADDITIONAL_ATTR' => 'class="calendar" placeholder="' . FormatDate("SHORT", $arItem["VALUES"]["MIN"]["VALUE"]) . '" onkeyup="smartFilter.keyup(this)" onchange="smartFilter.keyup(this)"',
                                                 'INPUT_NAME' => $arItem["VALUES"]["MIN"]["CONTROL_NAME"],
@@ -551,7 +518,7 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                                             'bitrix:main.calendar',
                                             '',
                                             array(
-                                                'FORM_NAME' => $arResult["FILTER_NAME"] . "_form",
+                                                'FORM_NAME' => $arParams["FILTER_NAME"] . "_form",
                                                 'SHOW_INPUT' => 'Y',
                                                 'INPUT_ADDITIONAL_ATTR' => 'class="calendar" placeholder="' . FormatDate("SHORT", $arItem["VALUES"]["MAX"]["VALUE"]) . '" onkeyup="smartFilter.keyup(this)" onchange="smartFilter.keyup(this)"',
                                                 'INPUT_NAME' => $arItem["VALUES"]["MAX"]["CONTROL_NAME"],
@@ -570,7 +537,7 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                         default:
                             if ($arItem['CODE'] == "PROP_5" || $arItem['CODE'] == "PROP_COLOR_Left" || $arItem['CODE'] == "PROP_COLOR" || $arItem['CODE'] == "PROP_COLOUR"):?>
                                 <div class="mt-4 pb-3 border-bottom">
-                                    <p class="filter-select__collapse-title h5 d-block d-lg-none text-uppercase mb-3"
+                                    <p class="filter-select__collapse-title h5 d-block text-uppercase mb-3"
                                        data-toggle="collapse"
                                        href="#collapse<?=$arItem['CODE']?>" role="button" aria-expanded="true"
                                        aria-controls="collapse<?=$arItem['CODE']?>"
@@ -580,7 +547,6 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                                             <?=$arItem['FILTER_HINT']?>
                                         </span>
                                     </p>
-                                    <p class="filter-select__collapse-title h5 d-none d-lg-block text-uppercase mb-3"><?=$arItem['FILTER_HINT']?></p>
                                     <div class="collapse show" id="collapse<?=$arItem['CODE']?>">
                                         <div style="flex-direction: row-reverse;" class="d-flex flex-wrap palette">
                                             <?php foreach ($arItem["VALUES"] as $val => $ar): ?>
@@ -602,7 +568,7 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                                 </div>
                             <?php else:?>
                                 <div class="border-bottom mt-4">
-                                    <p class="filter-select__collapse-title h5 d-block d-lg-none text-uppercase mb-3"
+                                    <p class="filter-select__collapse-title h5 d-block text-uppercase mb-3"
                                        data-toggle="collapse"
                                        href="#collapse<?=$arItem['CODE']?>" role="button" aria-expanded="true"
                                        aria-controls="collapse<?=$arItem['CODE']?>"
@@ -612,7 +578,6 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                                             <?=$arItem['FILTER_HINT']?>
                                         </span>
                                     </p>
-                                    <p class="filter-select__collapse-title h5 d-none d-lg-block text-uppercase mb-3"><?=$arItem['FILTER_HINT']?></p>
                                     <div class="collapse show" id="collapse<?=$arItem['CODE']?>">
                                         <ul>
                                             <?php foreach ($arItem["VALUES"] as $val => $ar): ?>
@@ -643,7 +608,7 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                 <?php if ($key === array_key_last($arResult['ITEMS']) && isset($extraOptions) && $extraOptions === true):?></div><?php endif;?>
             <?php endforeach;?>
         </form>
-        <?php if (isset($extraOptions) && $extraOptions === true && !$detect->isMobile()) :?>
+        <?php if (isset($extraOptions) && $extraOptions === true) :?>
             <button class="btn btn-primary btn-more-filter-settings text-uppercase font-weight-bold collapsed" type="button"
                     data-toggle="collapse" data-target="#moreFilterSettings" aria-expanded="false"
                     aria-controls="moreFilterSettings">

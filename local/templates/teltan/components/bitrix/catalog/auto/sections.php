@@ -58,6 +58,7 @@ $request = \Bitrix\Main\Application::getInstance()->getContext()->getRequest();
                     "webco:sort.panel",
                     "",
                     array(
+                        'FILTER_BUTTON' => 'Y',
                         'SORTS' => [
                             [
                                 'NAME' => 'Price: Low to High',
@@ -201,6 +202,7 @@ $request = \Bitrix\Main\Application::getInstance()->getContext()->getRequest();
                 "bitrix:catalog.smart.filter",
                 "right_strip",
                 array(
+                    "ROOT_SECTION_URL" => $arParams['SEF_FOLDER'],
                     "SHOW_SECTIONS" => 'Y',
                     "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
                     "IBLOCK_ID" => $arParams["IBLOCK_ID"],
