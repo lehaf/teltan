@@ -494,3 +494,67 @@ function removeFreeAdPropOnAds(string $adCategory) : void
         }
     }
 }
+
+function getSectionsForFilter(int $iblockId, ?int $activeSectionId = NULL, int $cacheTtl = 3600000): array
+{
+    $cache = \Bitrix\Main\Application::getInstance()->getManagedCache();
+    $cacheId = 'iblock_id_'.$iblockId;
+    $data = [];
+    $sections = [];
+
+    if ($cache->read($cacheTtl, $cacheId)) {
+        $sections = $cache->get($cacheId);
+    } else {
+        $res = CIBlockSection::GetList(
+            array(),
+            array(
+                'IBLOCK_ID' => $iblockId,
+                'ACTIVE' => 'Y',
+                "CNT_ACTIVE" => "Y",
+            ),
+            true,
+            array('ID', 'NAME', 'CODE', 'DEPTH_LEVEL', 'IBLOCK_SECTION_ID', 'SECTION_PAGE_URL')
+        );
+
+        if (!empty($res)) {
+            while ($section = $res->GetNext()) {
+                if ($section['ELEMENT_CNT'] > 0) {
+                    $sections[] = $section;
+                }
+
+            }
+        }
+
+        $cache->set($cacheId, $sections); // записываем в кеш
+    }
+
+    // Расчитываем активность
+    if (!empty($sections)) {
+        foreach ($sections as &$sect) {
+
+            if ($sect['ID'] == $activeSectionId) {
+                $sect['ACTIVE_SECTION'] = 'Y';
+                if ($sect['DEPTH_LEVEL'] == 1) {
+                    $data['ACTIVE']['BRAND'] = $sect;
+                } else {
+                    $data['ACTIVE']['MODEL'] = $sect;
+                }
+            }
+
+            if (!empty($sect['IBLOCK_SECTION_ID'])) {
+                if (isset($sect['ACTIVE_SECTION'])) {
+                    $data['SECTIONS'][$sect['IBLOCK_SECTION_ID']]['ACTIVE_SECTION'] = 'Y';
+                    $data['ACTIVE']['BRAND'] = $data['SECTIONS'][$sect['IBLOCK_SECTION_ID']];
+                }
+
+                $data['SECTIONS'][$sect['IBLOCK_SECTION_ID']]['ITEMS'][$sect['ID']] = $sect;
+            } else {
+                $data['SECTIONS'][$sect['ID']] = $sect;
+            }
+
+        }
+        unset($sect);
+    }
+
+    return $data;
+}

@@ -907,3 +907,70 @@ BX.Iblock.SmartFilter = (function()
 
     return SmartFilter;
 })();
+
+
+
+class RangeSlider {
+
+    constructor(elementId) {
+        this.elementId = elementId;
+        const element = document.getElementById(this.elementId);
+        this.element = element;
+        this.init();
+    }
+
+    init() {
+        const {rangeMin = 0, rangeMax = 100} = this.element.dataset;
+        const minInput = document.querySelector(`[data-range-min-connected="${this.elementId}"]`);
+        const maxInput = document.querySelector(`[data-range-max-connected="${this.elementId}"]`);
+
+        this.slider = noUiSlider.create(this.element, {
+            start: [
+                Number(minInput.value),
+                Number(maxInput.value)
+            ],
+            connect: true,
+            step: 1,
+            direction: 'rtl',
+            range: {
+                min: Number(rangeMin),
+                max: Number(rangeMax),
+            },
+            format: {
+                to: (value) => Math.round(value),
+                from: (value) => Number(value) || 0,
+            },
+        });
+
+        if (minInput && maxInput) {
+            this.slider.on('update', () => {
+                const [minValue, maxValue] = this.slider.get();
+                minInput.value = minValue;
+                maxInput.value = maxValue;
+            })
+
+            minInput.addEventListener('change', (e) => {
+                this.slider.set([e.target.value, null])
+            })
+
+            maxInput.addEventListener('change', (e) => {
+                this.slider.set([null, e.target.value])
+            })
+        }
+
+        const setters = document.querySelectorAll(`[data-range-connected="${this.elementId}"]`);
+
+        if (setters.length) {
+            setters.forEach((node) => {
+                node.addEventListener('click', (e) => {
+                    this.slider.set(e.target.dataset.rangeSet.split(','))
+                })
+            })
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    new RangeSlider('rangeSlider');
+    new RangeSlider('rangeSliderMainFilterMobile');
+});

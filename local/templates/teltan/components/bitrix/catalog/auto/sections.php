@@ -196,49 +196,43 @@ $request = \Bitrix\Main\Application::getInstance()->getContext()->getRequest();
         </div>
         <?php if ($request->get('isAjax') === 'y') die()?>
         <div class="col col-lg-3">
-            <div class="p-3 pt-4 pb-4 card text-right filter-select filter" id="filterModalContent">
-                <div class="pb-3 mb-2 mb-lg-4 d-flex d-lg-none justify-content-between border-bottom filter-header">
-                    <a class="filter-closer filterTogglerMobile" type="button"><i class="mr-1 mr-lg-3 icon-clear"></i> Close</a>
-                    <p class="m-0 d-inline-block text-uppercase font-weight-bolder filter-title">Filters</p>
-                </div>
-                <?php
-                $APPLICATION->IncludeComponent(
-                    "bitrix:catalog.smart.filter",
-                    "right_strip",
-                    array(
-                        "COMPONENT_TEMPLATE" => "bootstrap_v4",
-                        "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
-                        "IBLOCK_ID" => $arParams["IBLOCK_ID"],
-                        "SECTION_ID" => $arResult["VARIABLES"]["SECTION_ID"],
-                        "SECTION_CODE" => $arResult["VARIABLES"]["SECTION_CODE"],
-                        "FILTER_NAME" => "arrFilter",
-                        "HIDE_NOT_AVAILABLE" => "N",
-                        "TEMPLATE_THEME" => "blue",
-                        "FILTER_VIEW_MODE" => "horizontal",
-                        "DISPLAY_ELEMENT_COUNT" => "Y",
-                        "SEF_MODE" => "N",
-                        "CACHE_TYPE" => "A",
-                        "CACHE_TIME" => "36000000",
-                        "CACHE_GROUPS" => "Y",
-                        "SAVE_IN_SESSION" => "Y",
-                        "INSTANT_RELOAD" => "Y",
-                        "PAGER_PARAMS_NAME" => "arrPager",
-                        "PRICE_CODE" => array(
-                            0 => "BASE",
-                        ),
-                        "CONVERT_CURRENCY" => "Y",
-                        "XML_EXPORT" => "N",
-                        "SECTION_TITLE" => "-",
-                        "SECTION_DESCRIPTION" => "-",
-                        "POPUP_POSITION" => "left",
-                        "SEF_RULE" => "/flea/#SECTION_CODE_PATH#/filter/#SMART_FILTER_PATH#/apply/",
-                        "SECTION_CODE_PATH" => "",
-                        "SMART_FILTER_PATH" => '#SECTION_CODE_PATH#/filter/#SMART_FILTER_PATH#/apply/',
-                        "CURRENCY_ID" => "RUB"
+            <?php
+            $APPLICATION->IncludeComponent(
+                "bitrix:catalog.smart.filter",
+                "right_strip",
+                array(
+                    "SHOW_SECTIONS" => 'Y',
+                    "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
+                    "IBLOCK_ID" => $arParams["IBLOCK_ID"],
+                    "SECTION_ID" => $arResult["VARIABLES"]["SECTION_ID"],
+                    "SECTION_CODE" => $arResult["VARIABLES"]["SECTION_CODE"],
+                    "FILTER_NAME" => "arrFilter",
+                    "HIDE_NOT_AVAILABLE" => "N",
+                    "TEMPLATE_THEME" => "blue",
+                    "FILTER_VIEW_MODE" => "horizontal",
+                    "DISPLAY_ELEMENT_COUNT" => "Y",
+                    "SEF_MODE" => "N",
+                    "CACHE_TYPE" => "A",
+                    "CACHE_TIME" => "36000000",
+                    "CACHE_GROUPS" => "Y",
+                    "SAVE_IN_SESSION" => "Y",
+                    "INSTANT_RELOAD" => "Y",
+                    "PAGER_PARAMS_NAME" => "arrPager",
+                    "PRICE_CODE" => array(
+                        0 => "BASE",
                     ),
-                    false
-                );?>
-            </div>
+                    "CONVERT_CURRENCY" => "Y",
+                    "XML_EXPORT" => "N",
+                    "SECTION_TITLE" => "-",
+                    "SECTION_DESCRIPTION" => "-",
+                    "POPUP_POSITION" => "left",
+                    "SEF_RULE" => "/flea/#SECTION_CODE_PATH#/filter/#SMART_FILTER_PATH#/apply/",
+                    "SECTION_CODE_PATH" => "",
+                    "SMART_FILTER_PATH" => '#SECTION_CODE_PATH#/filter/#SMART_FILTER_PATH#/apply/',
+                    "CURRENCY_ID" => "RUB"
+                ),
+                false
+            );?>
         </div>
     </div>
 </div>

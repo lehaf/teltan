@@ -9182,8 +9182,8 @@ tbody tr:nth-child(even) {
       display: block;
       position: relative;
       top: 1px;
-      width: 17px;
-      height: 17px;
+      min-width: 17px;
+      min-height: 17px;
       border: 1px solid #ced4da;
       cursor: pointer; }
       .filter .checkbox .cr:after {
