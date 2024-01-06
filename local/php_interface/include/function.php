@@ -558,3 +558,51 @@ function getSectionsForFilter(int $iblockId, ?int $activeSectionId = NULL, int $
 
     return $data;
 }
+
+function isExistActiveElements(int $iblockId, ?int $sectionId = NULL, int $cacheTtl = 36000000) : bool
+{
+    if (!empty($sectionId)) {
+        $cache = \Bitrix\Main\Application::getInstance()->getManagedCache();
+        $cacheId = 'iblock_id_'.$iblockId;
+
+        if ($cache->read($cacheTtl, $cacheId)) {
+            $section = $cache->get($cacheId);
+        } else {
+            $section = [];
+            $res = CIBlockSection::GetList(
+                array(),
+                array(
+                    'ID' => $sectionId,
+                    'IBLOCK_ID' => $iblockId,
+                    'ACTIVE' => 'Y',
+                    "CNT_ACTIVE" => "Y",
+                ),
+                true,
+                array('ID')
+            );
+
+            if (!empty($res)) {
+                $section = $res->GetNext();
+            }
+
+            $cache->set($cacheId, $section); // записываем в кеш
+        }
+
+        $result = !empty($section) && $section['ELEMENT_CNT'] > 0 ? true : false;
+
+    } else {
+        $activeElement = \Bitrix\Iblock\ElementTable::getList(array(
+            'select' => array('ID', 'NAME'),
+            'filter' => array('ACTIVE' => 'Y', 'IBLOCK_ID' => $iblockId),
+            'limit' => 1,
+            'cache' => [
+                'ttl' => $cacheTtl,
+                'cache_joins' => true
+            ]
+        ))->fetch();
+
+        $result = !empty($activeElement) ? true : false;
+    }
+
+    return $result;
+}

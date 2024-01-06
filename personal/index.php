@@ -427,10 +427,12 @@ $allElements = array_reverse($allElements);
                                             <?= Loc::getMessage('UP_SPEED_SALE'); ?>
                                         </button>
                                         <script>
-                                            $('#dropdownMenuLink<?=$arItem['ID']?>').on('click', (e) => {
-                                                e.preventDefault()
-                                                $('#accordionUserItemWrap<?=$arItem['ID']?>').toggleClass('active')
-                                            })
+                                            document.addEventListener('DOMContentLoaded', () => {
+                                                $('#dropdownMenuLink<?=$arItem['ID']?>').on('click', (e) => {
+                                                    e.preventDefault()
+                                                    $('#accordionUserItemWrap<?=$arItem['ID']?>').toggleClass('active')
+                                                })
+                                            });
                                         </script>
                                         <div class="accardion-wrap"
                                              id="accordionUserItemWrap<?= $arItem['ID'] ?>">
@@ -1322,10 +1324,12 @@ $allElements = array_reverse($allElements);
                                             <?= Loc::getMessage('UP_SPEED_SALE'); ?>
                                         </button>
                                         <script>
-                                            $('#dropdownMenuLink<?=$arItem['ID']?>').on('click', (e) => {
-                                                e.preventDefault()
-                                                $('#accordionUserItemWrap<?=$arItem['ID']?>').toggleClass('active')
-                                            })
+                                            document.addEventListener('DOMContentLoaded', () => {
+                                                $('#dropdownMenuLink<?=$arItem['ID']?>').on('click', (e) => {
+                                                    e.preventDefault()
+                                                    $('#accordionUserItemWrap<?=$arItem['ID']?>').toggleClass('active')
+                                                })
+                                            });
                                         </script>
                                         <div class="accardion-wrap"
                                              id="accordionUserItemWrap<?= $arItem['ID'] ?>">
@@ -2642,10 +2646,12 @@ $allElements = array_reverse($allElements);
                                             <?= Loc::getMessage('UP_SPEED_SALE'); ?>
                                         </button>
                                         <script>
-                                            $('#dropdownMenuLink<?=$arItem['ID']?>').on('click', (e) => {
-                                                e.preventDefault()
-                                                $('#accordionUserItemWrap<?=$arItem['ID']?>').toggleClass('active')
-                                            })
+                                            document.addEventListener('DOMContentLoaded', () => {
+                                                $('#dropdownMenuLink<?=$arItem['ID']?>').on('click', (e) => {
+                                                    e.preventDefault()
+                                                    $('#accordionUserItemWrap<?=$arItem['ID']?>').toggleClass('active')
+                                                })
+                                            });
                                         </script>
                                         <div class="accardion-wrap"
                                              id="accordionUserItemWrap<?= $arItem['ID'] ?>">
@@ -3943,10 +3949,12 @@ $allElements = array_reverse($allElements);
                                             <?= Loc::getMessage('UP_SPEED_SALE'); ?>
                                         </button>
                                         <script>
-                                            $('#dropdownMenuLink<?=$arItem['ID']?>').on('click', (e) => {
-                                                e.preventDefault()
-                                                $('#accordionUserItemWrap<?=$arItem['ID']?>').toggleClass('active')
-                                            })
+                                            document.addEventListener('DOMContentLoaded', () => {
+                                                $('#dropdownMenuLink<?=$arItem['ID']?>').on('click', (e) => {
+                                                    e.preventDefault()
+                                                    $('#accordionUserItemWrap<?=$arItem['ID']?>').toggleClass('active')
+                                                })
+                                            });
                                         </script>
                                         <div class="accardion-wrap"
                                              id="accordionUserItemWrap<?= $arItem['ID'] ?>">
@@ -5245,10 +5253,12 @@ $allElements = array_reverse($allElements);
                                             <?= Loc::getMessage('UP_SPEED_SALE'); ?>
                                         </button>
                                         <script>
-                                            $('#dropdownMenuLink<?=$arItem['ID']?>').on('click', (e) => {
-                                                e.preventDefault()
-                                                $('#accordionUserItemWrap<?=$arItem['ID']?>').toggleClass('active')
-                                            })
+                                            document.addEventListener('DOMContentLoaded', () => {
+                                                $('#dropdownMenuLink<?=$arItem['ID']?>').on('click', (e) => {
+                                                    e.preventDefault()
+                                                    $('#accordionUserItemWrap<?=$arItem['ID']?>').toggleClass('active')
+                                                })
+                                            });
                                         </script>
                                         <div class="accardion-wrap"
                                              id="accordionUserItemWrap<?= $arItem['ID'] ?>">
@@ -6547,10 +6557,12 @@ $allElements = array_reverse($allElements);
                                             <?= Loc::getMessage('UP_SPEED_SALE'); ?>
                                         </button>
                                         <script>
-                                            $('#dropdownMenuLink<?=$arItem['ID']?>').on('click', (e) => {
-                                                e.preventDefault()
-                                                $('#accordionUserItemWrap<?=$arItem['ID']?>').toggleClass('active')
-                                            })
+                                            document.addEventListener('DOMContentLoaded', () => {
+                                                $('#dropdownMenuLink<?=$arItem['ID']?>').on('click', (e) => {
+                                                    e.preventDefault()
+                                                    $('#accordionUserItemWrap<?=$arItem['ID']?>').toggleClass('active')
+                                                })
+                                            });
                                         </script>
                                         <div class="accardion-wrap"
                                              id="accordionUserItemWrap<?= $arItem['ID'] ?>">
@@ -7762,6 +7774,7 @@ $allElements = array_reverse($allElements);
         </div>
     </div>
 </div>
+
     <script>
         function countRiseBuy(id, el, eltrigger) {
             var price = 0;

@@ -285,6 +285,9 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
 <div class="mt-5 mb-5 d-flex justify-content-center">
     <?=$arResult['NAV_STRING']?>
 </div>
+<?php if (empty($arResult['VIP']) && empty($arResult['ITEMS'])):?>
+    <div class="empty-ads"><?=Loc::getMessage('EMPTY_ITEMS')?></div>
+<?php endif;?>
 <?php if (strripos($_SERVER['REQUEST_URI'], 'PAGEN') === false):?>
     <div class="flex-column">
         <?php $APPLICATION->IncludeComponent(

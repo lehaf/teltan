@@ -12,6 +12,7 @@ Asset::getInstance()->addCss('https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-
 
 $request = \Bitrix\Main\Application::getInstance()->getContext()->getRequest();
 $session = \Bitrix\Main\Application::getInstance()->getSession();
+$sectionHasAds = isExistActiveElements($arParams['IBLOCK_ID'], $arResult["VARIABLES"]["SECTION_ID"]);
 
 switch ($arParams['SECTION_ID']) {
     case RESIDENTIAL_SECTION_ID:
@@ -390,45 +391,47 @@ $sectionName = $langId === false ? $curSection['NAME'] : $curSection['UF_NAME_'.
                 <?php if ($request->get('isAjax') === 'y') $APPLICATION->RestartBuffer()?>
                 <div id="target_container" class="col d-flex flex-column">
                     <?php $APPLICATION->ShowViewContent('map_points');?>
-                    <div class="mb-5 row d-flex align-items-center">
-                        <?php $APPLICATION->ShowViewContent('upper_nav');?>
-                        <?php $APPLICATION->IncludeComponent(
-                            "webco:sort.panel",
-                            "",
-                            array(
-                                'SORTS' => [
-                                    [
-                                        'NAME' => 'Price: Low to High',
-                                        'SORT' => 'property_PRICE',
-                                        'ORDER' => 'ASC'
+                    <?php if ($sectionHasAds):?>
+                        <div class="mb-5 row d-flex align-items-center">
+                            <?php $APPLICATION->ShowViewContent('upper_nav');?>
+                            <?php $APPLICATION->IncludeComponent(
+                                "webco:sort.panel",
+                                "",
+                                array(
+                                    'SORTS' => [
+                                        [
+                                            'NAME' => 'Price: Low to High',
+                                            'SORT' => 'property_PRICE',
+                                            'ORDER' => 'ASC'
+                                        ],
+                                        [
+                                            'NAME' => 'Price: High to Low',
+                                            'SORT' => 'property_PRICE',
+                                            'ORDER' => 'DESC'
+                                        ],
+                                        [
+                                            'NAME' => 'Date: Low to High',
+                                            'SORT' => 'property_TIME_RAISE',
+                                            'ORDER' => 'ASC'
+                                        ],
+                                        [
+                                            'NAME' => 'Date: High to Low',
+                                            'SORT' => 'property_TIME_RAISE',
+                                            'ORDER' => 'DESC'
+                                        ]
                                     ],
-                                    [
-                                        'NAME' => 'Price: High to Low',
-                                        'SORT' => 'property_PRICE',
-                                        'ORDER' => 'DESC'
-                                    ],
-                                    [
-                                        'NAME' => 'Date: Low to High',
-                                        'SORT' => 'property_TIME_RAISE',
-                                        'ORDER' => 'ASC'
-                                    ],
-                                    [
-                                        'NAME' => 'Date: High to Low',
-                                        'SORT' => 'property_TIME_RAISE',
-                                        'ORDER' => 'DESC'
+                                    'VIEWS' => [
+                                        'list' => [
+                                            'CLASS' => 'icon-sirting_line'
+                                        ],
+                                        'tile' => [
+                                            'CLASS' => 'icon-sirting_block'
+                                        ],
                                     ]
-                                ],
-                                'VIEWS' => [
-                                    'list' => [
-                                        'CLASS' => 'icon-sirting_line'
-                                    ],
-                                    'tile' => [
-                                        'CLASS' => 'icon-sirting_block'
-                                    ],
-                                ]
-                            )
-                        );?>
-                    </div>
+                                )
+                            );?>
+                        </div>
+                    <?php endif;?>
                     <?php
                     $APPLICATION->IncludeComponent(
                         "bitrix:catalog.section",

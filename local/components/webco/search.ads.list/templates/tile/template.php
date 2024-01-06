@@ -260,4 +260,6 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
         <?php endforeach;?>
     </div>
 <?php endif; ?>
-
+<?php if (empty($arResult['ITEMS']['VIP']) && empty($arResult['ITEMS']['COMMON'])):?>
+    <div class="empty-ads"><?=Loc::getMessage('EMPTY_ITEMS')?></div>
+<?php endif;?>

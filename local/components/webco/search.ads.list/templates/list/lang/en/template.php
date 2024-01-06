@@ -1,6 +1,6 @@
 <?php
-
-$MESS["BUY_NEW_TARIF"] = "Buy additional ads for placement";
-$MESS["OF_COUNT"] = "from";
-$MESS["BUY"] = "Buy";
-$MESS["AVAILABLE_ADS"] = "Available ads";
+$MESS["CT_BNL_ELEMENT_DELETE_CONFIRM"] = "All the information linked to this record will be deleted. Continue anyway?";
+$MESS["TODAY"] = "Today";
+$MESS["YESTERDAY"] = "Yesterday";
+$MESS["map"] = "Show ads on the map";
+$MESS["EMPTY_ITEMS"] = "There are no advertisements in this section yet";

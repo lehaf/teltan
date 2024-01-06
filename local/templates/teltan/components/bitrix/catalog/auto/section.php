@@ -8,6 +8,7 @@
 $dir = $APPLICATION->GetCurDir();
 $dirName = str_replace('/', '', $dir); // PHP код
 $request = \Bitrix\Main\Application::getInstance()->getContext()->getRequest();
+$sectionHasAds = isExistActiveElements($arParams['IBLOCK_ID'], $arResult["VARIABLES"]["SECTION_ID"]);
 
 if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
     $sectionData = getSectionData($arResult["VARIABLES"]["SECTION_ID"], $arParams['IBLOCK_ID']);
@@ -142,46 +143,48 @@ if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
     <div class="row row-cols-1 row-cols-lg-2">
         <?php if ($request->get('isAjax') === 'y') $APPLICATION->RestartBuffer()?>
         <div id="target_container"  class="col col-lg-9">
-            <div class="mb-5 row d-flex align-items-center">
-                <?php $APPLICATION->ShowViewContent('upper_nav');?>
-                <?php $APPLICATION->IncludeComponent(
-                    "webco:sort.panel",
-                    "",
-                    array(
-                        'FILTER_BUTTON' => 'Y',
-                        'SORTS' => [
-                            [
-                                'NAME' => 'Price: Low to High',
-                                'SORT' => 'property_PRICE',
-                                'ORDER' => 'ASC'
+            <?php if ($sectionHasAds):?>
+                <div class="mb-5 row d-flex align-items-center">
+                    <?php $APPLICATION->ShowViewContent('upper_nav');?>
+                    <?php $APPLICATION->IncludeComponent(
+                        "webco:sort.panel",
+                        "",
+                        array(
+                            'FILTER_BUTTON' => 'Y',
+                            'SORTS' => [
+                                [
+                                    'NAME' => 'Price: Low to High',
+                                    'SORT' => 'property_PRICE',
+                                    'ORDER' => 'ASC'
+                                ],
+                                [
+                                    'NAME' => 'Price: High to Low',
+                                    'SORT' => 'property_PRICE',
+                                    'ORDER' => 'DESC'
+                                ],
+                                [
+                                    'NAME' => 'Date: Low to High',
+                                    'SORT' => 'property_TIME_RAISE',
+                                    'ORDER' => 'ASC'
+                                ],
+                                [
+                                    'NAME' => 'Date: High to Low',
+                                    'SORT' => 'property_TIME_RAISE',
+                                    'ORDER' => 'DESC'
+                                ]
                             ],
-                            [
-                                'NAME' => 'Price: High to Low',
-                                'SORT' => 'property_PRICE',
-                                'ORDER' => 'DESC'
-                            ],
-                            [
-                                'NAME' => 'Date: Low to High',
-                                'SORT' => 'property_TIME_RAISE',
-                                'ORDER' => 'ASC'
-                            ],
-                            [
-                                'NAME' => 'Date: High to Low',
-                                'SORT' => 'property_TIME_RAISE',
-                                'ORDER' => 'DESC'
+                            'VIEWS' => [
+                                'list' => [
+                                    'CLASS' => 'icon-sirting_line'
+                                ],
+                                'tile' => [
+                                    'CLASS' => 'icon-sirting_block'
+                                ],
                             ]
-                        ],
-                        'VIEWS' => [
-                            'list' => [
-                                'CLASS' => 'icon-sirting_line'
-                            ],
-                            'tile' => [
-                                'CLASS' => 'icon-sirting_block'
-                            ],
-                        ]
-                    )
-                );?>
-            </div>
+                        )
+                    );?>
+                </div>
+            <?php endif;?>
             <?php
             $session = \Bitrix\Main\Application::getInstance()->getSession();
             $APPLICATION->IncludeComponent(
