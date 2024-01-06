@@ -1,5 +1,5 @@
-<?
+<?php
 $MESS["CT_BNL_ELEMENT_DELETE_CONFIRM"] = "All the information linked to this record will be deleted. Continue anyway?";
 $MESS["TODAY"] = "Today";
 $MESS["YESTERDAY"] = "Yesterday";
-?>
+$MESS["EMPTY_ITEMS"] = "No advertisements found!";

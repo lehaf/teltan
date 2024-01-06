@@ -1,22 +1,7 @@
 <script>
     $(document).ready(function () {
         // MAPS START
-        function createPreloader() {
-            let preloader = document.createElement('div');
-            preloader.classList.add('preloader');
-            let preloaderRow = document.createElement('div');
-            preloaderRow.classList.add('preloader__row');
-            let preloaderItem = document.createElement('div');
-            preloaderItem.classList.add('preloader__item');
-            preloaderRow.append(preloaderItem);
-            preloaderRow.append(preloaderItem);
-            preloader.append(preloaderRow);
-            return preloader;
-        }
-
         function filterItems() {
-            const itemsAjaxContainer = document.querySelector('div#rendorMapItemCard');
-            const preloader = createPreloader();
 
             $(this).trigger('click')
             let url = 'view=maplist&set_filter=y';
@@ -58,7 +43,6 @@
             });
 
             if (Object.keys(dataInputs).length > 0) {
-                itemsAjaxContainer.prepend(preloader);
                 $('.preloader').addClass('preloader-visible');
                 $.ajax({
                     type: "POST",
@@ -67,7 +51,7 @@
                     headers: {"X-Requested-With": "XMLHttpRequest"},
                     url: location.pathname + '?' + url,
                     success: function (data) {
-                        $('#rendorMapItemCard').replaceWith($(data).find('#rendorMapItemCard'));
+                        $('#target_container').replaceWith($(data).find('#target_container'));
                         history.pushState({}, "", location.origin + location.pathname + '?' + url);
                         $('.preloader').removeClass('preloader-visible');
                     }
@@ -768,7 +752,7 @@
                     if (needAjax === true) {
                         filterItems();
                     } else {
-                        document.querySelector('div#rendorMapItemCard').innerHTML = `
+                        document.querySelector('div#target_container').innerHTML = `
                             <div class="empty-ads">В данной области нет объявлений!</div>
                         `;
                     }

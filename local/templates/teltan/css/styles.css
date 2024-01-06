@@ -8302,7 +8302,7 @@ tbody tr:nth-child(even) {
       min-width: 21px; }
 
 .property-full-map .cord-container {
-  height: 100%;
+  height: 785px;
   max-height: 785px;
   width: 35%;
   overflow: hidden;
@@ -11306,8 +11306,7 @@ tbody tr:nth-child(even) {
     .product-card.product-line.product-line-vip .content-block .engin {
       max-width: 155px; }
     .product-card.product-line.product-line-vip .content-block .location {
-      max-width: 170px;
-      display: inline-block; }
+      max-width: 170px;}
     .product-card.product-line.product-line-vip .content-block .mileage {
       margin-bottom: 32px; }
       @media (max-width: 749.98px) {

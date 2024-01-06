@@ -1,11 +1,9 @@
 const SortPanel = function () {
     this.settings = {
         'switcherViewSelector':'button.products-sort__button',
-        'switcherSortSelector':'.menu-sort > .sort-item',
         'elementsGetSelector':'#target_container',
         'elementsPutSelector':'#target_container',
         'viewTypeAttr':'data-view',
-        'sortTypeAttr':'data-sort',
     }
 
     this.$loader = document.querySelector('div.preloader');
@@ -14,8 +12,6 @@ const SortPanel = function () {
 
 SortPanel.prototype.init = function () {
     this.$allViews = document.querySelectorAll(this.settings.switcherViewSelector);
-    this.$allSorts = document.querySelectorAll(this.settings.switcherSortSelector);
-
     this.setEventListener();
 }
 
@@ -31,21 +27,6 @@ SortPanel.prototype.setEventListener = function () {
                     _this.setActiveView(this.$allViews, switcherBtn, this.settings.viewTypeAttr);
                     _this.showLoader();
                     _this.sendData({'isAjax': 'y', 'typeOfView': typeOfView});
-                }
-            }
-        });
-    }
-
-    if (this.$allSorts) {
-        this.$allSorts.forEach((sortBtn) => {
-            sortBtn.onclick = (e) => {
-                e.preventDefault();
-                if (!sortBtn.classList.contains('active')) {
-                    let sortNumber = sortBtn.getAttribute(this.settings.sortTypeAttr);
-                    _this.setActiveView(this.$allSorts, sortBtn, this.settings.sortTypeAttr);
-                    document.querySelector('#sort-text').innerHTML = sortBtn.innerHTML;
-                    _this.showLoader();
-                    _this.sendData({'isAjax': 'y', 'sortNumber': sortNumber});
                 }
             }
         });
