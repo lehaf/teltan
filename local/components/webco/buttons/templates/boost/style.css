@@ -1,0 +1,67 @@
+img.credit-card {
+    width: 17px;
+    height: 14px;
+}
+
+img.tcoins{
+    width: 17px;
+    height: 17px;
+}
+
+img.basket{
+    width: 31px;
+    height: 18px;
+    margin-right: 1.2rem;
+}
+
+img.crown{
+    width: 22px;
+    height: 19px;
+}
+
+img.color{
+    width: 22px;
+    height: 34px;
+}
+
+img.ribbon{
+    width: 22px;
+    height: 22px;
+}
+
+img.crown-small{
+    width: 18px;
+    height: 16px;
+}
+
+img.color-small{
+    width: 18px;
+    height: 28px;
+}
+
+img.ribbon-small{
+    width: 18px;
+    height: 18px;
+}
+
+img.lightning{
+    width: 22px;
+    height: 22px;
+}
+
+.collapse .user-product__up-product {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #3fb465;
+    color: #ffffff;
+    font-size: 11px;
+}
+
+.collapse .user-product__up-product span {
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+}

@@ -11306,7 +11306,8 @@ tbody tr:nth-child(even) {
     .product-card.product-line.product-line-vip .content-block .engin {
       max-width: 155px; }
     .product-card.product-line.product-line-vip .content-block .location {
-      max-width: 170px;}
+      max-width: 170px;
+      display: inline-block;}
     .product-card.product-line.product-line-vip .content-block .mileage {
       margin-bottom: 32px; }
       @media (max-width: 749.98px) {
@@ -13144,7 +13145,7 @@ div[data-filter=unActiveAnnouncement] .product-card.product-line.user-product .r
     display: flex; }
 
 .user-promote-menu {
-  /*width: 283px;*/
+  width: 283px;
   overflow: hidden;
   font-weight: normal;
   font-size: 12px;
