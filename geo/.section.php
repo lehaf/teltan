@@ -1,6 +1,0 @@
-<?
-$sSectionName = "geo";
-$arDirProperties = Array(
-
-);
-?>
