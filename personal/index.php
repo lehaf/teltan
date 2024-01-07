@@ -5,17 +5,9 @@
 
 use Bitrix\Main\Localization\Loc;
 
-Loc::loadMessages(__FILE__);
 $APPLICATION->SetTitle("Персональный раздел");
 
 if (!$USER->IsAuthorized()) LocalRedirect("/");
-
-$arTypesVip = getHLData(PERSONAL_VIP_TYPES_HL_ID, ['*']);
-$arTypesRise = getHLData(PERSONAL_RISE_HL_ID, ['*']);
-$arTypesColour = getHLData(PERSONAL_COLOR_HL_ID, ['*']);
-$arTypesLent = getHLData(PERSONAL_RIBBON_HL_ID, ['*']);
-$arTypesPaket = getHLData(PERSONAL_PACKET_HL_ID, ['*']);
-$arPaket = getHLData(BOUGHT_RATE_HL_ID, ['*'],['UF_USER_ID' => $USER->GetID()]);
 
 
 $arUser = CUser::GetByID($USER->GetID())->Fetch();
@@ -275,138 +267,18 @@ $allElements = array_reverse($allElements);
                                     <a href="<?= $arItem['DETAIL_PAGE_URL'] ?>"
                                        class="title"><?= $arItem['NAME'] ?></a>
                                 </div>
-
                                 <div class="mb-4 d-flex flex-column flex-lg-row">
-                                    <div class="edit-user-item">
-                                        <button
-                                                id="text-uppercase<?= $arItem['ID'] ?>"
-                                                class="mr-lg-4 mb-3 mb-lg-0 btn user-product__btn-edit text-uppercase">
-                                            <?= Loc::getMessage('UP_EDIT'); ?>
-                                        </button>
-                                        <script>
-                                            $('#text-uppercase<?= $arItem['ID'] ?>').on('click', (e) => {
-                                                e.preventDefault()
-                                                $('#edit-item-menu_item<?= $arItem['ID'] ?>').toggleClass('active')
-                                            })
-                                        </script>
-                                        <ul id="edit-item-menu_item<?= $arItem['ID'] ?>"
-                                            class="flex-column edit-item-menu_item">
-                                            <li class="border-bottom">
-                                                <div class="custom-control custom-switch activateItem">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                           id="activateItem<?= $arItem['ID'] ?>"
-                                                           checked="checked">
-                                                    <label id="activateItemText<?= $arItem['ID'] ?>"
-                                                           data-iblock-id="<?= $arItem['IBLOCK_ID'] ?>"
-                                                           data-item-id="<?= $arItem['ID'] ?>"
-                                                           class="custom-control-label"
-                                                           for="activateItem<?= $arItem['ID'] ?>"><?= Loc::getMessage('DELETE_UN'); ?></label>
-                                                </div>
-                                            </li>
-                                            <script>
-                                                $('#activateItemText<?= $arItem['ID'] ?>').click(function () {
-
-                                                    var attе = '';
-                                                    if ($('#activateItem<?= $arItem['ID'] ?>').is(':checked')) {
-
-                                                        var tte = 'green';
-                                                    } else {
-                                                        var tte = 'red';
-                                                    }
-
-                                                    $.ajax({
-                                                        url: '/ajax/active_item.php',
-                                                        method: 'post',
-                                                        async: false,
-                                                        data: {data: $(this).data(), value: tte},
-                                                        success: function (data) {
-                                                            $('.allert__text').html(data);
-
-                                                            $('.del_all_in_chat').html('ok');
-                                                            $('.alert-confirmation').addClass('show');
-                                                        }
-                                                    })
-                                                })
-                                            </script>
-                                            <li class="border-bottom">
-                                                <a class="mr-3"
-                                                   href="/add/<?php if ($arItem['PROPERTY']['BUY']['VALUE_XML_ID'] == 'true') {
-                                                       echo 'rent';
-                                                   } else {
-                                                       if ($arItem['IBLOCK_ID'] == 2) {
-                                                           echo 'buy';
-                                                       } else {
-                                                           if ($arItem['IBLOCK_ID'] == 1) {
-                                                               echo 'fm';
-                                                           } elseif ($arItem['IBLOCK_ID'] == 3) {
-
-                                                               echo 'auto';
-                                                           } elseif ($arItem['IBLOCK_ID'] == 8) {
-                                                               echo 'scooter';
-                                                           } else {
-                                                               echo 'moto';
-                                                           }
-                                                       }
-                                                   }
-
-                                                    ?>/?ID=<?= $arItem['ID'] ?>&EDIT=Y"><?= Loc::getMessage('UP_EDIT'); ?></a>
-
-                                                <span class="mr-2"><svg width="16" height="16"
-                                                                        viewBox="0 0 16 16" fill="none"
-                                                                        xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M15.4042 3.28224L12.6642 0.542241C12.3066 0.206336 11.838 0.0135995 11.3475 0.000692758C10.8571 -0.012214 10.379 0.15561 10.0042 0.472241L1.0042 9.47224C0.680969 9.79821 0.479707 10.2254 0.434203 10.6822L0.00420295 14.8522C-0.00926809 14.9987 0.00973728 15.1463 0.0598642 15.2846C0.109991 15.4229 0.190005 15.5484 0.294203 15.6522C0.387643 15.7449 0.498459 15.8182 0.620297 15.868C0.742134 15.9178 0.872596 15.943 1.0042 15.9422H1.0942L5.2642 15.5622C5.721 15.5167 6.14824 15.3155 6.4742 14.9922L15.4742 5.99224C15.8235 5.62321 16.0123 5.13075 15.9992 4.62278C15.9861 4.1148 15.7721 3.63275 15.4042 3.28224ZM12.0042 6.62224L9.3242 3.94224L11.2742 1.94224L14.0042 4.67224L12.0042 6.62224Z"
-                                                      fill="#3FC5FF"/>
-                                                </svg>
-                                                </span>
-                                            </li>
-
-                                            <li class="px-3">
-                                                <button id="alertConfirmation<?= $arItem['ID'] ?>"
-                                                        type="button"
-                                                        class="btn p-0 text-secondary">
-                                                    <span class="mr-2"><?= Loc::getMessage('DELETE'); ?></span>
-
-                                                    <i class="mr-2 icon-clear"></i>
-                                                </button>
-                                            </li>
-                                        </ul>
-
-                                        <div id="alert-confirmationIdView<?= $arItem['ID'] ?>"
-                                             class="allert alert-confirmation flex-column card">
-                                            <button type="button" class="close" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-
-                                            <div class="d-flex justify-content-center allert__text">
-                                                <?= Loc::getMessage('CT_BNL_ELEMENT_DELETE_CONFIRM'); ?></div>
-
-
-                                            <div class="d-flex justify-content-center mt-4">
-                                                <button data-item="<?= $arItem['ID'] ?>"
-                                                        id="delItemId<?= $arItem['ID'] ?>"
-                                                        class="btn border-primary text-uppercase font-weight-bold text-primary py-3 px-5">
-                                                    <?= Loc::getMessage('DELETE'); ?></button>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <script>
-                                        $('#alertConfirmation<?=$arItem['ID']?>').on('click', function () {
-                                            $('#alert-confirmationIdView<?=$arItem['ID']?>').addClass('show');
-                                        })
-                                        $('#delItemId<?=$arItem['ID']?>').click(function () {
-                                            $.ajax({
-                                                url: '/ajax/del_item.php',
-                                                method: 'post',
-                                                async: false,
-                                                data: $(this).data(),
-                                                success: function (data) {
-                                                }
-                                            });
-                                            window.location.reload();
-                                        })
-                                    </script>
                                     <?php $APPLICATION->IncludeComponent(
+                                        "webco:buttons",
+                                        "edit",
+                                        array(
+                                            'ITEM_ID' => $arItem['ID'],
+                                            'IBLOCK_ID' => $arItem['IBLOCK_ID'],
+                                            'ITEM_ACTIVE' => $arItem['ACTIVE']
+                                        )
+                                    );
+
+                                    $APPLICATION->IncludeComponent(
                                         "webco:buttons",
                                         "boost",
                                         array(
@@ -528,117 +400,17 @@ $allElements = array_reverse($allElements);
                                 </div>
 
                                 <div class="mb-4 d-flex flex-column flex-lg-row">
-                                    <div class="edit-user-item">
-                                        <button
-                                                id="text-uppercase<?= $arItem['ID'] ?>"
-                                                class="mr-lg-4 mb-3 mb-lg-0 btn user-product__btn-edit text-uppercase">
-                                            <?= Loc::getMessage('UP_EDIT'); ?>
-                                        </button>
-                                        <script>
-                                            $('#text-uppercase<?= $arItem['ID'] ?>').on('click', (e) => {
-                                                e.preventDefault()
-                                                $('#edit-item-menu_item<?= $arItem['ID'] ?>').toggleClass('active')
-                                            })
-                                        </script>
-                                        <ul id="edit-item-menu_item<?= $arItem['ID'] ?>"
-                                            class="flex-column edit-item-menu_item">
-                                            <li class="border-bottom">
-                                                <div class="custom-control custom-switch activateItem">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                           id="activateItem<?= $arItem['ID'] ?>">
-                                                    <label id="activateItemText<?= $arItem['ID'] ?>"
-                                                           data-iblock-id="<?= $arItem['IBLOCK_ID'] ?>"
-                                                           data-item-id="<?= $arItem['ID'] ?>"
-                                                           class="custom-control-label"
-                                                           for="activateItem<?= $arItem['ID'] ?>"><?= Loc::getMessage('DELETE_UN'); ?></label>
-                                                </div>
-                                            </li>
-                                            <script>
-                                                $('#activateItemText<?= $arItem['ID'] ?>').click(function () {
-                                                    var attе = '';
-                                                    if ($('#activateItem<?= $arItem['ID'] ?>').is(':checked')) {
-                                                        var tte = 'green';
-                                                    } else {
-                                                        var tte = 'red';
-                                                    }
-
-                                                    $.ajax({
-                                                        url: '/ajax/active_item.php',
-                                                        method: 'post',
-                                                        async: false,
-                                                        data: {data: $(this).data(), value: tte},
-                                                        success: function (data) {
-                                                            $('.allert__text').html(data);
-
-                                                            $('.del_all_in_chat').html('ok');
-                                                            $('.alert-confirmation').addClass('show');
-                                                        }
-                                                    });
-                                                })
-                                            </script>
-
-
-                                            <li class="border-bottom">
-                                                <a class="mr-3"
-                                                   href="/add/fm/?ID=<?= $arItem['ID'] ?>&EDIT=Y"><?= Loc::getMessage('UP_EDIT'); ?></a>
-
-                                                <span class="mr-2"><svg width="16" height="16"
-                                                                        viewBox="0 0 16 16" fill="none"
-                                                                        xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M15.4042 3.28224L12.6642 0.542241C12.3066 0.206336 11.838 0.0135995 11.3475 0.000692758C10.8571 -0.012214 10.379 0.15561 10.0042 0.472241L1.0042 9.47224C0.680969 9.79821 0.479707 10.2254 0.434203 10.6822L0.00420295 14.8522C-0.00926809 14.9987 0.00973728 15.1463 0.0598642 15.2846C0.109991 15.4229 0.190005 15.5484 0.294203 15.6522C0.387643 15.7449 0.498459 15.8182 0.620297 15.868C0.742134 15.9178 0.872596 15.943 1.0042 15.9422H1.0942L5.2642 15.5622C5.721 15.5167 6.14824 15.3155 6.4742 14.9922L15.4742 5.99224C15.8235 5.62321 16.0123 5.13075 15.9992 4.62278C15.9861 4.1148 15.7721 3.63275 15.4042 3.28224ZM12.0042 6.62224L9.3242 3.94224L11.2742 1.94224L14.0042 4.67224L12.0042 6.62224Z"
-                                                      fill="#3FC5FF"/>
-                                                    </svg>
-                                                </span>
-                                            </li>
-
-                                            <li class="px-3">
-                                                <button id="alertConfirmation<?= $arItem['ID'] ?>"
-                                                        type="button"
-                                                        class="btn p-0 text-secondary">
-                                                    <span class="mr-2"><?= Loc::getMessage('DELETE'); ?></span>
-
-                                                    <i class="mr-2 icon-clear"></i>
-                                                </button>
-                                            </li>
-                                        </ul>
-
-                                        <div id="alert-confirmationIdView<?= $arItem['ID'] ?>"
-                                             class="allert alert-confirmation flex-column card">
-                                            <button type="button" class="close" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-
-                                            <div class="d-flex justify-content-center allert__text">
-                                                <?= Loc::getMessage('CT_BNL_ELEMENT_DELETE_CONFIRM'); ?></div>
-
-
-                                            <div class="d-flex justify-content-center mt-4">
-                                                <button data-item="<?= $arItem['ID'] ?>"
-                                                        id="delItemId<?= $arItem['ID'] ?>"
-                                                        class="btn border-primary text-uppercase font-weight-bold text-primary py-3 px-5">
-                                                    <?= Loc::getMessage('DELETE'); ?></button>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <script>
-                                        $('#alertConfirmation<?=$arItem['ID']?>').on('click', function () {
-                                            $('#alert-confirmationIdView<?=$arItem['ID']?>').addClass('show');
-                                        })
-                                        $('#delItemId<?=$arItem['ID']?>').click(function () {
-                                            $.ajax({
-                                                url: '/ajax/del_item.php',
-                                                method: 'post',
-                                                async: false,
-                                                data: $(this).data(),
-                                                success: function (data) {
-                                                }
-                                            });
-                                            window.location.reload();
-                                        })
-                                    </script>
-
                                     <?php $APPLICATION->IncludeComponent(
+                                        "webco:buttons",
+                                        "edit",
+                                        array(
+                                            'ITEM_ID' => $arItem['ID'],
+                                            'IBLOCK_ID' => $arItem['IBLOCK_ID'],
+                                            'ITEM_ACTIVE' => $arItem['ACTIVE']
+                                        )
+                                    );
+
+                                    $APPLICATION->IncludeComponent(
                                         "webco:buttons",
                                         "boost",
                                         array(
@@ -759,138 +531,17 @@ $allElements = array_reverse($allElements);
                                 </div>
 
                                 <div class="mb-4 d-flex flex-column flex-lg-row">
-                                    <div class="edit-user-item">
-                                        <button
-                                                id="text-uppercase<?= $arItem['ID'] ?>"
-                                                class="mr-lg-4 mb-3 mb-lg-0 btn user-product__btn-edit text-uppercase">
-                                            <?= Loc::getMessage('UP_EDIT'); ?>
-                                        </button>
-                                        <script>
-                                            $('#text-uppercase<?= $arItem['ID'] ?>').on('click', (e) => {
-                                                e.preventDefault()
-                                                $('#edit-item-menu_item<?= $arItem['ID'] ?>').toggleClass('active')
-                                            })
-                                        </script>
-                                        <ul id="edit-item-menu_item<?= $arItem['ID'] ?>"
-                                            class="flex-column edit-item-menu_item">
-                                            <li class="border-bottom">
-                                                <div class="custom-control custom-switch activateItem">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                           id="activateItem<?= $arItem['ID'] ?>">
-                                                    <label id="activateItemText<?= $arItem['ID'] ?>"
-                                                           data-iblock-id="<?= $arItem['IBLOCK_ID'] ?>"
-                                                           data-item-id="<?= $arItem['ID'] ?>"
-                                                           class="custom-control-label"
-                                                           for="activateItem<?= $arItem['ID'] ?>"><?= Loc::getMessage('DELETE_UN'); ?></label>
-                                                </div>
-                                            </li>
-                                            <script>
-                                                $('#activateItemText<?= $arItem['ID'] ?>').click(function () {
-
-                                                    var attе = '';
-                                                    if ($('#activateItem<?= $arItem['ID'] ?>').is(':checked')) {
-                                                        var tte = 'green';
-                                                    } else {
-                                                        var tte = 'red';
-                                                    }
-
-                                                    $.ajax({
-                                                        url: '/ajax/active_item.php',
-                                                        method: 'post',
-                                                        async: false,
-                                                        data: {data: $(this).data(), value: tte},
-                                                        success: function (data) {
-                                                            $('.allert__text').html(data);
-
-                                                            $('.del_all_in_chat').html('ok');
-                                                            $('.alert-confirmation').addClass('show');
-                                                        }
-                                                    });
-
-                                                })
-                                            </script>
-
-
-                                            <li class="border-bottom">
-                                                <a class="mr-3"
-                                                   href="/add/<?php if ($arItem['PROPERTY']['BUY']['VALUE_XML_ID'] == 'true') {
-                                                   echo 'rent';
-                                                   } else {
-                                                   if ($arItem['IBLOCK_ID'] == 2) {
-                                                   echo 'buy';
-                                                   } else {
-                                                   if ($arItem['IBLOCK_ID'] == 1) {
-                                                   echo 'fm';
-                                                   } elseif ($arItem['IBLOCK_ID'] == 3) {
-
-                                                   echo 'auto';
-                                                   } elseif ($arItem['IBLOCK_ID'] == 8) {
-                                                   echo 'scooter';
-                                                   } else {
-                                                   echo 'moto';
-                                                   }
-                                                   }
-                                                   }
-
-                                                    ?>/?ID=<?= $arItem['ID'] ?>&EDIT=Y"><?= Loc::getMessage('UP_EDIT'); ?></a>
-
-                                                <span class="mr-2"><svg width="16" height="16"
-                                                                        viewBox="0 0 16 16" fill="none"
-                                                                        xmlns="http://www.w3.org/2000/svg">
-<path d="M15.4042 3.28224L12.6642 0.542241C12.3066 0.206336 11.838 0.0135995 11.3475 0.000692758C10.8571 -0.012214 10.379 0.15561 10.0042 0.472241L1.0042 9.47224C0.680969 9.79821 0.479707 10.2254 0.434203 10.6822L0.00420295 14.8522C-0.00926809 14.9987 0.00973728 15.1463 0.0598642 15.2846C0.109991 15.4229 0.190005 15.5484 0.294203 15.6522C0.387643 15.7449 0.498459 15.8182 0.620297 15.868C0.742134 15.9178 0.872596 15.943 1.0042 15.9422H1.0942L5.2642 15.5622C5.721 15.5167 6.14824 15.3155 6.4742 14.9922L15.4742 5.99224C15.8235 5.62321 16.0123 5.13075 15.9992 4.62278C15.9861 4.1148 15.7721 3.63275 15.4042 3.28224ZM12.0042 6.62224L9.3242 3.94224L11.2742 1.94224L14.0042 4.67224L12.0042 6.62224Z"
-      fill="#3FC5FF"/>
-</svg>
-</span>
-                                            </li>
-
-                                            <li class="px-3">
-                                                <button id="alertConfirmation<?= $arItem['ID'] ?>"
-                                                        type="button"
-                                                        class="btn p-0 text-secondary">
-                                                    <span class="mr-2"><?= Loc::getMessage('DELETE'); ?></span>
-
-                                                    <i class="mr-2 icon-clear"></i>
-                                                </button>
-                                            </li>
-                                        </ul>
-
-                                        <div id="alert-confirmationIdView<?= $arItem['ID'] ?>"
-                                             class="allert alert-confirmation flex-column card">
-                                            <button type="button" class="close" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-
-                                            <div class="d-flex justify-content-center allert__text">
-                                                <?= Loc::getMessage('CT_BNL_ELEMENT_DELETE_CONFIRM'); ?></div>
-
-
-                                            <div class="d-flex justify-content-center mt-4">
-                                                <button data-item="<?= $arItem['ID'] ?>"
-                                                        id="delItemId<?= $arItem['ID'] ?>"
-                                                        class="btn border-primary text-uppercase font-weight-bold text-primary py-3 px-5">
-                                                    <?= Loc::getMessage('DELETE'); ?></button>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <script>
-                                        $('#alertConfirmation<?=$arItem['ID']?>').on('click', function () {
-                                            $('#alert-confirmationIdView<?=$arItem['ID']?>').addClass('show');
-                                        })
-                                        $('#delItemId<?=$arItem['ID']?>').click(function () {
-                                            $.ajax({
-                                                url: '/ajax/del_item.php',
-                                                method: 'post',
-                                                async: false,
-                                                data: $(this).data(),
-                                                success: function (data) {
-                                                }
-                                            });
-                                            window.location.reload();
-                                        })
-                                    </script>
-
                                     <?php $APPLICATION->IncludeComponent(
+                                        "webco:buttons",
+                                        "edit",
+                                        array(
+                                            'ITEM_ID' => $arItem['ID'],
+                                            'IBLOCK_ID' => $arItem['IBLOCK_ID'],
+                                            'ITEM_ACTIVE' => $arItem['ACTIVE']
+                                        )
+                                    );
+
+                                    $APPLICATION->IncludeComponent(
                                         "webco:buttons",
                                         "boost",
                                         array(
@@ -1011,118 +662,17 @@ $allElements = array_reverse($allElements);
                                 </div>
 
                                 <div class="mb-4 d-flex flex-column flex-lg-row">
-                                    <div class="edit-user-item">
-                                        <button
-                                                id="text-uppercase<?= $arItem['ID'] ?>"
-                                                class="mr-lg-4 mb-3 mb-lg-0 btn user-product__btn-edit text-uppercase">
-                                            <?= Loc::getMessage('UP_EDIT'); ?>
-                                        </button>
-                                        <script>
-                                            $('#text-uppercase<?= $arItem['ID'] ?>').on('click', (e) => {
-                                                e.preventDefault()
-                                                $('#edit-item-menu_item<?= $arItem['ID'] ?>').toggleClass('active')
-                                            })
-                                        </script>
-                                        <ul id="edit-item-menu_item<?= $arItem['ID'] ?>"
-                                            class="flex-column edit-item-menu_item">
-                                            <li class="border-bottom">
-                                                <div class="custom-control custom-switch activateItem">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                           id="activateItem<?= $arItem['ID'] ?>">
-                                                    <label id="activateItemText<?= $arItem['ID'] ?>"
-                                                           data-iblock-id="<?= $arItem['IBLOCK_ID'] ?>"
-                                                           data-item-id="<?= $arItem['ID'] ?>"
-                                                           class="custom-control-label"
-                                                           for="activateItem<?= $arItem['ID'] ?>"><?= Loc::getMessage('DELETE_UN'); ?></label>
-                                                </div>
-                                            </li>
-                                            <script>
-                                                $('#activateItemText<?= $arItem['ID'] ?>').click(function () {
-                                                    var attе = '';
-                                                    if ($('#activateItem<?= $arItem['ID'] ?>').is(':checked')) {
-                                                        var tte = 'green';
-                                                    } else {
-                                                        var tte = 'red';
-                                                    }
-
-                                                    $.ajax({
-                                                        url: '/ajax/active_item.php',
-                                                        method: 'post',
-                                                        async: false,
-                                                        data: {data: $(this).data(), value: tte},
-                                                        success: function (data) {
-                                                            $('.allert__text').html(data);
-
-                                                            $('.del_all_in_chat').html('ok');
-                                                            $('.alert-confirmation').addClass('show');
-                                                        }
-                                                    });
-
-                                                })
-                                            </script>
-
-
-                                            <li class="border-bottom">
-                                                <a class="mr-3"
-                                                   href="/add/auto/?ID=<?= $arItem['ID'] ?>&EDIT=Y"><?= Loc::getMessage('UP_EDIT'); ?></a>
-
-                                                <span class="mr-2"><svg width="16" height="16"
-                                                                        viewBox="0 0 16 16" fill="none"
-                                                                        xmlns="http://www.w3.org/2000/svg">
-<path d="M15.4042 3.28224L12.6642 0.542241C12.3066 0.206336 11.838 0.0135995 11.3475 0.000692758C10.8571 -0.012214 10.379 0.15561 10.0042 0.472241L1.0042 9.47224C0.680969 9.79821 0.479707 10.2254 0.434203 10.6822L0.00420295 14.8522C-0.00926809 14.9987 0.00973728 15.1463 0.0598642 15.2846C0.109991 15.4229 0.190005 15.5484 0.294203 15.6522C0.387643 15.7449 0.498459 15.8182 0.620297 15.868C0.742134 15.9178 0.872596 15.943 1.0042 15.9422H1.0942L5.2642 15.5622C5.721 15.5167 6.14824 15.3155 6.4742 14.9922L15.4742 5.99224C15.8235 5.62321 16.0123 5.13075 15.9992 4.62278C15.9861 4.1148 15.7721 3.63275 15.4042 3.28224ZM12.0042 6.62224L9.3242 3.94224L11.2742 1.94224L14.0042 4.67224L12.0042 6.62224Z"
-      fill="#3FC5FF"/>
-</svg>
-</span>
-                                            </li>
-
-                                            <li class="px-3">
-                                                <button id="alertConfirmation<?= $arItem['ID'] ?>"
-                                                        type="button"
-                                                        class="btn p-0 text-secondary">
-                                                    <span class="mr-2"><?= Loc::getMessage('DELETE'); ?></span>
-
-                                                    <i class="mr-2 icon-clear"></i>
-                                                </button>
-                                            </li>
-                                        </ul>
-
-                                        <div id="alert-confirmationIdView<?= $arItem['ID'] ?>"
-                                             class="allert alert-confirmation flex-column card">
-                                            <button type="button" class="close" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-
-                                            <div class="d-flex justify-content-center allert__text">
-                                                <?= Loc::getMessage('CT_BNL_ELEMENT_DELETE_CONFIRM'); ?></div>
-
-
-                                            <div class="d-flex justify-content-center mt-4">
-                                                <button data-item="<?= $arItem['ID'] ?>"
-                                                        id="delItemId<?= $arItem['ID'] ?>"
-                                                        class="btn border-primary text-uppercase font-weight-bold text-primary py-3 px-5">
-                                                    <?= Loc::getMessage('DELETE'); ?></button>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <script>
-                                        $('#alertConfirmation<?=$arItem['ID']?>').on('click', function () {
-                                            $('#alert-confirmationIdView<?=$arItem['ID']?>').addClass('show');
-                                        })
-                                        $('#delItemId<?=$arItem['ID']?>').click(function () {
-                                            $.ajax({
-                                                url: '/ajax/del_item.php',
-                                                method: 'post',
-                                                async: false,
-                                                data: $(this).data(),
-                                                success: function (data) {
-                                                }
-                                            });
-                                            window.location.reload();
-                                        })
-                                    </script>
-
                                     <?php $APPLICATION->IncludeComponent(
+                                        "webco:buttons",
+                                        "edit",
+                                        array(
+                                            'ITEM_ID' => $arItem['ID'],
+                                            'IBLOCK_ID' => $arItem['IBLOCK_ID'],
+                                            'ITEM_ACTIVE' => $arItem['ACTIVE']
+                                        )
+                                    );
+
+                                    $APPLICATION->IncludeComponent(
                                         "webco:buttons",
                                         "boost",
                                         array(
@@ -1243,119 +793,17 @@ $allElements = array_reverse($allElements);
                                 </div>
 
                                 <div class="mb-4 d-flex flex-column flex-lg-row">
-                                    <div class="edit-user-item">
-                                        <button
-                                                id="text-uppercase<?= $arItem['ID'] ?>"
-                                                class="mr-lg-4 mb-3 mb-lg-0 btn user-product__btn-edit text-uppercase">
-                                            <?= Loc::getMessage('UP_EDIT'); ?>
-                                        </button>
-                                        <script>
-                                            $('#text-uppercase<?= $arItem['ID'] ?>').on('click', (e) => {
-                                                e.preventDefault()
-                                                $('#edit-item-menu_item<?= $arItem['ID'] ?>').toggleClass('active')
-                                            })
-                                        </script>
-                                        <ul id="edit-item-menu_item<?= $arItem['ID'] ?>"
-                                            class="flex-column edit-item-menu_item">
-                                            <li class="border-bottom">
-                                                <div class="custom-control custom-switch activateItem">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                           id="activateItem<?= $arItem['ID'] ?>">
-                                                    <label id="activateItemText<?= $arItem['ID'] ?>"
-                                                           data-iblock-id="<?= $arItem['IBLOCK_ID'] ?>"
-                                                           data-item-id="<?= $arItem['ID'] ?>"
-                                                           class="custom-control-label"
-                                                           for="activateItem<?= $arItem['ID'] ?>"><?= Loc::getMessage('DELETE_UN'); ?></label>
-                                                </div>
-                                            </li>
-                                            <script>
-                                                $('#activateItemText<?= $arItem['ID'] ?>').click(function () {
-
-                                                    var attе = '';
-                                                    if ($('#activateItem<?= $arItem['ID'] ?>').is(':checked')) {
-                                                        var tte = 'green';
-                                                    } else {
-                                                        var tte = 'red';
-                                                    }
-
-                                                    $.ajax({
-                                                        url: '/ajax/active_item.php',
-                                                        method: 'post',
-                                                        async: false,
-                                                        data: {data: $(this).data(), value: tte},
-                                                        success: function (data) {
-                                                            $('.allert__text').html(data);
-
-                                                            $('.del_all_in_chat').html('ok');
-                                                            $('.alert-confirmation').addClass('show');
-                                                        }
-                                                    });
-
-                                                })
-                                            </script>
-
-
-                                            <li class="border-bottom">
-                                                <a class="mr-3"
-                                                   href="/add/moto/?ID=<?= $arItem['ID'] ?>&EDIT=Y"><?= Loc::getMessage('UP_EDIT'); ?></a>
-
-                                                <span class="mr-2"><svg width="16" height="16"
-                                                                        viewBox="0 0 16 16" fill="none"
-                                                                        xmlns="http://www.w3.org/2000/svg">
-<path d="M15.4042 3.28224L12.6642 0.542241C12.3066 0.206336 11.838 0.0135995 11.3475 0.000692758C10.8571 -0.012214 10.379 0.15561 10.0042 0.472241L1.0042 9.47224C0.680969 9.79821 0.479707 10.2254 0.434203 10.6822L0.00420295 14.8522C-0.00926809 14.9987 0.00973728 15.1463 0.0598642 15.2846C0.109991 15.4229 0.190005 15.5484 0.294203 15.6522C0.387643 15.7449 0.498459 15.8182 0.620297 15.868C0.742134 15.9178 0.872596 15.943 1.0042 15.9422H1.0942L5.2642 15.5622C5.721 15.5167 6.14824 15.3155 6.4742 14.9922L15.4742 5.99224C15.8235 5.62321 16.0123 5.13075 15.9992 4.62278C15.9861 4.1148 15.7721 3.63275 15.4042 3.28224ZM12.0042 6.62224L9.3242 3.94224L11.2742 1.94224L14.0042 4.67224L12.0042 6.62224Z"
-      fill="#3FC5FF"/>
-</svg>
-</span>
-                                            </li>
-
-                                            <li class="px-3">
-                                                <button id="alertConfirmation<?= $arItem['ID'] ?>"
-                                                        type="button"
-                                                        class="btn p-0 text-secondary">
-                                                    <span class="mr-2"><?= Loc::getMessage('DELETE'); ?></span>
-
-                                                    <i class="mr-2 icon-clear"></i>
-                                                </button>
-                                            </li>
-                                        </ul>
-
-                                        <div id="alert-confirmationIdView<?= $arItem['ID'] ?>"
-                                             class="allert alert-confirmation flex-column card">
-                                            <button type="button" class="close" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-
-                                            <div class="d-flex justify-content-center allert__text">
-                                                <?= Loc::getMessage('CT_BNL_ELEMENT_DELETE_CONFIRM'); ?></div>
-
-
-                                            <div class="d-flex justify-content-center mt-4">
-                                                <button data-item="<?= $arItem['ID'] ?>"
-                                                        id="delItemId<?= $arItem['ID'] ?>"
-                                                        class="btn border-primary text-uppercase font-weight-bold text-primary py-3 px-5">
-                                                    <?= Loc::getMessage('DELETE'); ?></button>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <script>
-                                        $('#alertConfirmation<?=$arItem['ID']?>').on('click', function () {
-                                            $('#alert-confirmationIdView<?=$arItem['ID']?>').addClass('show');
-                                        })
-                                        $('#delItemId<?=$arItem['ID']?>').click(function () {
-                                            $.ajax({
-                                                url: '/ajax/del_item.php',
-                                                method: 'post',
-                                                async: false,
-                                                data: $(this).data(),
-                                                success: function (data) {
-                                                }
-                                            });
-                                            window.location.reload();
-                                        })
-                                    </script>
-
                                     <?php $APPLICATION->IncludeComponent(
+                                        "webco:buttons",
+                                        "edit",
+                                        array(
+                                            'ITEM_ID' => $arItem['ID'],
+                                            'IBLOCK_ID' => $arItem['IBLOCK_ID'],
+                                            'ITEM_ACTIVE' => $arItem['ACTIVE']
+                                        )
+                                    );
+
+                                    $APPLICATION->IncludeComponent(
                                         "webco:buttons",
                                         "boost",
                                         array(
@@ -1476,119 +924,17 @@ $allElements = array_reverse($allElements);
                                 </div>
 
                                 <div class="mb-4 d-flex flex-column flex-lg-row">
-                                    <div class="edit-user-item">
-                                        <button
-                                                id="text-uppercase<?= $arItem['ID'] ?>"
-                                                class="mr-lg-4 mb-3 mb-lg-0 btn user-product__btn-edit text-uppercase">
-                                            <?= Loc::getMessage('UP_EDIT'); ?>
-                                        </button>
-                                        <script>
-                                            $('#text-uppercase<?= $arItem['ID'] ?>').on('click', (e) => {
-                                                e.preventDefault()
-                                                $('#edit-item-menu_item<?= $arItem['ID'] ?>').toggleClass('active')
-                                            })
-                                        </script>
-                                        <ul id="edit-item-menu_item<?= $arItem['ID'] ?>"
-                                            class="flex-column edit-item-menu_item">
-                                            <li class="border-bottom">
-                                                <div class="custom-control custom-switch activateItem">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                           id="activateItem<?= $arItem['ID'] ?>">
-                                                    <label id="activateItemText<?= $arItem['ID'] ?>"
-                                                           data-iblock-id="<?= $arItem['IBLOCK_ID'] ?>"
-                                                           data-item-id="<?= $arItem['ID'] ?>"
-                                                           class="custom-control-label"
-                                                           for="activateItem<?= $arItem['ID'] ?>"><?= Loc::getMessage('DELETE_UN'); ?></label>
-                                                </div>
-                                            </li>
-                                            <script>
-                                                $('#activateItemText<?= $arItem['ID'] ?>').click(function () {
-
-                                                    var attе = '';
-                                                    if ($('#activateItem<?= $arItem['ID'] ?>').is(':checked')) {
-                                                        var tte = 'green';
-                                                    } else {
-                                                        var tte = 'red';
-                                                    }
-
-                                                    $.ajax({
-                                                        url: '/ajax/active_item.php',
-                                                        method: 'post',
-                                                        async: false,
-                                                        data: {data: $(this).data(), value: tte},
-                                                        success: function (data) {
-                                                            $('.allert__text').html(data);
-
-                                                            $('.del_all_in_chat').html('ok');
-                                                            $('.alert-confirmation').addClass('show');
-                                                        }
-                                                    });
-
-                                                })
-                                            </script>
-
-
-                                            <li class="border-bottom">
-                                                <a class="mr-3"
-                                                   href="/add/scooter/?ID=<?= $arItem['ID'] ?>&EDIT=Y"><?= Loc::getMessage('UP_EDIT'); ?></a>
-
-                                                <span class="mr-2"><svg width="16" height="16"
-                                                                        viewBox="0 0 16 16" fill="none"
-                                                                        xmlns="http://www.w3.org/2000/svg">
-<path d="M15.4042 3.28224L12.6642 0.542241C12.3066 0.206336 11.838 0.0135995 11.3475 0.000692758C10.8571 -0.012214 10.379 0.15561 10.0042 0.472241L1.0042 9.47224C0.680969 9.79821 0.479707 10.2254 0.434203 10.6822L0.00420295 14.8522C-0.00926809 14.9987 0.00973728 15.1463 0.0598642 15.2846C0.109991 15.4229 0.190005 15.5484 0.294203 15.6522C0.387643 15.7449 0.498459 15.8182 0.620297 15.868C0.742134 15.9178 0.872596 15.943 1.0042 15.9422H1.0942L5.2642 15.5622C5.721 15.5167 6.14824 15.3155 6.4742 14.9922L15.4742 5.99224C15.8235 5.62321 16.0123 5.13075 15.9992 4.62278C15.9861 4.1148 15.7721 3.63275 15.4042 3.28224ZM12.0042 6.62224L9.3242 3.94224L11.2742 1.94224L14.0042 4.67224L12.0042 6.62224Z"
-      fill="#3FC5FF"/>
-</svg>
-</span>
-                                            </li>
-
-                                            <li class="px-3">
-                                                <button id="alertConfirmation<?= $arItem['ID'] ?>"
-                                                        type="button"
-                                                        class="btn p-0 text-secondary">
-                                                    <span class="mr-2"><?= Loc::getMessage('DELETE'); ?></span>
-
-                                                    <i class="mr-2 icon-clear"></i>
-                                                </button>
-                                            </li>
-                                        </ul>
-
-                                        <div id="alert-confirmationIdView<?= $arItem['ID'] ?>"
-                                             class="allert alert-confirmation flex-column card">
-                                            <button type="button" class="close" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-
-                                            <div class="d-flex justify-content-center allert__text">
-                                                <?= Loc::getMessage('CT_BNL_ELEMENT_DELETE_CONFIRM'); ?></div>
-
-
-                                            <div class="d-flex justify-content-center mt-4">
-                                                <button data-item="<?= $arItem['ID'] ?>"
-                                                        id="delItemId<?= $arItem['ID'] ?>"
-                                                        class="btn border-primary text-uppercase font-weight-bold text-primary py-3 px-5">
-                                                    <?= Loc::getMessage('DELETE'); ?></button>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <script>
-                                        $('#alertConfirmation<?=$arItem['ID']?>').on('click', function () {
-                                            $('#alert-confirmationIdView<?=$arItem['ID']?>').addClass('show');
-                                        })
-                                        $('#delItemId<?=$arItem['ID']?>').click(function () {
-                                            $.ajax({
-                                                url: '/ajax/del_item.php',
-                                                method: 'post',
-                                                async: false,
-                                                data: $(this).data(),
-                                                success: function (data) {
-                                                }
-                                            });
-                                            window.location.reload();
-                                        })
-                                    </script>
-
                                     <?php $APPLICATION->IncludeComponent(
+                                        "webco:buttons",
+                                        "edit",
+                                        array(
+                                            'ITEM_ID' => $arItem['ID'],
+                                            'IBLOCK_ID' => $arItem['IBLOCK_ID'],
+                                            'ITEM_ACTIVE' => $arItem['ACTIVE']
+                                        )
+                                    );
+
+                                    $APPLICATION->IncludeComponent(
                                         "webco:buttons",
                                         "boost",
                                         array(
@@ -1755,53 +1101,52 @@ $allElements = array_reverse($allElements);
         </div>
     </div>
 </div>
+<script>
+    addEventListener('DOMContentLoaded', () => {
+        const activeAdsTab = document.querySelector('div#tabs .form_radio_btn input#trueAnnouncement');
+        const notActiveAdsTab = document.querySelector('div#tabs .form_radio_btn input#falseAnnouncement');
 
-    <script>
-        addEventListener('DOMContentLoaded', () => {
-            const activeAdsTab = document.querySelector('div#tabs .form_radio_btn input#trueAnnouncement');
-            const notActiveAdsTab = document.querySelector('div#tabs .form_radio_btn input#falseAnnouncement');
-
-            if (notActiveAdsTab && activeAdsTab) {
-                notActiveAdsTab.parentNode.onclick = () => {
-                    const itemsTabId = notActiveAdsTab.value;
-                    const itemsTab = document.querySelector('div#'+itemsTabId);
-                    if (itemsTab) {
-                        if (itemsTab.classList.contains('d-none')) itemsTab.classList.remove('d-none');
-                    }
-
-                    const itemsTabId2 = activeAdsTab.value;
-                    const itemsTab2 = document.querySelector('div#'+itemsTabId2);
-                    if (itemsTab2) {
-                        if (!itemsTab2.classList.contains('d-none')) itemsTab2.classList.add('d-none');
-                    }
+        if (notActiveAdsTab && activeAdsTab) {
+            notActiveAdsTab.parentNode.onclick = () => {
+                const itemsTabId = notActiveAdsTab.value;
+                const itemsTab = document.querySelector('div#'+itemsTabId);
+                if (itemsTab) {
+                    if (itemsTab.classList.contains('d-none')) itemsTab.classList.remove('d-none');
                 }
 
-                activeAdsTab.parentNode.onclick = () => {
-                    const itemsTabId = activeAdsTab.value;
-                    const itemsTab = document.querySelector('div#'+itemsTabId);
-                    if (itemsTab) {
-                        if (itemsTab.classList.contains('d-none')) itemsTab.classList.remove('d-none');
-                    }
-
-                    const itemsTabId2 = notActiveAdsTab.value;
-                    const itemsTab2 = document.querySelector('div#'+itemsTabId2);
-                    if (itemsTab2) {
-                        if (!itemsTab2.classList.contains('d-none')) itemsTab2.classList.add('d-none');
-                    }
+                const itemsTabId2 = activeAdsTab.value;
+                const itemsTab2 = document.querySelector('div#'+itemsTabId2);
+                if (itemsTab2) {
+                    if (!itemsTab2.classList.contains('d-none')) itemsTab2.classList.add('d-none');
                 }
             }
-        });
-    </script>
-    <div class="allert alert-confirmation flex-column card">
-        <button onclick="window.location.reload()" type="button" class="close" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+
+            activeAdsTab.parentNode.onclick = () => {
+                const itemsTabId = activeAdsTab.value;
+                const itemsTab = document.querySelector('div#'+itemsTabId);
+                if (itemsTab) {
+                    if (itemsTab.classList.contains('d-none')) itemsTab.classList.remove('d-none');
+                }
+
+                const itemsTabId2 = notActiveAdsTab.value;
+                const itemsTab2 = document.querySelector('div#'+itemsTabId2);
+                if (itemsTab2) {
+                    if (!itemsTab2.classList.contains('d-none')) itemsTab2.classList.add('d-none');
+                }
+            }
+        }
+    });
+</script>
+<div class="allert alert-confirmation flex-column card">
+    <button onclick="window.location.reload()" type="button" class="close" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="d-flex justify-content-center allert__text"></div>
+    <div class="d-flex justify-content-center mt-4">
+        <button onclick="window.location.reload()"
+                class="btn_confirm btn border-primary text-uppercase font-weight-bold text-primary py-3 px-5">
+            <?=Loc::getMessage('OK_BTN')?>
         </button>
-        <div class="d-flex justify-content-center allert__text"></div>
-        <div class="d-flex justify-content-center mt-4">
-            <button onclick="window.location.reload()"
-                    class="btn_confirm btn border-primary text-uppercase font-weight-bold text-primary py-3 px-5">
-                <?=Loc::getMessage('OK_BTN')?>
-            </button>
-        </div>
     </div>
+</div>
 <?php require ($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php"); ?>

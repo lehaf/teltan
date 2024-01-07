@@ -2,10 +2,10 @@
 
 use Bitrix\Main\Loader;
 
-if (Loader::includeModule("iblock") && Loader::includeModule("highloadblock") && !empty($_REQUEST['item'])) {
+if (Loader::includeModule("iblock") && Loader::includeModule("highloadblock") && !empty($_REQUEST['itemId'])) {
     global $USER;
     // Удаляем объявление из инфоблока а также уменьшаем счетчик созданных объявлений пользователя
-    $itemId = intval($_REQUEST['item']);
+    $itemId = intval($_REQUEST['itemId']);
     $item = \Bitrix\Iblock\ElementTable::getList(array(
         'select' => array('ID', 'IBLOCK_ID'),
         'filter' => array('ID' => $itemId),

@@ -77,16 +77,20 @@ class BoostBtn extends \CBitrixComponent
     {
         if (!empty($this->arParams['ITEM_ID'])) $this->arResult['ITEM_ID'] = $this->arParams['ITEM_ID'];
         if (!empty($this->arParams['IBLOCK_ID'])) $this->arResult['IBLOCK_ID'] = $this->arParams['IBLOCK_ID'];
+        if (!empty($this->arParams['ITEM_ACTIVE'])) $this->arResult['ITEM_ACTIVE'] = $this->arParams['ITEM_ACTIVE'];
 
-        foreach ($this->services as $serviceType => $service) {
-            $info = getHLData($service['HL_BLOCK_ID']);
-            if ($serviceType === 'SET') $this->setColorName($info);
-            $this->arResult['BOOST'][$serviceType] = [
-                'ICON' => $service['ICON'],
-                'INCLUDE_PATH' => $service['INCLUDE_PATH'],
-                'INFO' => $info
-            ];
+        if ($this->getTemplateName() === 'boost') {
+            foreach ($this->services as $serviceType => $service) {
+                $info = getHLData($service['HL_BLOCK_ID']);
+                if ($serviceType === 'SET') $this->setColorName($info);
+                $this->arResult['BOOST'][$serviceType] = [
+                    'ICON' => $service['ICON'],
+                    'INCLUDE_PATH' => $service['INCLUDE_PATH'],
+                    'INFO' => $info
+                ];
+            }
         }
+
     }
 
     public function prepareResult() : void
