@@ -7626,9 +7626,9 @@ tbody tr:nth-child(even) {
   .footer__social svg {
     width: 30px;
     height: 30px; }
-  .footer__logo .image svg {
-    width: 30px;
-    height: 30px; }
+  .footer__logo .image img {
+    max-width: 130px;
+    max-height: 100px; }
 
 .form-control-select {
   display: flex;
@@ -8071,92 +8071,6 @@ tbody tr:nth-child(even) {
   transform: rotate(90deg);
   position: relative;
   top: 2px; }
-
-#category-one {
-  background-image: url(../assets/main-page-menu/img_01.png);
-  background-color: #857c8a;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center left;
-  background-position-x: 100px; }
-
-#category-two {
-  background-image: url("../assets/main-page-menu/img_02.png");
-  background-color: #928159;
-  background-repeat: no-repeat;
-  background-position-y: -39px;
-  background-position-x: 102px; }
-
-#category-three {
-  background-image: url("../assets/main-page-menu/img_03.png");
-  background-color: #7e86ad;
-  background-repeat: no-repeat;
-  background-position-y: -5px;
-  background-position-x: 140px; }
-
-#category-four {
-  background-image: url("../assets/main-page-menu/img_04.png");
-  background-color: #7f8a7c;
-  background-repeat: no-repeat;
-  background-position-y: -20px;
-  background-position-x: 40px; }
-
-#category-five {
-  background-image: url("../assets/main-page-menu/img_05.png");
-  background-color: #729462;
-  background-repeat: no-repeat;
-  background-position-y: -175px;
-  background-position-x: 34px; }
-
-#category-six {
-  background-image: url("../assets/main-page-menu/img_06.png");
-  background-color: #6d8c96;
-  background-repeat: no-repeat;
-  background-position-y: -45px;
-  background-position-x: 90px; }
-
-#category-seven {
-  background-image: url("../assets/main-page-menu/img_07.png");
-  background-color: #6d7b85;
-  background-repeat: no-repeat;
-  background-position-y: -45px;
-  background-position-x: 100px; }
-
-#category-eight {
-  background-image: url("../assets/main-page-menu/img_08.png");
-  background-color: #857c8a;
-  background-repeat: no-repeat;
-  background-position-y: -25px;
-  background-position-x: 70px; }
-
-#category-nine {
-  background-image: url("../assets/main-page-menu/img_09.png");
-  background-color: #975252;
-  background-repeat: no-repeat;
-  background-position-y: -18px;
-  background-position-x: 105px; }
-
-#category-ten {
-  background-image: url("../assets/main-page-menu/img_10.png");
-  background-color: #a87b5b;
-  background-repeat: no-repeat;
-  background-position-y: -15px;
-  background-position-x: 20px; }
-
-#category-eleven {
-  background-image: url("../assets/main-page-menu/img_11.png");
-  background-color: #7f8a7c;
-  background-repeat: no-repeat;
-  background-position-y: -115px;
-  background-position-x: 90px; }
-
-#category-twelve {
-  background-image: url(../assets/main-page-menu/img_12.png);
-  background-color: #a6696f;
-  background-repeat: no-repeat;
-  background-position-y: -25px;
-  background-position-x: 88px;
-  background-size: cover; }
 
 #carouselExampleInterval .carousel-item {
   max-height: 380px;
@@ -13648,13 +13562,8 @@ div[data-filter=unActiveAnnouncement] .product-card.product-line.user-product .r
 
 .dropdown:after {
   position: absolute;
-  content: url("../assets/img/arrow-down.svg");
   right: 30px;
   top: 17px;
-}
-
-.dropdown.active:after {
-  content: url("../assets/img/arrow-up.svg");
 }
 
 

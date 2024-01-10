@@ -55,9 +55,9 @@ Loc::loadMessages(__FILE__);
                      bis_size="{&quot;x&quot;:18,&quot;y&quot;:287,&quot;w&quot;:426,&quot;h&quot;:50,&quot;abs_x&quot;:468,&quot;abs_y&quot;:777}">
                     <div class="mr-4 footer__social"
                          bis_size="{&quot;x&quot;:18,&quot;y&quot;:287,&quot;w&quot;:426,&quot;h&quot;:50,&quot;abs_x&quot;:468,&quot;abs_y&quot;:777}">
-                        <?php if ($BXK_OPTIONS['URL_FACEBOOK']) { ?> <a class="mr-2"
-                                                                        href="<?= $BXK_OPTIONS['URL_FACEBOOK']; ?>"
-                                                                        bis_size="{&quot;x&quot;:133,&quot;y&quot;:294,&quot;w&quot;:193,&quot;h&quot;:17,&quot;abs_x&quot;:583,&quot;abs_y&quot;:784}">
+                        <?php if ($BXK_OPTIONS['URL_FACEBOOK']) { ?>
+                            <a class="mr-2" href="<?= $BXK_OPTIONS['URL_FACEBOOK']; ?>"
+                               bis_size="{&quot;x&quot;:133,&quot;y&quot;:294,&quot;w&quot;:193,&quot;h&quot;:17,&quot;abs_x&quot;:583,&quot;abs_y&quot;:784}">
                             <style>.cls-1 {
                                     fill: #1877f2;
                                 }
@@ -76,14 +76,11 @@ Loc::loadMessages(__FILE__);
                                 bis_size="{&quot;x&quot;:133,&quot;y&quot;:319,&quot;w&quot;:0,&quot;h&quot;:17,&quot;abs_x&quot;:583,&quot;abs_y&quot;:809}"> </a>
                         <?php } ?>
                     </div>
-                    <div class="footer__logo"
-                         bis_size="{&quot;x&quot;:18,&quot;y&quot;:337,&quot;w&quot;:426,&quot;h&quot;:0,&quot;abs_x&quot;:468,&quot;abs_y&quot;:827}">
-                        <a href="<?= $GLOBALS['arSetting'][SITE_ID]['href']; ?>"
-                           bis_size="{&quot;x&quot;:18,&quot;y&quot;:337,&quot;w&quot;:0,&quot;h&quot;:0,&quot;abs_x&quot;:468,&quot;abs_y&quot;:827}">
-                            <span class="image"
-                                  bis_size="{&quot;x&quot;:18,&quot;y&quot;:337,&quot;w&quot;:0,&quot;h&quot;:0,&quot;abs_x&quot;:468,&quot;abs_y&quot;:827}"> </span>
-                            <span class="text"
-                                  bis_size="{&quot;x&quot;:18,&quot;y&quot;:337,&quot;w&quot;:0,&quot;h&quot;:0,&quot;abs_x&quot;:468,&quot;abs_y&quot;:827}"> </span>
+                    <div class="footer__logo">
+                        <a <?=CSite::InDir('/index.php') ? '' : 'href="/"';?>>
+                            <span class="image">
+                                <img src="<?=SITE_TEMPLATE_PATH?>/assets/img/logo-footer.png">
+                            </span>
                         </a>
                     </div>
                 </div>
