@@ -122,22 +122,42 @@ $arLink = CIBlockSectionPropertyLink::GetArray(AUTO_IBLOCK_ID, 80);
 
                                     <div class="row row-cols-3 row-cols-lg-5 step-one__icons-line">
                                         <div class="col order-1 order-lg-1">
-                                            <span class="icon"><img src="../../img/auto1.png" alt=""></span>
+                                            <span class="icon">
+                                                <img src="<?=SITE_TEMPLATE_PATH?>/assets/img/front-photo.png"
+                                                     alt="front-photo"
+                                                     title="front-photo"
+                                                >
+                                            </span>
                                             <p class="mb-0"><?= Loc::getMessage('Front'); ?></p>
                                         </div>
 
                                         <div class="col order-2 order-lg-1">
-                                            <span class="icon"><img src="../../img/auto2.png" alt=""></span>
+                                            <span class="icon">
+                                                <img src="<?=SITE_TEMPLATE_PATH?>/assets/img/back-photo.png"
+                                                     alt="back-photo"
+                                                     title="back-photo"
+                                                >
+                                            </span>
                                             <p class="mb-0"><?= Loc::getMessage('Back'); ?> </p>
                                         </div>
 
                                         <div class="col-6 col-sm order-4 order-lg-1">
-                                            <span class="icon"><img src="../../img/auto3.png" alt=""></span>
+                                            <span class="icon">
+                                                <img src="<?=SITE_TEMPLATE_PATH?>/assets/img/left-side-photo.png"
+                                                     alt="left-side-photo"
+                                                     title="left-side-photo"
+                                                >
+                                            </span>
                                             <p class="mb-0"><?= Loc::getMessage('Side view'); ?></p>
                                         </div>
 
                                         <div class="col-6 col-sm order-5 order-lg-1">
-                                            <span class="icon"><img src="../../img/auto4.png" alt=""></span>
+                                            <span class="icon">
+                                                <img src="<?=SITE_TEMPLATE_PATH?>/assets/img/right-side-photo.png"
+                                                     alt="right-side-photo"
+                                                     title="right-side-photo"
+                                                >
+                                            </span>
                                             <p class="mb-0"><?= Loc::getMessage('Side view'); ?></p>
                                         </div>
 
