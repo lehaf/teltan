@@ -2986,4 +2986,4 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/slick.js');
             </div>
         </div>
     </div>
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/local/templates/teltan/map_detail.php';
+<?php require_once $_SERVER['DOCUMENT_ROOT'].SITE_TEMPLATE_PATH.'/includes/map/map_detail.php';

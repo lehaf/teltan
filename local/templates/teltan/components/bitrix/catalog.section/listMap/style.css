@@ -1,3 +1,7 @@
 .empty-ads {
     padding-left: 35px;
 }
+
+body .product-card.product-line.product-line-vip .content-block .location {
+    display: block;
+}

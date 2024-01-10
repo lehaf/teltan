@@ -15,6 +15,6 @@ $APPLICATION->IncludeComponent(
 );
 
 global $mapArray;
-require_once $_SERVER["DOCUMENT_ROOT"].'/local/templates/teltan/map.php';
+require_once $_SERVER["DOCUMENT_ROOT"].SITE_TEMPLATE_PATH.'/includes/map/add_ads_map.php';
 
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");

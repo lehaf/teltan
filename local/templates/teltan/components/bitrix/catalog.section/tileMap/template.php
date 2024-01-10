@@ -266,4 +266,4 @@ $mapArrayVip = [
     <?php endif;?>
 </div>
 
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH .'/map3.php';?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH .'/includes/map/big_map.php';?>
