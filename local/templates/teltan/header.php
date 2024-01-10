@@ -110,39 +110,31 @@ else
                             <i class="icon-user-1 mr-2"></i>
                             <span><?=Loc::getMessage('YOU_AD');?></span>
                         </a>
-                        <div class="d-none d-lg-flex align-items-center fleamarket-link">
-                            <a class="font-weight-bold d-flex align-items-center" href="/flea/">
-                                <span class="mt-1 mr-2 ml-2"><?=Loc::getMessage('FLEA_MARKET');?></span>
-                                <i class="icon-free"></i>
-                            </a>
-                            <div class="fleamarket">
-                                <?php $APPLICATION->IncludeComponent(
-                                    "bitrix:catalog.section.list",
-                                    "flea_menu",
-                                    Array(
-                                        "ADD_SECTIONS_CHAIN" => "N",
-                                        "CACHE_FILTER" => "N",
-                                        "CACHE_GROUPS" => "N",
-                                        "CACHE_TIME" => "36000000",
-                                        "CACHE_TYPE" => "A",
-                                        "COUNT_ELEMENTS" => "Y",
-                                        "COUNT_ELEMENTS_FILTER" => "CNT_ACTIVE",
-                                        "FILTER_NAME" => "sectionsFilter",
-                                        "IBLOCK_ID" => "1",
-                                        "IBLOCK_TYPE" => "announcements",
-                                        "SECTION_CODE" => "",
+                        <?php $APPLICATION->IncludeComponent(
+                            "bitrix:catalog.section.list",
+                            "flea_menu",
+                            Array(
+                                "ADD_SECTIONS_CHAIN" => "N",
+                                "CACHE_FILTER" => "N",
+                                "CACHE_GROUPS" => "N",
+                                "CACHE_TIME" => "36000000",
+                                "CACHE_TYPE" => "A",
+                                "COUNT_ELEMENTS" => "Y",
+                                "COUNT_ELEMENTS_FILTER" => "CNT_ACTIVE",
+                                "FILTER_NAME" => "sectionsFilter",
+                                "IBLOCK_ID" => "1",
+                                "IBLOCK_TYPE" => "announcements",
+                                "SECTION_CODE" => "",
 
-                                        "SECTION_USER_FIELDS" => array("UF_NAME_EN", "UF_SVG_ICON_URL","UF_NAME_HEB", "UF_FON", 'UF_ICON'),
-                                        "SECTION_ID" => $_REQUEST["SECTION_ID"],
-                                        "SECTION_URL" => "",
+                                "SECTION_USER_FIELDS" => array("UF_NAME_EN", "UF_SVG_ICON_URL","UF_NAME_HEB", "UF_FON", 'UF_ICON'),
+                                "SECTION_ID" => $_REQUEST["SECTION_ID"],
+                                "SECTION_URL" => "",
 
-                                        "SHOW_PARENT_NAME" => "Y",
-                                        "TOP_DEPTH" => "2",
-                                        "VIEW_MODE" => "LINE"
-                                    )
-                                );?>
-                            </div>
-                        </div>
+                                "SHOW_PARENT_NAME" => "Y",
+                                "TOP_DEPTH" => "2",
+                                "VIEW_MODE" => "LINE"
+                            )
+                        );?>
                         <div class="d-none d-lg-flex align-items-center fleamarket-link">
                             <a class="font-weight-bold d-flex align-items-center" href="/property/zhilaya/snyat-j/">
                                 <span class="mt-1 mr-2 ml-2"><?=Loc::getMessage('PROPERTY');?></span>
