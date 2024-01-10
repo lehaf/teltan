@@ -173,7 +173,7 @@ $this->setFrameMode(true);
                             <span class="date-registration">Registered: <?=$arResult['USER']['DATE_REGISTER'];?></span>
                         </div>
                         <div class="seller-card__photo">
-                            <img src="<?=SITE_TEMPLATE_PATH;?>/img/seller-photo.png" alt="">
+                            <img src="<?=SITE_TEMPLATE_PATH;?>/assets/img/seller-photo.png" alt="">
                         </div>
                     </div>
 
