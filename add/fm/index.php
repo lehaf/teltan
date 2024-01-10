@@ -103,7 +103,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray(SIMPLE_ADS_IBLOCK_ID, $_GET['ids'
                 <h2 class="mb-4 d-flex justify-content-center align-items-center section-title"> <?= Loc::getMessage('Description'); ?></h2>
                 <? $APPLICATION->IncludeComponent(
                     "bitrix:catalog.section.list",
-                    "sections_menu_add",
+                    "flea_add",
                     array(
                         "ADD_SECTIONS_CHAIN" => "N",
                         "CACHE_FILTER" => "N",

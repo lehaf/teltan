@@ -48,14 +48,14 @@ else
 
     <?php $APPLICATION->IncludeComponent(
         "bitrix:catalog.section.list",
-        "mobile_sections",
+        "mobile",
         Array(
             "ADD_SECTIONS_CHAIN" => "N",
             "CACHE_FILTER" => "N",
             "CACHE_GROUPS" => "N",
             "CACHE_TIME" => "36000000",
             "CACHE_TYPE" => "A",
-            "COUNT_ELEMENTS" => "N",
+            "COUNT_ELEMENTS" => "Y",
             "COUNT_ELEMENTS_FILTER" => "CNT_ACTIVE",
             "FILTER_NAME" => "sectionsFilter",
             "IBLOCK_ID" => "1",
@@ -118,14 +118,14 @@ else
                             <div class="fleamarket">
                                 <?php $APPLICATION->IncludeComponent(
                                     "bitrix:catalog.section.list",
-                                    "sections_menu",
+                                    "flea_menu",
                                     Array(
                                         "ADD_SECTIONS_CHAIN" => "N",
                                         "CACHE_FILTER" => "N",
                                         "CACHE_GROUPS" => "N",
                                         "CACHE_TIME" => "36000000",
                                         "CACHE_TYPE" => "A",
-                                        "COUNT_ELEMENTS" => "N",
+                                        "COUNT_ELEMENTS" => "Y",
                                         "COUNT_ELEMENTS_FILTER" => "CNT_ACTIVE",
                                         "FILTER_NAME" => "sectionsFilter",
                                         "IBLOCK_ID" => "1",

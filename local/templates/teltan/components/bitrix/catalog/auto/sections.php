@@ -31,7 +31,7 @@ $sectionHasAds = isExistActiveElements($arParams['IBLOCK_ID']);
         <div id="target_container"  class="col col-lg-9">
             <?php $APPLICATION->IncludeComponent(
                 "bitrix:catalog.section.list",
-                "sections_brand_auto",
+                "auto",
                 array(
                     "ADD_SECTIONS_CHAIN" => "N",
                     "CACHE_FILTER" => "N",
