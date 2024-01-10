@@ -1,3 +1,7 @@
 .empty-ads {
     padding-left: 35px;
 }
+
+div.product-card div.image-block {
+    padding: 0;
+}

@@ -98,7 +98,6 @@ $mapArrayVip = [
                                               </g>
                                             </svg>
                                         </p>
-                                        <a href="<?=$arItem['DETAIL_PAGE_URL']?>" class="mb-2 mb-lg-4 category"><?=mb_strimwidth($arItem['PREVIEW_TEXT'], 0, 300, " ...");?></a>
                                     </div>
                                     <div class="border-top py-2 d-flex justify-content-between align-items-center text-nowrap product-line__data-viwe">
                                         <div class="d-flex">
