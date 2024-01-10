@@ -219,7 +219,7 @@ else
                 <div class="col-6 col-xl-2 order-2 order-xl-3">
                     <a <?=CSite::InDir('/index.php') ? '' : 'href="/"';?> class="ml-auto d-flex justify-content-end logo">
                         <div class="mr-2 mr-lg-2 logo__image">
-                            <img src="<?=SITE_TEMPLATE_PATH?>/img/png-03.png" />
+                            <img src="<?=SITE_TEMPLATE_PATH?>/assets/img/logo.png" />
                             <!--
                             <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <rect width="44" height="44" fill="url(#pattern0)"/>
