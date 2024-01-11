@@ -6,25 +6,18 @@
 
 use Bitrix\Main\Localization\Loc;
 
-$mapArray = [
-    "type" => "FeatureCollection",
-    'features' => $arResult['MARKS']['features']
-];
-
-
-$mapArrayVip = [
-    "type" => "FeatureCollection",
-    'features' => $arResult['VIP_MARKS']['features']
-];
-
+$this->addExternalJs(SITE_TEMPLATE_PATH.'/js/map/big_map.js');
 ?>
-<div class="cord-container" id="target_container">
+<div class="cord-container" id="target_container" data-map-marks='<?=$arResult['MAP']?>'>
     <?php if (!empty($arResult['ITEMS'])):?>
         <?php foreach ($arResult['ITEMS'] as $adsType => $items):?>
             <div class="row row-cols-1 <?=$adsType === 'VIP_ITEMS' ? 'row-cols-lg-1' : ''?>">
                 <?php
                 $count = 0;
                 foreach ($items as $arItem):
+                    $this->AddEditAction($arItem['ID'], $arItem['EDIT_LINK'], $arItem["EDIT_LINK_TEXT"]);
+                    $this->AddDeleteAction($arItem['ID'], $arItem['DELETE_LINK'], $arItem["DELETE_LINK_TEXT"], array("CONFIRM" => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM')));
+
                     $strDate = getStringDate($arItem['DATE_CREATE']);
                     $color = '';
                     $vip = '';
@@ -33,7 +26,7 @@ $mapArrayVip = [
                     if (!empty($arItem['PROPERTIES']['VIP_DATE']['VALUE']) && strtotime($arItem['PROPERTIES']['VIP_DATE']['VALUE']) > time())
                         $vip = 'product-line-vip';
                     ?>
-                        <div class="mb-3 col 1">
+                        <div class="mb-3 col 1" id="<?=$this->GetEditAreaID($arItem['ID'])?>">
                             <?php $count++ ?>
                             <div class="card product-card product-line <?=!empty($vip) ? $vip : ''?>"
                                  <?php if (!empty($color)):?>style="background-color: <?=$color?>"<?php endif;?>>
@@ -141,4 +134,3 @@ $mapArrayVip = [
         <div class="empty-ads"><?=Loc::getMessage('EMPTY_ITEMS')?></div>
     <?php endif; ?>
 </div>
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH .'/includes/map/big_map.php';?>

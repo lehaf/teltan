@@ -6,19 +6,9 @@
 
 use Bitrix\Main\Localization\Loc;
 
-$mapArray = [
-    "type" => "FeatureCollection",
-    'features' => $arResult['MARKS']['features']
-];
-
-
-$mapArrayVip = [
-    "type" => "FeatureCollection",
-    'features' => $arResult['VIP_MARKS']['features']
-];
-
+$this->addExternalJs(SITE_TEMPLATE_PATH.'/js/map/big_map.js');
 ?>
-<div class="cord-container" id="target_container">
+<div class="cord-container" id="target_container" data-map-marks='<?=$arResult['MAP']?>'>
     <?php if(!empty($arResult['ITEMS'])):
         $arNotVip = [];
         $count = 0;
@@ -30,6 +20,8 @@ $mapArrayVip = [
         }
 
         foreach($arResult['VIPS'] as $arItem){
+            $this->AddEditAction($arItem['ID'], $arItem['EDIT_LINK'], $arItem["EDIT_LINK_TEXT"]);
+            $this->AddDeleteAction($arItem['ID'], $arItem['DELETE_LINK'], $arItem["DELETE_LINK_TEXT"], array("CONFIRM" => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM')));
 
             $color = '';
             $vip = '';
@@ -44,7 +36,7 @@ $mapArrayVip = [
             <?php if($vip != ''){?>
                 <div class="row row-cols-1 <?php if($count == 0){?> databefore<?php
                 }?>">
-                    <div class="mb-3 col ">
+                    <div class="mb-3 col" id="<?=$this->GetEditAreaID($arItem['ID'])?>">
                         <?php $count++?>
                         <div class="card product-card product-line <?=$vip;?>"
                              style="background-color: <?=$color;?>"
@@ -166,12 +158,15 @@ $mapArrayVip = [
             <?php
             $countNotVip = 0;
             foreach($arResult['ITEMS'] as $arItem) {
+                $this->AddEditAction($arItem['ID'], $arItem['EDIT_LINK'], $arItem["EDIT_LINK_TEXT"]);
+                $this->AddDeleteAction($arItem['ID'], $arItem['DELETE_LINK'], $arItem["DELETE_LINK_TEXT"], array("CONFIRM" => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM')));
+
                 $color = '';
                 if($arItem['PROPERTIES']['COLOR_DATE']['VALUE'] && strtotime($arItem['PROPERTIES']['COLOR_DATE']['VALUE']) > time()) {
                     $color = '#FFF5D9';
                 }
                 ?>
-                <div class="mb-4 col<?php if($count <1 and $countNotVip < 1){?> databefore<?php }?>">
+                <div class="mb-4 col<?php if($count <1 and $countNotVip < 1){?> databefore<?php }?>" id="<?=$this->GetEditAreaID($arItem['ID'])?>">
                     <?php $countNotVip++?>
                     <div class="card product-card" style="background-color: <?=$color;?>">
                         <div class="image-block">
@@ -264,5 +259,3 @@ $mapArrayVip = [
         <div class="empty-ads"><?=Loc::getMessage('EMPTY_ITEMS')?>המדור ריק</div>
     <?php endif;?>
 </div>
-
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH .'/includes/map/big_map.php';?>

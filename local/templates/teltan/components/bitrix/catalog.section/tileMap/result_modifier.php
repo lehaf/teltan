@@ -24,9 +24,10 @@ $ads = $propertyClass::getList(array(
     ]
 ))->fetchCollection();
 
+$mapMarks = [];
 foreach ($ads as $addProperty) {
     $mapLatlnt = !empty($addProperty->getMapLatlng()) ? json_decode($addProperty->getMapLatlng()->getValue(), true) : [];
-    $price = !empty($addProperty->getPrice()) ? '₪ ' . $addProperty->getPrice()->getValue() : '';
+    $price = !empty($addProperty->getPrice()) && $addProperty->getPrice()->getValue() != 0 ? '₪ ' . $addProperty->getPrice()->getValue() : '';
     $previewImg = CFile::GetPath($addProperty->getPreviewPicture());
     $detailPageRaw = $addProperty->getIblock()->getDetailPageUrl();
     $detailPageUrl = CIBlock::ReplaceDetailUrl(
@@ -40,52 +41,29 @@ foreach ($ads as $addProperty) {
         'E'
     );
 
-
-    if ($addProperty->getVipDate() && strtotime($addProperty->getVipDate()->getValue()) > time()) {
-        $arResult['VIP_MARKS']['features'][] = [
-            'type' => 'Feature',
-            'properties' => [
-                'href' => $detailPageUrl,
-                'image' => $previewImg ?? '/no-image.svg',
-                'title' => $addProperty->getName(),
-                'price' => $price,
-                'addres' => $addProperty->getName(),
-                'category' => $arParams['SECTION_NAME'],
-                'views' => $addProperty->getShowCounter(),
-                'date' => $addProperty->getDateCreate(),
-                'isVipCard' => true,
-            ],
-            'geometry' => [
-                'type' => 'Point',
-                'coordinates' =>
-                    [
-                        !empty($mapLatlnt['lng']) ? $mapLatlnt['lng'] : $mapLatlnt[0],
-                        !empty($mapLatlnt['lat']) ? $mapLatlnt['lat'] : $mapLatlnt[1]
-                    ]
-            ]
-        ];
-    } else {
-        $arResult['MARKS']['features'][] = [
-            'type' => 'Feature',
-            'properties' => [
-                'href' => $detailPageUrl,
-                'image' => $previewImg ?? '/no-image.svg',
-                'title' => $addProperty->getName(),
-                'price' => $price,
-                'addres' => $addProperty->getName(),
-                'category' => $arParams['SECTION_NAME'],
-                'views' => $addProperty->getShowCounter(),
-                'date' => $addProperty->getDateCreate(),
-                'isVipCard' => false,
-            ],
-            'geometry' => [
-                'type' => 'Point',
-                'coordinates' =>
-                    [
-                        !empty($mapLatlnt['lng']) ? $mapLatlnt['lng'] : $mapLatlnt[0],
-                        !empty($mapLatlnt['lat']) ? $mapLatlnt['lat'] : $mapLatlnt[1]
-                    ]
-            ]
-        ];
-    }
+    // Собираем все метки
+    $mapMarks[] = [
+        'type' => 'Feature',
+        'properties' => [
+            'href' => $detailPageUrl,
+            'image' => $previewImg ?? '/no-image.svg',
+            'title' => $addProperty->getName(),
+            'price' => $price,
+            'addres' => $addProperty->getName(),
+            'category' => $arParams['SECTION_NAME'],
+            'views' => $addProperty->getShowCounter(),
+            'date' => $addProperty->getDateCreate(),
+            'isVip' => $addProperty->getVipDate() && strtotime($addProperty->getVipDate()->getValue()) > time() ? true : false,
+        ],
+        'geometry' => [
+            'type' => 'Point',
+            'coordinates' =>
+                [
+                    !empty($mapLatlnt['lng']) ? $mapLatlnt['lng'] : $mapLatlnt[0],
+                    !empty($mapLatlnt['lat']) ? $mapLatlnt['lat'] : $mapLatlnt[1]
+                ]
+        ]
+    ];
 }
+
+if (!empty($mapMarks)) $arResult['MAP'] = json_encode($mapMarks);
