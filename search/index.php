@@ -79,47 +79,46 @@ $searchRes = $APPLICATION->IncludeComponent(
 	</h1>
     <?php if ($request->get('isAjax') === 'y') $APPLICATION->RestartBuffer()?>
     <div id="target_container">
-    <?php if (!empty($searchRes)):?>
-        <div class="mb-5 row d-flex align-items-center">
-            <?php $APPLICATION->IncludeComponent(
-                "webco:sort.panel",
-                "",
-                array(
-                    'SORTS' => [
-                        [
-                            'NAME' => 'Price: Low to High',
-                            'SORT' => 'property_PRICE',
-                            'ORDER' => 'ASC'
-                        ],
-                        [
-                            'NAME' => 'Price: High to Low',
-                            'SORT' => 'property_PRICE',
-                            'ORDER' => 'DESC'
-                        ],
-                        [
-                            'NAME' => 'Date: Low to High',
-                            'SORT' => 'property_TIME_RAISE',
-                            'ORDER' => 'ASC'
-                        ],
-                        [
-                            'NAME' => 'Date: High to Low',
-                            'SORT' => 'property_TIME_RAISE',
-                            'ORDER' => 'DESC'
-                        ]
+    <div class="mb-5 row d-flex align-items-center">
+        <?php $APPLICATION->IncludeComponent(
+            "webco:sort.panel",
+            "",
+            array(
+                'ELEMENTS_EXIST' => !empty($searchRes),
+                'SORTS' => [
+                    [
+                        'NAME' => 'Price: Low to High',
+                        'SORT' => 'property_PRICE',
+                        'ORDER' => 'ASC'
                     ],
-                    'VIEWS' => [
-                        'list' => [
-                            'CLASS' => 'icon-sirting_line'
-                        ],
-                        'tile' => [
-                            'CLASS' => 'icon-sirting_block'
-                        ],
+                    [
+                        'NAME' => 'Price: High to Low',
+                        'SORT' => 'property_PRICE',
+                        'ORDER' => 'DESC'
+                    ],
+                    [
+                        'NAME' => 'Date: Low to High',
+                        'SORT' => 'property_TIME_RAISE',
+                        'ORDER' => 'ASC'
+                    ],
+                    [
+                        'NAME' => 'Date: High to Low',
+                        'SORT' => 'property_TIME_RAISE',
+                        'ORDER' => 'DESC'
                     ]
-                )
-            );?>
-        </div>
-    <?php endif;
-
+                ],
+                'VIEWS' => [
+                    'list' => [
+                        'CLASS' => 'icon-sirting_line'
+                    ],
+                    'tile' => [
+                        'CLASS' => 'icon-sirting_block'
+                    ],
+                ]
+            )
+        );?>
+    </div>
+    <?php
     $session = \Bitrix\Main\Application::getInstance()->getSession();
     $APPLICATION->IncludeComponent(
         "webco:search.ads.list",

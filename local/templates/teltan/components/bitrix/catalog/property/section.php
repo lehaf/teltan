@@ -391,47 +391,46 @@ $sectionName = $langId === false ? $curSection['NAME'] : $curSection['UF_NAME_'.
                 <?php if ($request->get('isAjax') === 'y') $APPLICATION->RestartBuffer()?>
                 <div id="target_container" class="col d-flex flex-column">
                     <?php $APPLICATION->ShowViewContent('map_points');?>
-                    <?php if ($sectionHasAds):?>
-                        <div class="mb-5 row d-flex align-items-center">
-                            <?php $APPLICATION->ShowViewContent('upper_nav');?>
-                            <?php $APPLICATION->IncludeComponent(
-                                "webco:sort.panel",
-                                "",
-                                array(
-                                    'SORTS' => [
-                                        [
-                                            'NAME' => 'Price: Low to High',
-                                            'SORT' => 'property_PRICE',
-                                            'ORDER' => 'ASC'
-                                        ],
-                                        [
-                                            'NAME' => 'Price: High to Low',
-                                            'SORT' => 'property_PRICE',
-                                            'ORDER' => 'DESC'
-                                        ],
-                                        [
-                                            'NAME' => 'Date: Low to High',
-                                            'SORT' => 'property_TIME_RAISE',
-                                            'ORDER' => 'ASC'
-                                        ],
-                                        [
-                                            'NAME' => 'Date: High to Low',
-                                            'SORT' => 'property_TIME_RAISE',
-                                            'ORDER' => 'DESC'
-                                        ]
+                    <div class="mb-5 row d-flex align-items-center">
+                        <?php $APPLICATION->ShowViewContent('upper_nav');?>
+                        <?php $APPLICATION->IncludeComponent(
+                            "webco:sort.panel",
+                            "",
+                            array(
+                                'ELEMENTS_EXIST' => $sectionHasAds,
+                                'SORTS' => [
+                                    [
+                                        'NAME' => 'Price: Low to High',
+                                        'SORT' => 'property_PRICE',
+                                        'ORDER' => 'ASC'
                                     ],
-                                    'VIEWS' => [
-                                        'list' => [
-                                            'CLASS' => 'icon-sirting_line'
-                                        ],
-                                        'tile' => [
-                                            'CLASS' => 'icon-sirting_block'
-                                        ],
+                                    [
+                                        'NAME' => 'Price: High to Low',
+                                        'SORT' => 'property_PRICE',
+                                        'ORDER' => 'DESC'
+                                    ],
+                                    [
+                                        'NAME' => 'Date: Low to High',
+                                        'SORT' => 'property_TIME_RAISE',
+                                        'ORDER' => 'ASC'
+                                    ],
+                                    [
+                                        'NAME' => 'Date: High to Low',
+                                        'SORT' => 'property_TIME_RAISE',
+                                        'ORDER' => 'DESC'
                                     ]
-                                )
-                            );?>
-                        </div>
-                    <?php endif;?>
+                                ],
+                                'VIEWS' => [
+                                    'list' => [
+                                        'CLASS' => 'icon-sirting_line'
+                                    ],
+                                    'tile' => [
+                                        'CLASS' => 'icon-sirting_block'
+                                    ],
+                                ]
+                            )
+                        );?>
+                    </div>
                     <?php
                     $APPLICATION->IncludeComponent(
                         "bitrix:catalog.section",

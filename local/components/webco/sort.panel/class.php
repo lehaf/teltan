@@ -68,7 +68,7 @@ class SortPanel extends \CBitrixComponent
     public function executeComponent()
     {
         $this->prepareResult();
-        $this->includeComponentTemplate();
+        if (!empty($this->arParams['ELEMENTS_EXIST'])) $this->includeComponentTemplate();
 
     }
 }
