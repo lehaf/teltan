@@ -111,7 +111,7 @@ if (!empty($arResult['ITEMS'])) {
                     'href' => $item['DETAIL_PAGE_URL'],
                     'image' => $item['MAP_IMG']['src'],
                     'title' => $item['NAME'],
-                    'price' => PROPERTY_CURRENCY_SYMBOL.' '.$item['PROPERTIES']['PRICE']['VALUE'],
+                    'price' => !empty($item['PROPERTIES']['PRICE']['VALUE']) ? PROPERTY_CURRENCY_SYMBOL.' '.$item['PROPERTIES']['PRICE']['VALUE'] : '',
                     'addres' => $item['NAME'],
                     'category' => $nameSection,
                     'views' => $item['SHOW_COUNTER'],
