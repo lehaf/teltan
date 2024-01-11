@@ -1,94 +1,24 @@
-$(document).ready(function () {
-    function filterItems() {
+window.mapInit = function ()
+{
+    mapboxgl.accessToken = 'pk.eyJ1Ijoicm9vdHRlc3QxMjMiLCJhIjoiY2w0ZHppeGJzMDczZDNndGc2eWR0M2R5aSJ9.wz6xj8AGc7s6Ivd09tOZrA';
+    let mapCoordinate = [34.886226654052734, 31.95340028021316]; //default coordinate map
 
-        $(this).trigger('click')
-        let url = 'view=maplist&set_filter=y';
-        let dataInputs = {};
-        $('#mainFiltersRent').find('input').each(function (index) {
-            if ($(this).is(':checkbox')) {
-                if ($(this).is(':checked')) {
-                    let data = $(this).data();
-                    if (data.controlId !== undefined) {
-                        if (data.htmlValue.length > 0) {
-                            url = url + '&' + data.controlId + '=' + data.htmlValue;
-                            dataInputs[data.controlId] = data.htmlValue;
-                        }
-                    }
-                }
-            } else {
-                if ($(this).is(':text')) {
-                    let data = $(this).data();
-                    let val = $(this).val();
-                    if (data.controlId !== undefined) {
-                        if (val.length > 0) {
-                            url = url + '&' + data.controlId + '=' + val;
-                            dataInputs[data.controlId] = val;
-                        }
-                    }
-                } else {
-                    let data = $(this).data();
-                    let val = $(this).val();
-                    if (val !== '') {
-                        if (data.controlId !== undefined) {
-                            if (val.length > 0) {
-                                url = url + '&' + data.controlId + '=' + val;
-                                dataInputs[data.controlId] = val;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        if (Object.keys(dataInputs).length > 0) {
-            $('.preloader').addClass('preloader-visible');
-            $.ajax({
-                type: "POST",
-                dataType: "html",
-                data: dataInputs,
-                headers: {"X-Requested-With": "XMLHttpRequest"},
-                url: location.pathname + '?' + url,
-                success: function (data) {
-                    $('#target_container').replaceWith($(data).find('#target_container'));
-                    history.pushState({}, "", location.origin + location.pathname + '?' + url);
-                    $('.preloader').removeClass('preloader-visible');
-                }
-            });
-        }
-    }
+    const jsonMarks = document.querySelector('div.property-map').getAttribute('data-map-marks');
+    const marks = JSON.parse(jsonMarks);
 
     if ($('#map').length > 0) {
-
-        mapboxgl.accessToken = 'pk.eyJ1Ijoicm9vdHRlc3QxMjMiLCJhIjoiY2w0ZHppeGJzMDczZDNndGc2eWR0M2R5aSJ9.wz6xj8AGc7s6Ivd09tOZrA';
-        const mapCoordinate = [34.886226654052734, 31.95340028021316] //default coordinate map
-
+        
         const map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/roottest123/cl6erwd1b000w14papxnk52l0',
             center: mapCoordinate,
-            zoom: 6
-        });
-
-        const popup = new mapboxgl.Popup({
-            closeButton: false, // отображать ли кнопку закрытия попапа
-            closeOnClick: true // Закрытие при клике на карту
+            zoom: 4
         });
 
         let hoveredStateId = null;
-        let hoveredStateId1 = null;
-        let hoveredStateId2 = null;
-        let hoveredStateId3 = null;
-        let hoveredStateId5 = null;
-        let hoveredStateId6 = null;
-        let hoveredStateId7 = null;
-        let hoveredStateId8 = null;
-
-        const jsonMarks = document.querySelector('div#target_container').getAttribute('data-map-marks');
-        const marks = JSON.parse(jsonMarks);
 
         map.on('load', () => {
 
-            // Добавляем обычные метки на карту
             map.addSource('earthquakes', {
                 type: 'geojson',
                 data: {
@@ -97,55 +27,68 @@ $(document).ready(function () {
                 },
                 generateId: true, // автоматическая генерация id
                 cluster: true,
-                clusterMaxZoom: 10, // Max zoom to cluster points on
-                clusterRadius: 38 // Radius of each cluster when clustering points (defaults to 50)
+                clusterMaxZoom: 10, // Max zoom to cluster point on
+                clusterRadius: 38 // Radius of each cluster when clustering point (defaults to 50)
             });
-
-            // Добавляем раены всех областей на карту
+            
             map.addSource('2_source', {
+                //  buffer: 0,
                 type: 'vector',
                 url: 'mapbox://roottest123.cl4dzsogf01p420r1z1eexmd8-190dy',
+                //   generateId: true,
                 promoteId: {"abu_gosh": "MUN_ENG"}
             });
 
-            // Добавляем раены
             map.addSource('1_source-1', {
+                //  buffer: 0,
                 type: 'vector',
                 url: 'mapbox://roottest123.cl6esciyp056n27n7bt6oa5lu-5jj6n',
+                //   generateId: true,
                 promoteId: {"1": "MUN_HE"}
             });
 
             map.addSource('1_source-2', {
+                //  buffer: 0,
                 type: 'vector',
                 url: 'mapbox://roottest123.cl6gf5h6f04ui21lfk89oqcs8-5f9io',
+                //   generateId: true,
                 promoteId: {"2": "MUN_HE"}
             });
 
             map.addSource('1_source-3', {
+                //  buffer: 0,
                 type: 'vector',
                 url: 'mapbox://roottest123.cl6lxgu4a0giv28lso1jlwefx-75mpl',
+                //   generateId: true,
                 promoteId: {"3": "MUN_HE"}
             });
 
             map.addSource('1_source-4', {
+                //  buffer: 0,
                 type: 'vector',
                 url: 'mapbox://roottest123.cl6ly3jvs028d20plraodyris-13vuw',
+                //   generateId: true,
                 promoteId: {"44": "MUN_HE"}
             });
 
             map.addSource('1_source-5', {
+                //  buffer: 0,
                 type: 'vector',
                 url: 'mapbox://roottest123.cl6pkuxw201py2pp621m2p2r0-8xh1n',
+                //   generateId: true,
                 promoteId: {"5": "MUN_HE"}
             });
 
             map.addSource('1_source-6', {
+                //  buffer: 0,
                 type: 'vector',
                 url: 'mapbox://roottest123.cl6m08odf06n220nuyymbcj0w-986xe',
+                //   generateId: true,
                 promoteId: {"6": "MUN_HE"}
             });
 
             map.addSource('1_source-7', {
+                //  buffer: 0,
                 type: 'vector',
                 url: 'mapbox://roottest123.cl6pmgk0l02412pp66ucshjvm-4kgrk',
                 generateId: true,
@@ -153,9 +96,11 @@ $(document).ready(function () {
             });
 
             map.addSource('1_source-8', {
+                //  buffer: 0,
                 type: 'vector',
                 url: 'mapbox://roottest123.cl6pmqqmx01tt2jnsplwbhegs-7sgyg',
                 generateId: true,
+
             });
 
             map.addLayer({
@@ -182,20 +127,20 @@ $(document).ready(function () {
             });
 
             map.on('mousemove', '1-level-area8', (e) => {
-                let features = map.queryRenderedFeatures(e.point);
+                const features = map.queryRenderedFeatures(e.point);
 
                 if (features[0].layer.id === "1-level-area8") {
                     if (features.length > 0) {
-                        if (hoveredStateId8 !== null) {
+                        if (hoveredStateId !== null) {
                             map.setFeatureState(
-                                {source: '1_source-8', sourceLayer: '8', id: hoveredStateId8},
+                                {source: '1_source-8', sourceLayer: '8', id: hoveredStateId},
                                 {hover: false}
                             );
                         }
 
-                        hoveredStateId8 = features[0].id;
+                        hoveredStateId = features[0].id;
                         map.setFeatureState(
-                            {source: '1_source-8', sourceLayer: '8', id: hoveredStateId8},
+                            {source: '1_source-8', sourceLayer: '8', id: hoveredStateId},
                             {hover: true}
                         );
                     }
@@ -203,32 +148,18 @@ $(document).ready(function () {
             });
 
             map.on('mouseleave', '1-level-area8', () => {
-
-                map.setFeatureState(
-                    {source: '1_source-8', sourceLayer: '8', id: hoveredStateId8},
-                    {hover: false}
-                );
-
-                let hoveredStateId8 = null;
+                if (hoveredStateId !== null) {
+                    map.setFeatureState(
+                        {source: '1_source-8', sourceLayer: '8', id: hoveredStateId},
+                        {hover: false}
+                    );
+                }
+                hoveredStateId = null;
             });
 
             map.on('click', '1-level-area8', (e) => {
-                map.flyTo({center: {lat: 30.792293462499828, lng: 34.88696429992865}, zoom: 8});
-                let features = map.queryRenderedFeatures(e.point);
-                let disctricts = $('.dropdown-building-area2').find('input');
-                disctricts.each(function () {
-                    $(this).attr("checked", false);
-                });
-                let elems = $('.dropdown-building-area1').find('input');
-                elems.each(function (index) {
-                    let data = $(this).data()
-                    if (data.valued === features[0]['properties']['MUN_HE']) {
-                        $(this).attr("checked", true);
-                    } else {
-                        $(this).attr("checked", false);
-                    }
-                });
-                filterItems();
+
+                map.flyTo({center: e.features[0].geometry.coordinates[0][0], zoom: 10});
             });
 
             map.addLayer({
@@ -255,20 +186,20 @@ $(document).ready(function () {
             });
 
             map.on('mousemove', '1-level-area7', (e) => {
-                let features = map.queryRenderedFeatures(e.point);
+                const features = map.queryRenderedFeatures(e.point);
 
                 if (features[0].layer.id === "1-level-area7") {
                     if (features.length > 0) {
-                        if (hoveredStateId7 !== null) {
+                        if (hoveredStateId !== null) {
                             map.setFeatureState(
-                                {source: '1_source-7', sourceLayer: '7', id: hoveredStateId7},
+                                {source: '1_source-7', sourceLayer: '7', id: hoveredStateId},
                                 {hover: false}
                             );
                         }
 
-                        hoveredStateId7 = features[0].id;
+                        hoveredStateId = features[0].id;
                         map.setFeatureState(
-                            {source: '1_source-7', sourceLayer: '7', id: hoveredStateId7},
+                            {source: '1_source-7', sourceLayer: '7', id: hoveredStateId},
                             {hover: true}
                         );
                     }
@@ -276,30 +207,17 @@ $(document).ready(function () {
             });
 
             map.on('mouseleave', '1-level-area7', () => {
-                map.setFeatureState(
-                    {source: '1_source-7', sourceLayer: '7', id: hoveredStateId7},
-                    {hover: false}
-                );
-                hoveredStateId7 = null;
+                if (hoveredStateId !== null) {
+                    map.setFeatureState(
+                        {source: '1_source-7', sourceLayer: '7', id: hoveredStateId},
+                        {hover: false}
+                    );
+                }
+                hoveredStateId = null;
             });
 
             map.on('click', '1-level-area7', (e) => {
-                map.flyTo({center: {lng: 34.68506737325703, lat: 31.616011520099917}, zoom: 8});
-                let features = map.queryRenderedFeatures(e.point);
-                let disctricts = $('.dropdown-building-area2').find('input');
-                disctricts.each(function () {
-                    $(this).attr("checked", false);
-                });
-                let elems = $('.dropdown-building-area1').find('input');
-                elems.each(function (index) {
-                    let data = $(this).data()
-                    if (data.valued === features[0]['properties']['MUN_HE']) {
-                        $(this).attr("checked", true);
-                    } else {
-                        $(this).attr("checked", false);
-                    }
-                });
-                filterItems();
+                map.flyTo({center: e.features[0].geometry.coordinates[0][0], zoom: 10});
             });
 
             map.addLayer({
@@ -326,19 +244,20 @@ $(document).ready(function () {
             });
 
             map.on('mousemove', '1-level-area6', (e) => {
-                let features = map.queryRenderedFeatures(e.point);
+                const features = map.queryRenderedFeatures(e.point);
+
                 if (features[0].layer.id === "1-level-area6") {
                     if (features.length > 0) {
-                        if (hoveredStateId6 !== null) {
+                        if (hoveredStateId !== null) {
                             map.setFeatureState(
-                                {source: '1_source-6', sourceLayer: '6', id: hoveredStateId6},
+                                {source: '1_source-6', sourceLayer: '6', id: hoveredStateId},
                                 {hover: false}
                             );
                         }
 
-                        hoveredStateId6 = features[0].id;
+                        hoveredStateId = features[0].id;
                         map.setFeatureState(
-                            {source: '1_source-6', sourceLayer: '6', id: hoveredStateId6},
+                            {source: '1_source-6', sourceLayer: '6', id: hoveredStateId},
                             {hover: true}
                         );
                     }
@@ -346,32 +265,17 @@ $(document).ready(function () {
             });
 
             map.on('mouseleave', '1-level-area6', () => {
-
-                map.setFeatureState(
-                    {source: '1_source-6', sourceLayer: '6', id: hoveredStateId6},
-                    {hover: false}
-                );
-
-                hoveredStateId6 = null;
+                if (hoveredStateId !== null) {
+                    map.setFeatureState(
+                        {source: '1_source-6', sourceLayer: '6', id: hoveredStateId},
+                        {hover: false}
+                    );
+                }
+                hoveredStateId = null;
             });
 
             map.on('click', '1-level-area6', (e) => {
-                map.flyTo({center: {lng: 34.98752305903815, lat: 31.6928666963656}, zoom: 8});
-                let features = map.queryRenderedFeatures(e.point);
-                let disctricts = $('.dropdown-building-area2').find('input');
-                disctricts.each(function () {
-                    $(this).attr("checked", false);
-                });
-                let elems = $('.dropdown-building-area1').find('input');
-                elems.each(function (index) {
-                    let data = $(this).data()
-                    if (data.valued === features[0]['properties']['MUN_HE']) {
-                        $(this).attr("checked", true);
-                    } else {
-                        $(this).attr("checked", false);
-                    }
-                });
-                filterItems();
+                map.flyTo({center: e.features[0].geometry.coordinates[0][0], zoom: 10});
             });
 
             map.addLayer({
@@ -396,21 +300,21 @@ $(document).ready(function () {
                     ]
                 }
             });
-            map.on('mousemove', '1-level-area5', (e) => {
-                let features = map.queryRenderedFeatures(e.point);
 
+            map.on('mousemove', '1-level-area5', (e) => {
+                const features = map.queryRenderedFeatures(e.point);
                 if (features[0].layer.id === "1-level-area5") {
                     if (features.length > 0) {
-                        if (hoveredStateId5 !== null) {
+                        if (hoveredStateId !== null) {
                             map.setFeatureState(
-                                {source: '1_source-5', sourceLayer: '5', id: hoveredStateId5},
+                                {source: '1_source-5', sourceLayer: '5', id: hoveredStateId},
                                 {hover: false}
                             );
                         }
 
-                        hoveredStateId5 = features[0].id;
+                        hoveredStateId = features[0].id;
                         map.setFeatureState(
-                            {source: '1_source-5', sourceLayer: '5', id: hoveredStateId5},
+                            {source: '1_source-5', sourceLayer: '5', id: hoveredStateId},
                             {hover: true}
                         );
                     }
@@ -418,32 +322,18 @@ $(document).ready(function () {
             });
 
             map.on('mouseleave', '1-level-area5', () => {
-
-                map.setFeatureState(
-                    {source: '1_source-5', sourceLayer: '5', id: hoveredStateId5},
-                    {hover: false}
-                );
-
-                hoveredStateId5 = null;
+                if (hoveredStateId !== null) {
+                    map.setFeatureState(
+                        {source: '1_source-5', sourceLayer: '5', id: hoveredStateId},
+                        {hover: false}
+                    );
+                }
+                hoveredStateId = null;
             });
 
             map.on('click', '1-level-area5', (e) => {
-                map.flyTo({center: {lng: 34.903915804879404, lat: 32.05794313480354}, zoom: 8});
-                let features = map.queryRenderedFeatures(e.point);
-                let disctricts = $('.dropdown-building-area2').find('input');
-                disctricts.each(function () {
-                    $(this).attr("checked", false);
-                });
-                let elems = $('.dropdown-building-area1').find('input');
-                elems.each(function (index) {
-                    let data = $(this).data()
-                    if (data.valued === features[0]['properties']['MUN_HE']) {
-                        $(this).attr("checked", true);
-                    } else {
-                        $(this).attr("checked", false);
-                    }
-                });
-                filterItems();
+
+                map.flyTo({center: e.features[0].geometry.coordinates[0][0], zoom: 10});
             });
 
             map.addLayer({
@@ -468,20 +358,22 @@ $(document).ready(function () {
                     ]
                 }
             });
+
             map.on('mousemove', '1-level-area3', (e) => {
-                let features = map.queryRenderedFeatures(e.point);
+                const features = map.queryRenderedFeatures(e.point);
+
                 if (features[0].layer.id === "1-level-area3") {
                     if (features.length > 0) {
-                        if (hoveredStateId3 !== null) {
+                        if (hoveredStateId !== null) {
                             map.setFeatureState(
-                                {source: '1_source-3', sourceLayer: '3', id: hoveredStateId3},
+                                {source: '1_source-3', sourceLayer: '3', id: hoveredStateId},
                                 {hover: false}
                             );
                         }
 
-                        hoveredStateId3 = features[0].id;
+                        hoveredStateId = features[0].id;
                         map.setFeatureState(
-                            {source: '1_source-3', sourceLayer: '3', id: hoveredStateId3},
+                            {source: '1_source-3', sourceLayer: '3', id: hoveredStateId},
                             {hover: true}
                         );
                     }
@@ -489,32 +381,18 @@ $(document).ready(function () {
             });
 
             map.on('mouseleave', '1-level-area3', () => {
-
-                map.setFeatureState(
-                    {source: '1_source-3', sourceLayer: '3', id: hoveredStateId3},
-                    {hover: false}
-                );
-
-                hoveredStateId3 = null;
+                if (hoveredStateId !== null) {
+                    map.setFeatureState(
+                        {source: '1_source-3', sourceLayer: '3', id: hoveredStateId},
+                        {hover: false}
+                    );
+                }
+                hoveredStateId = null;
             });
 
             map.on('click', '1-level-area3', (e) => {
-                map.flyTo({center: {lng: 35.346581583016246, lat: 31.954594298007592}, zoom: 8});
-                let features = map.queryRenderedFeatures(e.point);
-                let disctricts = $('.dropdown-building-area2').find('input');
-                disctricts.each(function () {
-                    $(this).attr("checked", false);
-                });
-                let elems = $('.dropdown-building-area1').find('input');
-                elems.each(function (index) {
-                    let data = $(this).data()
-                    if (data.valued === features[0]['properties']['MUN_HE']) {
-                        $(this).attr("checked", true);
-                    } else {
-                        $(this).attr("checked", false);
-                    }
-                });
-                filterItems();
+
+                map.flyTo({center: e.features[0].geometry.coordinates[0][0], zoom: 10});
             });
 
             map.addLayer({
@@ -539,21 +417,22 @@ $(document).ready(function () {
                     ]
                 }
             });
+
             map.on('mousemove', '1-level-area2', (e) => {
-                let features = map.queryRenderedFeatures(e.point);
+                const features = map.queryRenderedFeatures(e.point);
 
                 if (features[0].layer.id === "1-level-area2") {
                     if (features.length > 0) {
-                        if (hoveredStateId2 !== null) {
+                        if (hoveredStateId !== null) {
                             map.setFeatureState(
-                                {source: '1_source-2', sourceLayer: '2', id: hoveredStateId2},
+                                {source: '1_source-2', sourceLayer: '2', id: hoveredStateId},
                                 {hover: false}
                             );
                         }
 
-                        hoveredStateId2 = features[0].id;
+                        hoveredStateId = features[0].id;
                         map.setFeatureState(
-                            {source: '1_source-2', sourceLayer: '2', id: hoveredStateId2},
+                            {source: '1_source-2', sourceLayer: '2', id: hoveredStateId},
                             {hover: true}
                         );
                     }
@@ -561,32 +440,17 @@ $(document).ready(function () {
             });
 
             map.on('mouseleave', '1-level-area2', () => {
-
-                map.setFeatureState(
-                    {source: '1_source-2', sourceLayer: '2', id: hoveredStateId2},
-                    {hover: false}
-                );
-
-                hoveredStateId2 = null;
+                if (hoveredStateId !== null) {
+                    map.setFeatureState(
+                        {source: '1_source-2', sourceLayer: '2', id: hoveredStateId},
+                        {hover: false}
+                    );
+                }
+                hoveredStateId = null;
             });
 
             map.on('click', '1-level-area2', (e) => {
-                map.flyTo({center: {lng: 35.24984065244277, lat: 32.59322837411284}, zoom: 8});
-                let features = map.queryRenderedFeatures(e.point);
-                let disctricts = $('.dropdown-building-area2').find('input');
-                disctricts.each(function () {
-                    $(this).attr("checked", false);
-                });
-                let elems = $('.dropdown-building-area1').find('input');
-                elems.each(function (index) {
-                    let data = $(this).data()
-                    if (data.valued === features[0]['properties']['MUN_HE']) {
-                        $(this).attr("checked", true);
-                    } else {
-                        $(this).attr("checked", false);
-                    }
-                });
-                filterItems();
+                map.flyTo({center: e.features[0].geometry.coordinates[0][0], zoom: 10});
             });
 
             map.addLayer({
@@ -611,21 +475,22 @@ $(document).ready(function () {
                     ]
                 }
             });
+
             map.on('mousemove', '1-level-area1', (e) => {
-                let features = map.queryRenderedFeatures(e.point);
+                const features = map.queryRenderedFeatures(e.point);
 
                 if (features[0].layer.id === "1-level-area1") {
                     if (features.length > 0) {
-                        if (hoveredStateId1 !== null) {
+                        if (hoveredStateId !== null) {
                             map.setFeatureState(
-                                {source: '1_source-1', sourceLayer: '1', id: hoveredStateId1},
+                                {source: '1_source-1', sourceLayer: '1', id: hoveredStateId},
                                 {hover: false}
                             );
                         }
 
-                        hoveredStateId1 = features[0].id;
+                        hoveredStateId = features[0].id;
                         map.setFeatureState(
-                            {source: '1_source-1', sourceLayer: '1', id: hoveredStateId1},
+                            {source: '1_source-1', sourceLayer: '1', id: hoveredStateId},
                             {hover: true}
                         );
                     }
@@ -633,27 +498,17 @@ $(document).ready(function () {
             });
 
             map.on('mouseleave', '1-level-area1', () => {
-                map.setFeatureState({source: '1_source-1', sourceLayer: '1', id: hoveredStateId1}, {hover: false});
-                hoveredStateId1 = null;
+                if (hoveredStateId !== null) {
+                    map.setFeatureState(
+                        {source: '1_source-1', sourceLayer: '1', id: hoveredStateId},
+                        {hover: false}
+                    );
+                }
+                hoveredStateId = null;
             });
 
             map.on('click', '1-level-area1', (e) => {
-                map.flyTo({center: {lng: 35.4259031056865, lat: 32.90573889477902}, zoom: 8});
-                let features = map.queryRenderedFeatures(e.point);
-                let disctricts = $('.dropdown-building-area2').find('input');
-                disctricts.each(function () {
-                    $(this).attr("checked", false);
-                });
-                let regions = $('.dropdown-building-area1').find('input');
-                regions.each(function () {
-                    let data = $(this).data();
-                    if (data.valued === features[0]['properties']['MUN_HE']) {
-                        $(this).attr("checked", true);
-                    } else {
-                        $(this).attr("checked", false);
-                    }
-                });
-                filterItems();
+                map.flyTo({center: e.features[0].geometry.coordinates[0][0], zoom: 10});
             });
 
             map.addLayer({
@@ -680,7 +535,8 @@ $(document).ready(function () {
             });
 
             map.on('mousemove', 'earthquakess-layer', (e) => {
-                let features = map.queryRenderedFeatures(e.point);
+                const features = map.queryRenderedFeatures(e.point);
+
                 if (features[0].layer.id === "earthquakess-layer") {
                     if (features.length > 0) {
                         if (hoveredStateId !== null) {
@@ -710,38 +566,13 @@ $(document).ready(function () {
             });
 
             map.on('click', 'earthquakess-layer', (e) => {
-                const district = e.features[0];
-                let districts = $('.dropdown-building-area2').find('input');
-                let regions = $('.dropdown-building-area1').find('input');
-                regions.each(function () {
-                    $(this).attr("checked", false);
-                });
-                let needAjax = false;
-                districts.each(function () {
-                    let data = $(this).data();
-                    if (data.valued === district['properties']['MUN_HEB']) {
-                        $(this).attr("checked", true);
-                        needAjax = true;
-                    } else {
-                        $(this).attr("checked", false);
-                    }
-                });
-
-                if (needAjax === true) {
-                    filterItems();
-                } else {
-                    document.querySelector('div#target_container').innerHTML = `
-                            <div class="empty-ads">В данной области нет объявлений!</div>
-                        `;
-                }
-
                 map.setFeatureState(
                     {source: '2_source', sourceLayer: 'abu_gosh', id: hoveredStateId},
                     {select: true}
                 );
+                map.flyTo({center: e.features[0].geometry.coordinates[0][0], zoom: 12});
             })
 
-            // Слой кластера
             map.addLayer({
                 id: 'clusters',
                 type: 'circle',
@@ -757,7 +588,6 @@ $(document).ready(function () {
                 }
             });
 
-            // Слой кол-ва точек в кластере
             map.addLayer({
                 id: 'cluster-count',
                 type: 'symbol',
@@ -770,7 +600,6 @@ $(document).ready(function () {
                 }
             });
 
-            // Слой отображения меток на карте
             map.addLayer({
                 id: 'point',
                 type: 'circle',
@@ -799,12 +628,10 @@ $(document).ready(function () {
 
             // inspect a cluster on click
             map.on('click', 'clusters', (e) => {
-                let features = map.queryRenderedFeatures(e.point, {
+                const features = map.queryRenderedFeatures(e.point, {
                     layers: ['clusters']
                 });
-
                 const clusterId = features[0].properties.cluster_id;
-
                 map.getSource('earthquakes').getClusterExpansionZoom(
                     clusterId,
                     (err, zoom) => {
@@ -818,6 +645,17 @@ $(document).ready(function () {
                 );
             });
 
+            // When a click event occurs on a feature in
+            // the point layer, open a popup at
+            // the location of the feature, with
+            // description HTML from its properties.
+            map.on('mouseenter', 'point', (e) => {
+                const coordinates = e.features[0].geometry.coordinates.slice();
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+            });
+
             map.on('mouseenter', 'clusters', () => {
                 map.getCanvas().style.cursor = 'pointer';
             });
@@ -826,23 +664,20 @@ $(document).ready(function () {
                 map.getCanvas().style.cursor = '';
             });
 
-
-            map.on('mouseenter', 'point', (e) => {
-                const coordinates = e.features[0].geometry.coordinates;
-                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                }
-                clearMapItemPLace();
-            });
-
             map.on('mouseenter', 'point', () => {
                 map.getCanvas().style.cursor = 'pointer';
             });
 
             map.on('mouseleave', 'point', () => {
                 map.getCanvas().style.cursor = '';
-                clearMapItemPLace();
             });
+            
+            const popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick: true
+            });
+
+
             // Клик на метку
             map.on('click', 'point', (e) => {
                 if (e.features.length > 0) {
@@ -920,21 +755,12 @@ $(document).ready(function () {
                     }
                 }
             });
-        });
 
-        const geocoder = new MapboxGeocoder({
-            mapboxgl: mapboxgl,
-            language: 'he-HE',
-            accessToken: mapboxgl.accessToken,
-            marker: false
-        })
-        map.addControl(geocoder)
+        });
     }
 
+}
 
-    const clearMapItemPLace = () => $('div.databeforeinsert').remove();
-
+$(document).ready(function () {
+    window.mapInit();
 });
-
-
-

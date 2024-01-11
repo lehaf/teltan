@@ -9,24 +9,27 @@ use Bitrix\Main\Localization\Loc;
 
 $dir = $APPLICATION->GetCurDir();
 $dirName = str_replace('/', '', $dir); // PHP код
+
+// LazyLoad
 $itemCounter = 0;
 $pixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
-
-$mapArray = $arResult['MAP_ARRAY'];
-$mapArrayVip = $arResult['MAP_ARRAY_VIP'];
-
 $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
+
+// propertyMap
+if ($arParams['CATEGORY'] === PROPERTY_ADS_TYPE_CODE) {
+    $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/map/map_property_section.js');
+    $this->addExternalCss(SITE_TEMPLATE_PATH.'/css/map_vip_marker.css');
+}
 ?>
 <?// карта для раздела PROPERTY?>
-<?php if (!empty($arResult['MAP_ARRAY']) || !empty($arResult['MAP_ARRAY_VIP'])):?>
+<?php if (!empty($arResult['MAP'])):?>
     <?php $this->SetViewTarget('map_points');?>
-    <div class="property-map">
+    <div class="property-map" data-map-marks='<?=$arResult['MAP']?>'>
         <div id="map" style="width: 100%; height: 100%"></div>
         <button onclick="window.location.href ='?view=maplist'" class="show-all-items">
             <a href="?view=maplist"><?=Loc::getMessage('map')?></a>
         </button>
     </div>
-    <?php require_once $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . '/includes/map/map_property_section.php'; ?>
     <?php $this->EndViewTarget();?>
 <?php endif;?>
 <?php $this->SetViewTarget('upper_nav');?>

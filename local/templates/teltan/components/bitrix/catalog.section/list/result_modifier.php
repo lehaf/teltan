@@ -51,6 +51,7 @@ if (!empty($arResult['ITEMS'])) {
     // Перебираем элементы
     $newItems = [];
     $vipAds = [];
+    $mapMarks = [];
     foreach ($arResult['ITEMS'] as $item) {
         // Ресайз картинок
         if (!empty($item['PREVIEW_PICTURE']['ID'])) {
@@ -104,7 +105,7 @@ if (!empty($arResult['ITEMS'])) {
         if (!empty($item['PROPERTIES']['MAP_LATLNG']['~VALUE'])) {
             $mapLatlnt = json_decode($item['PROPERTIES']['MAP_LATLNG']['~VALUE'], true);
             $nameSection = $arParams['SECTION_NAME'];
-            $itemMark = [
+            $mapMarks[] = [
                 'type' => 'Feature',
                 'properties' => [
                     'href' => $item['DETAIL_PAGE_URL'],
@@ -115,7 +116,7 @@ if (!empty($arResult['ITEMS'])) {
                     'category' => $nameSection,
                     'views' => $item['SHOW_COUNTER'],
                     'date' => $item['DATE_CREATE'],
-                    'isVipCard' => false,
+                    'isVip' => !empty($item['PROPERTIES']['VIP_DATE']['VALUE']) && strtotime($item['PROPERTIES']['VIP_DATE']['VALUE']) > time() ? true : false
                 ],
                 'geometry' => [
                     'type' => 'Point',
@@ -126,14 +127,6 @@ if (!empty($arResult['ITEMS'])) {
                         ]
                 ]
             ];
-
-            if (!empty($item['PROPERTIES']['VIP_DATE']['VALUE']) && strtotime($item['PROPERTIES']['VIP_DATE']['VALUE']) > time()) {
-                $arResult['MAP_ARRAY_VIP']["type"] = "FeatureCollection";
-                $arResult['MAP_ARRAY_VIP']['features'][] = $itemMark;
-            } else {
-                $arResult['MAP_ARRAY']["type"] = "FeatureCollection";
-                $arResult['MAP_ARRAY']['features'][] = $itemMark;
-            }
         }
 
         if (!empty($item['PROPERTIES']['VIP_DATE']['VALUE']) && strtotime($item['PROPERTIES']['VIP_DATE']['VALUE']) > time()) {
@@ -142,6 +135,8 @@ if (!empty($arResult['ITEMS'])) {
             $newItems[] = $item;
         }
     }
+
+    if (!empty($mapMarks)) $arResult['MAP'] = json_encode($mapMarks);
 
     $arResult['ITEMS'] = [
         'VIP' => $vipAds,

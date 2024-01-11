@@ -1,0 +1,27 @@
+.mapboxgl-popup-content .popup-content .vip-marker {
+    margin-left: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 30px;
+    height: 17px;
+    max-width: 80px;
+    padding: 0 12px;
+    padding-right: 15px;
+    background: #F50000;
+    border-radius: 23.5px;
+}
+
+.mapboxgl-popup-content .popup-content .vip-marker .icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    background: #FFFFFF;
+    border-radius: 25px;
+}
