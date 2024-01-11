@@ -570,7 +570,8 @@ window.mapInit = function ()
                     {source: '2_source', sourceLayer: 'abu_gosh', id: hoveredStateId},
                     {select: true}
                 );
-                map.flyTo({center: e.features[0].geometry.coordinates[0][0], zoom: 12});
+
+                // map.flyTo({center: e.features[0].geometry.coordinates[0][0], zoom: 12});
             })
 
             map.addLayer({
