@@ -59,8 +59,7 @@ if ($mapLatlnt['lng'] == null) {
     $mapLatlnt['lng'] = $mapLatlnt[0];
 }
 
-$mapMark = ["type"=> "FeatureCollection"];
-$mapMark['features'][] = [
+$mapMark = json_encode([
     'type' => 'Feature',
     'properties' => [
         'href' => $arResult['DETAIL_PAGE_URL'],
@@ -71,24 +70,20 @@ $mapMark['features'][] = [
         'category' => $nameSection,
         'views' => !empty($counterJson) ? $counterJson : 0,
         'date' => $arResult['DATE_CREATE'],
-        'isVipCard' => false,
+        'isVip' => !empty($arResult['PROPERTIES']['VIP_DATE']['VALUE']) && strtotime($arResult['PROPERTIES']['VIP_DATE']['VALUE']) > time() ? true : false,
     ],
     'geometry' => [
         'type' => 'Point',
         'coordinates' =>
             [$mapLatlnt['lng'], $mapLatlnt['lat']]
     ]
-];
-
-if (!empty($arResult['PROPERTIES']['VIP_DATE']['VALUE']) && strtotime($arResult['PROPERTIES']['VIP_DATE']['VALUE']) > time()) {
-    $mapArrayVip = $mapMark;
-} else {
-    $mapArray = $mapMark;
-}
+]);
 
 global $arSetting;
 
 $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/slick.js');
+$this->addExternalCss(SITE_TEMPLATE_PATH.'/css/map_vip_marker.css');
+$this->addExternalJs(SITE_TEMPLATE_PATH.'/js/map/map_detail.js');
 ?>
 
 <div class="row flex-column-reverse flex-lg-row mb-4">
@@ -925,7 +920,7 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/slick.js');
                 <div type="button" class="flex-column">
                     <p class="map__address"><?=$arResult['PROPERTIES']['MAP_LAYOUT']['VALUE'].', '.$arResult['PROPERTIES']['MAP_LAYOUT_BIG']['VALUE'] ?>
                         <i class="icon-pin"></i></p>
-                    <div id="mapMini" style="width: 100%; height: 200px;"></div>
+                    <div id="mapMini" style="width: 100%; height: 200px;" data-map-mark='<?=$mapMark?>'></div>
                 </div>
             <?php endif;?>
         </div>
@@ -961,7 +956,7 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/slick.js');
                         <?php endif;?>
                     </div>
                     <div class="modal-body">
-                        <div id="mapFullSize" style="width: 100%; max-height: 422px; height: 100%;"></div>
+                        <div id="mapFullSize" style="width: 100%; height: 100%;"></div>
                     </div>
                 </div>
             </div>
@@ -2986,4 +2981,3 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/slick.js');
             </div>
         </div>
     </div>
-<?php require_once $_SERVER['DOCUMENT_ROOT'].SITE_TEMPLATE_PATH.'/includes/map/map_detail.php';
