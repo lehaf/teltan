@@ -26,7 +26,7 @@ $userPhone = getUserInfoByID()['PERSONAL_PHONE'];
 if (!$userPhone) LocalRedirect($GLOBALS['arSetting'][SITE_ID]['href'] . 'personal/edit/');
 if ($_GET['EDIT'] == 'Y' && $_GET['ID']) {
     $arSelect = array("ID", "IBLOCK_ID", "IBLOCK_SECTION_ID", "NAME", "DATE_ACTIVE_FROM", "PROPERTY_*", "PREVIEW_TEXT", "PREVIEW_PICTURE");
-    $arFilter = array("IBLOCK_ID" => $IBLOCK_ID, 'ID' => $_GET['ID'], "ACTIVE_DATE" => "Y", "ACTIVE" => "Y");
+    $arFilter = array("IBLOCK_ID" => $IBLOCK_ID, 'ID' => $_GET['ID']);
     $res = CIBlockElement::GetList(array(), $arFilter, false, array("nPageSize" => 1), $arSelect);
     while ($ob = $res->GetNextElement()) {
         $arFields = $ob->GetFields();

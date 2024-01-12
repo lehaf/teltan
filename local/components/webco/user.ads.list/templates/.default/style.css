@@ -1,0 +1,31 @@
+div.inactive .product-card.product-line.user-product::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    background: rgba(181, 181, 181, 0.4);
+}
+
+div.inactive .product-card.product-line.user-product .edit-user-item {
+    z-index: 2;
+}
+
+div.inactive .product-card.product-line.user-product .edit-user-item .user-product__btn-edit {
+    background: #ffffff;
+}
+
+div.inactive .product-card.product-line.user-product .rise-btn {
+    z-index: 2;
+}
+
+.status-announcement div.form_radio_btn.active label{
+    background-color: #33e56d;
+    color: #ffffff;
+}
+
+body main > div.container{
+    min-height: 72vh;
+}

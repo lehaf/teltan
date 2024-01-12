@@ -23,13 +23,14 @@ if (!$userPhone) LocalRedirect($GLOBALS['arSetting'][SITE_ID]['href'] . 'persona
 $IBLOCK_ID = PROPERTY_ADS_IBLOCK_ID;
 if ($_GET['EDIT'] == 'Y' && $_GET['ID']) {
     $arSelect = array("ID", "IBLOCK_ID", "IBLOCK_SECTION_ID", "NAME", "DATE_ACTIVE_FROM", "PROPERTY_*", "PREVIEW_TEXT", "PREVIEW_PICTURE");
-    $arFilter = array("IBLOCK_ID" => $IBLOCK_ID, 'ID' => $_GET['ID'], "ACTIVE_DATE" => "Y", "ACTIVE" => "Y");
+    $arFilter = array("IBLOCK_ID" => $IBLOCK_ID, 'ID' => $_GET['ID']);
     $res = CIBlockElement::GetList(array(), $arFilter, false, array("nPageSize" => 1), $arSelect);
     while ($ob = $res->GetNextElement()) {
         $arFields = $ob->GetFields();
         $arProps = $ob->GetProperties();
     }
 }
+
 $arLink = \CIBlockSectionPropertyLink::GetArray($IBLOCK_ID, 27);
 $GLOBALS['MAP_EDIT_RESULT_CORDINATES'] = $arProps['MAP_LATLNG']['~VALUE'];
 $GLOBALS['MAP_EDIT_RESULT_POSITION'] = $arProps['MAP_POSITION']['~VALUE'];

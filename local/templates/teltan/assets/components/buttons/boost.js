@@ -1,6 +1,24 @@
-function buyServiceBoost(itemId, itemSelector, iblockId, boostType, typeBuy) {
-    console.log(123);
+const BoostBtn = function () {
+    this.init();
+}
 
+BoostBtn.prototype.init = function () {
+    this.setEventListener();
+}
+
+BoostBtn.prototype.setEventListener = function () {
+    $('.btn-accelerate-sale').click(function () {
+        $(this).next().toggleClass('active')
+    })
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    window.BoostBtn = new BoostBtn();
+});
+
+
+function buyServiceBoost(itemId, itemSelector, iblockId, boostType, typeBuy) {
     let price = 0;
     let count = 0;
     let ajaxUrl = null;
@@ -116,25 +134,3 @@ function buyServiceBoost(itemId, itemSelector, iblockId, boostType, typeBuy) {
         });
     }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    const servicesBtns = document.querySelectorAll('button.btn-accelerate-sale');
-
-    if (servicesBtns.length > 0) {
-        servicesBtns.forEach((btn) => {
-            btn.onclick = () => {
-                const dropdown = btn.querySelector('div.accardion-wrap');
-
-                if (dropdown) {
-                    let dropdownClasses = dropdown.classList;
-
-                    if (dropdownClasses.contains('active')) {
-                        dropdownClasses.remove('active');
-                    } else {
-                        dropdownClasses.add('active');
-                    }
-                }
-            }
-        });
-    }
-});

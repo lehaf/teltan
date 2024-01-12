@@ -606,3 +606,33 @@ function isExistActiveElements(int $iblockId, ?int $sectionId = NULL, int $cache
 
     return $result;
 }
+
+function getCurUserAdsCount(string $activeItems = 'Y') : int
+{
+    $iblocks = [
+        PROPERTY_ADS_IBLOCK_ID,
+        SCOOTER_IBLOCK_ID,
+        MOTO_IBLOCK_ID,
+        AUTO_IBLOCK_ID,
+        SIMPLE_ADS_IBLOCK_ID,
+    ];
+
+    $count = 0;
+    foreach ($iblocks as $iblockId) {
+        $iblockClass = \Bitrix\Iblock\Iblock::wakeUp($iblockId)->getEntityDataClass();
+        $adsInfo = $iblockClass::getList(array(
+            'order' => ['ID' => 'ASC'],
+            'select' => ['ID'],
+            'filter' => array(
+                'ID_USER.VALUE' => \Bitrix\Main\Engine\CurrentUser::get()->getId(),
+                'ACTIVE' => $activeItems
+            ),
+            'cache' => array(
+                'ttl' => 3600000,
+                'cache_joins' => true
+            ),
+        ))->fetchCollection();
+        $count += $adsInfo->count();
+    }
+    return $count;
+}

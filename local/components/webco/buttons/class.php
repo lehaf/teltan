@@ -78,6 +78,7 @@ class BoostBtn extends \CBitrixComponent
         if (!empty($this->arParams['ITEM_ID'])) $this->arResult['ITEM_ID'] = $this->arParams['ITEM_ID'];
         if (!empty($this->arParams['IBLOCK_ID'])) $this->arResult['IBLOCK_ID'] = $this->arParams['IBLOCK_ID'];
         if (!empty($this->arParams['ITEM_ACTIVE'])) $this->arResult['ITEM_ACTIVE'] = $this->arParams['ITEM_ACTIVE'];
+        if (!empty($this->arParams['EDIT_PAGE'])) $this->arResult['EDIT_PAGE'] = $this->arParams['EDIT_PAGE'];
 
         if ($this->getTemplateName() === 'boost') {
             foreach ($this->services as $serviceType => $service) {

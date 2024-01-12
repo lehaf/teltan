@@ -134,10 +134,6 @@ $(document).ready(function () {
         })
     }
 
-    $('.btn-accelerate-sale').click(function () {
-
-        $(this).next().toggleClass('active')
-    })
 
     $('#modalSandMessage').on('show.bs.modal', () => {
         $('#modalFullSize').modal('hide')

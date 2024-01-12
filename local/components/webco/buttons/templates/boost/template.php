@@ -6,6 +6,10 @@
 /** @global object $USER */
 
 use Bitrix\Main\Localization\Loc;
+
+$this->addExternalJs(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.js');
+$this->addExternalJs(SITE_TEMPLATE_PATH.'/assets/components/buttons/edit.js');
+$this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css');
 ?>
 <div class="userItemSettings">
     <button class="btn btn-accelerate-sale text-uppercase font-weight-bold"

@@ -1,13 +1,20 @@
+const EditBtn = function () {
+    this.init();
+}
 
-document.addEventListener('DOMContentLoaded', () => {
-    const alertBtns = document.querySelectorAll('button.alert-confirmation-btn');
-    const deleteBtns = document.querySelectorAll('button.delete-item-btn');
-    const editBtns = document.querySelectorAll('button.item-edit-btn');
-    const activateItemToggles = document.querySelectorAll('label.activate-item-toggle');
+EditBtn.prototype.init = function () {
+    this.$alertBtns = document.querySelectorAll('button.alert-confirmation-btn');
+    this.$deleteBtns = document.querySelectorAll('button.delete-item-btn');
+    this.$editBtns = document.querySelectorAll('button.item-edit-btn');
+    this.$activateItemToggles = document.querySelectorAll('label.activate-item-toggle');
 
+    this.setEventListener();
+}
+
+EditBtn.prototype.setEventListener = function () {
     // Открытие кнопки редактирования
-    if (editBtns.length > 0) {
-        editBtns.forEach((btn) => {
+    if (this.$editBtns.length > 0) {
+        this.$editBtns.forEach((btn) => {
             btn.onclick = () => {
                 const list =  btn.parentNode.querySelector('ul.edit-item-menu_item');
 
@@ -25,8 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Всплывашки
-    if (alertBtns.length > 0) {
-        alertBtns.forEach((btn) => {
+    if (this.$alertBtns.length > 0) {
+        this.$alertBtns.forEach((btn) => {
             btn.onclick = () => {
                 const adId = btn.getAttribute('data-ad-id');
                 const dropdown = document.querySelector('div#alert-confirmationIdView'+adId);
@@ -44,8 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Удаление
-    if (deleteBtns.length > 0) {
-        deleteBtns.forEach((btn) => {
+    if (this.$deleteBtns.length > 0) {
+        this.$deleteBtns.forEach((btn) => {
             const itemId = btn.getAttribute('data-item');
             btn.onclick = () => {
                 $.ajax({
@@ -62,8 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Активация / Деактивация
-    if (activateItemToggles.length > 0) {
-        activateItemToggles.forEach((toggle) => {
+    if (this.$activateItemToggles.length > 0) {
+        this.$activateItemToggles.forEach((toggle) => {
             toggle.onclick = () => {
                 let toggleColor = '';
                 const itemId = toggle.getAttribute('data-item-id');
@@ -94,4 +101,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    window.EditBtn = new EditBtn();
 });
