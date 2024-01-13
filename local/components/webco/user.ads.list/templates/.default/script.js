@@ -10,20 +10,37 @@ const UserAdsManager = function () {
 }
 
 UserAdsManager.prototype.init = function () {
-    this.setEventListener();
+    this.setEventTabs();
+    this.setEventPagination();
 }
 
-UserAdsManager.prototype.setEventListener = function () {
+UserAdsManager.prototype.setEventTabs = function () {
     const _this = this;
 
-    if (this.$typeBtns) {
+    if (this.$typeBtns.length > 0) {
         this.$typeBtns.forEach((typeBtn) => {
             typeBtn.onclick = () => {
                 document.querySelector('.status-announcement div.form_radio_btn.active').classList.remove('active');
                 typeBtn.classList.add('active');
                 const type = typeBtn.getAttribute('data-active');
                 _this.showLoader();
-                _this.sendData({'isAjax': 'y', 'active': type});
+                _this.sendData({'isAjax': 'y', 'active': type}, location.pathname);
+            }
+        });
+    }
+}
+
+UserAdsManager.prototype.setEventPagination = function () {
+    const _this = this;
+    this.$paginationLinks = document.querySelectorAll('nav a');
+
+    if (this.$paginationLinks.length > 0) {
+        this.$paginationLinks.forEach((link) => {
+            link.onclick = (e) => {
+                e.preventDefault();
+                _this.showLoader();
+                const type = document.querySelector('.status-announcement div.form_radio_btn.active').getAttribute('data-active');
+                _this.sendData({'isAjax': 'y', 'active': type}, link.getAttribute('href'));
             }
         });
     }
@@ -48,9 +65,9 @@ UserAdsManager.prototype.getDomElementsFromString = function (string) {
     return obDomParser.parseFromString(string, "text/html");
 }
 
-UserAdsManager.prototype.sendData = function (data) {
+UserAdsManager.prototype.sendData = function (data, link = location.href) {
     const _this = this;
-    fetch(location.href, {
+    fetch(link, {
         method: 'POST',
         cache: 'no-cache',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -67,7 +84,11 @@ UserAdsManager.prototype.sendData = function (data) {
             document.querySelector('#user_ads').classList.remove('inactive');
         }
         curContainer.innerHTML = newData.innerHTML;
+        _this.setEventPagination();
         _this.hideLoader();
+
+        window.history.replaceState(null, null, link);
+
         // reinit lazy-load
         if (window.ImageDefer) window.ImageDefer.init();
         // reinit button edit

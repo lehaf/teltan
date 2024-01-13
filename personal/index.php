@@ -10,6 +10,13 @@ $APPLICATION->SetTitle("Персональный раздел");
 if (!$USER->IsAuthorized()) LocalRedirect("/");
 
 $request = \Bitrix\Main\Application::getInstance()->getContext()->getRequest();
+
+if ((!empty($request->get('active')) && $request->get('active') === 'N') || !empty($_GET['ads_inactive'])) {
+    $curTab = "inactive" ;
+} else {
+    $curTab = 'active';
+}
+
 $activeCount = getCurUserAdsCount();
 $unActiveCount = getCurUserAdsCount('N');
 ?>
@@ -20,21 +27,19 @@ $unActiveCount = getCurUserAdsCount('N');
             <div class="preloader__item"></div>
         </div>
     </div>
-    <h2 class="mb-4 subtitle">
-        <?= Loc::getMessage('TITl'); ?>
-    </h2>
+    <h2 class="mb-4 subtitle"><?= Loc::getMessage('TITl'); ?></h2>
     <div class="row">
         <div class="col-12 col-xl-9">
             <!-- counter -->
             <div class="mb-4">
                 <div id="tabs">
                     <div class="mb-4 d-flex justify-content-center justify-content-lg-end status-announcement">
-                        <div class="form_radio_btn" data-active="N">
+                        <div class="form_radio_btn <?=$curTab === 'inactive' ? 'active' : ''?>" data-active="N">
                             <label class="btn-left" for="falseAnnouncement"><?=Loc::getMessage('UNACTIVE_COUNT')?>
                                 <span class="ml-2 falseAnnouncementCounter"><?=$unActiveCount?></span>
                             </label>
                         </div>
-                        <div class="form_radio_btn active" data-active="Y">
+                        <div class="form_radio_btn <?=$curTab === 'active'? 'active' : ''?>" data-active="Y">
                             <label class="btn-right" for="trueAnnouncement"><?=Loc::getMessage('ACTIVE_COUNT')?>
                                 <span class="ml-2 trueAnnouncementCounter"><?=$activeCount?></span>
                             </label>
@@ -65,17 +70,18 @@ $unActiveCount = getCurUserAdsCount('N');
                     </div>
                 </div>
             <?php endif;?>
-            <?php if ($request->get('isAjax') === 'y') $APPLICATION->RestartBuffer();
-            $APPLICATION->IncludeComponent(
-                "webco:user.ads.list",
-                "",
-                array(
-                    'ACTIVE' =>  !empty($request->get('active')) ? $request->get('active') : 'Y',
-                    "CACHE_TYPE" => "A",
-                    'CACHE_TIME' => 360000000,
-                )
-            );
-            if ($request->get('isAjax') === 'y') die();?>
+            <?php if ($request->get('isAjax') === 'y') $APPLICATION->RestartBuffer();?>
+            <div id="user_ads" class="<?=$curTab?>">
+                <?php $APPLICATION->IncludeComponent(
+                    "webco:user.ads.list",
+                    "",
+                    array(
+                        'ACTIVE' =>  $curTab === 'inactive' ? 'N' : 'Y',
+                        'CACHE_TIME' => 360000000,
+                    )
+                );?>
+            </div>
+            <?php if ($request->get('isAjax') === 'y') die();?>
         </div>
         <?php include $_SERVER['DOCUMENT_ROOT'] . '/personal/left.php' ?>
     </div>

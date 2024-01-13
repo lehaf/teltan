@@ -7,8 +7,32 @@ BoostBtn.prototype.init = function () {
 }
 
 BoostBtn.prototype.setEventListener = function () {
+    // Кнопка открытия все услуг
     $('.btn-accelerate-sale').click(function () {
         $(this).next().toggleClass('active')
+    });
+
+    // Кнопка поднятия объявлений
+    let att = '1';
+    $('.rise-btn').click(function () {
+        let isSend = confirm("Поднять объявление?");
+        if (isSend == true) {
+            $.ajax({
+                url: '/ajax/rise_item.php',
+                method: 'post',
+                async: false,
+                data: $(this).data(),
+                success: function (data) {
+                    att = data;
+                }
+            });
+
+            if (att == 'none') {
+                $(this).css('visibility', 'hidden');
+            } else {
+                $(this).children('.m-0').text(att);
+            }
+        }
     })
 }
 
@@ -110,7 +134,6 @@ function buyServiceBoost(itemId, itemSelector, iblockId, boostType, typeBuy) {
                             async: false,
                             data: params,
                             success: function (data) {
-                                console.log(params);
                                 window.location.reload();
                             }
                         });

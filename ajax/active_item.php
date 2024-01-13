@@ -103,6 +103,10 @@ if (!empty($updateFields)) {
             $element->set($propCode, $propVal);
         }
         $element->save();
+
+//        // чистим кэш
+//        $taggedCache = \Bitrix\Main\Application::getInstance()->getTaggedCache();
+//        $taggedCache->clearByTag('iblock_id_'.$iblockId);
     }
 }
 

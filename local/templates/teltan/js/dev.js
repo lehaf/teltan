@@ -561,27 +561,6 @@ $(document).ready(function () {
         if (clicked === false) radioBtn[0].parentNode.querySelector('label').click();
     }
 
-    var att = '1';
-    $('.rise-btn').click(function () {
-        let isSend = confirm("поднять объявление?");
-        if (isSend == true) {
-            $.ajax({
-                url: '/ajax/rise_item.php',
-                method: 'post',
-                async: false,
-                data: $(this).data(),
-                success: function (data) {
-                    att = data;
-                }
-            });
-
-            if (att == 'none') {
-                $(this).css('visibility', 'hidden');
-            } else {
-                $(this).children('.m-0').text(att);
-            }
-        }
-    })
     //  $("#registerPhone").mask("0(999) 999-9999");
     $('#area1toogle').click(function () {
         $('.dropdown-filter').removeClass('active')

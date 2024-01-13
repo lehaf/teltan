@@ -16,7 +16,6 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/assets/components/buttons/edit.js');
 $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css');
 ?>
 <?php if (!empty($arResult['ADS'])):?>
-    <div id="user_ads" class="<?=$arParams['ACTIVE'] === 'Y' ? '' : 'inactive'?>">
         <?php foreach ($arResult['ADS'] as $item):?>
             <?php
                 $this->AddEditAction($item['ID'], $item['EDIT_LINK'], $item["EDIT_LINK_TEXT"]);
@@ -35,8 +34,8 @@ $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css')
                         <div class="px-2 px-lg-3 content-block">
                             <div class="d-flex flex-column h-100 justify-content-between text-right">
                                 <div class="mb-3 mb-lg-5 d-flex flex-column-reverse flex-lg-row justify-content-between align-items-end">
-                                    <?php if (!empty($item['PROPERTIES']['PRICE']['VALUE'])):?>
-                                        <p class="price"><?=$item['PROPERTIES']['PRICE']['VALUE']?></p>
+                                    <?php if (!empty($item['PRICE'])):?>
+                                        <p class="price"><?=$item['PRICE']?></p>
                                     <?php endif;?>
                                     <a href="<?=$item['DETAIL_PAGE_URL']?>" class="title"><?=$item['NAME']?></a>
                                 </div>
@@ -69,11 +68,11 @@ $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css')
                                         <i class="icon-visibility"></i>
                                     </span>
                                     <div class="d-none d-lg-flex justify-content-end align-items-center ml-5 product-line__up-date">
-                                        <?php if (!empty($item['PROPERTIES']['TIME_RAISE']['VALUE'])):?>
+                                        <?php if (!empty($item['TIME_RAISE'])):?>
                                             <div class="mr-2 d-flex justify-content-center align-items-center user-product__up-product">
                                                 <span data-id="<?=$item['ID']?>" class="text-uppercase font-weight-bold upRise">UP</span>
                                             </div>
-                                            <?php $strDate = getStringDate($item['PROPERTIES']['TIME_RAISE']['VALUE'])?>
+                                            <?php $strDate = getStringDate($item['TIME_RAISE'])?>
                                             <span class="up-date"><?= ($strDate['MES']) ? GetMessage($strDate['MES']) . ', ' . $strDate['HOURS'] : $strDate['HOURS']; ?></span>
                                         <?php endif;?>
                                     </div>
@@ -86,7 +85,7 @@ $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css')
                         </div>
                     </div>
                     <?php // Значки платных услуг?>
-                    <?php if (!empty($item['PROPERTIES']['COUNT_RAISE']['VALUE'])):?>
+                    <?php if (!empty($item['COUNT_RAISE'])):?>
                         <div type="button"
                              data-id="<?= $item['ID'] ?>" data-iblock-id="<?=$item['IBLOCK_ID']?>"
                              class="b-none d-lg-flex justify-content-center align-items-center rise-btn"
@@ -94,12 +93,12 @@ $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css')
                             <span data-id="<?=$item['ID']?>" class="mr-1 text-uppercase font-weight-bold up">UP</span>
                             <p class="m-0">
                                 <?= Loc::getMessage('UP_RISE'); ?>
-                                (<span><?= $item['PROPERTIES']['COUNT_RAISE']['VALUE'] ?></span>)
+                                (<span><?= $item['COUNT_RAISE'] ?></span>)
                             </p>
                         </div>
                     <?php endif;?>
                     <div class="d-flex flex-column controls-rise-item">
-                        <?php if ($item['PROPERTIES']['VIP_DATE']['VALUE'] && strtotime($item['PROPERTIES']['VIP_DATE']['VALUE']) > time()):?>
+                        <?php if ($item['VIP_DATE'] && strtotime($item['VIP_DATE']) > time()):?>
                             <div class="d-flex justify-content-center align-items-center item">
                                 <svg width="22" height="19" viewBox="0 0 22 19" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
@@ -108,7 +107,7 @@ $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css')
                                 </svg>
                             </div>
                         <?php endif;?>
-                        <?php if ($item['PROPERTIES']['COLOR_DATE']['VALUE'] && strtotime($item['PROPERTIES']['COLOR_DATE']['VALUE']) > time()):?>
+                        <?php if ($item['COLOR_DATE'] && strtotime($item['COLOR_DATE']) > time()):?>
                             <div class="d-flex justify-content-center align-items-center item">
                                 <svg width="16" height="17" viewBox="0 0 16 17" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
@@ -119,7 +118,7 @@ $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css')
                                 </svg>
                             </div>
                         <?php endif;?>
-                        <?php if ($item['PROPERTIES']['LENTA_DATE']['VALUE'] && strtotime($item['PROPERTIES']['LENTA_DATE']['VALUE']) > time()):?>
+                        <?php if ($item['LENTA_DATE'] && strtotime($item['LENTA_DATE']) > time()):?>
                             <div class="d-flex justify-content-center align-items-center item">
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
@@ -134,7 +133,7 @@ $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css')
                                 </svg>
                             </div>
                         <?php endif;?>
-                        <?php if ($item['PROPERTIES']['PAKET_DATE']['VALUE'] && strtotime($item['PROPERTIES']['PAKET_DATE']['VALUE']) > time()):?>
+                        <?php if ($item['PAKET_DATE'] && strtotime($item['PAKET_DATE']) > time()):?>
                             <div class="d-flex justify-content-center align-items-center item">
                                 <svg width="16" height="18" viewBox="0 0 16 18" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
@@ -147,7 +146,7 @@ $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css')
                     </div>
                 </div>
         <?php endforeach ?>
-    </div>
+        <?=$arResult['PAGINATION']?>
 <?php endif;?>
 
 

@@ -2,158 +2,218 @@
 
 class UserAdsList extends \CBitrixComponent
 {
-    private array $iblocks = [
-        PROPERTY_ADS_IBLOCK_ID => [
-            'EDIT_PAGE' => [
-                'BUY' => '/add/buy/',
-                'RENT' => '/add/rent/',
-            ]
-        ],
-        SCOOTER_IBLOCK_ID => [
-            'EDIT_PAGE' => '/add/scooter/'
-        ],
-        MOTO_IBLOCK_ID => [
-            'EDIT_PAGE' => '/add/moto/'
-        ],
-        AUTO_IBLOCK_ID => [
-            'EDIT_PAGE' => '/add/auto/'
-        ],
-        SIMPLE_ADS_IBLOCK_ID => [
-            'EDIT_PAGE' => '/add/fm/'
-        ],
+    private int $curUserId;
+    private object $nav;
+    private string $pagerName;
+    private array $iblocksId = [
+        PROPERTY_ADS_IBLOCK_ID,
+        SCOOTER_IBLOCK_ID,
+        MOTO_IBLOCK_ID,
+        AUTO_IBLOCK_ID,
+        SIMPLE_ADS_IBLOCK_ID,
     ];
 
-    public function getUserAds(int $iblockId, array $editLink, string $active = 'Y') : array
+    public function __construct($component = \null)
+    {
+        $this->curUserId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
+        parent::__construct($component);
+    }
+
+    public function getUserAds(string $active = 'Y') : void
     {
         $select = [
             'ID',
             'CODE',
             'IBLOCK_ID',
             'IBLOCK_SECTION_ID',
+            'DATE_CREATE',
             'NAME',
+            'DETAIL_PAGE_URL' => 'IBLOCK.DETAIL_PAGE_URL',
             'SHOW_COUNTER',
             'PREVIEW_PICTURE',
+            'EDIT_PAGE',
+        ];
+
+        $selectUserProps = [
             'TIME_RAISE',
             'PRICE',
-            'DATE_CREATE',
             'COUNT_RAISE',
             'VIP_DATE',
             'PAKET_DATE',
             'COLOR_DATE',
             'LENTA_DATE',
-            'TYPE_TAPE',
-            'IBLOCK',
-            'IBLOCK_SECTION',
+            'ID_USER',
         ];
 
-        $iblockClass = \Bitrix\Iblock\Iblock::wakeUp($iblockId)->getEntityDataClass();
-        $adsInfo = $iblockClass::getList(array(
-            'order' => ['ID' => 'ASC'],
-            'select' => $select,
-            'filter' => array(
-                'ID_USER.VALUE' => \Bitrix\Main\Engine\CurrentUser::get()->getId(),
-                'ACTIVE' => $active
-            )
-        ))->fetchCollection();
+        $nav = new \Bitrix\Main\UI\PageNavigation($this->pagerName);
+        $maxPageElements = !empty($this->arParams['MAX_PAGE_ELEMENTS']) ? $this->arParams['MAX_PAGE_ELEMENTS'] : 2;
 
-        $resultAds = [];
-        foreach ($adsInfo as $ad) {
-            $itemUrlPatternParams = [
-                'ID' => $ad->getId(),
-                'CODE' => $ad->getCode(),
-                'IBLOCK_SECTION_ID' => $ad->getIblockSectionId(),
-            ];
+        $nav->allowAllRecords(false)
+            ->setPageSize($maxPageElements)
+            ->initFromUri();
 
-            if ($iblockId === PROPERTY_ADS_IBLOCK_ID) {
-                if (in_array($ad->getIblockSectionId(), BUY_SECTION_ID_ARRAY))
-                    $editPage = $editLink['EDIT_PAGE']['BUY'];
-                if (in_array($ad->getIblockSectionId(), RENT_SECTION_ID_ARRAY))
-                    $editPage = $editLink['EDIT_PAGE']['BUY'];
-            } else {
-                $editPage = $editLink['EDIT_PAGE'];
-            }
-
-            $resultAds[$ad->getId()] = [
-                'ID' => $ad->getId(),
-                'IBLOCK_ID' => $ad->getIblockId(),
-                'NAME' => $ad->getName(),
+        $query = \Bitrix\Iblock\ElementTable::query()
+            ->setSelect(array_merge($select,$selectUserProps))
+            ->setLimit($nav->getLimit())
+            ->setOffset($nav->getOffset())
+            ->setFilter([
+                'IBLOCK_ID' => $this->iblocksId,
                 'ACTIVE' => $active,
-                'DATE_CREATE' => $ad->getDateCreate(),
-                'SHOW_COUNTER' => $ad->getShowCounter(),
-                'DETAIL_PAGE_URL' => \CIBlock::ReplaceDetailUrl($ad->getIblock()->getDetailPageUrl(), $itemUrlPatternParams, true, 'E'),
-                'EDIT_PAGE' => $editPage,
-                'PROPERTIES' => [
-                    'PRICE' => ['VALUE' => !empty($ad->getPrice()) ? ICON_CURRENCY.' '.$ad->getPrice()->getValue() : ''],
-                    'LENTA_DATE' => ['VALUE' => !empty($ad->getLentaDate()) ? $ad->getLentaDate()->getValue() : ''],
-                    'VIP_DATE' => ['VALUE' => !empty($ad->getVipDate()) ? $ad->getVipDate()->getValue() : ''],
-                    'PAKET_DATE' => ['VALUE' => !empty($ad->getPaketDate()) ? $ad->getPaketDate()->getValue() : ''],
-                    'COLOR_DATE' => ['VALUE' => !empty($ad->getColorDate()) ? $ad->getColorDate()->getValue() : ''],
-                    'TIME_RAISE' => ['VALUE' => !empty($ad->getTimeRaise()) ? $ad->getTimeRaise()->getValue() : ''],
-                    'COUNT_RAISE' => ['VALUE' => !empty($ad->getCountRaise()) ? $ad->getCountRaise()->getValue() : ''],
-                ],
-                'TAPE' => !empty($ribbonTypes) && !empty($ad->getTypeTape()) ?  $ribbonTypes[$ad->getTypeTape()->getValue()] : ''
-            ];
-
-            // Ресайз картинок
-            if (!empty($ad->getPreviewPicture())) {
-                $resultAds[$ad->getId()]['PREVIEW_PICTURE'] = \CFile::ResizeImageGet(
-                    $ad->getPreviewPicture(),
-                    array(
-                        'width' => 250,
-                        'height' => 200
-                    ),
-                    BX_RESIZE_IMAGE_PROPORTIONAL_ALT
-                );
-            } else {
-                $resultAds[$ad->getId()]['PREVIEW_PICTURE']['src'] = SITE_TEMPLATE_PATH . '/assets/no-image.svg';
-            }
-
-            // Эрмитаж
-            $arButtons = CIBlock::GetPanelButtons(
-                $iblockId,
-                $ad->getId(),
-                0,
-                array("SECTION_BUTTONS"=>false, "SESSID"=>false)
+                'ID_USER' => $this->curUserId,
+            ])
+            ->setGroup([
+                'ID',
+            ])
+            ->registerRuntimeField(
+                new \Bitrix\Main\Entity\ReferenceField(
+                    'ELEMENT_PROPERTY', // Даем алиас таблице
+                    '\Bitrix\Iblock\ElementPropertyTable',
+                    ['=this.ID' => 'ref.IBLOCK_ELEMENT_ID'],
+                )
+            )
+            ->registerRuntimeField(
+                new \Bitrix\Main\Entity\ReferenceField(
+                    'PROPERTY', // Даем алиас таблице
+                    '\Bitrix\Iblock\PropertyTable',
+                    ['=this.ELEMENT_PROPERTY.IBLOCK_PROPERTY_ID' => 'ref.ID'],
+                )
+            )
+            ->registerRuntimeField(
+                "EDIT_PAGE",
+                [
+                    'expression' => [
+                        'CASE WHEN %s = "1" THEN "/add/fm/" 
+                      WHEN %s = "2" AND (%s = "34" OR %s = "32") THEN "/add/rent/" 
+                      WHEN %s = "2" AND (%s = "35" OR %s = "33") THEN "/add/buy/" 
+                      WHEN %s = "3" THEN "/add/auto/" 
+                      WHEN %s = "7" THEN "/add/moto/" 
+                      WHEN %s = "8" THEN "/add/scooter/" 
+                END',
+                        'IBLOCK_ID',
+                        'IBLOCK_ID',
+                        'IBLOCK_SECTION_ID',
+                        'IBLOCK_SECTION_ID',
+                        'IBLOCK_ID',
+                        'IBLOCK_SECTION_ID',
+                        'IBLOCK_SECTION_ID',
+                        'IBLOCK_ID',
+                        'IBLOCK_ID',
+                        'IBLOCK_ID',
+                    ]
+                ]
             );
 
-            $resultAds[$ad->getId()]["ADD_LINK"] = $arButtons["edit"]["add_element"]["ACTION_URL"];
-            $resultAds[$ad->getId()]["EDIT_LINK"] = $arButtons["edit"]["edit_element"]["ACTION_URL"];
-            $resultAds[$ad->getId()]["DELETE_LINK"] = $arButtons["edit"]["delete_element"]["ACTION_URL"];
-
-            $resultAds[$ad->getId()]["ADD_LINK_TEXT"] = $arButtons["edit"]["add_element"]["TEXT"];
-            $resultAds[$ad->getId()]["EDIT_LINK_TEXT"] = $arButtons["edit"]["edit_element"]["TEXT"];
-            $resultAds[$ad->getId()]["DELETE_LINK_TEXT"] = $arButtons["edit"]["delete_element"]["TEXT"];
+        foreach ($selectUserProps as $propCode) {
+            $query->registerRuntimeField(
+                $propCode,
+                [
+                    'expression' => ['GROUP_CONCAT(CASE WHEN %s = "'.$propCode.'" THEN %s  END)', 'PROPERTY.CODE', 'ELEMENT_PROPERTY.VALUE']
+                ]
+            );
         }
 
-        return $resultAds;
-    }
+        $count = $query->queryCountTotal();
+        $nav->setRecordCount($count);
+        $this->nav = $nav;
 
-    public function setUserAdsToResult() : void
-    {
-        if (!empty($this->iblocks)) {
+        $collection = $query->exec()->fetchAll();
+
+        if (!empty($collection)) {
             $resultAds = [];
-            foreach ($this->iblocks as $iblockId => $editLink) {
-                $iblockUserAds = $this->getUserAds($iblockId, $editLink, $this->arParams['ACTIVE']);
-                $resultAds = array_merge($resultAds,$iblockUserAds);
-            }
+            foreach ($collection as &$ad) {
+                $ad['ACTIVE'] = $active;
+                $ad['PRICE'] =  !empty($ad['PRICE']) ? ICON_CURRENCY.' '.round($ad['PRICE']) : '';
+                $ad['COUNT_RAISE'] = round($ad['COUNT_RAISE']);
+                $ad['DETAIL_PAGE_URL'] = \CIBlock::ReplaceDetailUrl($ad['DETAIL_PAGE_URL'], $ad, true, 'E');
 
-            if (!empty($resultAds)) $this->arResult['ADS'] = $resultAds;
+                // Ресайз картинок
+                if (!empty($ad['PREVIEW_PICTURE'])) {
+                    $ad['PREVIEW_PICTURE'] = \CFile::ResizeImageGet(
+                        $ad['PREVIEW_PICTURE'],
+                        array(
+                            'width' => 250,
+                            'height' => 200
+                        ),
+                        BX_RESIZE_IMAGE_PROPORTIONAL_ALT
+                    );
+                } else {
+                    $ad['PREVIEW_PICTURE']['src'] = SITE_TEMPLATE_PATH . '/assets/no-image.svg';
+                }
+
+                // Эрмитаж
+                $arButtons = CIBlock::GetPanelButtons(
+                    $ad['IBLOCK_ID'],
+                    $ad['ID'],
+                    0,
+                    array("SECTION_BUTTONS"=>false, "SESSID"=>false)
+                );
+
+                $ad["ADD_LINK"] = $arButtons["edit"]["add_element"]["ACTION_URL"];
+                $ad["EDIT_LINK"] = $arButtons["edit"]["edit_element"]["ACTION_URL"];
+                $ad["DELETE_LINK"] = $arButtons["edit"]["delete_element"]["ACTION_URL"];
+
+                $ad["ADD_LINK_TEXT"] = $arButtons["edit"]["add_element"]["TEXT"];
+                $ad["EDIT_LINK_TEXT"] = $arButtons["edit"]["edit_element"]["TEXT"];
+                $ad["DELETE_LINK_TEXT"] = $arButtons["edit"]["delete_element"]["TEXT"];
+
+                $resultAds[] = $ad;
+            }
+            unset($ad);
+        } else {
+            $this->abortResultCache();
+
+            if (!empty($_GET[$this->pagerName])) {
+                global $APPLICATION;
+                $curPage = $APPLICATION->GetCurPage();
+                LocalRedirect($curPage);
+            }
         }
+
+        if (!empty($resultAds)) $this->arResult['ADS'] = $resultAds;
     }
+
 
     public function bindTagsToCache()
     {
         global $CACHE_MANAGER;
-        foreach ($this->iblocks as $iblockId => $editPage) {
+        foreach ($this->iblocksId as $iblockId) {
             $CACHE_MANAGER->RegisterTag("iblock_id_".$iblockId);
         }
     }
 
+    public function setPageNavigationToResult()
+    {
+        global $APPLICATION;
+        ob_start();
+        $APPLICATION->IncludeComponent(
+            "bitrix:main.pagenavigation",
+            "user-history",
+            array(
+                "NAV_OBJECT" => $this->nav,
+                "SHOW_COUNT" => "N",
+            ),
+            false
+        );
+        $this->arResult['PAGINATION'] = ob_get_contents();
+        ob_end_clean();
+    }
+
     public function executeComponent()
     {
-        if ($this->startResultCache()) {
+        $this->pagerName = '';
+        switch ($this->arParams['ACTIVE']) {
+            case 'Y':
+                $this->pagerName = 'ads_active';
+                break;
+            case 'N':
+                $this->pagerName = 'ads_inactive';
+                break;
+        }
+
+        if ($this->startResultCache($this->arParams['CACHE_TIME'], [$this->curUserId, $this->pagerName, $_GET[$this->pagerName]])) {
             $this->bindTagsToCache(); // Вешаем теги инфоблока на кэш
-            $this->setUserAdsToResult($this->arParams['ACTIVE']);
+            $this->getUserAds($this->arParams['ACTIVE']);
+            $this->setPageNavigationToResult();
             $this->includeComponentTemplate();
         }
     }
