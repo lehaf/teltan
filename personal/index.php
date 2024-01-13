@@ -76,6 +76,7 @@ $unActiveCount = getCurUserAdsCount('N');
                     "webco:user.ads.list",
                     "",
                     array(
+                        'MAX_PAGE_ELEMENTS' => 12,
                         'ACTIVE' =>  $curTab === 'inactive' ? 'N' : 'Y',
                         'CACHE_TIME' => 360000000,
                     )

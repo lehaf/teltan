@@ -46,7 +46,7 @@ class UserAdsList extends \CBitrixComponent
         ];
 
         $nav = new \Bitrix\Main\UI\PageNavigation($this->pagerName);
-        $maxPageElements = !empty($this->arParams['MAX_PAGE_ELEMENTS']) ? $this->arParams['MAX_PAGE_ELEMENTS'] : 2;
+        $maxPageElements = !empty($this->arParams['MAX_PAGE_ELEMENTS']) ? $this->arParams['MAX_PAGE_ELEMENTS'] : 12;
 
         $nav->allowAllRecords(false)
             ->setPageSize($maxPageElements)
