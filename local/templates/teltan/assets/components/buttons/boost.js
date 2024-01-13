@@ -102,11 +102,11 @@ function buyServiceBoost(itemId, itemSelector, iblockId, boostType, typeBuy) {
                 count: count,
                 iblock: iblockId,
                 price: price.price,
-                uf_vip: price.uf_vip,
-                uf_lenta: price.uf_lenta,
-                uf_rise_day: price.uf_rise_day,
-                uf_rise_count: price.uf_rise_count,
-                uf_xml_id_lent: price.uf_xml_id_lent
+                vip_date: price.vip_date,
+                ribbon_date: price.ribbon_date,
+                ribbon_type: price.ribbon_type,
+                color_date: price.color_date,
+                rise_count: price.rise_count,
             }
             break;
     }

@@ -73,7 +73,7 @@ $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css')
                                 <form id="formProdact<?=$type.$arResult['ITEM_ID']?>">
                                     <?php if ($type !== 'SET'):?>
                                         <div class="mb-4 px-3 card">
-                                            <?php foreach ($boostData['INFO'] as $info):?>
+                                            <?php foreach ($boostData['INFO'] as $key => $info):?>
                                                 <?php if ($info['UF_COUNT'] > 0):?>
                                                     <div class="py-3 border-bottom d-flex justify-content-between">
                                                         <span class="font-weight-bold"><?=$info["UF_PRICE"]?> T</span>
@@ -83,7 +83,9 @@ $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css')
                                                                    data-price="<?=$info["UF_PRICE"]?>"
                                                                    data-price-shek="<?=$info["UF_PRICE_SHEK"]?>"
                                                                    <?=!empty($info["UF_XML_ID"]) ? 'data-xml-id="'.$info["UF_XML_ID"].'"' : ''?>
-                                                                   name="<?=$type?>Product">
+                                                                   name="<?=$type?>Product"
+                                                                   <?=$key === 0 ? "checked" : ''?>
+                                                            >
                                                             <span><?=$info["UF_NAME"]?></span>
                                                             <span class="checkbox"></span>
                                                         </label>
@@ -93,7 +95,7 @@ $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css')
                                         </div>
                                     <?php else:?>
                                         <div class="mb-4 px-3 card" id="accordionSection<?=$arResult['ITEM_ID']?>">
-                                            <?php foreach ($boostData['INFO'] as $info):?>
+                                            <?php foreach ($boostData['INFO'] as $key => $info):?>
                                                 <div class="py-3 border-bottom d-flex justify-content-between" id="tipe1">
                                                     <span class="font-weight-bold"><?=$info['UF_PRICE'].' T'?></span>
                                                     <label class="custom-radio-btn">
@@ -101,24 +103,24 @@ $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css')
                                                         <input type="radio"
                                                                value="<?=$info["ID"]?>"
                                                                data-price="<?=$info["UF_PRICE"]?>"
-                                                               data-UF_RISE_COUNT="<?=$info["UF_RISE_COUNT"]?>"
-                                                               data-UF_RISE_DAY="<?=$info["UF_RISE_DAY"]?>"
-                                                               data-UF_LENTA="<?=$info["UF_LENTA"]?>"
-                                                               data-UF_VIP="<?=$info["UF_VIP"]?>"
-                                                               data-UF_COLOUR="<?=$info["UF_COLOUR"]?>"
-                                                               data-UF_XML_ID_LENT="<?=$info["UF_XML_ID_LENT"]?>"
+                                                               data-rise_count="<?=$info["UF_RISE_COUNT"]?>"
+                                                               data-ribbon_date="<?=$info["UF_LENTA"]?>"
+                                                               data-vip_date="<?=$info["UF_VIP"]?>"
+                                                               data-color_date="<?=$info["UF_COLOUR"]?>"
+                                                               data-ribbon_type="<?=$info["UF_XML_ID_LENT"]?>"
                                                                data-price-shek="<?=$info["UF_PRICE_SHEK"]?>"
                                                                name="<?=$type?>Product"
                                                                data-toggle="collapse"
                                                                data-target="#collapsePaket<?=$info['ID']?>"
                                                                aria-expanded="true"
                                                                aria-controls="collapseOne"
+                                                               <?=$key === 0 ? "checked" : ''?>
                                                         >
                                                         <span><?=$info['UF_NAME']?></span>
                                                         <span class="checkbox"></span>
                                                     </label>
                                                 </div>
-                                                <div id="collapsePaket<?=$info['ID']?>" class="collapse" aria-labelledby="tipe1" data-parent="#accordionSection<?=$arResult['ITEM_ID']?>">
+                                                <div id="collapsePaket<?=$info['ID']?>" class="collapse <?=$key === 0 ? "show" : ''?>" aria-labelledby="tipe1" data-parent="#accordionSection<?=$arResult['ITEM_ID']?>">
                                                     <div class="p-3 d-flex flex-column new-collapse">
                                                         <p class="mb-4 text-uppercase font-weight-bold"><?=$info["UF_BIG_TEXT"]?></p>
                                                         <p class="text-right"><?=$info["UF_STANDART_TEXT"]?></p>

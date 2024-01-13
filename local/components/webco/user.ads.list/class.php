@@ -53,6 +53,7 @@ class UserAdsList extends \CBitrixComponent
             ->initFromUri();
 
         $query = \Bitrix\Iblock\ElementTable::query()
+            ->setOrder(['DATE_CREATE' => 'DESC'])
             ->setSelect(array_merge($select,$selectUserProps))
             ->setLimit($nav->getLimit())
             ->setOffset($nav->getOffset())
