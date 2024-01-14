@@ -21,7 +21,6 @@ $sectionHasAds = isExistActiveElements($arParams['IBLOCK_ID']);
     $arrVipSliderFilter = [
         '!=PROPERTY_VIP_FLAG' => false,
         '!PROPERTY_VIP_DATE' => false,
-        '>PROPERTY_VIP_DATE' => new \Bitrix\Main\Type\DateTime()
     ];
 
     $APPLICATION->IncludeComponent(
@@ -302,7 +301,7 @@ $sectionHasAds = isExistActiveElements($arParams['IBLOCK_ID']);
                     "SEF_MODE" => "N",
                     "CACHE_TYPE" => "A",
                     "CACHE_TIME" => "36000000",
-                    "CACHE_GROUPS" => "Y",
+                    "CACHE_GROUPS" => "N",
                     "SAVE_IN_SESSION" => "Y",
 
                     "PAGER_PARAMS_NAME" => "arrPager",

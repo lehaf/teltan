@@ -73,7 +73,7 @@ $sectionName = $langId === false ? $curSection['NAME'] : $curSection['UF_NAME_'.
             "SEF_MODE" => "N",
             "CACHE_TYPE" => "A",
             "CACHE_TIME" => "36000000",
-            "CACHE_GROUPS" => "Y",
+            "CACHE_GROUPS" => "N",
             "SAVE_IN_SESSION" => "Y",
 
             "PAGER_PARAMS_NAME" => "arrPager",
@@ -124,7 +124,7 @@ $sectionName = $langId === false ? $curSection['NAME'] : $curSection['UF_NAME_'.
                 "SEF_MODE" => "N",
                 "CACHE_TYPE" => "A",
                 "CACHE_TIME" => "36000000",
-                "CACHE_GROUPS" => "Y",
+                "CACHE_GROUPS" => "N",
                 "SAVE_IN_SESSION" => "Y",
                 "PAGER_PARAMS_NAME" => "arrPager",
                 "PRICE_CODE" => array(
@@ -282,7 +282,6 @@ $sectionName = $langId === false ? $curSection['NAME'] : $curSection['UF_NAME_'.
             $vipSliderFilter = [
                 '!=PROPERTY_VIP_FLAG' => false,
                 '!=PROPERTY_VIP_DATE' => false,
-                ">PROPERTY_VIP_DATE" => date('Y-m-d H:i:s')
             ];
 
             $APPLICATION->IncludeComponent(

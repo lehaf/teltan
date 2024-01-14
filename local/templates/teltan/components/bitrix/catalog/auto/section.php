@@ -34,7 +34,8 @@ if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
     <?php
     global $arVipSliderFilter;
     $arVipSliderFilter = [
-        ">=PROPERTY_VIP_DATE" => date('Y-m-d H:i:s')
+        '!PROPERTY_VIP_FLAG' => false,
+        '!PROPERTY_VIP_DATE' => false,
     ];
 
     $APPLICATION->IncludeComponent(

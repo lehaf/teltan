@@ -33,7 +33,6 @@ if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
     $arrVipSliderFilter = [
         '!PROPERTY_VIP_FLAG' => false,
         '!PROPERTY_VIP_DATE' => false,
-        ">PROPERTY_VIP_DATE" => date('Y-m-d H:i:s')
     ];
 
     $APPLICATION->IncludeComponent(
@@ -323,7 +322,7 @@ if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
                     "SEF_MODE" => "N",
                     "CACHE_TYPE" => "A",
                     "CACHE_TIME" => "36000000",
-                    "CACHE_GROUPS" => "Y",
+                    "CACHE_GROUPS" => "N",
                     "SAVE_IN_SESSION" => "Y",
                     "INSTANT_RELOAD" => "Y",
                     "PAGER_PARAMS_NAME" => "arrPager",
