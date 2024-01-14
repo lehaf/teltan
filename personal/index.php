@@ -56,20 +56,6 @@ $unActiveCount = getCurUserAdsCount('N');
             </div>
             <?php if ($request->get('isAjax') === 'y') $APPLICATION->RestartBuffer();?>
             <div id="user_ads" class="<?=$curTab?>">
-                <?php if (empty($activeCount) && $curTab === 'active'):?>
-                    <div class="mb-4 card d-flex flex-column flex-lg-row w-100 justify-content-around no-message">
-                        <div class="mb-3 mb-0 d-flex flex-column align-items-center justify-content-center">
-                            <p class="mb-4"><?=Loc::getMessage('NO_ADS')?></p>
-                            <img src="<?=SITE_TEMPLATE_PATH?>/assets/no-message.svg"
-                                 alt="no-ads"
-                                 title="no-ads"
-                            >
-                        </div>
-                        <div class="d-flex align-items-center justify-content-center">
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalTypeAdd"><?= Loc::getMessage('To_add_an_advert'); ?></button>
-                        </div>
-                    </div>
-                <?php endif;?>
                 <?php $APPLICATION->IncludeComponent(
                     "webco:user.ads.list",
                     "",

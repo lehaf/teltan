@@ -147,6 +147,23 @@ $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css')
                 </div>
         <?php endforeach ?>
         <?=$arResult['PAGINATION']?>
+<?php else:?>
+    <div class="mb-4 card d-flex flex-column flex-lg-row w-100 justify-content-around no-message">
+        <div class="mb-3 mb-0 d-flex flex-column align-items-center justify-content-center">
+            <p class="mb-4"><?=$arParams['ACTIVE'] === 'Y' ? Loc::getMessage('UAL_NO_ACTIVE_ADS') : Loc::getMessage('UAL_NO_INACTIVE_ADS') ?></p>
+            <img src="<?=SITE_TEMPLATE_PATH?>/assets/no-message.svg"
+                 alt="no-ads"
+                 title="no-ads"
+            >
+        </div>
+        <?php if ($arParams['ACTIVE'] === 'Y'):?>
+            <div class="d-flex align-items-center justify-content-center">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#modalTypeAdd">
+                    <?=Loc::getMessage('UAL_CREATE_NEW_ADS')?>
+                </button>
+            </div>
+        <?php endif;?>
+    </div>
 <?php endif;?>
 
 
