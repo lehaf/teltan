@@ -15,32 +15,22 @@ class UserAdsCounter extends \CBitrixComponent
         PROPERTY_ADS_IBLOCK_ID => [
             "NAME" => 'PROPERTY',
             'FREE_USER_PROP' =>  'UF_FREE_PROPERTY',
-            'COST_USER_PROP' =>  'UF_AVAILABLE_PROPERTY',
-            'COUNT_ADS_USER_PROP' =>  'UF_COUNT_PROPERTY',
         ],
         SCOOTER_IBLOCK_ID => [
             "NAME" => 'AUTO',
             'FREE_USER_PROP' =>  'UF_FREE_AUTO',
-            'COST_USER_PROP' =>  'UF_AVAILABLE_AUTO',
-            'COUNT_ADS_USER_PROP' =>  'UF_COUNT_AUTO',
         ],
         MOTO_IBLOCK_ID => [
             "NAME" => 'AUTO',
             'FREE_USER_PROP' =>  'UF_FREE_AUTO',
-            'COST_USER_PROP' =>  'UF_AVAILABLE_AUTO',
-            'COUNT_ADS_USER_PROP' =>  'UF_COUNT_AUTO',
         ],
         AUTO_IBLOCK_ID => [
             "NAME" => 'AUTO',
             'FREE_USER_PROP' =>  'UF_FREE_AUTO',
-            'COST_USER_PROP' =>  'UF_AVAILABLE_AUTO',
-            'COUNT_ADS_USER_PROP' =>  'UF_COUNT_AUTO',
         ],
         SIMPLE_ADS_IBLOCK_ID => [
             "NAME" => 'FLEA',
             'FREE_USER_PROP' =>  'UF_FREE_FLEA',
-            'COST_USER_PROP' =>  'UF_AVAILABLE_FLEA',
-            'COUNT_ADS_USER_PROP' =>  'UF_COUNT_FLEA',
         ],
     ];
 
@@ -48,14 +38,11 @@ class UserAdsCounter extends \CBitrixComponent
     {
         foreach ($this->adsIblocksData as $userProps) {
             $this->userSelectParams[] = $userProps['FREE_USER_PROP'];
-            $this->userSelectParams[] = $userProps['COST_USER_PROP'];
-            $this->userSelectParams[] = $userProps['COUNT_ADS_USER_PROP'];
         }
     }
 
-    public function getUserRateAdsLimitInfo() : array
+    private function getUserRates() : ?array
     {
-        $limits = [];
         $boughtRateEntity = GetEntityDataClass(BOUGHT_RATE_HL_ID);
         $userRates = $boughtRateEntity::getList(array(
             'order' => array('ID' => 'ASC'),
@@ -65,20 +52,26 @@ class UserAdsCounter extends \CBitrixComponent
                 '>UF_DATE_EXPIRED'=> new \Bitrix\Main\Type\DateTime()
             )
         ))->fetchAll();
+
+        return $userRates ?? NULL;
+    }
+
+    public function getUserRateAdsLimitInfo(array $userRates) : array
+    {
+        $limits = [];
         if (!empty($userRates)) {
             foreach ($userRates as $rate) {
                 $limits[$rate['UF_TYPE']] += $rate['UF_COUNT_REMAIN'];
             }
         }
-
         return $limits;
     }
 
-    public function setUserCounters(array $user) : void
+    public function setUserCounters(array $user, array $userRates = []) : void
     {
         if (!empty($user)) {
             $autoAdded = false;
-            $rateLimits = $this->getUserRateAdsLimitInfo();
+            $rateLimits = $this->getUserRateAdsLimitInfo($userRates);
             foreach ($this->adsIblocksData as $userProps) {
                 if ($userProps['NAME'] === 'AUTO') {
                     if ($autoAdded === false) {
@@ -125,29 +118,99 @@ class UserAdsCounter extends \CBitrixComponent
             $user = \Bitrix\Main\UserTable::getList(array(
                 'select' => array('ID', ...$this->userSelectParams),
                 'filter' => array('ID' => \Bitrix\Main\Engine\CurrentUser::get()->getId()),
+                'cache' => [
+                    'ttl' => 360000,
+                    'cache_joins' => true
+                ]
             ))->fetch();
+
             if (!empty($user)) {
-                $this->getUserAds();
-                $this->setUserCounters($user);
+                $userRates = $this->getUserRates();
+                $this->getUserAds($userRates);
+                $this->setUserCounters($user, $userRates);
             }
         }
     }
 
-    public function getUserAds() : void
+    private function getActiveUserAds() : array
+    {
+        $cache = \Bitrix\Main\Data\Cache::createInstance(); // Служба кеширования
+        $taggedCache = \Bitrix\Main\Application::getInstance()->getTaggedCache(); // Служба пометки кеша тегами
+        $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
+
+        $userAds = [];
+        $cacheTtl = 360000000;
+        $cachePath = 'user_ads_counter';
+        $cacheId = 'user_ads_counter_'.$userId;
+
+        if ($cache->initCache($cacheTtl, $cacheId, $cachePath)) {
+            $userAds = $cache->getVars();
+        } elseif ($cache->startDataCache()) {
+            // Начинаем записывать теги
+            $taggedCache->startTagCache($cachePath);
+            foreach ($this->iblocks as $iblockId) {
+                $taggedCache->registerTag("iblock_id_".$iblockId);
+            }
+            $taggedCache->endTagCache();
+
+            $select = [
+                'ID',
+                'IBLOCK_ID',
+                'NAME',
+                'ACTIVE_TO',
+            ];
+
+            $selectUserProps = [
+                'ID_USER',
+                'FREE_AD',
+            ];
+
+            $query = \Bitrix\Iblock\ElementTable::query()
+                ->setSelect(array_merge($select,$selectUserProps))
+                ->setFilter([
+                    'IBLOCK_ID' => $this->iblocks,
+                    'ACTIVE' => 'Y',
+                    'ID_USER' => \Bitrix\Main\Engine\CurrentUser::get()->getId(),
+                    '!FREE_AD' => false
+                ])
+                ->setGroup([
+                    'ID',
+                ])
+                ->registerRuntimeField(
+                    new \Bitrix\Main\Entity\ReferenceField(
+                        'ELEMENT_PROPERTY', // Даем алиас таблице
+                        '\Bitrix\Iblock\ElementPropertyTable',
+                        ['=this.ID' => 'ref.IBLOCK_ELEMENT_ID'],
+                    )
+                )
+                ->registerRuntimeField(
+                    new \Bitrix\Main\Entity\ReferenceField(
+                        'PROPERTY', // Даем алиас таблице
+                        '\Bitrix\Iblock\PropertyTable',
+                        ['=this.ELEMENT_PROPERTY.IBLOCK_PROPERTY_ID' => 'ref.ID'],
+                    )
+                );
+            foreach ($selectUserProps as $propCode) {
+                $query->registerRuntimeField(
+                    $propCode,
+                    [
+                        'expression' => ['GROUP_CONCAT(CASE WHEN %s = "'.$propCode.'" THEN %s  END)', 'PROPERTY.CODE', 'ELEMENT_PROPERTY.VALUE']
+                    ]
+                );
+            }
+
+            $userAds = $query->exec()->fetchAll();
+            $cache->endDataCache($userAds);
+        }
+
+        return $userAds;
+    }
+
+    public function getUserAds(array $userRates) : void
     {
         if (\Bitrix\Main\Loader::includeModule('highloadblock') && \Bitrix\Main\Loader::includeModule('iblock')) {
-            $curTime = new \Bitrix\Main\Type\DateTime();
-            $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
-            $boughtRateEntity = GetEntityDataClass(BOUGHT_RATE_HL_ID);
-            $userRates = $boughtRateEntity::getList(array(
-                'order' => array('ID' => 'ASC'),
-                'select' => array('*'),
-                'filter' => array(
-                    'UF_USER_ID'=> $userId,
-                    '>UF_DATE_EXPIRED'=> $curTime
-                )
-            ))->fetchAll();
 
+            // Получаем платные объявления
             if (!empty($userRates)) {
                 foreach ($userRates as $key => $rate) {
                     $this->arResult['USER_ADS'][$rate['UF_TYPE']]['COST_ADS'][$key]['DATE_EXPIRED'] = $rate['UF_DATE_EXPIRED'];
@@ -159,29 +222,15 @@ class UserAdsCounter extends \CBitrixComponent
             }
 
             // Получаем бесплатные объявления пользователей
-            foreach ($this->iblocks as $iblockId) {
-                $iblock = \Bitrix\Iblock\Iblock::wakeUp($iblockId);
-                $iblockClass = $iblock->getEntityDataClass();
-                $collection = $iblockClass::getList(array(
-                    'select' => ['ID', 'ACTIVE_TO'],
-                    'filter' => [
-                        'ACTIVE' => 'Y',
-                        'ID_USER.VALUE' => \Bitrix\Main\Engine\CurrentUser::get()->getId(),
-                        '!FREE_AD.VALUE' => false
-                    ]
-                ))->fetchCollection();
-
-                foreach ($collection as $item) {
-                    if ($item->getId()) {
-                        $this->arResult['USER_ADS'][$this->adsIblocksData[$iblockId]['NAME']]['FREE_ADS'][] = $item->getId();
-                        $this->arResult['USER_ADS'][$this->adsIblocksData[$iblockId]['NAME']]['FREE_ADS_COUNT'] += 1;
-                        $this->arResult['USER_ADS'][$this->adsIblocksData[$iblockId]['NAME']]['FREE_DATE_EXPIRED'] = $item->getActiveTo();
-                    }
+            $freeAds = $this->getActiveUserAds();
+            if (!empty($freeAds)) {
+                foreach ($freeAds as $item) {
+                    $this->arResult['USER_ADS'][$this->adsIblocksData[$item['IBLOCK_ID']]['NAME']]['FREE_ADS'][] = $item['ID'];
+                    $this->arResult['USER_ADS'][$this->adsIblocksData[$item['IBLOCK_ID']]['NAME']]['FREE_ADS_COUNT'] += 1;
+                    $this->arResult['USER_ADS'][$this->adsIblocksData[$item['IBLOCK_ID']]['NAME']]['FREE_DATE_EXPIRED'] = $item['ACTIVE_TO'];
                 }
-
-                if (empty($this->arResult['USER_ADS'][$this->adsIblocksData[$iblockId]['NAME']]['FREE_ADS_COUNT']))
-                    $this->arResult['USER_ADS'][$this->adsIblocksData[$iblockId]['NAME']]['FREE_ADS_COUNT'] = 0;
             }
+
         }
     }
 

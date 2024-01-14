@@ -30,7 +30,6 @@ $unActiveCount = getCurUserAdsCount('N');
     <h2 class="mb-4 subtitle"><?= Loc::getMessage('TITl'); ?></h2>
     <div class="row">
         <div class="col-12 col-xl-9">
-            <!-- counter -->
             <div class="mb-4">
                 <div id="tabs">
                     <div class="mb-4 d-flex justify-content-center justify-content-lg-end status-announcement">
@@ -55,23 +54,22 @@ $unActiveCount = getCurUserAdsCount('N');
                     );
                 ?>
             </div>
-            <!-- counter -->
-            <?php if (empty($activeCount) && empty($unActiveCount)):?>
-                <div class="mb-4 card d-flex flex-column flex-lg-row w-100 justify-content-around no-message">
-                    <div class="mb-3 mb-0 d-flex flex-column align-items-center justify-content-center">
-                        <p class="mb-4"><?=Loc::getMessage('NO_ADS')?></p>
-                        <img src="<?=SITE_TEMPLATE_PATH?>/assets/no-message.svg"
-                             alt="no-ads"
-                             title="no-ads"
-                        >
-                    </div>
-                    <div class="d-flex align-items-center justify-content-center">
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#modalTypeAdd"><?= Loc::getMessage('To_add_an_advert'); ?></button>
-                    </div>
-                </div>
-            <?php endif;?>
             <?php if ($request->get('isAjax') === 'y') $APPLICATION->RestartBuffer();?>
             <div id="user_ads" class="<?=$curTab?>">
+                <?php if (empty($activeCount) && $curTab === 'active'):?>
+                    <div class="mb-4 card d-flex flex-column flex-lg-row w-100 justify-content-around no-message">
+                        <div class="mb-3 mb-0 d-flex flex-column align-items-center justify-content-center">
+                            <p class="mb-4"><?=Loc::getMessage('NO_ADS')?></p>
+                            <img src="<?=SITE_TEMPLATE_PATH?>/assets/no-message.svg"
+                                 alt="no-ads"
+                                 title="no-ads"
+                            >
+                        </div>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalTypeAdd"><?= Loc::getMessage('To_add_an_advert'); ?></button>
+                        </div>
+                    </div>
+                <?php endif;?>
                 <?php $APPLICATION->IncludeComponent(
                     "webco:user.ads.list",
                     "",
@@ -87,6 +85,7 @@ $unActiveCount = getCurUserAdsCount('N');
         <?php include $_SERVER['DOCUMENT_ROOT'] . '/personal/left.php' ?>
     </div>
 </div>
+
 <!-- Sale modal -->
 <div class="modal fade" id="payTcoins" tabindex="-1" aria-labelledby="payTcoins" aria-hidden="true">
     <div class="modal-dialog">
@@ -94,21 +93,18 @@ $unActiveCount = getCurUserAdsCount('N');
             <div class="p-0 mb-4 border-bottom-0 modal-header justify-content-end">
                 <h2 class="subtitle" id="exampleModalLabel">Оплата</h2>
             </div>
-
             <div class="p-0 modal-body text-right">
-                <p class="mb-4 text-uppercase font-weight-bold">MY BALANCE: <span id="payTcoinsBalance"
-                                                                                  class="text-primary"> </span>
-                    TCOIN</p>
-                <p class="mb-0 text-uppercase font-weight-bold">К списанию: <span id="payTcoinsNeedle"
-                                                                                  class="text-primary">2.5 </span>
-                    TCOIN</p>
-
+                <p class="mb-4 text-uppercase font-weight-bold">
+                    MY BALANCE: <span id="payTcoinsBalance" class="text-primary"></span> TCOIN
+                </p>
+                <p class="mb-0 text-uppercase font-weight-bold">
+                    К списанию: <span id="payTcoinsNeedle" class="text-primary">2.5 </span> TCOIN
+                </p>
                 <hr>
-
-                <p id="payTcoinsAtEnd" class="mb-3 text-uppercase font-weight-bold text-secondary">Остаток: <span>20 TCOIN</span>
+                <p id="payTcoinsAtEnd" class="mb-3 text-uppercase font-weight-bold text-secondary">
+                    Остаток: <span>20 TCOIN</span>
                 </p>
             </div>
-
             <div class="p-0 border-top-0 modal-footer">
                 <button type="button" class="btn" data-dismiss="modal">Close</button>
                 <button id="buyItemFew" type="submit" class="btn btn-primary">Оплатить</button>
@@ -122,21 +118,18 @@ $unActiveCount = getCurUserAdsCount('N');
             <div class="p-0 mb-4 border-bottom-0 modal-header justify-content-end">
                 <h2 class="subtitle" id="exampleModalLabel">Оплата</h2>
             </div>
-
             <div class="p-0 modal-body text-right">
-                <p class="mb-4 text-uppercase font-weight-bold">MY BALANCE: <span id="paySkekBalance"
-                                                                                  class="text-primary"> </span> <?= ICON_CURRENCY ?>
+                <p class="mb-4 text-uppercase font-weight-bold">
+                    MY BALANCE: <span id="paySkekBalance" class="text-primary"></span> <?=ICON_CURRENCY?>
                 </p>
-                <p class="mb-0 text-uppercase font-weight-bold">К списанию: <span id="payShekNeedle"
-                                                                                  class="text-primary">2.5 </span> <?= ICON_CURRENCY ?>
+                <p class="mb-0 text-uppercase font-weight-bold">
+                    К списанию: <span id="payShekNeedle" class="text-primary">2.5 </span> <?= ICON_CURRENCY ?>
                 </p>
-
                 <hr>
-
-                <p id="payShekAtEnd" class="mb-3 text-uppercase font-weight-bold text-secondary">Остаток:
-                    <span>20 <?= ICON_CURRENCY ?></span></p>
+                <p id="payShekAtEnd" class="mb-3 text-uppercase font-weight-bold text-secondary">
+                    Остаток: <span>20 <?= ICON_CURRENCY ?></span>
+                </p>
             </div>
-
             <div class="p-0 border-top-0 modal-footer">
                 <button type="button" class="btn" data-dismiss="modal">Close</button>
                 <button id="buyItemFewShek" type="submit" class="btn btn-primary">Оплатить</button>
@@ -151,8 +144,7 @@ $unActiveCount = getCurUserAdsCount('N');
     </button>
     <div class="d-flex justify-content-center allert__text"></div>
     <div class="d-flex justify-content-center mt-4">
-        <button onclick="window.location.reload()"
-                class="btn_confirm btn border-primary text-uppercase font-weight-bold text-primary py-3 px-5">
+        <button onclick="window.location.reload()" class="btn_confirm btn border-primary text-uppercase font-weight-bold text-primary py-3 px-5">
             <?=Loc::getMessage('OK_BTN')?>
         </button>
     </div>

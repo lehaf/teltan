@@ -203,9 +203,3 @@ $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css')
         </div>
     <?php endif;?>
 </div>
-
-
-
-
-
-

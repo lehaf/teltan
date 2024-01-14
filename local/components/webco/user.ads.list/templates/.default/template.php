@@ -23,14 +23,14 @@ $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css')
             ?>
                 <div class="mb-4 card product-card product-line user-product" id="<?=$this->GetEditAreaID($item['ID'])?>">
                     <div class="card-link" href="<?= $item['DETAIL_PAGE_URL'] ?>">
-                        <div onclick="window.location.href='<?= $item['DETAIL_PAGE_URL'] ?>'" style="cursor: pointer" class="image-block">
+                        <a href="<?= $item['DETAIL_PAGE_URL']?>" style="cursor: pointer" class="image-block">
                             <div class="i-box">
                                 <img src="<?=$item["PREVIEW_PICTURE"]['src']?>"
                                      alt="<?=$item['NAME']?>"
                                      title="<?=$item['NAME']?>"
                                 >
                             </div>
-                        </div>
+                        </a>
                         <div class="px-2 px-lg-3 content-block">
                             <div class="d-flex flex-column h-100 justify-content-between text-right">
                                 <div class="mb-3 mb-lg-5 d-flex flex-column-reverse flex-lg-row justify-content-between align-items-end">

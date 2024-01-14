@@ -67,9 +67,3 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/assets/components/buttons/edit.js');
         </div>
     </div>
 </div>
-
-
-
-
-
-

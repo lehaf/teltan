@@ -609,6 +609,9 @@ function isExistActiveElements(int $iblockId, ?int $sectionId = NULL, int $cache
 
 function getCurUserAdsCount(string $activeItems = 'Y') : int
 {
+    $cache = \Bitrix\Main\Data\Cache::createInstance(); // Служба кеширования
+    $taggedCache = \Bitrix\Main\Application::getInstance()->getTaggedCache(); // Служба пометки кеша тегами
+
     $iblocks = [
         PROPERTY_ADS_IBLOCK_ID,
         SCOOTER_IBLOCK_ID,
@@ -617,22 +620,56 @@ function getCurUserAdsCount(string $activeItems = 'Y') : int
         SIMPLE_ADS_IBLOCK_ID,
     ];
 
-    $count = 0;
-    foreach ($iblocks as $iblockId) {
-        $iblockClass = \Bitrix\Iblock\Iblock::wakeUp($iblockId)->getEntityDataClass();
-        $adsInfo = $iblockClass::getList(array(
-            'order' => ['ID' => 'ASC'],
-            'select' => ['ID'],
-            'filter' => array(
-                'ID_USER.VALUE' => \Bitrix\Main\Engine\CurrentUser::get()->getId(),
-                'ACTIVE' => $activeItems
-            ),
-            'cache' => array(
-                'ttl' => 3600000,
-                'cache_joins' => true
-            ),
-        ))->fetchCollection();
-        $count += $adsInfo->count();
+
+    $cacheTtl = 360000000;
+    $cachePath = 'user_ads_count';
+    $cacheId = 'user_ads_count_'.$activeItems;
+
+    if ($cache->initCache($cacheTtl, $cacheId, $cachePath)) {
+        $count = $cache->getVars();
+    } elseif ($cache->startDataCache()) {
+        // Начинаем записывать теги
+        $taggedCache->startTagCache($cachePath);
+        foreach ($iblocks as $iblockId) {
+            $taggedCache->registerTag("iblock_id_".$iblockId);
+        }
+        $taggedCache->endTagCache();
+
+        $query = \Bitrix\Iblock\ElementTable::query()
+            ->setSelect(['ID'])
+            ->setFilter([
+                'IBLOCK_ID' => $iblocks,
+                'ACTIVE' => $activeItems,
+                'ID_USER' => \Bitrix\Main\Engine\CurrentUser::get()->getId()
+            ])
+            ->setGroup([
+                'ID',
+            ])
+            ->registerRuntimeField(
+                new \Bitrix\Main\Entity\ReferenceField(
+                    'ELEMENT_PROPERTY', // Даем алиас таблице
+                    '\Bitrix\Iblock\ElementPropertyTable',
+                    ['=this.ID' => 'ref.IBLOCK_ELEMENT_ID'],
+                )
+            )
+            ->registerRuntimeField(
+                new \Bitrix\Main\Entity\ReferenceField(
+                    'PROPERTY', // Даем алиас таблице
+                    '\Bitrix\Iblock\PropertyTable',
+                    ['=this.ELEMENT_PROPERTY.IBLOCK_PROPERTY_ID' => 'ref.ID'],
+                )
+            )
+            ->registerRuntimeField(
+                'ID_USER',
+                [
+                    'expression' => ['GROUP_CONCAT(CASE WHEN %s = "ID_USER" THEN %s  END)', 'PROPERTY.CODE', 'ELEMENT_PROPERTY.VALUE']
+                ]
+            );
+
+        $count = $query->queryCountTotal();
+
+        $cache->endDataCache($count);
     }
+
     return $count;
 }
