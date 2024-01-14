@@ -97,13 +97,18 @@ $APPLICATION->SetTitle("Teltan - main");
     <div class="d-flex flex-column">
         <?php
         // PROPERTY MARKET
-        global $arrFilterProp;
-        $arrFilterProp = array(
-            array(
-                "LOGIC" => "OR",
-                "PROPERTY_VIP_DATE" => false,
-                "<PROPERTY_VIP_DATE" => date('Y-m-d H:i:s')
-            )
+        global $adsFilter;
+        $adsFilter = array(
+            [
+            'LOGIC' => 'OR',
+            "=PROPERTY_VIP_DATE" => false,
+            "=PROPERTY_VIP_FLAG" => false
+            ],
+            [
+                'LOGIC' => 'OR',
+                "=PROPERTY_VIP_DATE" => '',
+                "=PROPERTY_VIP_FLAG" => ''
+            ]
         );
 
         $APPLICATION->IncludeComponent(
@@ -120,8 +125,8 @@ $APPLICATION->SetTitle("Teltan - main");
                 "AJAX_OPTION_STYLE" => "N",
                 "CACHE_FILTER" => "Y",
                 "CACHE_GROUPS" => "N",
-                "CACHE_TIME" => "3600",
-                "CACHE_TYPE" => "N",
+                "CACHE_TIME" => "36000000",
+                "CACHE_TYPE" => "A",
                 "CHECK_DATES" => "Y",
                 "DETAIL_URL" => "",
                 "DISPLAY_BOTTOM_PAGER" => "N",
@@ -131,7 +136,7 @@ $APPLICATION->SetTitle("Teltan - main");
                 "DISPLAY_PREVIEW_TEXT" => "N",
                 "DISPLAY_TOP_PAGER" => "N",
                 "FIELD_CODE" => array("SHOW_COUNTER", "DATE_CREATE"),
-                "FILTER_NAME" => "arrFilterProp",
+                "FILTER_NAME" => "adsFilter",
                 "HIDE_LINK_WHEN_NO_DETAIL" => "N",
                 "IBLOCK_ID" => PROPERTY_ADS_IBLOCK_ID,
                 "IBLOCK_TYPE" => "announcements",
@@ -149,7 +154,14 @@ $APPLICATION->SetTitle("Teltan - main");
                 "PARENT_SECTION" => "",
                 "PARENT_SECTION_CODE" => "",
                 "PREVIEW_TRUNCATE_LEN" => "",
-                "PROPERTY_CODE" => array("VIP_DATE", "LENTA_DATE", "COLOR_DATE", "PAKET_DATE", "PRICE", ""),
+                "PROPERTY_CODE" => array(
+                    "VIP_DATE",
+                    "LENTA_DATE",
+                    "COLOR_DATE",
+                    "PAKET_DATE",
+                    "PRICE",
+                    ""
+                ),
                 "SET_BROWSER_TITLE" => "N",
                 "SET_LAST_MODIFIED" => "N",
                 "SET_META_DESCRIPTION" => "N",
@@ -167,15 +179,6 @@ $APPLICATION->SetTitle("Teltan - main");
         );
 
         // AUTO MARKET
-        global $arrFilterAuto;
-        $arrFilterAuto = array(
-            array(
-                "LOGIC" => "OR",
-                "PROPERTY_VIP_DATE" => false,
-                "<PROPERTY_VIP_DATE" => date('Y-m-d H:i:s')
-            )
-        );
-
         $APPLICATION->IncludeComponent(
             "bitrix:news.list",
             "main",
@@ -183,9 +186,9 @@ $APPLICATION->SetTitle("Teltan - main");
                 "BLOCK_TITLE" => Loc::getMessage("AUTO"),
                 "ADD_SECTIONS_CHAIN" => "N",
                 "CACHE_FILTER" => "Y",
-                "CACHE_GROUPS" => "Y",
+                "CACHE_GROUPS" => "N",
                 "CACHE_TIME" => "36000000",
-                "CACHE_TYPE" => "N",
+                "CACHE_TYPE" => "A",
                 "CHECK_DATES" => "Y",
                 "DETAIL_URL" => "",
                 "DISPLAY_DATE" => "Y",
@@ -196,7 +199,7 @@ $APPLICATION->SetTitle("Teltan - main");
                     "SHOW_COUNTER",
                     "DATE_CREATE"
                 ),
-                "FILTER_NAME" => "arrFilterAuto",
+                "FILTER_NAME" => "adsFilter",
                 "HIDE_LINK_WHEN_NO_DETAIL" => "N",
                 "IBLOCK_ID" => AUTO_IBLOCK_ID,
                 "IBLOCK_TYPE" => "announcements",
@@ -227,15 +230,6 @@ $APPLICATION->SetTitle("Teltan - main");
         );
 
         // MOTO
-        global $arrFilterMoto;
-        $arrFilterMoto = array(
-            array(
-                "LOGIC" => "OR",
-                "PROPERTY_VIP_DATE" => false,
-                "<PROPERTY_VIP_DATE" => date('Y-m-d H:i:s')
-            )
-        );
-
         $APPLICATION->IncludeComponent(
             "bitrix:news.list",
             "main",
@@ -249,9 +243,9 @@ $APPLICATION->SetTitle("Teltan - main");
                 "AJAX_OPTION_JUMP" => "N",
                 "AJAX_OPTION_STYLE" => "N",
                 "CACHE_FILTER" => "Y",
-                "CACHE_GROUPS" => "Y",
+                "CACHE_GROUPS" => "N",
                 "CACHE_TIME" => "36000000",
-                "CACHE_TYPE" => "N",
+                "CACHE_TYPE" => "A",
                 "CHECK_DATES" => "Y",
                 "DETAIL_URL" => "",
                 "DISPLAY_BOTTOM_PAGER" => "N",
@@ -261,7 +255,7 @@ $APPLICATION->SetTitle("Teltan - main");
                 "DISPLAY_PREVIEW_TEXT" => "N",
                 "DISPLAY_TOP_PAGER" => "N",
                 "FIELD_CODE" => array("SHOW_COUNTER", "DATE_CREATE"),
-                "FILTER_NAME" => "arrFilterMoto",
+                "FILTER_NAME" => "adsFilter",
                 "HIDE_LINK_WHEN_NO_DETAIL" => "N",
                 "IBLOCK_ID" => MOTO_IBLOCK_ID,
                 "IBLOCK_TYPE" => "announcements",
@@ -297,15 +291,6 @@ $APPLICATION->SetTitle("Teltan - main");
         );
 
         // SCOOTER
-        global $arrFilterScooter;
-        $arrFilterScooter = array(
-            array(
-                "LOGIC" => "OR",
-                "PROPERTY_VIP_DATE" => false,
-                "<PROPERTY_VIP_DATE" => date('Y-m-d H:i:s')
-            )
-        );
-
         $APPLICATION->IncludeComponent(
             "bitrix:news.list",
             "main",
@@ -319,9 +304,9 @@ $APPLICATION->SetTitle("Teltan - main");
                 "AJAX_OPTION_JUMP" => "N",
                 "AJAX_OPTION_STYLE" => "N",
                 "CACHE_FILTER" => "Y",
-                "CACHE_GROUPS" => "Y",
+                "CACHE_GROUPS" => "N",
                 "CACHE_TIME" => "36000000",
-                "CACHE_TYPE" => "N",
+                "CACHE_TYPE" => "A",
                 "CHECK_DATES" => "Y",
                 "DETAIL_URL" => "",
                 "DISPLAY_BOTTOM_PAGER" => "N",
@@ -331,7 +316,7 @@ $APPLICATION->SetTitle("Teltan - main");
                 "DISPLAY_PREVIEW_TEXT" => "N",
                 "DISPLAY_TOP_PAGER" => "N",
                 "FIELD_CODE" => array("SHOW_COUNTER", "DATE_CREATE"),
-                "FILTER_NAME" => "arrFilterScooter",
+                "FILTER_NAME" => "adsFilter",
                 "HIDE_LINK_WHEN_NO_DETAIL" => "N",
                 "IBLOCK_ID" => SCOOTER_IBLOCK_ID,
                 "IBLOCK_TYPE" => "announcements",
@@ -367,15 +352,6 @@ $APPLICATION->SetTitle("Teltan - main");
         );
 
         // FLEA-MARKET
-        global $arrFilterAD;
-        $arrFilterAD = array(
-            array(
-                "LOGIC" => "OR",
-                "PROPERTY_VIP_DATE" => false,
-                "<PROPERTY_VIP_DATE" => date('Y-m-d H:i:s')
-            )
-        );
-
         $APPLICATION->IncludeComponent(
             "bitrix:news.list",
             "main",
@@ -389,9 +365,9 @@ $APPLICATION->SetTitle("Teltan - main");
                 "AJAX_OPTION_JUMP" => "N",
                 "AJAX_OPTION_STYLE" => "N",
                 "CACHE_FILTER" => "Y",
-                "CACHE_GROUPS" => "Y",
+                "CACHE_GROUPS" => "N",
                 "CACHE_TIME" => "36000000",
-                "CACHE_TYPE" => "N",
+                "CACHE_TYPE" => "A",
                 "CHECK_DATES" => "Y",
                 "DETAIL_URL" => "",
                 "DISPLAY_BOTTOM_PAGER" => "N",
@@ -401,7 +377,7 @@ $APPLICATION->SetTitle("Teltan - main");
                 "DISPLAY_PREVIEW_TEXT" => "N",
                 "DISPLAY_TOP_PAGER" => "N",
                 "FIELD_CODE" => array("SHOW_COUNTER", "DATE_CREATE"),
-                "FILTER_NAME" => "arrFilterAD",
+                "FILTER_NAME" => "adsFilter",
                 "HIDE_LINK_WHEN_NO_DETAIL" => "N",
                 "IBLOCK_ID" => SIMPLE_ADS_IBLOCK_ID,
                 "IBLOCK_TYPE" => "announcements",

@@ -5,8 +5,6 @@
 $_SERVER['DOCUMENT_ROOT'] = '/home/bitrix/www';
 require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_before.php';
 
-use \Bitrix\Main\Type\DateTime;
-
 $iblocks = [
     SIMPLE_ADS_IBLOCK_ID,
     PROPERTY_ADS_IBLOCK_ID,
@@ -16,7 +14,7 @@ $iblocks = [
 ];
 
 if (\Bitrix\Main\Loader::includeModule('iblock')) {
-    $curTime =  new DateTime();
+    $curTime =  date("Y-m-d H:i:s", time());
     foreach ($iblocks as $iblockId) {
         $iblockClass = \Bitrix\Iblock\Iblock::wakeUp($iblockId)->getEntityDataClass();
         $collection = $iblockClass::getList(array(
