@@ -1,0 +1,11 @@
+.full-box {
+    min-height: 67vh;
+}
+
+div.empty-ads {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 25px;
+    margin-bottom: 30vh;
+}

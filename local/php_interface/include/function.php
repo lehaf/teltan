@@ -717,3 +717,14 @@ function getCurUserAdsCount(string $activeItems = 'Y') : int
 
     return $count;
 }
+
+function addHLItem($hlId, $data)
+{
+    if (\Bitrix\Main\Loader::includeModule("highloadblock")) {
+        $hlblock = \Bitrix\Highloadblock\HighloadBlockTable::getById($hlId)->fetch();
+        $entity = \Bitrix\Highloadblock\HighloadBlockTable::compileEntity($hlblock);
+        $hlClass = $entity->getDataClass();
+
+        return $hlClass::add($data);
+    }
+}

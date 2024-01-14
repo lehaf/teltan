@@ -277,18 +277,6 @@ function getHighloadInfo(int $hlblock_id, array $arSelect)
     return $entity_data_class::getList($arSelect)->fetchAll();
 }
 
-function addHLItem($hlblock_id, $arData)
-{
-    Loader::includeModule("highloadblock");
-
-    $hlblock = HL\HighloadBlockTable::getById($hlblock_id)->fetch();
-
-    $entity = HL\HighloadBlockTable::compileEntity($hlblock);
-    $entity_data_class = $entity->getDataClass();
-
-    return $entity_data_class::add($arData);
-}
-
 function delHlItem($hlblock_id, $IDItem)
 {
     Loader::includeModule("highloadblock");

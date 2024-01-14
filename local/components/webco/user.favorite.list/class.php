@@ -1,16 +1,26 @@
 <?php if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 
-class UserAdsCounter extends \CBitrixComponent
+class UserFavoriteList extends \CBitrixComponent
 {
+    private int $curUserId;
     private object $nav;
-    private array $searchSort = [];
+    private string $pagerName = 'favorite';
+    private array $iblocksId = [
+        PROPERTY_ADS_IBLOCK_ID,
+        SCOOTER_IBLOCK_ID,
+        MOTO_IBLOCK_ID,
+        AUTO_IBLOCK_ID,
+        SIMPLE_ADS_IBLOCK_ID,
+    ];
 
-
-    public function getUserAds(array $itemsId) : void
+    public function __construct($component = \null)
     {
-        // формируем сортировку согласно поиску
-        $this->searchSort = $itemsId;
+        $this->curUserId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
+        parent::__construct($component);
+    }
 
+    public function getUserAds() : void
+    {
         // Получаем все возможные ленты продвижения
         $ribTypes = getHighloadInfo(
             PERSONAL_RIBBON_HL_ID,
@@ -52,30 +62,25 @@ class UserAdsCounter extends \CBitrixComponent
             'MAP_LAYOUT',
             'MAP_LAYOUT_BIG',
             'LOCATION',
+            'PROP_TRANSMISION_Left',
+            'PROP_PROBEG_Left',
+            'PROP_KM_ML',
+            'PROP_ENGIEN_LITERS_Left',
+            'PROP_ENGINE',
+            'PROP_KM_ML_ENGIE',
         ];
 
-
-        $order = [];
-        $session = \Bitrix\Main\Application::getInstance()->getSession();
-        if ($session->has('sort')) {
-            $sort = $session->get('sort');
-            if ($sort['NAME'] === 'Relevance') {
-                $relevanceSort = 'Y';
-            } else {
-                $order[str_replace('property_', '', $sort['SORT'])] = $sort['ORDER'];
-                $relevanceSort = 'N';
-            }
-        }
-
-        $nav = new \Bitrix\Main\UI\PageNavigation('search_list');
+        $nav = new \Bitrix\Main\UI\PageNavigation($this->pagerName);
         $maxPageElements = !empty($this->arParams['MAX_PAGE_ELEMENTS']) ? $this->arParams['MAX_PAGE_ELEMENTS'] : 12;
 
         $nav->allowAllRecords(false)
             ->setPageSize($maxPageElements)
             ->initFromUri();
 
+        $itemsId = getFavoritesUser($this->curUserId);
+
         $query = \Bitrix\Iblock\ElementTable::query()
-            ->setOrder($order)
+            ->setOrder(['DATE_CREATE' => 'DESC'])
             ->setSelect(array_merge($select,$selectUserProps))
             ->setLimit($nav->getLimit())
             ->setOffset($nav->getOffset())
@@ -99,6 +104,30 @@ class UserAdsCounter extends \CBitrixComponent
                     '\Bitrix\Iblock\PropertyTable',
                     ['=this.ELEMENT_PROPERTY.IBLOCK_PROPERTY_ID' => 'ref.ID'],
                 )
+            )
+            ->registerRuntimeField(
+                "EDIT_PAGE",
+                [
+                    'expression' => [
+                        'CASE WHEN %s = "1" THEN "/add/fm/" 
+                      WHEN %s = "2" AND (%s = "34" OR %s = "32") THEN "/add/rent/" 
+                      WHEN %s = "2" AND (%s = "35" OR %s = "33") THEN "/add/buy/" 
+                      WHEN %s = "3" THEN "/add/auto/" 
+                      WHEN %s = "7" THEN "/add/moto/" 
+                      WHEN %s = "8" THEN "/add/scooter/" 
+                END',
+                        'IBLOCK_ID',
+                        'IBLOCK_ID',
+                        'IBLOCK_SECTION_ID',
+                        'IBLOCK_SECTION_ID',
+                        'IBLOCK_ID',
+                        'IBLOCK_SECTION_ID',
+                        'IBLOCK_SECTION_ID',
+                        'IBLOCK_ID',
+                        'IBLOCK_ID',
+                        'IBLOCK_ID',
+                    ]
+                ]
             );
 
         foreach ($selectUserProps as $propCode) {
@@ -120,8 +149,8 @@ class UserAdsCounter extends \CBitrixComponent
             $resultAds = [];
             foreach ($collection as &$ad) {
                 $ad['PRICE'] =  !empty($ad['PRICE']) ? ICON_CURRENCY.' '.round($ad['PRICE']) : '';
-                $ad['COUNT_RAISE'] = round($ad['COUNT_RAISE']);
                 $ad['RIBBON'] = !empty($ribbonTypes) && !empty($ad['TYPE_TAPE']) ?  $ribbonTypes[$ad['TYPE_TAPE']] : '';
+                $ad['COUNT_RAISE'] = round($ad['COUNT_RAISE']);
                 $ad['DETAIL_PAGE_URL'] = \CIBlock::ReplaceDetailUrl($ad['DETAIL_PAGE_URL'], $ad, true, 'E');
 
                 // Получаем разделы элементов
@@ -130,13 +159,6 @@ class UserAdsCounter extends \CBitrixComponent
                         'NAME' => $ad['SECTION_NAME'],
                         'SECTION_PAGE_URL' => \CIBlock::ReplaceDetailUrl($ad['SECTION_PAGE_URL'], $ad, true, 'S')
                     ];
-                }
-
-                // Местоположение
-                if ($ad['IBLOCK_ID'] == PROPERTY_ADS_IBLOCK_ID && (!empty($ad['MAP_LAYOUT_BIG']) || !empty($ad['MAP_LAYOUT']))){
-                    if (!empty($ad['MAP_LAYOUT_BIG']) || !empty($ad['MAP_LAYOUT'])) $region = $ad['MAP_LAYOUT_BIG'];
-                    if (!empty($ad['MAP_LAYOUT'])) $city = $ad['MAP_LAYOUT'];
-                    $ad['LOCATION'] = isset($city) ? $city . ', ' . $region : $region;
                 }
 
                 // Ресайз картинок
@@ -172,37 +194,53 @@ class UserAdsCounter extends \CBitrixComponent
                 $resultAds[] = $ad;
             }
             unset($ad);
-        }
+        } else {
+            $this->abortResultCache();
 
-        if (!empty($resultAds)) $this->sortAds($resultAds, $relevanceSort);
-    }
-
-    public function sortAds(array $ads, string $relevanceSort = 'Y') : void
-    {
-        if (!empty($ads)) {
-            foreach ($ads as $key => $adData) {
-                if ($relevanceSort === 'Y') $key = array_search($adData['ID'], $this->searchSort);
-                $typeAds = strtotime($adData['VIP_DATE']) > time() ? 'VIP' : 'COMMON';
-                $this->arResult['ITEMS'][$typeAds][$key] = $adData;
+            if (!empty($_GET[$this->pagerName])) {
+                global $APPLICATION;
+                $curPage = $APPLICATION->GetCurPage();
+                LocalRedirect($curPage);
             }
         }
+
+        if (!empty($resultAds)) $this->arResult['ADS'] = $resultAds;
+    }
+
+
+    public function bindTagsToCache()
+    {
+        global $CACHE_MANAGER;
+        foreach ($this->iblocksId as $iblockId) {
+            $CACHE_MANAGER->RegisterTag("iblock_id_".$iblockId);
+        }
+        $CACHE_MANAGER->RegisterTag("favorite_user_".$this->curUserId);
+    }
+
+    public function setPageNavigationToResult()
+    {
+        global $APPLICATION;
+        ob_start();
+        $APPLICATION->IncludeComponent(
+            "bitrix:main.pagenavigation",
+            "user-history",
+            array(
+                "NAV_OBJECT" => $this->nav,
+                "SHOW_COUNT" => "N",
+            ),
+            false
+        );
+        $this->arResult['PAGINATION'] = ob_get_contents();
+        ob_end_clean();
     }
 
     public function executeComponent()
     {
-        if (!empty($this->arParams['ITEMS'])) {
-            $this->getUserAds($this->arParams['ITEMS']);
+        if ($this->startResultCache($this->arParams['CACHE_TIME'], [$this->curUserId,$this->pagerName, $_GET[$this->pagerName]])) {
+            $this->bindTagsToCache();
+            $this->getUserAds();
+            $this->setPageNavigationToResult();
             $this->includeComponentTemplate();
-            global $APPLICATION;
-            $APPLICATION->IncludeComponent(
-                "bitrix:main.pagenavigation",
-                "user-history",
-                array(
-                    "NAV_OBJECT" => $this->nav,
-                    "SHOW_COUNT" => "N",
-                ),
-                false
-            );
         }
     }
 }
