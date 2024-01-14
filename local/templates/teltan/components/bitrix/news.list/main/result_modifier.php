@@ -95,7 +95,7 @@ if (!empty($arParams['IBLOCK_ID'])) {
         }
 
         // Получаем разделы элементов
-        if ($arParams['CATEGORY'] !== AUTO_ADS_TYPE_CODE) {
+        if ($arParams['CATEGORY'] !== AUTO_ADS_TYPE_CODE && !empty($vipItem->getIblockSection())) {
             $sectionUrlPatternParams = [
                 'ID' => $vipItem->getIblockSection()->getId(),
                 'CODE' => $vipItem->getIblockSection()->getCode(),

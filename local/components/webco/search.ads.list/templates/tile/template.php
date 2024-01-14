@@ -18,11 +18,11 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
         $this->AddEditAction($item['ID'], $item['EDIT_LINK'], $item["EDIT_LINK_TEXT"]);
         $this->AddDeleteAction($item['ID'], $item['DELETE_LINK'], $item["DELETE_LINK_TEXT"], array("CONFIRM" => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM')));
 
-        if ($item['PROPERTIES']['VIP_DATE']['VALUE'] && strtotime($item['PROPERTIES']['VIP_DATE']['VALUE']) > time()):?>
+        if ($item['VIP_DATE'] && strtotime($item['VIP_DATE']) > time()):?>
             <div class="row row-cols-1" id="<?=$this->GetEditAreaID($item['ID'])?>">
                 <div class="mb-3 col">
                     <div class="card product-card product-line product-line-vip property-vip"
-                        <?php if (!empty($item['PROPERTIES']['COLOR_DATE']['VALUE'] && strtotime($item['PROPERTIES']['COLOR_DATE']['VALUE']) > time())):?>
+                        <?php if (!empty($item['COLOR_DATE'] && strtotime($item['COLOR_DATE']) > time())):?>
                             style="background-color: <?=PROPERTY_VIP_COLOR;?>"
                         <?php endif;?>
                     >
@@ -46,10 +46,8 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
                                         </svg>
                                     </p>
                                     <?php if (!$USER->IsAuthorized()):?></a><?php endif; ?>
-                                <?php if(!empty($item['PROPERTIES']['PRICE']['VALUE'])):?>
-                                    <p class="mb-0 price">
-                                        <?=ICON_CURRENCY.' '.number_format($item['PROPERTIES']['PRICE']['VALUE'], 0, '.', ' ');?>
-                                    </p>
+                                <?php if(!empty($item['PRICE'])):?>
+                                    <p class="mb-0 price"><?=$item['PRICE']?></p>
                                 <?php endif;?>
                                 <div class="vip-marker">
                                     <div class="mr-2 icon">
@@ -69,11 +67,11 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
                                             <div class="col-12 col-xl">
                                                 <p class="d-none d-xl-inline-block engin">
                                                     <span>
-                                                        <?= $item['PROPERTIES']['PROP_ENGIEN_NEW_Left']['VALUE'] ?>
-                                                        <?= $item['PROPERTIES']['PROP_KM_ML_ENGIE']['VALUE'] ?>
-                                                          <span><?= $item['PROPERTIES']['PROP_ENGINE']['VALUE'] ?></span>
+                                                        <?= $item['PROP_ENGIEN_NEW_Left'] ?>
+                                                        <?= $item['PROP_KM_ML_ENGIE'] ?>
+                                                          <span><?= $item['PROP_ENGINE'] ?></span>
                                                         ,
-                                                        <span> <?= $item['PROPERTIES']['PROP_ENGIEN_LITERS_Left']['VALUE'] ?> l.</span>
+                                                        <span> <?= $item['PROP_ENGIEN_LITERS_Left'] ?> l.</span>
                                                         </span>
                                                     <i class="icon-engine"></i>
                                                 </p>
@@ -94,18 +92,18 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
                                                 <?php endif;?>
                                             </div>
                                             <div class="col-12 col-xl-4">
-                                                <?php if(!empty($item['PROPERTIES']['PROP_PROBEG_Left']['VALUE'])):?>
+                                                <?php if(!empty($item['PROP_PROBEG_Left'])):?>
                                                     <p class="mileage mb-3">
                                                         <span>
-                                                            <?=number_format($item['PROPERTIES']['PROP_PROBEG_Left']['VALUE'], 0, '.', ' ');?>
-                                                            <?=$item['PROPERTIES']['PROP_KM_ML']['VALUE']?>
+                                                            <?=number_format($item['PROP_PROBEG_Left'], 0, '.', ' ');?>
+                                                            <?=$item['PROP_KM_ML']?>
                                                         </span>
                                                         <i class="ml-2 icon-download-speed"></i>
                                                     </p>
                                                 <?php endif;?>
-                                                <?php if(!empty($item['PROPERTIES']['PROP_TRANSMISION_Left']['VALUE'])):?>
+                                                <?php if(!empty($item['PROP_TRANSMISION_Left'])):?>
                                                     <p class="d-none d-xl-inline-block transmission">
-                                                        <span><?=$item['PROPERTIES']['PROP_TRANSMISION_Left']['VALUE']?></span>
+                                                        <span><?=$item['PROP_TRANSMISION_Left']?></span>
                                                         <i class="ml-2 icon-manual-transmission"></i>
                                                     </p>
                                                 <?php endif;?>
@@ -180,7 +178,7 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
             ?>
             <div class="mb-4 col" id="<?=$this->GetEditAreaID($item['ID'])?>">
                 <div class="card product-card auto-product <?=$arParams['IMG_VIEW'] !== 'CONTAINER' ? 'property-product' : ''?>"
-                    <?php if (!empty($item['PROPERTIES']['COLOR_DATE']['VALUE'] && strtotime($item['PROPERTIES']['COLOR_DATE']['VALUE']) > time())):?>
+                    <?php if (!empty($item['COLOR_DATE'] && strtotime($item['COLOR_DATE']) > time())):?>
                         style="background-color: <?=PROPERTY_VIP_COLOR;?>"
                     <?php endif;?>>
                     <div class="image-block">
@@ -202,15 +200,15 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
                                 </svg>
                             </p>
                             <?php if (!$USER->IsAuthorized()):?></a><?php endif; ?>
-                        <?php if(!empty($item['PROPERTIES']['PRICE']['VALUE'])):?>
-                            <p class="mb-0 price"><?=ICON_CURRENCY.' '.number_format($item['PROPERTIES']['PRICE']['VALUE'], 0, '.', ' ');?></p>
+                        <?php if(!empty($item['PRICE'])):?>
+                            <p class="mb-0 price"><?=$item['PRICE']?></p>
                         <?php endif;?>
                     </div>
                     <div class="px-2 px-lg-3 content-block">
                         <div class="text-right">
                             <a href="<?=$item['DETAIL_PAGE_URL']?>" class="mb-2 mb-lg-3 title"><?=$item['NAME']?></a>
-                            <?php if(!empty($item['PROPERTIES']['PROP_PROBEG_Left']['VALUE'])):?>
-                                <p class="mb-2 mileage"><?=number_format($item['PROPERTIES']['PROP_PROBEG_Left']['VALUE'], 0, '.', ' ');?> <?=$item['PROPERTIES']['PROP_KM_ML']['VALUE']?><i class="ml-2 icon-download-speed"></i></p>
+                            <?php if(!empty($item['PROP_PROBEG_Left'])):?>
+                                <p class="mb-2 mileage"><?=number_format($item['PROP_PROBEG_Left'], 0, '.', ' ');?> <?=$item['PROP_KM_ML']?><i class="ml-2 icon-download-speed"></i></p>
                             <?php endif;?>
                             <?php if($item['LOCATION']):?>
                                 <p class="mb-2 location">
@@ -249,8 +247,7 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
                                 <div class="rec-top"></div>
                                 <div class="rec-bottom"></div>
                             </div>
-                            <div class="text"
-                                 style="background-color: <?='#'.$item['RIBBON']['UF_COLOR']?>">
+                            <div class="text" style="background-color: <?='#'.$item['RIBBON']['UF_COLOR']?>">
                                 <?=$item['RIBBON']['UF_NAME']?>
                             </div>
                         </div>

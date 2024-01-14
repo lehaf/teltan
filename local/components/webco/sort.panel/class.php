@@ -46,11 +46,17 @@ class SortPanel extends \CBitrixComponent
                 $this->session->set('sort', $sortsSet[$this->post->get('sortNumber')]);
             }
 
-            if ($this->session->has('sort') || empty($this->session->get('sort'))) {
+            if ($this->session->has('sort') && !empty(array_search($this->session->get('sort'), $sortsSet)) || empty($this->session->get('sort'))) {
                 $curSort = $this->session->get('sort');
                 $this->arResult['SORT_TEXT'] = $curSort['NAME'];
                 $curSortKey = array_search($curSort, $sortsSet);
                 $sortsSet[$curSortKey]['ACTIVE'] = 'Y';
+            } else {
+                if (!empty($sortsSet[0])) {
+                    $this->arResult['SORT_TEXT'] = $sortsSet[0]['NAME'];
+                    $this->session->set('sort', $sortsSet[0]);
+                    $sortsSet[0]['ACTIVE'] = 'Y';
+                }
             }
 
             $this->arResult['SORTS'] =  $sortsSet;
