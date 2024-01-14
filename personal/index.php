@@ -95,7 +95,7 @@ $unActiveCount = getCurUserAdsCount('N');
             </div>
             <div class="p-0 modal-body text-right">
                 <p class="mb-4 text-uppercase font-weight-bold">
-                    MY BALANCE: <span id="payTcoinsBalance" class="text-primary"></span> TCOIN
+                    MY BALANCE: <span id="payTcoinsBalance" class="text-primary">0 </span> TCOIN
                 </p>
                 <p class="mb-0 text-uppercase font-weight-bold">
                     К списанию: <span id="payTcoinsNeedle" class="text-primary">2.5 </span> TCOIN
@@ -120,7 +120,7 @@ $unActiveCount = getCurUserAdsCount('N');
             </div>
             <div class="p-0 modal-body text-right">
                 <p class="mb-4 text-uppercase font-weight-bold">
-                    MY BALANCE: <span id="paySkekBalance" class="text-primary"></span> <?=ICON_CURRENCY?>
+                    MY BALANCE: <span id="paySkekBalance" class="text-primary">0</span> <?=ICON_CURRENCY?>
                 </p>
                 <p class="mb-0 text-uppercase font-weight-bold">
                     К списанию: <span id="payShekNeedle" class="text-primary">2.5 </span> <?= ICON_CURRENCY ?>

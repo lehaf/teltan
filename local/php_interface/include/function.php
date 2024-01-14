@@ -228,6 +228,37 @@ function getOptimalActiveUserRate(string $adsCategory) : ?array
     return !empty($optimalRate) ? $optimalRate : NULL;
 }
 
+/** Функция возвращает максимальное кол-во платных объявлений,
+ * которые может создать пользователь на текущий момент.
+ * Учитываются только активные тарифы
+ */
+function getActiveUserRatesFullLimit(string $adsCategory) : ?int
+{
+    $limit = 0;
+    if (CModule::IncludeModule('highloadblock')) {
+        $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
+        $curTime = new DateTime();
+        $boughtRateEntity = GetEntityDataClass(BOUGHT_RATE_HL_ID);
+        $userRates = $boughtRateEntity::getList(array(
+            'order' => array('ID' => 'ASC'),
+            'select' => array('*'),
+            'filter' => array(
+                'UF_USER_ID'=> $userId,
+                'UF_TYPE'=> $adsCategory,
+                '>UF_DATE_EXPIRED'=> $curTime
+            )
+        ))->fetchAll();
+
+        if (!empty($userRates)) {
+            foreach ($userRates as $rate) {
+                $limit += $rate['UF_COUNT_REMAIN'];
+            }
+        }
+    }
+
+    return $limit ?? NULL;
+}
+
 function getRateInfoById(int $rateId) : ?array
 {
     if (CModule::IncludeModule('highloadblock')) {
@@ -319,15 +350,28 @@ function canUserCreateAds(int $iblockId, string $categoryCode) : bool
 {
     $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
     $arUser = \CUser::GetByID($userId)->Fetch();
-    $optimalUserRate = getOptimalActiveUserRate($categoryCode);
+    $userFreeAdsLimit = $arUser['UF_FREE_'.$categoryCode]; // Лимит объявлений на данной категории у пользователя
+
     $iblockClass = \Bitrix\Iblock\Iblock::wakeUp($iblockId)->getEntityDataClass();
-    $elements = $iblockClass::getList(array(
+    // Получаем кол-во активных БЕСПЛАТНЫХ объявлений
+    $freeActiveAds = $iblockClass::getList(array(
         'select' => array('ID', 'NAME'),
-        'filter' => ['ID_USER.VALUE' => $userId, '!FREE_AD.VALUE' => false]
-    ))->fetchCollection();
-    $countUserFreeAds = $elements->count();
-    $countRatesAds = !empty($optimalUserRate['ADS_USED']) ? $optimalUserRate['ADS_USED'] : 0;
-    return ($countRatesAds + $arUser['UF_FREE_'.$categoryCode] - $arUser['UF_COUNT_'.$categoryCode] - $countUserFreeAds) > 0;
+        'filter' => ['ID_USER.VALUE' => $userId, '!FREE_AD.VALUE' => false, 'ACTIVE' => 'Y'],
+        'count_total' => 1,
+    ));
+    $countUserFreeActiveAds = $freeActiveAds->getCount();
+    // Получаем кол-во активных ПЛАТНЫХ объявлений
+    $costActiveAds = $iblockClass::getList(array(
+        'select' => array('ID', 'NAME'),
+        'filter' => ['ID_USER.VALUE' => $userId, 'FREE_AD.VALUE' => false, 'ACTIVE' => 'Y'],
+        'count_total' => 1,
+    ));
+    $countUserCostActiveAds = $costActiveAds->getCount();
+
+    // Получаем лимит платных объявлений
+    $limitCostActiveRates = getActiveUserRatesFullLimit( $categoryCode) ?? 0;
+
+    return ($limitCostActiveRates + $userFreeAdsLimit - $countUserCostActiveAds - $countUserFreeActiveAds) > 0;
 }
 
 function getCurUserActiveRates() : array
@@ -620,10 +664,10 @@ function getCurUserAdsCount(string $activeItems = 'Y') : int
         SIMPLE_ADS_IBLOCK_ID,
     ];
 
-
+    $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
     $cacheTtl = 360000000;
     $cachePath = 'user_ads_count';
-    $cacheId = 'user_ads_count_'.$activeItems;
+    $cacheId = 'user_'.$userId.'_ads_count_'.$activeItems;
 
     if ($cache->initCache($cacheTtl, $cacheId, $cachePath)) {
         $count = $cache->getVars();
@@ -640,7 +684,7 @@ function getCurUserAdsCount(string $activeItems = 'Y') : int
             ->setFilter([
                 'IBLOCK_ID' => $iblocks,
                 'ACTIVE' => $activeItems,
-                'ID_USER' => \Bitrix\Main\Engine\CurrentUser::get()->getId()
+                'ID_USER' => $userId
             ])
             ->setGroup([
                 'ID',

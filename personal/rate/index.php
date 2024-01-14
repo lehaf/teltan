@@ -1,7 +1,6 @@
 <?php require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 
 use Bitrix\Main\Localization\Loc;
-Loc::loadMessages(__FILE__);
 
 $entity_data_class = GetEntityDataClass(TYPE_RATES_HL_ID);
 $rsData = $entity_data_class::getList(array(
@@ -40,13 +39,10 @@ while ($arTypes = $rsData->fetch()) {
     }
 }
 ?>
-
     <div class="container">
         <h2 class="mb-4 subtitle"><?=$APPLICATION->ShowTitle()?></h2>
         <div class="row">
-
             <div id="paketControl" class="col-12 col-lg-8 col-xl-9">
-
                 <!-- CLASSIC TARIF -->
                 <div class="d-flex justify-content-end select-tarif-nav-box">
                     <ul class="nav nav-pills bg-white" id="pills-tab" role="tablist">
@@ -54,22 +50,17 @@ while ($arTypes = $rsData->fetch()) {
                             <a class="nav-link" id="pills-flea-market-tab" data-toggle="pill" href="#pills-flea-market"
                                role="tab" aria-controls="pills-flea-market" aria-selected="false"><?=Loc::getMessage('Flea-market')?></a>
                         </li>
-
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" id="pills-property-tab" data-toggle="pill" href="#pills-property"
                                role="tab" aria-controls="pills-property" aria-selected="false"><?=Loc::getMessage('Property')?></a>
                         </li>
-
                         <li class="nav-item nav-item-last" role="presentation">
                             <a class="nav-link active" id="pills-auto-tab" data-toggle="pill" href="#pills-auto"
                                role="tab" aria-controls="pills-auto" aria-selected="true"><?=Loc::getMessage('Auto')?></a>
                         </li>
                     </ul>
                 </div>
-
-
                 <div class="px-3 px-md-4 px-lg-5 pt-0 card select-tarif">
-
                     <div class="tab-content" id="pills-tabContent">
                         <div class="tab-pane fade active show" id="pills-auto" role="tabpanel"
                              aria-labelledby="pills-auto-tab">
@@ -77,7 +68,7 @@ while ($arTypes = $rsData->fetch()) {
                                 <p class="h3 mb-4 px-4 pt-4 pb-3 text-right border-bottom"><?=Loc::getMessage('Classic')?></p>
 
                                 <div class="mb-4 d-flex flex-column">
-                                    <? foreach ($arTypeAuto['CLASSIC'] as $arItem) { ?>
+                                    <?php foreach ($arTypeAuto['CLASSIC'] as $arItem) { ?>
                                         <div class="mb-4 d-flex flex-column">
                                             <div class="d-flex justify-content-between justify-content-end">
                                                 <p class="m-0 mx-2 mx-lg-4 text-primary font-weight-bold text-nowrap"><?= $arItem['UF_PRICE'] ?>
@@ -104,14 +95,14 @@ while ($arTypes = $rsData->fetch()) {
                                             </div>
 
                                         </div>
-                                    <? } ?>
+                                    <?php } ?>
                                 </div>
 
                                 <!-- BUSINES TARIF -->
                                 <p class="h3 mb-4 px-4 pt-4 pb-3 text-right border-bottom"><?=Loc::getMessage('Business')?></p>
 
                                 <div class="mb-4 d-flex flex-column">
-                                    <? foreach ($arTypeAuto['BUSINES'] as $arItem) { ?>
+                                    <?php foreach ($arTypeAuto['BUSINES'] as $arItem) { ?>
                                         <div class="mb-4 d-flex flex-column">
                                             <div class="d-flex justify-content-between justify-content-end">
                                                 <p class="m-0 mx-2 mx-lg-4 text-primary font-weight-bold text-nowrap"><?= $arItem['UF_PRICE'] ?>
@@ -138,7 +129,7 @@ while ($arTypes = $rsData->fetch()) {
                                             </div>
 
                                         </div>
-                                    <? } ?>
+                                    <?php } ?>
                                 </div>
 
                                 <div class="mb-4 d-flex flex-column flex-md-row justify-content-end">
@@ -205,7 +196,7 @@ while ($arTypes = $rsData->fetch()) {
                                 <p class="h3 mb-4 px-4 pt-4 pb-3 text-right border-bottom"><?=Loc::getMessage('Classic')?></p>
 
                                 <div class="mb-4 d-flex flex-column">
-                                    <? foreach ($arTypeProp['CLASSIC'] as $arItem) { ?>
+                                    <?php foreach ($arTypeProp['CLASSIC'] as $arItem) { ?>
                                         <div class="mb-4 d-flex flex-column">
                                             <div class="d-flex justify-content-between justify-content-end">
                                                 <p class="m-0 mx-2 mx-lg-4 text-primary font-weight-bold text-nowrap"><?= $arItem['UF_PRICE'] ?>
@@ -232,14 +223,14 @@ while ($arTypes = $rsData->fetch()) {
                                             </div>
 
                                         </div>
-                                    <? } ?>
+                                    <?php } ?>
                                 </div>
 
                                 <!-- BUSINES TARIF -->
                                 <p class="h3 mb-4 px-4 pt-4 pb-3 text-right border-bottom"><?=Loc::getMessage('Business')?></p>
 
                                 <div class="mb-4 d-flex flex-column">
-                                    <? foreach ($arTypeProp['BUSINES'] as $arItem) { ?>
+                                    <?php foreach ($arTypeProp['BUSINES'] as $arItem) { ?>
                                         <div class="mb-4 d-flex flex-column">
                                             <div class="d-flex justify-content-between justify-content-end">
                                                 <p class="m-0 mx-2 mx-lg-4 text-primary font-weight-bold text-nowrap"><?= $arItem['UF_PRICE'] ?>
@@ -266,7 +257,7 @@ while ($arTypes = $rsData->fetch()) {
                                             </div>
 
                                         </div>
-                                    <? } ?>
+                                    <?php } ?>
                                 </div>
 
                                 <div class="mb-4 d-flex flex-column flex-md-row justify-content-end">
@@ -331,7 +322,7 @@ while ($arTypes = $rsData->fetch()) {
                              aria-labelledby="pills-flea-market-tab">
                             <form action="">
                                 <p class="h3 mb-4 px-4 pt-4 pb-3 text-right border-bottom"><?=Loc::getMessage('Classic')?></p>
-                                <? foreach ($arTypeFlea['CLASSIC'] as $arItem) { ?>
+                                <?php foreach ($arTypeFlea['CLASSIC'] as $arItem) { ?>
                                     <div class="mb-4 d-flex flex-column">
                                         <div class="d-flex justify-content-between justify-content-end">
                                             <p class="m-0 mx-2 mx-lg-4 text-primary font-weight-bold text-nowrap"><?= $arItem['UF_PRICE'] ?>
@@ -357,12 +348,12 @@ while ($arTypes = $rsData->fetch()) {
                                         </div>
 
                                     </div>
-                                <? } ?>
+                                <?php } ?>
 
                                 <!-- BUSINES TARIF -->
                                 <p class="h3 mb-4 px-4 pt-4 pb-3 text-right border-bottom"><?=Loc::getMessage('Business')?></p>
 
-                                <? foreach ($arTypeFlea['BUSINES'] as $arItem) { ?>
+                                <?php foreach ($arTypeFlea['BUSINES'] as $arItem) { ?>
                                     <div class="mb-4 d-flex flex-column">
                                         <div class="d-flex justify-content-between justify-content-end">
                                             <p class="m-0 mx-2 mx-lg-4 text-primary font-weight-bold text-nowrap"><?= $arItem['UF_PRICE'] ?> T</p>
@@ -384,7 +375,7 @@ while ($arTypes = $rsData->fetch()) {
                                             </div>
                                         </div>
                                     </div>
-                                <? } ?>
+                                <?php } ?>
 
                                 <div class="mb-4 d-flex flex-column flex-md-row justify-content-end">
                                     <!-- Button trigger modal -->
@@ -461,7 +452,7 @@ while ($arTypes = $rsData->fetch()) {
                     </div>
                 </div>
             </div>
-            <? include $_SERVER['DOCUMENT_ROOT'] . '/personal/left.php' ?>
+            <?php include $_SERVER['DOCUMENT_ROOT'] . '/personal/left.php' ?>
             <script>
                 $('.controlPanelPaket').click(function () {
                     let $data;
@@ -568,4 +559,4 @@ while ($arTypes = $rsData->fetch()) {
             <button onclick="$('.alert-confirmation').removeClass('show');" class="btn_confirm btn border-primary text-uppercase font-weight-bold text-primary py-3 px-5">ok</button>
         </div>
     </div>
-<? require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php"); ?>
+<?php require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php"); ?>
