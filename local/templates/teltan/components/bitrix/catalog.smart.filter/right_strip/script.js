@@ -11,7 +11,7 @@ function JCSmartFilter(ajaxURL, viewMode, params)
         this.bindUrlToButton('set_filter', params.SEF_SET_FILTER_URL);
         this.sef = true;
     }
-    console.log(params.SEF_SET_FILTER_URL)
+
     if (params && params.SEF_DEL_FILTER_URL)
     {
         this.bindUrlToButton('del_filter', params.SEF_DEL_FILTER_URL);
@@ -203,7 +203,6 @@ JCSmartFilter.prototype.postHandler = function (result, fromCache)
                 if (modef.style.display === 'none')
                 {
 
-                    console.log(result)
                     modef.style.display = 'inline-block';
                 }
 
@@ -291,7 +290,6 @@ JCSmartFilter.prototype.postHandler = function (result, fromCache)
 
 JCSmartFilter.prototype.bindUrlToButton = function (buttonId, url)
 {
-    console.log(url)
     var button = BX(buttonId);
     if (button)
     {
@@ -468,8 +466,6 @@ JCSmartFilter.prototype.showDropDownPopup = function(element, popupId)
 JCSmartFilter.prototype.selectDropDownItem = function(element, controlId , selector)
 {
     this.keyup(BX(controlId));
-    console.log($(element).html())
-    console.log(selector)
     $(selector).html($(element).html())
     var wrapContainer = BX.findParent(BX(controlId), {className:"bx_filter_select_container"}, false);
 
@@ -970,7 +966,95 @@ class RangeSlider {
     }
 }
 
+const FilterCollapseManager = function () {
+    this.settings = {
+        'cookieName':'stripFilterCollapse',
+        'collapseItemsIdAttrSelector':'p.filter-select__collapse-title[data-collapse-id]',
+        'collapseAttr':'data-collapse-id',
+    }
+
+    this.$startPageCookie = this.getCookie(this.settings.cookieName).length > 0 ?
+        JSON.parse(this.getCookie(this.settings.cookieName)) : null;
+    this.$collapses = document.querySelectorAll(this.settings.collapseItemsIdAttrSelector);
+    this.init();
+}
+
+FilterCollapseManager.prototype.init = function () {
+    this.collapseManagerEvent();
+}
+
+FilterCollapseManager.prototype.setCookie = function (name, value, days) {
+    // Установка куки
+    let expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+
+}
+
+FilterCollapseManager.prototype.getCookie = function (cookieName) {
+    const name = cookieName + "=";
+    const cookieArray = document.cookie.split(';');
+    for(let i = 0; i < cookieArray.length; i++) {
+        let cookie = cookieArray[i];
+        while (cookie.charAt(0) === ' ') {
+            cookie = cookie.substring(1);
+        }
+        if (cookie.indexOf(name) === 0) {
+            return cookie.substring(name.length, cookie.length);
+        }
+    }
+    return "";
+}
+
+FilterCollapseManager.prototype.collapseManagerEvent = function () {
+    const _this = this;
+    if (this.$collapses.length > 0) {
+        this.$collapses.forEach((collapse) => {
+            const collapseState = collapse.getAttribute('aria-expanded');
+            const collapseId = collapse.getAttribute(_this.settings.collapseAttr);
+
+            if (this.$startPageCookie) {
+                const indexCollapse = this.$startPageCookie.indexOf(collapseId)
+                if (indexCollapse !== -1) {
+                    collapse.classList.add('collapsed');
+                    collapse.parentNode.querySelector('div.collapse.show').classList.remove('show');
+                }
+            }
+
+            collapse.onclick = () => {
+                const stripFilterCollapse = this.getCookie(this.settings.cookieName);
+                if (stripFilterCollapse.length > 0) {
+                    let data = JSON.parse(stripFilterCollapse);
+                    const index = data.indexOf(collapseId);
+
+                    if (collapseState === 'true' && index === -1) {
+                        data.push(collapseId);
+                    } else {
+                        if (index > -1) {
+                            data.splice(index, 1);
+                        }
+                    }
+                    console.log(data);
+                    _this.setCookie(_this.settings.cookieName, JSON.stringify(data), 60);
+                } else {
+                    let data = [];
+
+                    if (collapseState === 'true') data.push(collapseId);
+                    console.log(data);
+                    _this.setCookie(_this.settings.cookieName, JSON.stringify(data), 60);
+                }
+            }
+        });
+    }
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
+    new FilterCollapseManager();
     new RangeSlider('rangeSlider');
     new RangeSlider('rangeSliderMainFilterMobile');
 });

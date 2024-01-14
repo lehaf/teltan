@@ -107,6 +107,10 @@ ul#smartFilterChoiceNew {
 }
 
 @media (max-width: 749.98px) {
+	form.smart-filter-form div.price-block:first-of-type {
+		margin-top: 40px !important;
+	}
+
 	div#moreFilterSettings {
 		display: block !important;
 	}

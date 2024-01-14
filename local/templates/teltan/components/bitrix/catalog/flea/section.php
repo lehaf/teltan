@@ -146,6 +146,7 @@ if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
                     "",
                     array(
                         'ELEMENTS_EXIST' => $sectionHasAds,
+                        'FILTER_BUTTON' => 'Y',
                         'SORTS' => [
                             [
                                 'NAME' => 'Price: Low to High',

@@ -120,15 +120,18 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                     switch ($arItem["DISPLAY_TYPE"]):
                         case "A":?>
                             <?php if ($arItem['CODE'] == 'PRICE' && $arItem['VALUES']['MIN']['VALUE'] != $arItem['VALUES']['MAX']['VALUE']):?>
-                                <div class="d-block mt-4 border-bottom">
+                                <div class="d-block mt-4 border-bottom price-block">
                                     <p class="filter-select__collapse-title h5 d-block text-uppercase mb-3"
-                                       data-toggle="collapse" href="#collapse<?=$arItem['CODE']?>" role="button"
+                                       data-toggle="collapse"
+                                       data-collapse-id="<?=$arItem['CODE']?>"
+                                       href="#collapse<?=$arItem['CODE']?>"
+                                       role="button"
                                        aria-expanded="true"
                                        aria-controls="collapse<?=$arItem['CODE']?>"
                                     >
                                         <span class="d-flex justify-content-between align-items-center">
                                             <i class="icone-filter-title icon-arrow-down-sign-to-navigate-3"></i>
-                                            <?=$arItem['FILTER_HINT']?>
+                                            PRICE
                                         </span>
                                     </p>
                                     <div id="collapse<?=$arItem['CODE']?>" class="collapse show">
@@ -194,7 +197,10 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                         case "B":?>
                             <div class="d-block mb-3">
                                 <p class="filter-select__collapse-title h5 d-block text-uppercase"
-                                   data-toggle="collapse" href="#collapse<?=$arItem['CODE']?>" role="button"
+                                   data-toggle="collapse"
+                                   href="#collapse<?=$arItem['CODE']?>"
+                                   data-collapse-id="<?=$arItem['CODE']?>"
+                                   role="button"
                                    aria-expanded="true"
                                    aria-controls="collapse<?=$arItem['CODE']?>">
                                 <span class="d-flex justify-content-between align-items-center"><i
@@ -299,7 +305,10 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                             <div class="border-bottom mt-4">
                                 <p class="filter-select__collapse-title h5 d-block text-uppercase mb-3"
                                    data-toggle="collapse"
-                                   href="#collapse<?=$arItem['CODE']?>" role="button" aria-expanded="true"
+                                   href="#collapse<?=$arItem['CODE']?>"
+                                   data-collapse-id="<?=$arItem['CODE']?>"
+                                   role="button"
+                                   aria-expanded="true"
                                    aria-controls="collapse<?=$arItem['CODE']?>"
                                 >
                                     <span class="d-flex justify-content-between align-items-center">
@@ -539,7 +548,10 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                                 <div class="mt-4 pb-3 border-bottom">
                                     <p class="filter-select__collapse-title h5 d-block text-uppercase mb-3"
                                        data-toggle="collapse"
-                                       href="#collapse<?=$arItem['CODE']?>" role="button" aria-expanded="true"
+                                       href="#collapse<?=$arItem['CODE']?>"
+                                       data-collapse-id="<?=$arItem['CODE']?>"
+                                       role="button"
+                                       aria-expanded="true"
                                        aria-controls="collapse<?=$arItem['CODE']?>"
                                     >
                                         <span class="d-flex justify-content-between align-items-center">
@@ -570,7 +582,10 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
                                 <div class="border-bottom mt-4">
                                     <p class="filter-select__collapse-title h5 d-block text-uppercase mb-3"
                                        data-toggle="collapse"
-                                       href="#collapse<?=$arItem['CODE']?>" role="button" aria-expanded="true"
+                                       href="#collapse<?=$arItem['CODE']?>"
+                                       data-collapse-id="<?=$arItem['CODE']?>"
+                                       role="button"
+                                       aria-expanded="true"
                                        aria-controls="collapse<?=$arItem['CODE']?>"
                                     >
                                         <span class="d-flex justify-content-between align-items-center">

@@ -144,6 +144,7 @@ $sectionHasAds = isExistActiveElements($arParams['IBLOCK_ID']);
                     "",
                     array(
                         'ELEMENTS_EXIST' => $sectionHasAds,
+                        'FILTER_BUTTON' => 'Y',
                         'SORTS' => [
                             [
                                 'NAME' => 'Price: Low to High',
