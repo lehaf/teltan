@@ -75,7 +75,7 @@ $this->setFrameMode(true);
     <div class="container">
         <?php  $elementId = $APPLICATION->IncludeComponent(
             'bitrix:catalog.element',
-            'property',
+            '',
             [
                 "USER_ID" => $userId,
                 'IBLOCK_TYPE' => $arParams['IBLOCK_TYPE'],

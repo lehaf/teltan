@@ -10164,7 +10164,7 @@ tbody tr:nth-child(even) {
       color: #555555; }
     .connection-with-seller .contact-list li {
       margin-bottom: 10px; }
-  .connection-with-seller button {
+  .connection-with-seller button, .connection-with-seller a {
     padding-left: 15px;
     padding-right: 15px;
     line-height: 34px;

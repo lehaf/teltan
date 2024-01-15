@@ -65,8 +65,22 @@ UserAdsManager.prototype.getDomElementsFromString = function (string) {
     return obDomParser.parseFromString(string, "text/html");
 }
 
+
+// class Fetcher {
+//
+//     static post = async (body) => {
+//         return fetch(link,{
+//             method: 'POST',
+//             cache: 'no-cache',
+//             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+//             body
+//         }).then(res => res.text())
+//     }
+// }
+
 UserAdsManager.prototype.sendData = function (data, link = location.href) {
     const _this = this;
+
     fetch(link, {
         method: 'POST',
         cache: 'no-cache',
@@ -99,7 +113,6 @@ UserAdsManager.prototype.sendData = function (data, link = location.href) {
         console.log(error);
     });
 }
-
 
 addEventListener('DOMContentLoaded', () => {
     new UserAdsManager();
