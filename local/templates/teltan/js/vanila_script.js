@@ -1618,9 +1618,6 @@
     }
     // MAPS END
 
-    $('#showListUserNumber').on('click', () => {
-        $('.mobile-block-show-contacts').toggleClass('show')
-    })
 
     $('#closeNumberList').on('click', () => {
         $('.mobile-block-show-contacts').removeClass('show')

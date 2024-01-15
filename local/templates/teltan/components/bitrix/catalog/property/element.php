@@ -289,4 +289,5 @@ $this->setFrameMode(true);
             )
         ); ?>
     </div>
+    <?php $APPLICATION->ShowViewContent('detail_mobile_buttons');?>
 </main>

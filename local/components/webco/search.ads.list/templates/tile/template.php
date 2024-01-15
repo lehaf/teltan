@@ -62,7 +62,7 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
                             <div class="px-2 px-lg-3 content-block">
                                 <div class="text-right">
                                     <a href="<?=$item['DETAIL_PAGE_URL']?>" class="mb-2 mb-lg-3 title"><?=$item['NAME']?></a>
-                                    <?php if ($arParams['CATEGORY'] === AUTO_ADS_TYPE_CODE):?>
+                                    <?php if ($item['IBLOCK_ID'] == AUTO_IBLOCK_ID):?>
                                         <div class="row">
                                             <div class="col-12 col-xl">
                                                 <p class="d-none d-xl-inline-block engin">

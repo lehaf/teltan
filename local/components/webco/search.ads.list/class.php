@@ -52,6 +52,12 @@ class UserAdsCounter extends \CBitrixComponent
             'MAP_LAYOUT',
             'MAP_LAYOUT_BIG',
             'LOCATION',
+            'PROP_TRANSMISION_Left',
+            'PROP_PROBEG_Left',
+            'PROP_KM_ML',
+            'PROP_ENGIEN_LITERS_Left',
+            'PROP_ENGINE',
+            'PROP_KM_ML_ENGIE',
         ];
 
 

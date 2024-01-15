@@ -1,6 +1,31 @@
 <?php if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED!==true) die();
 
 if (!empty($arResult)) {
+    
+    $arResult['EDIT_PAGE'] = '#';
+    switch ($arResult['IBLOCK_ID']) {
+        case 1:
+            $arResult['EDIT_PAGE'] = '/add/fm/?ID=' . $arResult['ID'] . '&EDIT=Y';
+            break;
+        case 2:
+            if ($arResult['PROPERTIES']['BUY']["VALUE_XML_ID"] == 'true') {
+                $arResult['EDIT_PAGE'] = '/add/rent/?ID=' . $arResult['ID'] . '&EDIT=Y';
+            } else {
+                $arResult['EDIT_PAGE'] = '/add/buy/?ID=' . $arResult['ID'] . '&EDIT=Y';
+            }
+            break;
+        case 3:
+            $arResult['EDIT_PAGE'] = '/add/auto/?ID=' . $arResult['ID'] . '&EDIT=Y';
+            break;
+        case 7:
+            $arResult['EDIT_PAGE'] = '/add/moto/?ID=' . $arResult['ID'] . '&EDIT=Y';
+            break;
+        case 8:
+            $arResult['EDIT_PAGE'] = '/add/scooter/?ID=' . $arResult['ID'] . '&EDIT=Y';
+            break;
+    }
+    
+
     if (!empty($arResult['PROPERTIES']['ID_USER']['VALUE'])) {
         $rsUser = CUser::GetByID($arResult['PROPERTIES']['ID_USER']['VALUE']);
         $arUser = $rsUser->Fetch();
@@ -10,64 +35,73 @@ if (!empty($arResult)) {
         $arResult['USER']['DATE_REGISTER'] = explode(' ', $arUser['DATE_REGISTER'])[0];
     }
 
-// Галерея
-    if($arResult['PROPERTIES']['PHOTOS']['VALUE']) {
-        foreach($arResult['PROPERTIES']['PHOTOS']['VALUE'] as $k => $item)
-        {
-            $arResult['PHOTOS'][$k]['BIG'] = resizeImg($item, 610, 470);
-            $arResult['PHOTOS'][$k]['SMALL'] = resizeImg($item, 116, 75);
-            $arResult['PHOTOS'][$k]['ORIG'] = CFile::GetPath($item);
-            $arResult['PHOTOS'][$k]['SMALL_2'] = resizeImg($item, 208, 120);
+    // Галерея
+    if ($arResult['PROPERTIES']['PHOTOS']['VALUE']) {
+        foreach($arResult['PROPERTIES']['PHOTOS']['VALUE'] as $imgId) {
+            $arResult['PHOTOS']['BIG'][] = \CFile::ResizeImageGet(
+                $imgId,
+                array(
+                    'width' => 610,
+                    'height' => 470
+                ),
+                BX_RESIZE_IMAGE_PROPORTIONAL
+            );
+
+            $arResult['PHOTOS']['SMALL'][] = \CFile::ResizeImageGet(
+                $imgId,
+                array(
+                    'width' => 116,
+                    'height' => 75
+                ),
+                BX_RESIZE_IMAGE_PROPORTIONAL
+            );
+
+            $arResult['PHOTOS']['BIG_SLIDER'][]['src'] = \CFile::GetPath($imgId);
+
+            $arResult['PHOTOS']['SMALL_SLIDER'][] = \CFile::ResizeImageGet(
+                $imgId,
+                array(
+                    'width' => 208,
+                    'height' => 120
+                ),
+                BX_RESIZE_IMAGE_PROPORTIONAL
+            );
         }
     } else {
-        if ($arResult['PREVIEW_PICTURE']['SRC']) {
-            $arResult['PHOTOS'] = [];
-        }else{
-            $arResult['PHOTOS'][0]['BIG'] = '/local/templates/teltan/assets/no-image.svg';
+        $arResult['PHOTOS']['BIG'][]['src'] = SITE_TEMPLATE_PATH.'/assets/no-image.svg';
+    }
+
+    if ($arResult['IBLOCK_ID'] == PROPERTY_ADS_IBLOCK_ID && (!empty($arResult['PROPERTIES']['MAP_LAYOUT_BIG']['VALUE']) || !empty($arResult['PROPERTIES']['MAP_LAYOUT']['VALUE']))){
+        if (!empty($arResult['PROPERTIES']['MAP_LAYOUT_BIG']['VALUE']) || !empty($arResult['PROPERTIES']['MAP_LAYOUT']['VALUE'])) $region = $arResult['PROPERTIES']['MAP_LAYOUT_BIG']['VALUE'];
+        if (!empty($arResult['PROPERTIES']['MAP_LAYOUT']['VALUE'])) $city = $arResult['PROPERTIES']['MAP_LAYOUT']['VALUE'];
+        $arResult['LOCATION'] = isset($city) ? $city . ', ' . $region : $region;
+    }
+
+    // MAP
+    if (!empty($arResult['PROPERTIES']['MAP_LATLNG']['~VALUE'])) {
+        $mapLatlnt = json_decode($arResult['PROPERTIES']['MAP_LATLNG']['~VALUE'], true);
+
+        if ($mapLatlnt['lng'] == null) {
+            $mapLatlnt['lat'] = $mapLatlnt[1];
+            $mapLatlnt['lng'] = $mapLatlnt[0];
         }
+
+        $arResult['MAP_MARK'] = json_encode([
+            'type' => 'Feature',
+            'properties' => [
+                'href' => $arResult['DETAIL_PAGE_URL'],
+                'image' => $arResult['PREVIEW_PICTURE']['SAFE_SRC'] ?? '/no-image.svg',
+                'title' => $arResult['NAME'],
+                'price' => !empty($arResult['PROPERTIES']['PRICE']['VALUE']) ? PROPERTY_CURRENCY_SYMBOL.' '.$arResult['PROPERTIES']['PRICE']['VALUE'] : '',
+                'addres' => $arResult['NAME'],
+                'date' => $arResult['DATE_CREATE'],
+                'isVip' => !empty($arResult['PROPERTIES']['VIP_DATE']['VALUE']) && strtotime($arResult['PROPERTIES']['VIP_DATE']['VALUE']) > time() ? true : false,
+            ],
+            'geometry' => [
+                'type' => 'Point',
+                'coordinates' =>
+                    [$mapLatlnt['lng'], $mapLatlnt['lat']]
+            ]
+        ]);
     }
-
-// Похожие объявления
-    $i = 0;
-    $arSelect = Array("ID", "NAME", "DETAIL_PAGE_URL", "PREVIEW_PICTURE", "PROPERTY_PRICE", "DATE_CREATE", "SHOW_COUNTER", "PROPERTY_COLOR_DATE", "PROPERTY_LENTA_DATE", "PROPERTY_TYPE_TAPE");
-    $arFilter = Array("IBLOCK_ID"=> $arResult['IBLOCK_ID'], "ACTIVE"=>"Y", "SECTION_ID" => $arResult['IBLOCK_SECTION_ID'], "!ID" => $arResult['ID']);
-    $res = CIBlockElement::GetList(Array('RAND' => 'ASC'), $arFilter, false, Array("nTopCount" => 16), $arSelect);
-    while($ob = $res->GetNextElement()) {
-        $arResult['SIMILAR'][$i] = $ob->GetFields();
-        $arResult['SIMILAR'][$i]['TAPE'] = getHighloadInfo(
-            PERSONAL_RIBBON_HL_ID,
-            array(
-                'select' => array('*'),
-                'filter' => array(
-                    'UF_XML_ID' => $arResult['SIMILAR'][$i]['PROPERTY_TYPE_TAPE_VALUE']
-                )
-            )
-        )[0];
-        $i++;
-    }
-
-    $risesTypesClass = GetEntityDataClass(PERSONAL_RISE_HL_ID);
-    $arResult['SPEED_UP_SALE']['RISES'] = $risesTypesClass::getList(array(
-        'select' => array('*')
-    ))->fetchAll();
-
-    $vipTypesClass = GetEntityDataClass(PERSONAL_VIP_TYPES_HL_ID);
-    $arResult['SPEED_UP_SALE']['VIPS'] = $vipTypesClass::getList(array(
-        'select' => array('*')
-    ))->fetchAll();
-
-    $colorTypeClass = GetEntityDataClass(PERSONAL_COLOR_HL_ID);
-    $arResult['SPEED_UP_SALE']['COLORS'] = $colorTypeClass::getList(array(
-        'select' => array('*')
-    ))->fetchAll();
-
-    $ribbonsClass = GetEntityDataClass(PERSONAL_RIBBON_HL_ID);
-    $arResult['SPEED_UP_SALE']['RIBBONS'] = $ribbonsClass::getList(array(
-        'select' => array('*')
-    ))->fetchAll();
-
-    $packetsTypesClass = GetEntityDataClass(PERSONAL_PACKET_HL_ID);
-    $arResult['SPEED_UP_SALE']['SETS'] = $packetsTypesClass::getList(array(
-        'select' => array('*')
-    ))->fetchAll();
 }

@@ -12,7 +12,7 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/assets/components/buttons/edit.js');
 $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css');
 ?>
 <div class="userItemSettings">
-    <button class="btn btn-accelerate-sale text-uppercase font-weight-bold"
+    <button class="btn btn-accelerate-sale text-uppercase font-weight-bold <?=$arParams['DETAIL_PAGE'] === 'Y' ? 'w-100' : ''?>"
             role="button"
             id="dropdownServices<?=$arResult['ITEM_ID']?>"
             data-toggle="dropdown" 
