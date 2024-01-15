@@ -104,4 +104,16 @@ if (!empty($arResult)) {
             ]
         ]);
     }
+    // Собираем поля свойств для блока описания
+    if (!empty($arResult['PROPERTIES'])) {
+        foreach ($arResult['PROPERTIES'] as $prop){
+            if (strripos($prop['CODE'], 'PROP') !== false && $prop['MULTIPLE'] == 'Y' && !empty($prop['VALUE']) && $prop['CODE'] !== 'PHOTOS') {
+                $arResult['DESCRIPTION_PROPS'][] = [
+                    'NAME' => $prop['NAME'],
+                    'VALUE' => $prop['VALUE']
+                ];
+            }
+        }
+    }
 }
+

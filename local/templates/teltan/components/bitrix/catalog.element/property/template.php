@@ -541,7 +541,7 @@ $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css')
                 <?php endif;?>
             </div>
         </div>
-        <?php if (!empty($arResult['PROPERTIES'])):?>
+        <?php if (!empty($arResult['DESCRIPTION_PROPS'])):?>
             <p class=" h2 mb-4 subtitle">Description</p>
             <div class="mb-4">
                 <div class="card p-4">
@@ -551,21 +551,19 @@ $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css')
                                 <td class="border-top-0"></td>
                                 <td class="border-top-0 font-weight-bold"></td>
                             </tr>
-                            <?php foreach ($arResult['PROPERTIES'] as $prop):?>
-                                <?php if (strripos($prop['CODE'], 'PROP') !== false && $prop['MULTIPLE'] == 'Y' && !empty($prop['VALUE']) && $prop['CODE'] !== 'PHOTOS'):?>
-                                    <tr>
-                                        <td>
-                                            <?php if (is_array($prop['VALUE'])):
-                                                foreach ($prop['VALUE'] as $key => $value):?>
-                                                    <?='- '.$value . '</br>'?>
-                                                <?php endforeach;?>
-                                            <?php else:?>
-                                                <?=$prop['VALUE']?>
-                                            <?php endif;?>
-                                        </td>
-                                        <td class="font-weight-bold">:<?=$prop['NAME']?></td>
-                                    </tr>
-                                <?php endif;?>
+                            <?php foreach ($arResult['DESCRIPTION_PROPS'] as $prop):?>
+                                <tr>
+                                    <td>
+                                        <?php if (is_array($prop['VALUE'])):
+                                            foreach ($prop['VALUE'] as $key => $value):?>
+                                                <?='- '.$value . '</br>'?>
+                                            <?php endforeach;?>
+                                        <?php else:?>
+                                            <?=$prop['VALUE']?>
+                                        <?php endif;?>
+                                    </td>
+                                    <td class="font-weight-bold">:<?=$prop['NAME']?></td>
+                                </tr>
                             <?php endforeach;?>
                         </tbody>
                     </table>
