@@ -260,236 +260,238 @@ $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css')
                 </div>
             <?php endif;?>
             <?php // Модалка с картинками?>
-            <div class="modal fade" id="modalFullSize" tabindex="-1" role="dialog"
-                 aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                <div class="modal-dialog m-0 mw-100" role="document">
-                    <div class="modal-content bg-transparent">
-                        <div class="fullScreenItemModal">
-                            <button type="button" class="m-0 mr-auto close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <div class="slider-counter-mobile"></div>
-                            <div class="fullScreenItemModal__content">
-                                <div class="row h-100">
-                                    <div class="col-3 seller-cards">
-                                        <?php if (!$arParams['USER_ID']) { ?>
-                                            <div class="mb-4 card connection-with-seller text-right 4">
-                                                <h1 class="mb-4 connection-with-seller__title"><?= $arResult['NAME']; ?></h1>
-                                                <p class="mb-4 connection-with-seller__price text-primary">
-                                                    <?= number_format($arResult['PROPERTIES']['PRICE']['VALUE'], 0, '.', ' '); ?> <?= ICON_CURRENCY; ?>
-                                                </p>
-                                                <?php if ($arResult['PROPERTIES']['LOCATION']['VALUE']) { ?>
-                                                    <p class="pb-3 border-bottom">
-                                                        <span class="mr-1"><?= $arResult['PROPERTIES']['LOCATION']['VALUE']; ?></span>
-                                                        <svg class="icon-local"
-                                                             style="position: relative; width: 16px; top: -2px; fill: #747474"
-                                                             version="1.1"
-                                                             id="Capa_1" xmlns="http://www.w3.org/2000/svg"
-                                                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
-                                                             y="0px"
-                                                             viewBox="0 0 513.597 513.597" xml:space="preserve">
-                                                          <g>
-                                                              <path d="M263.278,0.107C158.977-3.408,73.323,80.095,73.323,183.602c0,117.469,112.73,202.72,175.915,325.322
-                                                            c3.208,6.225,12.169,6.233,15.388,0.009c57.16-110.317,154.854-184.291,172.959-290.569
-                                                            C456.331,108.387,374.776,3.866,263.278,0.107z M256.923,279.773c-53.113,0-96.171-43.059-96.171-96.171
-                                                            s43.059-96.171,96.171-96.171c53.113,0,96.172,43.059,96.172,96.171S310.036,279.773,256.923,279.773z"></path>
-                                                          </g>
-                                                        </svg>
+            <?php if (!empty($arResult['PHOTOS']['BIG_SLIDER']) && !empty($arResult['PHOTOS']['SMALL_SLIDER'])):?>
+                <div class="modal fade" id="modalFullSize" tabindex="-1" role="dialog"
+                     aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal-dialog m-0 mw-100" role="document">
+                        <div class="modal-content bg-transparent">
+                            <div class="fullScreenItemModal">
+                                <button type="button" class="m-0 mr-auto close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <div class="slider-counter-mobile"></div>
+                                <div class="fullScreenItemModal__content">
+                                    <div class="row h-100">
+                                        <div class="col-3 seller-cards">
+                                            <?php if (!$arParams['USER_ID']) { ?>
+                                                <div class="mb-4 card connection-with-seller text-right 4">
+                                                    <h1 class="mb-4 connection-with-seller__title"><?= $arResult['NAME']; ?></h1>
+                                                    <p class="mb-4 connection-with-seller__price text-primary">
+                                                        <?= number_format($arResult['PROPERTIES']['PRICE']['VALUE'], 0, '.', ' '); ?> <?= ICON_CURRENCY; ?>
                                                     </p>
-                                                <?php } ?>
-                                                <div class="mb-4 row no-gutters">
-                                                    <button class="mr-2 col btn btn-show-phone text-uppercase font-weight-bold"
-                                                            disabled><?= Loc::getMessage('SHOW_PHONE'); ?>
-                                                    </button>
-                                                    <button class="ml-2 col btn btn-primary text-uppercase font-weight-bold"
-                                                            disabled><?= Loc::getMessage('SEND_MESSAGE'); ?>
-                                                    </button>
-                                                </div>
-                                                <p class="text-unaurh-user"><?= Loc::getMessage('VIEW_REGISTER_MESS'); ?></p>
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <ul class="nav justify-content-end font-weight-bold">
-                                                            <li class="mr-4 justify-content-center">
-                                                                <a class="" href="#" data-toggle="modal"
-                                                                   data-target="#registerModal">
-                                                                    <span class="mr-2"><?= Loc::getMessage('REGISTER'); ?></span>
-                                                                    <i class="icon-user-1"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a class="" href="#" data-toggle="modal"
-                                                                   data-target="#logInModal">
-                                                                    <span class="mr-2"><?= Loc::getMessage('Sign_In'); ?></span>
-                                                                    <i class="icon-log-in"></i>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                        <?php include $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . "/includes/footer/register_modal.php"; ?>
-                                                        <?php include $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . "/includes/footer/auth_modal.php"; ?>
+                                                    <?php if ($arResult['PROPERTIES']['LOCATION']['VALUE']) { ?>
+                                                        <p class="pb-3 border-bottom">
+                                                            <span class="mr-1"><?= $arResult['PROPERTIES']['LOCATION']['VALUE']; ?></span>
+                                                            <svg class="icon-local"
+                                                                 style="position: relative; width: 16px; top: -2px; fill: #747474"
+                                                                 version="1.1"
+                                                                 id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                                                                 xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+                                                                 y="0px"
+                                                                 viewBox="0 0 513.597 513.597" xml:space="preserve">
+                                                              <g>
+                                                                  <path d="M263.278,0.107C158.977-3.408,73.323,80.095,73.323,183.602c0,117.469,112.73,202.72,175.915,325.322
+                                                                c3.208,6.225,12.169,6.233,15.388,0.009c57.16-110.317,154.854-184.291,172.959-290.569
+                                                                C456.331,108.387,374.776,3.866,263.278,0.107z M256.923,279.773c-53.113,0-96.171-43.059-96.171-96.171
+                                                                s43.059-96.171,96.171-96.171c53.113,0,96.172,43.059,96.172,96.171S310.036,279.773,256.923,279.773z"></path>
+                                                              </g>
+                                                            </svg>
+                                                        </p>
+                                                    <?php } ?>
+                                                    <div class="mb-4 row no-gutters">
+                                                        <button class="mr-2 col btn btn-show-phone text-uppercase font-weight-bold"
+                                                                disabled><?= Loc::getMessage('SHOW_PHONE'); ?>
+                                                        </button>
+                                                        <button class="ml-2 col btn btn-primary text-uppercase font-weight-bold"
+                                                                disabled><?= Loc::getMessage('SEND_MESSAGE'); ?>
+                                                        </button>
+                                                    </div>
+                                                    <p class="text-unaurh-user"><?= Loc::getMessage('VIEW_REGISTER_MESS'); ?></p>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <ul class="nav justify-content-end font-weight-bold">
+                                                                <li class="mr-4 justify-content-center">
+                                                                    <a class="" href="#" data-toggle="modal"
+                                                                       data-target="#registerModal">
+                                                                        <span class="mr-2"><?= Loc::getMessage('REGISTER'); ?></span>
+                                                                        <i class="icon-user-1"></i>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="" href="#" data-toggle="modal"
+                                                                       data-target="#logInModal">
+                                                                        <span class="mr-2"><?= Loc::getMessage('Sign_In'); ?></span>
+                                                                        <i class="icon-log-in"></i>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                            <?php include $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . "/includes/footer/register_modal.php"; ?>
+                                                            <?php include $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . "/includes/footer/auth_modal.php"; ?>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        <?php } elseif ($arParams['USER_ID'] == $arResult['PROPERTIES']['ID_USER']['VALUE']) { ?>
-                                            <div class="mb-4 card connection-with-seller text-right 5">
-                                                <h1 class="mb-4 connection-with-seller__title"><?= $arResult['NAME']; ?></h1>
-                                                <p class="mb-4 connection-with-seller__price text-primary">
-                                                    <?= number_format($arResult['PROPERTIES']['PRICE']['VALUE'], 0, '.', ' '); ?> <?= ICON_CURRENCY; ?>
-                                                </p>
-                                                <?php if ($arResult['PROPERTIES']['LOCATION']['VALUE']) { ?>
-                                                    <p class="pb-3 border-bottom">
-                                                        <span class="mr-1"><?= $arResult['PROPERTIES']['LOCATION']['VALUE']; ?></span>
-                                                        <svg class="icon-local"
-                                                             style="position: relative; width: 16px; top: -2px; fill: #747474"
-                                                             version="1.1"
-                                                             id="Capa_1" xmlns="http://www.w3.org/2000/svg"
-                                                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
-                                                             y="0px"
-                                                             viewBox="0 0 513.597 513.597" xml:space="preserve">
-                                                          <g>
-                                                              <path d="M263.278,0.107C158.977-3.408,73.323,80.095,73.323,183.602c0,117.469,112.73,202.72,175.915,325.322
-                                                            c3.208,6.225,12.169,6.233,15.388,0.009c57.16-110.317,154.854-184.291,172.959-290.569
-                                                            C456.331,108.387,374.776,3.866,263.278,0.107z M256.923,279.773c-53.113,0-96.171-43.059-96.171-96.171
-                                                            s43.059-96.171,96.171-96.171c53.113,0,96.172,43.059,96.172,96.171S310.036,279.773,256.923,279.773z"></path>
-                                                          </g>
-                                                        </svg>
+                                            <?php } elseif ($arParams['USER_ID'] == $arResult['PROPERTIES']['ID_USER']['VALUE']) { ?>
+                                                <div class="mb-4 card connection-with-seller text-right 5">
+                                                    <h1 class="mb-4 connection-with-seller__title"><?= $arResult['NAME']; ?></h1>
+                                                    <p class="mb-4 connection-with-seller__price text-primary">
+                                                        <?= number_format($arResult['PROPERTIES']['PRICE']['VALUE'], 0, '.', ' '); ?> <?= ICON_CURRENCY; ?>
                                                     </p>
-                                                <?php } ?>
-                                                <div class="flex-column">
-                                                    <a href="<?=$arResult['EDIT_PAGE']?>" class="mb-3 w-100 btn btn-primary text-uppercase font-weight-bold">
-                                                        <?= Loc::getMessage('EDIT'); ?>
-                                                    </a>
-                                                    <?php
-                                                    $APPLICATION->IncludeComponent(
-                                                        "webco:buttons",
-                                                        "boost",
-                                                        array(
-                                                            'ITEM_ID' => $arResult['ID'],
-                                                            'IBLOCK_ID' => $arResult['IBLOCK_ID'],
-                                                            'DETAIL_PAGE' => 'Y'
-                                                        )
-                                                    );
-                                                    ?>
-                                                </div>
-                                            </div>
-                                        <?php } else { ?>
-                                            <div class="mb-4 card connection-with-seller text-right 6">
-                                                <h1 class="mb-4 connection-with-seller__title"><?= $arResult['NAME']; ?></h1>
-                                                <p class="mb-4 connection-with-seller__price text-primary">
-                                                    <?= number_format($arResult['PROPERTIES']['PRICE']['VALUE'], 0, '.', ' '); ?> <?= ICON_CURRENCY; ?>
-                                                </p>
-                                                <?php if ($arResult['PROPERTIES']['LOCATION']['VALUE']) { ?>
-                                                    <p class="pb-3 border-bottom">
-                                                        <span class="mr-1"><?= $arResult['PROPERTIES']['LOCATION']['VALUE']; ?></span>
-                                                        <svg class="icon-local"
-                                                             style="position: relative; width: 16px; top: -2px; fill: #747474"
-                                                             version="1.1"
-                                                             id="Capa_1" xmlns="http://www.w3.org/2000/svg"
-                                                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
-                                                             y="0px"
-                                                             viewBox="0 0 513.597 513.597" xml:space="preserve">
-                                                          <g>
-                                                              <path d="M263.278,0.107C158.977-3.408,73.323,80.095,73.323,183.602c0,117.469,112.73,202.72,175.915,325.322
-                                                            c3.208,6.225,12.169,6.233,15.388,0.009c57.16-110.317,154.854-184.291,172.959-290.569
-                                                            C456.331,108.387,374.776,3.866,263.278,0.107z M256.923,279.773c-53.113,0-96.171-43.059-96.171-96.171
-                                                            s43.059-96.171,96.171-96.171c53.113,0,96.172,43.059,96.172,96.171S310.036,279.773,256.923,279.773z"></path>
-                                                          </g>
-                                                        </svg>
-                                                    </p>
-                                                <?php } ?>
-                                                <div class="row no-gutters">
-                                                    <button class="mr-2 col btn btn-show-phone text-uppercase font-weight-bold"
-                                                            data-toggle="collapse" href="#showContactPhone"
-                                                            role="button" aria-expanded="false"
-                                                            aria-controls="showContactPhone"><?= Loc::getMessage('SHOW_PHONE'); ?>
-                                                    </button>
-                                                    <button class="ml-2 col btn btn-primary text-uppercase font-weight-bold"
-                                                            data-toggle="modal"
-                                                            data-target="#modalSandMessage"><?= Loc::getMessage('SEND_MESSAGE'); ?>
-                                                    </button>
-                                                </div>
-                                                <ul class="text-right collapse contact-list"
-                                                    id="showContactPhone">
-                                                    <li class="d-flex justify-content-end">
-                                                        <p class="mb-0 d-flex align-items-center time">
-                                                            <?php if ($arResult['PROPERTIES']['UF_CALL_ANYTIME']['VALUE'] == 1) { ?>
-                                                                <span class="mx-2"><?= Loc::getMessage('CALL_ANYTIME'); ?></span>
-                                                            <?php } else { ?>
-
-                                                                from<span
-                                                                        class="mx-2"><?= $arResult['PROPERTIES']['UF_CALL_FROM']['VALUE'] ?></span>
-                                                                to <span
-                                                                        class="mx-2"><?= $arResult['PROPERTIES']['UF_CALL_TO']['VALUE'] ?></span>
-                                                            <?php } ?>
-                                                            <svg width="20" height="20" viewBox="0 0 20 20"
-                                                                 fill="none"
-                                                                 xmlns="http://www.w3.org/2000/svg">
-                                                                <path d="M9.99 0C4.47 0 0 4.48 0 10C0 15.52 4.47 20 9.99 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 9.99 0ZM10 18C5.58 18 2 14.42 2 10C2 5.58 5.58 2 10 2C14.42 2 18 5.58 18 10C18 14.42 14.42 18 10 18ZM9.78 5H9.72C9.32 5 9 5.32 9 5.72V10.44C9 10.79 9.18 11.12 9.49 11.3L13.64 13.79C13.98 13.99 14.42 13.89 14.62 13.55C14.6702 13.469 14.7036 13.3788 14.7182 13.2846C14.7328 13.1905 14.7283 13.0943 14.705 13.002C14.6817 12.9096 14.64 12.8229 14.5824 12.7469C14.5249 12.671 14.4526 12.6074 14.37 12.56L10.5 10.26V5.72C10.5 5.32 10.18 5 9.78 5Z"
-                                                                      fill="#555555"/>
+                                                    <?php if ($arResult['PROPERTIES']['LOCATION']['VALUE']) { ?>
+                                                        <p class="pb-3 border-bottom">
+                                                            <span class="mr-1"><?= $arResult['PROPERTIES']['LOCATION']['VALUE']; ?></span>
+                                                            <svg class="icon-local"
+                                                                 style="position: relative; width: 16px; top: -2px; fill: #747474"
+                                                                 version="1.1"
+                                                                 id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                                                                 xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+                                                                 y="0px"
+                                                                 viewBox="0 0 513.597 513.597" xml:space="preserve">
+                                                              <g>
+                                                                  <path d="M263.278,0.107C158.977-3.408,73.323,80.095,73.323,183.602c0,117.469,112.73,202.72,175.915,325.322
+                                                                c3.208,6.225,12.169,6.233,15.388,0.009c57.16-110.317,154.854-184.291,172.959-290.569
+                                                                C456.331,108.387,374.776,3.866,263.278,0.107z M256.923,279.773c-53.113,0-96.171-43.059-96.171-96.171
+                                                                s43.059-96.171,96.171-96.171c53.113,0,96.172,43.059,96.172,96.171S310.036,279.773,256.923,279.773z"></path>
+                                                              </g>
                                                             </svg>
-
                                                         </p>
-                                                    </li>
-                                                    <?php if ($arResult['USER']['PERSONAL_PHONE']) { ?>
-                                                        <li>
-                                                            <a href="tel:<?= $arResult['USER']['PERSONAL_PHONE'] ?>"><?= $arResult['USER']['PERSONAL_PHONE'] ?></a>
-                                                        </li>
                                                     <?php } ?>
-                                                </ul>
-                                            </div>
-                                        <?php } ?>
-                                    </div>
-                                    <div class="main-contetnt col-12 col-xl-9">
-                                        <div class="row h-100">
-                                            <div class="col-12 col-xl-10">
-                                                <div class="mainItemSlider">
-                                                    <?php foreach ($arResult['PHOTOS']['BIG_SLIDER'] as $k => $img):?>
-                                                        <div class="slide">
-                                                            <img src="<?=$img['src']?>"
-                                                                 alt="<?=$arResult['NAME']?>"
-                                                                 title="<?=$arResult['NAME']?>"
-                                                            >
-                                                        </div>
-                                                    <?php endforeach ?>
+                                                    <div class="flex-column">
+                                                        <a href="<?=$arResult['EDIT_PAGE']?>" class="mb-3 w-100 btn btn-primary text-uppercase font-weight-bold">
+                                                            <?= Loc::getMessage('EDIT'); ?>
+                                                        </a>
+                                                        <?php
+                                                        $APPLICATION->IncludeComponent(
+                                                            "webco:buttons",
+                                                            "boost",
+                                                            array(
+                                                                'ITEM_ID' => $arResult['ID'],
+                                                                'IBLOCK_ID' => $arResult['IBLOCK_ID'],
+                                                                'DETAIL_PAGE' => 'Y'
+                                                            )
+                                                        );
+                                                        ?>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="d-none d-xl-flex col-xl-2">
-                                                <div class="dots navMainItemSlider">
-                                                    <?php foreach ($arResult['PHOTOS']['SMALL_SLIDER'] as $k => $img):?>
-                                                        <div class="dots__dot">
-                                                            <img src="<?=$img['src']?>"
-                                                                 alt="<?=$arResult['NAME']?>"
-                                                                 title="<?=$arResult['NAME']?>"
-                                                            >
-                                                        </div>
-                                                    <?php endforeach ?>
+                                            <?php } else { ?>
+                                                <div class="mb-4 card connection-with-seller text-right 6">
+                                                    <h1 class="mb-4 connection-with-seller__title"><?= $arResult['NAME']; ?></h1>
+                                                    <p class="mb-4 connection-with-seller__price text-primary">
+                                                        <?= number_format($arResult['PROPERTIES']['PRICE']['VALUE'], 0, '.', ' '); ?> <?= ICON_CURRENCY; ?>
+                                                    </p>
+                                                    <?php if ($arResult['PROPERTIES']['LOCATION']['VALUE']) { ?>
+                                                        <p class="pb-3 border-bottom">
+                                                            <span class="mr-1"><?= $arResult['PROPERTIES']['LOCATION']['VALUE']; ?></span>
+                                                            <svg class="icon-local"
+                                                                 style="position: relative; width: 16px; top: -2px; fill: #747474"
+                                                                 version="1.1"
+                                                                 id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                                                                 xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+                                                                 y="0px"
+                                                                 viewBox="0 0 513.597 513.597" xml:space="preserve">
+                                                              <g>
+                                                                  <path d="M263.278,0.107C158.977-3.408,73.323,80.095,73.323,183.602c0,117.469,112.73,202.72,175.915,325.322
+                                                                c3.208,6.225,12.169,6.233,15.388,0.009c57.16-110.317,154.854-184.291,172.959-290.569
+                                                                C456.331,108.387,374.776,3.866,263.278,0.107z M256.923,279.773c-53.113,0-96.171-43.059-96.171-96.171
+                                                                s43.059-96.171,96.171-96.171c53.113,0,96.172,43.059,96.172,96.171S310.036,279.773,256.923,279.773z"></path>
+                                                              </g>
+                                                            </svg>
+                                                        </p>
+                                                    <?php } ?>
+                                                    <div class="row no-gutters">
+                                                        <button class="mr-2 col btn btn-show-phone text-uppercase font-weight-bold"
+                                                                data-toggle="collapse" href="#showContactPhone"
+                                                                role="button" aria-expanded="false"
+                                                                aria-controls="showContactPhone"><?= Loc::getMessage('SHOW_PHONE'); ?>
+                                                        </button>
+                                                        <button class="ml-2 col btn btn-primary text-uppercase font-weight-bold"
+                                                                data-toggle="modal"
+                                                                data-target="#modalSandMessage"><?= Loc::getMessage('SEND_MESSAGE'); ?>
+                                                        </button>
+                                                    </div>
+                                                    <ul class="text-right collapse contact-list"
+                                                        id="showContactPhone">
+                                                        <li class="d-flex justify-content-end">
+                                                            <p class="mb-0 d-flex align-items-center time">
+                                                                <?php if ($arResult['PROPERTIES']['UF_CALL_ANYTIME']['VALUE'] == 1) { ?>
+                                                                    <span class="mx-2"><?= Loc::getMessage('CALL_ANYTIME'); ?></span>
+                                                                <?php } else { ?>
+
+                                                                    from<span
+                                                                            class="mx-2"><?= $arResult['PROPERTIES']['UF_CALL_FROM']['VALUE'] ?></span>
+                                                                    to <span
+                                                                            class="mx-2"><?= $arResult['PROPERTIES']['UF_CALL_TO']['VALUE'] ?></span>
+                                                                <?php } ?>
+                                                                <svg width="20" height="20" viewBox="0 0 20 20"
+                                                                     fill="none"
+                                                                     xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M9.99 0C4.47 0 0 4.48 0 10C0 15.52 4.47 20 9.99 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 9.99 0ZM10 18C5.58 18 2 14.42 2 10C2 5.58 5.58 2 10 2C14.42 2 18 5.58 18 10C18 14.42 14.42 18 10 18ZM9.78 5H9.72C9.32 5 9 5.32 9 5.72V10.44C9 10.79 9.18 11.12 9.49 11.3L13.64 13.79C13.98 13.99 14.42 13.89 14.62 13.55C14.6702 13.469 14.7036 13.3788 14.7182 13.2846C14.7328 13.1905 14.7283 13.0943 14.705 13.002C14.6817 12.9096 14.64 12.8229 14.5824 12.7469C14.5249 12.671 14.4526 12.6074 14.37 12.56L10.5 10.26V5.72C10.5 5.32 10.18 5 9.78 5Z"
+                                                                          fill="#555555"/>
+                                                                </svg>
+
+                                                            </p>
+                                                        </li>
+                                                        <?php if ($arResult['USER']['PERSONAL_PHONE']) { ?>
+                                                            <li>
+                                                                <a href="tel:<?= $arResult['USER']['PERSONAL_PHONE'] ?>"><?= $arResult['USER']['PERSONAL_PHONE'] ?></a>
+                                                            </li>
+                                                        <?php } ?>
+                                                    </ul>
+                                                </div>
+                                            <?php } ?>
+                                        </div>
+                                        <div class="main-contetnt col-12 col-xl-9">
+                                            <div class="row h-100">
+                                                <div class="col-12 col-xl-10">
+                                                    <div class="mainItemSlider">
+                                                        <?php foreach ($arResult['PHOTOS']['BIG_SLIDER'] as $k => $img):?>
+                                                            <div class="slide">
+                                                                <img src="<?=$img['src']?>"
+                                                                     alt="<?=$arResult['NAME']?>"
+                                                                     title="<?=$arResult['NAME']?>"
+                                                                >
+                                                            </div>
+                                                        <?php endforeach ?>
+                                                    </div>
+                                                </div>
+                                                <div class="d-none d-xl-flex col-xl-2">
+                                                    <div class="dots navMainItemSlider">
+                                                        <?php foreach ($arResult['PHOTOS']['SMALL_SLIDER'] as $k => $img):?>
+                                                            <div class="dots__dot">
+                                                                <img src="<?=$img['src']?>"
+                                                                     alt="<?=$arResult['NAME']?>"
+                                                                     title="<?=$arResult['NAME']?>"
+                                                                >
+                                                            </div>
+                                                        <?php endforeach ?>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="info-and-coll-btn">
-                                <div class="d-flex flex-column">
-                                    <p class="price"><?= number_format($arResult['PROPERTIES']['PRICE']['VALUE'], 0, '.', ' '); ?> <?= ICON_CURRENCY; ?></p>
-                                    <p class="mb-0 title"><?= $arResult['NAME']; ?></p>
+                                <div class="info-and-coll-btn">
+                                    <div class="d-flex flex-column">
+                                        <p class="price"><?= number_format($arResult['PROPERTIES']['PRICE']['VALUE'], 0, '.', ' '); ?> <?= ICON_CURRENCY; ?></p>
+                                        <p class="mb-0 title"><?= $arResult['NAME']; ?></p>
+                                    </div>
+                                    <?php if($USER->IsAuthorized()){?>
+                                    <div class="d-flex justify-content-center align-items-center call-item">
+                                        <a href="tel:+375293069433" class="btn">
+                                            <svg width="17" height="17" viewBox="0 0 17 17" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M11.3239 12.0618L12.7799 10.6058C12.976 10.4122 13.2242 10.2796 13.4942 10.2242C13.7642 10.1688 14.0444 10.193 14.3009 10.2938L16.0754 11.0023C16.3347 11.1076 16.5569 11.2872 16.7143 11.5185C16.8716 11.7498 16.9569 12.0226 16.9594 12.3023V15.5523C16.9579 15.7426 16.9179 15.9307 16.8418 16.1051C16.7657 16.2795 16.6551 16.4368 16.5167 16.5673C16.3782 16.6979 16.2148 16.7991 16.0362 16.8648C15.8576 16.9306 15.6675 16.9595 15.4774 16.9498C3.04294 16.1763 0.533938 5.64633 0.0594376 1.61633C0.037411 1.41843 0.0575361 1.21811 0.118489 1.02854C0.179442 0.838978 0.279841 0.664466 0.413081 0.51649C0.546322 0.368513 0.709384 0.250424 0.89154 0.169993C1.0737 0.0895611 1.27082 0.0486092 1.46994 0.0498313H4.60944C4.88959 0.0506605 5.1631 0.135285 5.39476 0.29282C5.62643 0.450356 5.80568 0.673597 5.90944 0.933831L6.61794 2.70833C6.7221 2.96383 6.74868 3.24435 6.69434 3.51486C6.64001 3.78537 6.50718 4.03387 6.31244 4.22933L4.85644 5.68533C4.85644 5.68533 5.69494 11.3598 11.3239 12.0618Z"
+                                                      fill="white"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                    <?php }?>
                                 </div>
-                                <?php if($USER->IsAuthorized()){?>
-                                <div class="d-flex justify-content-center align-items-center call-item">
-                                    <a href="tel:+375293069433" class="btn">
-                                        <svg width="17" height="17" viewBox="0 0 17 17" fill="none"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M11.3239 12.0618L12.7799 10.6058C12.976 10.4122 13.2242 10.2796 13.4942 10.2242C13.7642 10.1688 14.0444 10.193 14.3009 10.2938L16.0754 11.0023C16.3347 11.1076 16.5569 11.2872 16.7143 11.5185C16.8716 11.7498 16.9569 12.0226 16.9594 12.3023V15.5523C16.9579 15.7426 16.9179 15.9307 16.8418 16.1051C16.7657 16.2795 16.6551 16.4368 16.5167 16.5673C16.3782 16.6979 16.2148 16.7991 16.0362 16.8648C15.8576 16.9306 15.6675 16.9595 15.4774 16.9498C3.04294 16.1763 0.533938 5.64633 0.0594376 1.61633C0.037411 1.41843 0.0575361 1.21811 0.118489 1.02854C0.179442 0.838978 0.279841 0.664466 0.413081 0.51649C0.546322 0.368513 0.709384 0.250424 0.89154 0.169993C1.0737 0.0895611 1.27082 0.0486092 1.46994 0.0498313H4.60944C4.88959 0.0506605 5.1631 0.135285 5.39476 0.29282C5.62643 0.450356 5.80568 0.673597 5.90944 0.933831L6.61794 2.70833C6.7221 2.96383 6.74868 3.24435 6.69434 3.51486C6.64001 3.78537 6.50718 4.03387 6.31244 4.22933L4.85644 5.68533C4.85644 5.68533 5.69494 11.3598 11.3239 12.0618Z"
-                                                  fill="white"/>
-                                        </svg>
-                                    </a>
-                                </div>
-                                <?php }?>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            <?php endif;?>
         </div>
         <?php if (!empty($arResult['PROPERTIES']['PROP_FLOOR']['VALUE']) || !empty($arResult['PROPERTIES']['PROP_AREA_3']['VALUE']) || !empty($arResult['PROPERTIES']['PROP_Completion']['VALUE']) ||
             !empty($arResult['PROPERTIES']['PROP_COUNT_ROOMS']['VALUE'])):?>
