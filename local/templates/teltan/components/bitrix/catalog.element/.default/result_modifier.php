@@ -58,7 +58,7 @@ if (!empty($arResult)) {
                     'width' => 116,
                     'height' => 75
                 ),
-                BX_RESIZE_IMAGE_PROPORTIONAL
+                BX_RESIZE_IMAGE_EXACT
             );
 
             $arResult['PHOTOS']['BIG_SLIDER'][]['src'] = \CFile::GetPath($imgId);
@@ -69,7 +69,7 @@ if (!empty($arResult)) {
                     'width' => 208,
                     'height' => 120
                 ),
-                BX_RESIZE_IMAGE_PROPORTIONAL
+                BX_RESIZE_IMAGE_EXACT
             );
         }
     } else {
