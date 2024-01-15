@@ -227,8 +227,8 @@ $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css')
                 <div class="slider-for">
                      <?php foreach ($arResult['PHOTOS']['BIG'] as $k => $img):?>
                          <div class="slide"
-                              data-toggle="modal"
-                              data-target="#modalFullSize"
+                              <?=!empty($arResult['PHOTOS']['SMALL']) ? 'data-toggle="modal"' : ''?>
+                              <?=!empty($arResult['PHOTOS']['SMALL']) ? 'data-target="#modalFullSize""' : ''?>
                               data-current-slider="<?=$k;?>"
                          >
                                 <img src="<?=$img['src']?>"
