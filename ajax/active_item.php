@@ -44,7 +44,7 @@ if ($_REQUEST['value'] == 'green') {
     if ($isFreeAd) {
         $newExpiredTimeFreeAdd = time() + DAYS_EXPIRED_FREE_ADS * $oneDayToSecond;
         $updateFields['ACTIVE'] = true;
-        $updateFields['ACTIVE_TO'] = \Bitrix\Main\Type\DateTime::createFromTimestamp($newExpiredTimeFreeAdd);
+        $updateFields['ACTIVE_TO'] = date('Y-m-d H:i:s',$newExpiredTimeFreeAdd);
         $operationResult = Loc::getMessage('ACTIVATE_ITEM');
     } else {
         // Если не существует бесплатных объявлений
@@ -52,7 +52,7 @@ if ($_REQUEST['value'] == 'green') {
             $newExpiredTimeFreeAdd = time() + DAYS_EXPIRED_FREE_ADS * $oneDayToSecond;
             if ($freeAdPropVal = getPropertyFreeAdValueId($iblockId)) $updateFields['FREE_AD'] = $freeAdPropVal;
             $updateFields['ACTIVE'] = true;
-            $updateFields['ACTIVE_TO'] = \Bitrix\Main\Type\DateTime::createFromTimestamp($newExpiredTimeFreeAdd);
+            $updateFields['ACTIVE_TO'] = date('Y-m-d H:i:s',$newExpiredTimeFreeAdd);
             // удаляем у всех существуещих объявлений этого пользователя чекбокс "бесплатное объявление"
             removeFreeAdPropOnAds($iblocksIdToCode[$iblockId]);
             if ($canUserCreateAds)  deleteAdFromUserRate($productId, $iblockId); // удаляем из купленного тарифа (если это объявление там было)
@@ -79,7 +79,7 @@ if ($_REQUEST['value'] == 'green') {
 
                             $updateFields['ACTIVE'] = true;
                             $time = strtotime($optimalUserRate['UF_DATE_EXPIRED']);
-                            $updateFields['ACTIVE_TO'] = \Bitrix\Main\Type\DateTime::createFromTimestamp($time);
+                            $updateFields['ACTIVE_TO'] = date('Y-m-d H:i:s',$time);
 
                             $operationResult = Loc::getMessage('ACTIVATE_ITEM');
                         } else {
