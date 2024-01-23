@@ -56,4 +56,28 @@ if(!$user)
         ); ?>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        $(document).on("submit", "#change_pass", function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "/ajax/change_password.php",
+                data: $(this).serialize(),
+                success: function (msg) {
+                    if (msg['TYPE'] == "ERROR") {
+                        $('.pop-up').addClass('active');
+                        $('.pop-up__text').html(msg['MESSAGE']);
+                        $('span.error_auth_mess').empty().append(msg['MESSAGE']);
+                    }
+                    if (msg['TYPE'] == "OK") {
+                        $('.pop-up').addClass('active');
+                        $('.pop-up__text').html('שינוי הסיסמה יתבצע בהצלחה');
+                    }
+
+                }
+            });
+        });
+    });
+</script>
 <?php require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

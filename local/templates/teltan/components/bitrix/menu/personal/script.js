@@ -1,6 +1,7 @@
 const PersonalMenu = function () {
     this.settings = {
         'messageCounterSelector':'div.counter-user-message > span#count_user_messages',
+        'ajaxUrl':'/ajax/user_messages.php',
     }
 
     this.$counterSelector = document.querySelector(this.settings.messageCounterSelector);
@@ -10,7 +11,7 @@ const PersonalMenu = function () {
 
 PersonalMenu.prototype.setUserMessages = function (countMessages) {
     if (this.$counterSelector) {
-        this.$counterSelector.innerHTML = '+'+countMessages;
+        this.$counterSelector.innerHTML = countMessages+'+';
         if (this.$counterSelector.parentNode.classList.contains('hide'))
             this.$counterSelector.parentNode.classList.remove('hide');
     }
@@ -18,7 +19,7 @@ PersonalMenu.prototype.setUserMessages = function (countMessages) {
 
 PersonalMenu.prototype.getUserMessages = function () {
     const _this = this;
-    fetch('/ajax/user_messages.php', {
+    fetch(this.settings.ajaxUrl, {
         method: 'POST',
         cache: 'no-cache',
         headers: {

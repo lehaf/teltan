@@ -1,7 +1,7 @@
-<?if(!$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') die();
+<?php if(!$_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') die();
 require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
 
-if(isset($_POST) && !empty($_POST) && check_bitrix_sessid()) {
+if (!empty($_POST) && check_bitrix_sessid()) {
 
     global $USER;
 
@@ -15,10 +15,8 @@ if(isset($_POST) && !empty($_POST) && check_bitrix_sessid()) {
     $user_name = $_POST['userName'];
 
 
-    if($user_email && filter_var($user_email, FILTER_VALIDATE_EMAIL))
-    {
+    if ($user_email && filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
         $fields['EMAIL'] = $user_email;
-        $fields['LOGIN'] = $user_email;
 
         // Текущий email
         $curEmail = $USER->GetEmail();
@@ -34,28 +32,25 @@ if(isset($_POST) && !empty($_POST) && check_bitrix_sessid()) {
         }
     }
 
-    if($user_phone)
-    {
+    if($user_phone) {
         $fields['PERSONAL_PHONE'] = $user_phone;
 
         // Смена номера
-        if($cur_user['PERSONAL_PHONE'] != $user_phone)
-        {
-            $error['TYPE'] = 'POPUP';
-            $error['NUMBER'] = $user_phone;
-
-           // $code = randString(4, array("0123456789"));
-           // addConfirmCode($code, $cur_user['ID'], 'update_phone');
-           // sendSMS('Код для подтверждения телефона: '.$code, $user_phone);
-        }
+//        if($cur_user['PERSONAL_PHONE'] != $user_phone) {
+//            $error['TYPE'] = 'POPUP';
+//            $error['NUMBER'] = $user_phone;
+//
+//           // $code = randString(4, array("0123456789"));
+//           // addConfirmCode($code, $cur_user['ID'], 'update_phone');
+//           // sendSMS('Код для подтверждения телефона: '.$code, $user_phone);
+//        }
     }
 
 
     if($user_name)
         $fields['NAME'] = $user_name;
 
-    if($fields && !$strError && $error['TYPE'] != 'POPUP')
-    {
+    if (!empty($fields) && !$strError && $error['TYPE'] != 'POPUP') {
         $user = new CUser;
 
         $user->Update($USER->GetID(), $fields);

@@ -1,12 +1,13 @@
 <?php require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 
+/** @global object $APPLICATION */
+
 use Bitrix\Main\Localization\Loc;
 
-Loc::loadMessages(__FILE__);
-global $APPLICATION;
 $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
 
 if (!$userId) LocalRedirect('/');
+
 
 if (isset($_GET['id']) && isset($_GET['au']) && isset($_GET['ref'])) {
     $ref = md5($_GET['au'] . SALT_ID_CHAT . $_GET['id']);
@@ -63,7 +64,6 @@ if (isset($_GET['id']) && isset($_GET['au']) && isset($_GET['ref'])) {
                                 <span class="text-danger btn-delete-all__text block_b"><?= ($blocked) ? 'Unlock' : Loc::getMessage('Block') ?></span>
                             </button>
                         </div>
-
                         <button style="cursor: pointer" onclick="window.location.href = '/personal/messages/'"
                                 type="button"
                                 class="mb-4 btn btn-go-back d-flex justify-content-center align-items-center border-primary">
@@ -527,29 +527,14 @@ if (isset($_GET['id']) && isset($_GET['au']) && isset($_GET['ref'])) {
 
             removeFile = (fileId) => {
                 const dt = new DataTransfer()
-                // const filteredFiles = Array.from(this.fileList).filter((file) => file.name !== fileId)
-                // filteredFiles.forEach((file) => dt.items.add(file))
-
-                // this.fileList = dt.files
-
-                // this.updateOutputInput()
-
                 $(`[data-file-id="${fileId}"]`).remove()
             }
 
         }
 
         new FileUploader(
-            // container where will images rendered (prepend method useing)
             '#chatUploadFileBox',
-            // single input file element, all files will be merged there
             '#addFileChat',
-            // render image templte
-            // {{example}} - placeholders for templateOptions render (dataUrl at lest required)
-            // data-file-id - container
-            // data-file-remove-id - data for remove btn (whould has the same as container value)
-            // .rotate-control button to rotate image
-            // .rotate-img - element for rotating
             `<div class="ml-3 d-flex align-items-center justify-content-center upload-file" data-file-id="{{name}}" data-file-remove-id="{{name}}">
                                         <button type="button" class="mr-2 close" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
@@ -600,6 +585,177 @@ if (isset($_GET['id']) && isset($_GET['au']) && isset($_GET['ref'])) {
                 }
             });
         }, 10000); // интервал в миллисекундах (30 секунд = 30000 миллисекунд)
+
+        function getCountMess() {
+            $.ajax({
+                type: "POST",
+                url: "/ajax/count_mess.php",
+                data: '',
+                success: function (count) {
+                    if (count) {
+                        $('.counter-user-message span').text(count);
+                        $('.user-message__counter span').text(count);
+                    }
+                }
+            });
+        }
+
+        $(document).on('click', '.del_all_chats', function () {
+            $('.allert__text').html('Вы действительно хотите удалить все чаты?');
+            $('.btn_confirm').addClass('del_all_chat');
+            $('.btn_confirm').removeClass('del_chat');
+            $('.alert-confirmation').addClass('show');
+        })
+
+        $(document).on('click', '.deleteChatPopup', function () {
+            $('.allert__text').html('Вы действительно хотите удалить чат?');
+            $('.btn_confirm').addClass('del_chat');
+            $('.btn_confirm').removeClass('del_all_chat');
+            $('.btn_confirm').attr('data-pr1', $(this).data('ad'));
+            $('.btn_confirm').attr('data-pr2', $(this).data('au'));
+            $('.alert-confirmation').addClass('show');
+        })
+
+        $(document).on('click', '.del_chat', function () {
+            let adId = $(this).attr('data-pr1');
+            let recipientId = $(this).attr('data-pr2');
+
+            $.ajax({
+                type: "POST",
+                url: "/ajax/delchat.php",
+                data: 'adId=' + adId + '&recipientId=' + recipientId + '',
+                success: function (msg) {
+                    if (msg['TYPE'] == "OK") {
+                        getCountMess();
+                        $('.deleteChatPopup[data-ad=' + adId + '][data-au=' + recipientId + ']').parent().parent().parent().parent().remove();
+                        $('.allert').removeClass('show');
+                    }
+                }
+            });
+        });
+
+        $(document).on('click', '.btn-blocked', function () {
+            $('.allert__text').html('Вы действительно хотите заблокировать пользователя?');
+            $('.btn_confirm').addClass('block_user');
+            $('.btn_confirm').removeClass('del_all_in_chat');
+            $('.btn_confirm').attr('data-pr1', $(this).data('ad'));
+            $('.btn_confirm').attr('data-pr2', $(this).data('au'));
+            $('.block_user').html('Заблокировать');
+            $('.alert-confirmation').addClass('show');
+        })
+
+        $(document).on('click', '.btn-unlocked', function () {
+            $('.allert__text').html('Вы действительно хотите разблокировать пользователя?');
+            $('.btn_confirm').addClass('block_user');
+            $('.btn_confirm').removeClass('del_all_in_chat');
+            $('.btn_confirm').attr('data-pr1', $(this).data('ad'));
+            $('.btn_confirm').attr('data-pr2', $(this).data('au'));
+            $('.block_user').html('Разблокировать');
+            $('.alert-confirmation').addClass('show');
+        })
+
+        $(document).on('click', '.block_user', function () {
+            let ad = $(this).data('pr1');
+            let au = $(this).data('pr2');
+            $.ajax({
+                type: "POST",
+                url: "/ajax/block_user.php",
+                data: 'ad=' + ad + '&au=' + au + '',
+                success: function (msg) {
+                    if (msg['TYPE'] == "OK") {
+                        window.location.reload();
+                    }
+                    if (msg['TYPE'] == "RESET") {
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+
+
+        $(document).on("submit", "form[name=send_message]", function (e) {
+            e.preventDefault();
+            var a = 0;
+            var $imgobject = {};
+            $(this).find('.upload-file').each(function () {
+
+                $imgobject['img'+ a] = $(this).data('src');
+                a++;
+            });
+            var form = $(this);
+            var $data2 = {};
+            $data2['files'] = $imgobject;
+            $data2['idAd'] = $('#idAd').val();
+            $data2['messageContent'] = $('#messageContent').val();
+            $.ajax({
+
+                type: "POST",
+                url: "/ajax/send_message.php",
+                data: $data2,
+                success: function (msg) {
+                    if (msg['TYPE'] == "ERROR") {
+                        //$('span.error_auth_mess').empty().append(msg['MESSAGE']);
+                    }
+                    if (msg['TYPE'] == "OK") {
+                        $('#messageContent').empty();
+                        $('.alert-confirmation').addClass('show');
+                        setTimeout(function () {
+                            $('.alert-confirmation').removeClass('show');
+                        }, 2000);
+                        $('#modalSandMessage').modal('hide');
+                        $('#modalFullSize').modal('hide');
+
+                    }
+                }
+            });
+            //return false;
+        });
+
+
+        $(document).on('click', '.del_all_chat', function () {
+            $.ajax({
+                type: "POST",
+                url: "/ajax/del_all_chat.php",
+                data: $(this).serialize(),
+                success: function (msg) {
+                    if (msg['TYPE'] == "OK") {
+                        $('.block_chats').empty().append('<div class="mb-4 card d-flex flex-column flex-lg-row w-100 justify-content-around no-message">\n' +
+                            '                        <div class="mb-3 mb-0 d-flex flex-column align-items-center justify-content-center">\n' +
+                            '                            <p class="mb-4">У вас пока что нет сообщений</p>\n' +
+                            '                            <img src="/local/templates/teltan/assets/no-message.svg" alt="">\n' +
+                            '                        </div>\n' +
+                            '                    </div>');
+                        $('.allert').removeClass('show');
+                    }
+                }
+            });
+        });
+
+        $(document).on('click', '.del_all_in_chat', function () {
+            $('.allert__text').html('Вы действительно хотите удалить все сообщения?');
+            $('.btn_confirm').addClass('del_all_in_chat');
+            $('.btn_confirm').attr('data-pr1', $(this).data('ad'));
+            $('.btn_confirm').attr('data-pr2', $(this).data('au'));
+            $('.del_all_in_chat').html('Удалить');
+            $('.alert-confirmation').addClass('show');
+        })
+
+        $(document).on('click', '.del_all_in_chat', function () {
+            let adId = $(this).data('pr1');
+            let recipientId = $(this).data('pr2');
+
+            $.ajax({
+                type: "POST",
+                url: "/ajax/delchat.php",
+                data: 'adId=' + adId + '&recipientId=' + recipientId + '',
+                success: function (msg) {
+                    getCountMess();
+                    if (msg['TYPE'] == "OK") {
+                        window.location.href = '/personal/messages/';
+                    }
+                }
+            });
+        });
     </script>
 
 <?php require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php");
