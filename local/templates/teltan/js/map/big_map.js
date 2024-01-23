@@ -468,6 +468,7 @@ $(document).ready(function () {
                     ]
                 }
             });
+
             map.on('mousemove', '1-level-area3', (e) => {
                 let features = map.queryRenderedFeatures(e.point);
                 if (features[0].layer.id === "1-level-area3") {
@@ -843,13 +844,21 @@ $(document).ready(function () {
                 map.getCanvas().style.cursor = '';
                 clearMapItemPLace();
             });
+
             // Клик на метку
             map.on('click', 'point', (e) => {
                 if (e.features.length > 0) {
-                    let uniqueFeatures = [];
+                    let vipAds = [];
+                    let commonAds = [];
                     e.features.forEach((feature) => {
-                        uniqueFeatures[feature.id] = feature;
+                        if (feature.properties.isVip == true) {
+                            vipAds[feature.id] = feature;
+                        } else {
+                            commonAds[feature.id] = feature;
+                        }
                     });
+
+                    const uniqueFeatures = vipAds.concat(commonAds);
 
                     if (uniqueFeatures.length > 0) {
                         let description = '';
