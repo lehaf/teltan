@@ -12,7 +12,7 @@ if (!empty($arResult)) {
     $arResult['EDIT_PAGE'] = '#';
     switch ($arResult['IBLOCK_ID']) {
         case 1:
-            $arResult['EDIT_PAGE'] = '/add/fm/?ID=' . $arResult['ID'] . '&EDIT=Y';
+            $arResult['EDIT_PAGE'] = '/add/flea/?ID=' . $arResult['ID'] . '&EDIT=Y';
             break;
         case 2:
             if ($arResult['PROPERTIES']['BUY']["VALUE_XML_ID"] == 'true') {
@@ -123,10 +123,12 @@ if (!empty($arResult)) {
         switch ($arParams['CATEGORY']) {
             case FLEA_ADS_TYPE_CODE:
                 foreach ($arResult['PROPERTIES'] as $prop){
-                    $arResult['DESCRIPTION_PROPS'][] = [
-                        'NAME' => $prop['NAME'],
-                        'VALUE' => $prop['VALUE']
-                    ];
+                    if (strripos($prop['CODE'], 'PROP') !== false && !empty($prop['VALUE']) && $prop['CODE'] !== 'PHOTOS' && $prop['CODE'] !== 'PROP_COLOR') {
+                        $arResult['DESCRIPTION_PROPS'][] = [
+                            'NAME' => $prop['NAME'],
+                            'VALUE' => $prop['VALUE']
+                        ];
+                    }
                 }
                 break;
             case AUTO_ADS_TYPE_CODE:

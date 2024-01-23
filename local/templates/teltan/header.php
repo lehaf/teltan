@@ -222,7 +222,7 @@ else
                             <?=Loc::getMessage('other')?>
                         </p>
                         <div class="d-flex flex-column">
-                            <a href="/add/fm/" class="btn btn-primary text-uppercase font-weight-bold mb-4">
+                            <a href="/add/flea/" class="btn btn-primary text-uppercase font-weight-bold mb-4">
                                 <?=Loc::getMessage('yourAds')?>
                             </a>
                         </div>

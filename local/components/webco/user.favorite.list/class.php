@@ -109,7 +109,7 @@ class UserFavoriteList extends \CBitrixComponent
                 "EDIT_PAGE",
                 [
                     'expression' => [
-                        'CASE WHEN %s = "1" THEN "/add/fm/" 
+                        'CASE WHEN %s = "1" THEN "/add/flea/" 
                       WHEN %s = "2" AND (%s = "34" OR %s = "32") THEN "/add/rent/" 
                       WHEN %s = "2" AND (%s = "35" OR %s = "33") THEN "/add/buy/" 
                       WHEN %s = "3" THEN "/add/auto/" 
