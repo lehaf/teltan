@@ -50,7 +50,11 @@ if (!empty($arResult['ITEMS'])):?>
                         </svg>
                     </p>
                     <?php if (!$USER->IsAuthorized()):?></a><?php endif; ?>
-                    <p class="mb-0 price"><?=ICON_CURRENCY.' '.number_format($item['PROPERTY_PRICE_VALUE'], 0, '.', ' ')?></p>
+                    <?php if (!empty($item['PROPERTY_PRICE_VALUE'])):?>
+                        <p class="mb-0 price">
+                            <?=ICON_CURRENCY.' '.number_format($item['PROPERTY_PRICE_VALUE'], 0, '.', ' ')?>
+                        </p>
+                    <?php endif;?>
                 </div>
                 <div class="px-2 px-lg-3 content-block">
                     <div class="text-right">
