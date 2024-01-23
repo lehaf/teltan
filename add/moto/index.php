@@ -1609,7 +1609,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray(MOTO_IBLOCK_ID, 94);
                 <?}?>
                 $data['PROP_BODY_TYPE'] = $('#PROP_BODY_TYPE_val').val()
                 $data['section_id'] = $('.activeSection').data();
-                $data['LOCATION'] = $('.first-drop').html() + $('.second-drop').html()
+                $data['LOCATION'] = $('.first-drop').html() + ', ' + $('.second-drop').html()
                 $data['region'] = $('.first-drop').html().trim();
                 $data['city'] = $('.second-drop').html().trim();
                 var $data2 = {};

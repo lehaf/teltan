@@ -993,7 +993,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray(SIMPLE_ADS_IBLOCK_ID, $_GET['ids'
                     $data['itemDescription'] = $('#itemDescription').val();
                     $data['section_id'] = $('input#section_id').val();
 
-                    $data['LOCATION'] = $('.first-drop').html() + $('.second-drop').html()
+                    $data['LOCATION'] = $('.first-drop').html() + ', ' + $('.second-drop').html()
                     $data['region'] = $('.first-drop').html().trim();
                     $data['city'] = $('.second-drop').html().trim();
                     $('.preloader').addClass('preloader-visible');

@@ -1420,7 +1420,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray(AUTO_IBLOCK_ID, 80);
                 <?}?>
                 $data['dateSelectSelector'] = $('select#dateSelectSelector').val();
                 $data['section_id'] = $('.activeSection').data();
-                $data['LOCATION'] = $('.first-drop').html() + $('.second-drop').html()
+                $data['LOCATION'] = $('.first-drop').html() + ', ' + $('.second-drop').html();
                 $data['region'] = $('.first-drop').html().trim();
                 $data['city'] = $('.second-drop').html().trim();
                 $('.preloader').addClass('preloader-visible');
