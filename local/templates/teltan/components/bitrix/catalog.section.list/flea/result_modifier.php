@@ -15,15 +15,28 @@ if (!empty($arResult['SECTIONS'])) {
         }
 
         // Ресайз картинок
-        if (!empty($section['PICTURE']['ID'])) {
-            $section['PICTURE'] = \CFile::ResizeImageGet(
-                $section['PICTURE']['ID'],
-                array(
-                    'width' => 250,
-                    'height' => 120
-                ),
-                BX_RESIZE_IMAGE_PROPORTIONAL
-            );
+        // Генерируем webp картинку и ресайзим картинки если их нет - ставим заглушку
+        if (\Bitrix\Main\Loader::includeModule("webp.img")) {
+            if (!empty($section['PICTURE']['ID'])) {
+                $section['PICTURE']['src'] = \WebCompany\WebpImg::getResizeWebpSrc(
+                    $section['PICTURE']['ID'],
+                    250,
+                    120,
+                    true,
+                    90
+                );
+            }
+        } else {
+            if (!empty($section['PICTURE']['ID'])) {
+                $section['PICTURE'] = \CFile::ResizeImageGet(
+                    $section['PICTURE']['ID'],
+                    array(
+                        'width' => 250,
+                        'height' => 120
+                    ),
+                    BX_RESIZE_IMAGE_PROPORTIONAL
+                );
+            }
         }
 
         if (empty($section['IBLOCK_SECTION_ID'])) {
