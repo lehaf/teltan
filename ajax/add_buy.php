@@ -132,7 +132,7 @@ if ($canUserCreateAds || $_REQUEST['EDIT'] == 'Y') {
             'PROPERTY_VALUES' => $PROP,
             'NAME' => $NAME,
             'ACTIVE' => 'Y',
-            'PREVIEW_TEXT' => $_POST['itemDescription'],
+            'PREVIEW_TEXT' => trim($_POST['itemDescription']),
         );
 
         // Получаем всю инфу о самом первом активном купленном пакете
@@ -156,8 +156,8 @@ if ($canUserCreateAds || $_REQUEST['EDIT'] == 'Y') {
             'PROPERTY_VALUES' => $PROP,
             'NAME' => $NAME,
             'ACTIVE' => 'Y',
-            'PREVIEW_TEXT' => $_POST['itemDescription'],
-            'DETAIL_TEXT' => $_POST['itemDescription'],
+            'PREVIEW_TEXT' => trim($_POST['itemDescription']),
+            'DETAIL_TEXT' => trim($_POST['itemDescription']),
         );
     }
 
