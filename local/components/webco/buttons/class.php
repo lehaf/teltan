@@ -5,7 +5,7 @@ class BoostBtn extends \CBitrixComponent
     private array $services = [
         'RISE' => [
             'HL_BLOCK_ID' => PERSONAL_RISE_HL_ID,
-            'INCLUDE_PATH' => '/include-area/service_rise.php',
+            'INCLUDE_PATH' => SITE_TEMPLATE_PATH.'/includes/area/service_rise.php',
             'ICON' => [
                 'CLASS' => 'text-uppercase font-weight-bold up',
                 'NAME' => 'UP',
@@ -13,7 +13,7 @@ class BoostBtn extends \CBitrixComponent
         ],
         'VIP' => [
             'HL_BLOCK_ID' => PERSONAL_VIP_TYPES_HL_ID,
-            'INCLUDE_PATH' => '/include-area/service_vip.php',
+            'INCLUDE_PATH' => SITE_TEMPLATE_PATH.'/includes/area/service_vip.php',
             'ICON' => [
                 'CLASS' => 'crown',
                 'SRC' => '/local/templates/teltan/assets/svg/crown.svg'
@@ -21,7 +21,7 @@ class BoostBtn extends \CBitrixComponent
         ],
         'COLOR' => [
             'HL_BLOCK_ID' => PERSONAL_COLOR_HL_ID,
-            'INCLUDE_PATH' => '/include-area/service_color.php',
+            'INCLUDE_PATH' => SITE_TEMPLATE_PATH.'/includes/area/service_color.php',
             'ICON' => [
                 'CLASS' => 'color',
                 'SRC' => '/local/templates/teltan/assets/svg/color.svg'
@@ -29,7 +29,7 @@ class BoostBtn extends \CBitrixComponent
         ],
         'RIBBON' => [
             'HL_BLOCK_ID' => PERSONAL_RIBBON_HL_ID,
-            'INCLUDE_PATH' => '/include-area/service_ribbon.php',
+            'INCLUDE_PATH' => SITE_TEMPLATE_PATH.'/includes/area/service_ribbon.php',
             'ICON' => [
                 'CLASS' => 'ribbon',
                 'SRC' => '/local/templates/teltan/assets/svg/ribbon.svg'
@@ -37,7 +37,7 @@ class BoostBtn extends \CBitrixComponent
         ],
         'SET' => [
             'HL_BLOCK_ID' => PERSONAL_PACKET_HL_ID,
-            'INCLUDE_PATH' => '/include-area/service_set.php',
+            'INCLUDE_PATH' => SITE_TEMPLATE_PATH.'/includes/area/service_set.php',
             'ICON' => [
                 'CLASS' => 'lightning',
                 'SRC' => '/local/templates/teltan/assets/svg/lightning.svg'

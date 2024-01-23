@@ -21,7 +21,7 @@ $sectionHasAds = isExistActiveElements($arParams['IBLOCK_ID']);
             "",
             Array(
                 "AREA_FILE_SHOW" => "file",
-                "PATH" => "/include-area/".mb_strtolower($dirName)."-h1-ru.php",
+                "PATH" => SITE_TEMPLATE_PATH."/includes/area/".mb_strtolower($dirName)."-h1-ru.php",
                 "EDIT_TEMPLATE" => ""
             )
         );?>

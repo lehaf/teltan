@@ -213,7 +213,7 @@ $rentType = $entity_data_class::getList(array(
                                         "",
                                         Array(
                                             "AREA_FILE_SHOW" => "file",
-                                            "PATH" => "/include-area/".mb_strtolower($dirName)."-h2-ru.php",
+                                            "PATH" => SITE_TEMPLATE_PATH."/includes/area/".mb_strtolower($dirName)."-h2-ru.php",
                                             "EDIT_TEMPLATE" => ""
                                         )
                                     );
@@ -230,7 +230,7 @@ $rentType = $entity_data_class::getList(array(
                                         "",
                                         Array(
                                             "AREA_FILE_SHOW" => "file",
-                                            "PATH" => "/include-area/".mb_strtolower($dirName)."-p2-ru.php",
+                                            "PATH" => SITE_TEMPLATE_PATH."/includes/area/".mb_strtolower($dirName)."-p2-ru.php",
                                             "EDIT_TEMPLATE" => ""
                                         )
                                     );
@@ -379,7 +379,7 @@ $rentType = $entity_data_class::getList(array(
                                             "",
                                             Array(
                                                 "AREA_FILE_SHOW" => "file",
-                                                "PATH" => "/include-area/".mb_strtolower($dirName)."-p5-ru.php",
+                                                "PATH" => SITE_TEMPLATE_PATH."/includes/area/".mb_strtolower($dirName)."-p5-ru.php",
                                                 "EDIT_TEMPLATE" => ""
                                             )
                                         );?>
@@ -404,7 +404,7 @@ $rentType = $entity_data_class::getList(array(
                                         "",
                                         Array(
                                             "AREA_FILE_SHOW" => "file",
-                                            "PATH" => "/include-area/".mb_strtolower($dirName)."-p3-ru.php",
+                                            "PATH" => SITE_TEMPLATE_PATH."/includes/area/".mb_strtolower($dirName)."-p3-ru.php",
                                             "EDIT_TEMPLATE" => ""
                                         )
                                     );?>
@@ -418,7 +418,7 @@ $rentType = $entity_data_class::getList(array(
                                         "",
                                         Array(
                                             "AREA_FILE_SHOW" => "file",
-                                            "PATH" => "/include-area/".mb_strtolower($dirName)."-p4-ru.php",
+                                            "PATH" => SITE_TEMPLATE_PATH."/includes/area/".mb_strtolower($dirName)."-p4-ru.php",
                                             "EDIT_TEMPLATE" => ""
                                         )
                                     );?>

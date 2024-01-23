@@ -298,7 +298,7 @@ if ($arParams['CATEGORY'] === PROPERTY_ADS_TYPE_CODE) {
             "",
             Array(
                 "AREA_FILE_SHOW" => "file",
-                "PATH" => "/include-area/".mb_strtolower($dirName)."-h1-sub-ru.php",
+                "PATH" => SITE_TEMPLATE_PATH."/includes/area/".mb_strtolower($dirName)."-h1-sub-ru.php",
                 "EDIT_TEMPLATE" => ""
             )
         );?>
@@ -307,7 +307,7 @@ if ($arParams['CATEGORY'] === PROPERTY_ADS_TYPE_CODE) {
             "",
             Array(
                 "AREA_FILE_SHOW" => "file",
-                "PATH" => "/include-area/".mb_strtolower($dirName)."-text-ru.php",
+                "PATH" => SITE_TEMPLATE_PATH."/includes/area/".mb_strtolower($dirName)."-text-ru.php",
                 "EDIT_TEMPLATE" => ""
             )
         );?>
