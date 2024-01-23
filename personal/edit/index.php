@@ -1,11 +1,11 @@
-<?
+<?php
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 use Bitrix\Main\Localization\Loc;
 
 Loc::loadMessages(__FILE__);
 $APPLICATION->SetTitle("Персональные данные");
 ?>
-<?
+<?php
 // Смена email
 if($_GET['update_email'] && $_GET['update_email'] == 'Y')
 {
@@ -58,7 +58,7 @@ if(!$user)
                     </div>
 
                     <div class="d-flex flex-column flex-xl-row-reverse align-items-end form-group">
-                        <?
+                        <?php
                         if(!$user['PERSONAL_PHONE'])
                             $er_mess = 'Для размещения объявлений, необходимо заполнить номер телефона';
                         ?>
@@ -84,10 +84,22 @@ if(!$user)
                     </button>
                 </div>
             </div>
-                        <?include $_SERVER['DOCUMENT_ROOT'].'/personal/left.php'?>
-
+            <?php $APPLICATION->IncludeComponent(
+                "bitrix:menu",
+                "personal",
+                array(
+                    "ALLOW_MULTI_SELECT" => "N",
+                    "CHILD_MENU_TYPE" => "",
+                    "DELAY" => "N",
+                    "MAX_LEVEL" => "1",
+                    "MENU_CACHE_GET_VARS" => array(""),
+                    "MENU_CACHE_TIME" => "360000",
+                    "MENU_CACHE_TYPE" => "A",
+                    "MENU_CACHE_USE_GROUPS" => "N",
+                    "ROOT_MENU_TYPE" => "personal",
+                    "USE_EXT" => "N"
+                )
+            ); ?>
         </div>
     </div>
-</main>
-
-<?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
+<?php require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

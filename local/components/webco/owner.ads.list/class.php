@@ -216,7 +216,8 @@ class UserAdsCounter extends \CBitrixComponent
     public function executeComponent()
     {
         if (!empty($_GET['user'])) {
-            if ($this->startResultCache($this->arParams['CACHE_TIME'], [$_GET['user'], $this->pagerName, $_GET[$this->pagerName]])) {
+            $curSort = \Bitrix\Main\Application::getInstance()->getSession()->get('sort');
+            if ($this->startResultCache($this->arParams['CACHE_TIME'], [$_GET['user'], $this->pagerName, $_GET[$this->pagerName], $curSort])) {
                 $this->bindTagsToCache();
                 $this->getUserAds($_GET['user']);
                 $this->setPageNavigationToResult();

@@ -1,0 +1,8 @@
+ul.user-profile-menu li.user-profile-menu__list.active {
+    color:#3fb465;
+}
+
+div.counter-user-message.hide {
+    background: none;
+    display: none;
+}

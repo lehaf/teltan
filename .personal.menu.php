@@ -1,0 +1,56 @@
+<?php
+use Bitrix\Main\Localization\Loc;
+
+$aMenuLinks = array(
+    array(
+        Loc::getMessage('CABINET'),
+        "/personal/",
+        array(),
+        array(),
+        ""
+    ),
+    array(
+        Loc::getMessage('MESSAGES'),
+        "/personal/messages/",
+        array(),
+        array(
+            'COUNTER_MESSAGES' => 'Y'
+        ),
+        ""
+    ),
+    array(
+        Loc::getMessage('BUY_HISTORY'),
+        "/personal/wallet/",
+        array(),
+        array(),
+        ""
+    ),
+    array(
+        Loc::getMessage('BUY_TARIF'),
+        "/personal/rate/",
+        array(),
+        array(),
+        ""
+    ),
+    array(
+        Loc::getMessage('TRACKED'),
+        "/personal/favorites/",
+        array(),
+        array(),
+        ""
+    ),
+    array(
+        Loc::getMessage('DATA_CHANGE'),
+        "/personal/edit/",
+        array(),
+        array(),
+        ""
+    ),
+    array(
+        Loc::getMessage('CHANGE_PASS'),
+        "/personal/change_pass/",
+        array(),
+        array(),
+        ""
+    ),
+);
