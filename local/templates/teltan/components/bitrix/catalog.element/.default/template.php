@@ -161,7 +161,7 @@ $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css')
                 </div>
             </div>
             <a class="w-100 btn btn-primary text-uppercase btn-author-add"
-               href="/search/author/?R=<?= $arResult['IBLOCK_ID'] ?>&I=<?=$arResult['PROPERTIES']['ID_USER']['VALUE']?>&sort=price_d&display=block"
+               href="/owner/?user=<?=$arResult['PROPERTIES']['ID_USER']['VALUE']?>"
             >
                 <?=Loc::getMessage('ALL_ADS_AUTHOR')?>
             </a>

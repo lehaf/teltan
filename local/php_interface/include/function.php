@@ -651,7 +651,7 @@ function isExistActiveElements(int $iblockId, ?int $sectionId = NULL, int $cache
     return $result;
 }
 
-function getCurUserAdsCount(string $activeItems = 'Y') : int
+function getUserAdsCount(int $userId, string $activeItems = 'Y') : int
 {
     $cache = \Bitrix\Main\Data\Cache::createInstance(); // Служба кеширования
     $taggedCache = \Bitrix\Main\Application::getInstance()->getTaggedCache(); // Служба пометки кеша тегами
@@ -664,7 +664,6 @@ function getCurUserAdsCount(string $activeItems = 'Y') : int
         SIMPLE_ADS_IBLOCK_ID,
     ];
 
-    $userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
     $cacheTtl = 360000000;
     $cachePath = 'user_ads_count';
     $cacheId = 'user_'.$userId.'_ads_count_'.$activeItems;

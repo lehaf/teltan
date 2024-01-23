@@ -9,6 +9,7 @@ $APPLICATION->SetTitle("Персональный раздел");
 
 if (!$USER->IsAuthorized()) LocalRedirect("/");
 
+$userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
 $request = \Bitrix\Main\Application::getInstance()->getContext()->getRequest();
 
 if ((!empty($request->get('active')) && $request->get('active') === 'N') || !empty($_GET['ads_inactive'])) {
@@ -17,8 +18,8 @@ if ((!empty($request->get('active')) && $request->get('active') === 'N') || !emp
     $curTab = 'active';
 }
 
-$activeCount = getCurUserAdsCount();
-$unActiveCount = getCurUserAdsCount('N');
+$activeCount = getUserAdsCount($userId);
+$unActiveCount = getUserAdsCount($userId,'N');
 ?>
 <div class="container">
     <div class="preloader">
