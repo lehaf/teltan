@@ -68,5 +68,3 @@ if (isset($_POST) && !empty($_POST)) {
     header('Content-type: application/json; charset=utf-8');
     print json_encode($error);
 }
-require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/epilog_after.php");
-?>

@@ -193,23 +193,6 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on("submit", "form[name=add_ad]", function (e) {
-        e.preventDefault();
-        $.ajax({
-            type: "POST",
-            url: "/ajax/add_ad.php",
-            data: $(this).serialize(),
-            success: function (msg) {
-                if (msg['TYPE'] == "ERROR") {
-                    $('span.error_auth_mess').empty().append(msg['MESSAGE']);
-                }
-                if (msg['OK'] == "Y") {
-                    window.location.reload('/personal/');
-                }
-            }
-        });
-    });
-
     $(document).on("submit", "#confirmCodeForm", function (e) {
         e.preventDefault();
         $.ajax({
@@ -226,13 +209,7 @@ $(document).ready(function () {
             }
         });
     });
-    //  $('.add-item-favorite').on('click', () => {
-    //     $('.add-item-favorite').toggleClass('active')
-    //  })
 
-    //  $('.followThisItem').on('click', function () {
-    //     $(this).toggleClass('active')
-    //  })
     $(document).on("click", ".like, .like_f, .product-line__like", function (e) {
 
         e.preventDefault();

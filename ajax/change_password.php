@@ -51,5 +51,3 @@ if(isset($_POST) && !empty($_POST) && check_bitrix_sessid()) {
     print json_encode($error);
 }
 
-require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/epilog_after.php");
-?>

@@ -15,5 +15,3 @@ if(isset($_POST)) {
     header('Content-type: application/json; charset=utf-8');
     print json_encode($count);
 }
-require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/epilog_after.php");
-?>

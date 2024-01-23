@@ -66,4 +66,3 @@ if (Loader::includeModule("iblock") && Loader::includeModule("highloadblock") &&
     if ($favoriteItem) $favoriteItem->delete();
 }
 
-require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/epilog_after.php");
