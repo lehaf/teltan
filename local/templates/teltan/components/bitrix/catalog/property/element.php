@@ -77,6 +77,7 @@ $this->setFrameMode(true);
             'bitrix:catalog.element',
             '',
             [
+                "CATEGORY" => PROPERTY_ADS_TYPE_CODE,
                 "USER_ID" => $userId,
                 'IBLOCK_TYPE' => $arParams['IBLOCK_TYPE'],
                 'IBLOCK_ID' => $arParams['IBLOCK_ID'],

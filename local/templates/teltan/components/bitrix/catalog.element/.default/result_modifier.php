@@ -1,7 +1,14 @@
 <?php if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED!==true) die();
 
+/** @var array $arParams */
+/** @var array $arResult */
+
 if (!empty($arResult)) {
-    
+
+    $res = CIBlockElement::GetByID($arResult["ID"]);
+    if ($element = $res->GetNext()) $arResult['SHOW_COUNTER'] = $element['SHOW_COUNTER'];
+
+
     $arResult['EDIT_PAGE'] = '#';
     switch ($arResult['IBLOCK_ID']) {
         case 1:
@@ -113,13 +120,64 @@ if (!empty($arResult)) {
     }
     // Собираем поля свойств для блока описания
     if (!empty($arResult['PROPERTIES'])) {
-        foreach ($arResult['PROPERTIES'] as $prop){
-            if (strripos($prop['CODE'], 'PROP') !== false && $prop['MULTIPLE'] == 'Y' && !empty($prop['VALUE']) && $prop['CODE'] !== 'PHOTOS') {
-                $arResult['DESCRIPTION_PROPS'][] = [
-                    'NAME' => $prop['NAME'],
-                    'VALUE' => $prop['VALUE']
-                ];
-            }
+        switch ($arParams['CATEGORY']) {
+            case FLEA_ADS_TYPE_CODE:
+                foreach ($arResult['PROPERTIES'] as $prop){
+                    $arResult['DESCRIPTION_PROPS'][] = [
+                        'NAME' => $prop['NAME'],
+                        'VALUE' => $prop['VALUE']
+                    ];
+                }
+                break;
+            case AUTO_ADS_TYPE_CODE:
+                // Получаем все типы кузовов
+                switch ($arParams['IBLOCK_ID']) {
+                    case AUTO_IBLOCK_ID:
+                        $bodyTypeClass = GetEntityDataClass(AUTO_BODY_TYPE_HL_ID);
+                        break;
+                    case MOTO_IBLOCK_ID:
+                        $bodyTypeClass = GetEntityDataClass(MOTO_BODY_TYPE_HL_ID);
+                        break;
+                    case SCOOTER_IBLOCK_ID:
+                        $bodyTypeClass = GetEntityDataClass(SCOOTER_BODY_TYPE_HL_ID);
+                        break;
+                }
+
+                $bodyTypes = $bodyTypeClass::getList(array(
+                    'select' => array('*'),
+                ))->fetchAll();
+
+                if (!empty($bodyTypes)) {
+                    $newTree = [];
+                    foreach ($bodyTypes as $type) {
+                        $newTree[$type['UF_XML_ID']] = $type;
+                    }
+                    $bodyTypes = $newTree;
+                }
+
+                foreach ($arResult['PROPERTIES'] as $prop) {
+                    // Получаем тип кузова
+                    if ($prop['CODE'] === 'PROP_BODY_TYPE' && !empty($prop['VALUE'])) $prop['VALUE'] = $bodyTypes[$prop['VALUE']]['UF_NAME'];
+
+                    if (strripos($prop['CODE'], 'PROP') !== false && !empty($prop['VALUE']) && $prop['CODE'] !== 'PHOTOS' && $prop['CODE'] !== 'PROP_COLOR_Left') {
+                        $arResult['DESCRIPTION_PROPS'][] = [
+                            'CODE' => $prop['CODE'],
+                            'NAME' => $prop['NAME'],
+                            'VALUE' => $prop['VALUE']
+                        ];
+                    }
+                }
+                break;
+            case PROPERTY_ADS_TYPE_CODE:
+                foreach ($arResult['PROPERTIES'] as $prop){
+                    if (strripos($prop['CODE'], 'PROP') !== false && $prop['MULTIPLE'] == 'Y' && !empty($prop['VALUE']) && $prop['CODE'] !== 'PHOTOS') {
+                        $arResult['DESCRIPTION_PROPS'][] = [
+                            'NAME' => $prop['NAME'],
+                            'VALUE' => $prop['VALUE']
+                        ];
+                    }
+                }
+                break;
         }
     }
 }

@@ -50,6 +50,8 @@ $MESS['sended'] = 'Message sent';
 
 $MESS['error_ajax'] = 'insufficient funds';
 $MESS['type_item'] = 'Choose type:';
-?>
+$MESS['sellerComment'] = 'SELLER COMMENT';
+$MESS['equipment'] = 'EQUIPMENT';
+
 
 

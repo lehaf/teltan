@@ -17,15 +17,15 @@ use Bitrix\Main\ModuleManager;
 
 $this->setFrameMode(true);
 
-global $USER;
-$UserID = $USER->GetID();
+$userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
 ?>
 <div class="container">
     <?php  $elementId = $APPLICATION->IncludeComponent(
         'bitrix:catalog.element',
         '',
         [
-            "USER_ID" => $UserID,
+            "CATEGORY" => FLEA_ADS_TYPE_CODE,
+            "USER_ID" => $userId,
             'IBLOCK_TYPE' => $arParams['IBLOCK_TYPE'],
             'IBLOCK_ID' => $arParams['IBLOCK_ID'],
             'PROPERTY_CODE' => (isset($arParams['DETAIL_PROPERTY_CODE']) ? $arParams['DETAIL_PROPERTY_CODE'] : []),

@@ -50,5 +50,6 @@ $MESS['sended'] = 'Сообщение отправленно';
 
 $MESS['error_ajax'] = 'недостаточно средств';
 $MESS['type_item'] = 'Выберите тип:';
-?>
+$MESS['sellerComment'] = 'SELLER COMMENT';
+$MESS['equipment'] = 'EQUIPMENT';
 

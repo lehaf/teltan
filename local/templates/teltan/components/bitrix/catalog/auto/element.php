@@ -17,15 +17,15 @@ use Bitrix\Main\ModuleManager;
 
 $this->setFrameMode(true);
 
-global $USER;
-$UserID = $USER->GetID();
+$userId = \Bitrix\Main\Engine\CurrentUser::get()->getId();
 ?>
 <div class="container">
     <?php $elementId = $APPLICATION->IncludeComponent(
         'bitrix:catalog.element',
         '',
         [
-            "USER_ID" => $UserID,
+            "CATEGORY" => AUTO_ADS_TYPE_CODE,
+            "USER_ID" => $userId,
             'IBLOCK_TYPE' => $arParams['IBLOCK_TYPE'],
             'IBLOCK_ID' => $arParams['IBLOCK_ID'],
             'PROPERTY_CODE' => (isset($arParams['DETAIL_PROPERTY_CODE']) ? $arParams['DETAIL_PROPERTY_CODE'] : []),
@@ -63,7 +63,6 @@ $UserID = $USER->GetID();
             'LINK_IBLOCK_ID' => $arParams['LINK_IBLOCK_ID'],
             'LINK_PROPERTY_SID' => $arParams['LINK_PROPERTY_SID'],
             'LINK_ELEMENTS_URL' => $arParams['LINK_ELEMENTS_URL'],
-
             'OFFERS_CART_PROPERTIES' => (isset($arParams['OFFERS_CART_PROPERTIES']) ? $arParams['OFFERS_CART_PROPERTIES'] : []),
             'OFFERS_FIELD_CODE' => $arParams['DETAIL_OFFERS_FIELD_CODE'],
             'OFFERS_PROPERTY_CODE' => (isset($arParams['DETAIL_OFFERS_PROPERTY_CODE']) ? $arParams['DETAIL_OFFERS_PROPERTY_CODE'] : []),
@@ -71,7 +70,6 @@ $UserID = $USER->GetID();
             'OFFERS_SORT_ORDER' => $arParams['OFFERS_SORT_ORDER'],
             'OFFERS_SORT_FIELD2' => $arParams['OFFERS_SORT_FIELD2'],
             'OFFERS_SORT_ORDER2' => $arParams['OFFERS_SORT_ORDER2'],
-
             'ELEMENT_ID' => $arResult['VARIABLES']['ELEMENT_ID'],
             'ELEMENT_CODE' => $arResult['VARIABLES']['ELEMENT_CODE'],
             'SECTION_ID' => $arResult['VARIABLES']['SECTION_ID'],
@@ -151,7 +149,6 @@ $UserID = $USER->GetID();
             'USE_ENHANCED_ECOMMERCE' => (isset($arParams['USE_ENHANCED_ECOMMERCE']) ? $arParams['USE_ENHANCED_ECOMMERCE'] : ''),
             'DATA_LAYER_NAME' => (isset($arParams['DATA_LAYER_NAME']) ? $arParams['DATA_LAYER_NAME'] : ''),
             'BRAND_PROPERTY' => (isset($arParams['BRAND_PROPERTY']) ? $arParams['BRAND_PROPERTY'] : ''),
-
             'USE_GIFTS_DETAIL' => $arParams['USE_GIFTS_DETAIL']?: 'Y',
             'USE_GIFTS_MAIN_PR_SECTION_LIST' => $arParams['USE_GIFTS_MAIN_PR_SECTION_LIST']?: 'Y',
             'GIFTS_SHOW_DISCOUNT_PERCENT' => $arParams['GIFTS_SHOW_DISCOUNT_PERCENT'],
@@ -167,7 +164,6 @@ $UserID = $USER->GetID();
             'GIFTS_SHOW_SLIDER' => $arParams['LIST_SHOW_SLIDER'],
             'GIFTS_SLIDER_INTERVAL' => isset($arParams['LIST_SLIDER_INTERVAL']) ? $arParams['LIST_SLIDER_INTERVAL'] : '',
             'GIFTS_SLIDER_PROGRESS' => isset($arParams['LIST_SLIDER_PROGRESS']) ? $arParams['LIST_SLIDER_PROGRESS'] : '',
-
             'GIFTS_MAIN_PRODUCT_DETAIL_PAGE_ELEMENT_COUNT' => $arParams['GIFTS_MAIN_PRODUCT_DETAIL_PAGE_ELEMENT_COUNT'],
             'GIFTS_MAIN_PRODUCT_DETAIL_BLOCK_TITLE' => $arParams['GIFTS_MAIN_PRODUCT_DETAIL_BLOCK_TITLE'],
             'GIFTS_MAIN_PRODUCT_DETAIL_HIDE_BLOCK_TITLE' => $arParams['GIFTS_MAIN_PRODUCT_DETAIL_HIDE_BLOCK_TITLE'],

@@ -51,6 +51,7 @@ $MESS['sended'] = 'הודעה נשלחה';
 
 $MESS['error_ajax'] = 'אין מספיק כספים';
 $MESS['type_item'] = 'בחר סוג:';
-?>
+$MESS['sellerComment'] = 'תגובת המוכר';
+$MESS['equipment'] = 'צִיוּד';
 
 

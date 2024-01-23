@@ -136,9 +136,15 @@ else
                                 <i class="icon-steering"></i>
                             </a>
                             <div class="dropdown-menu">
-                                <a href="/auto/" class="border-bottom dropdown-item <?php echo (CSite::InDir('/auto/')) ? "active" : " "; ?>"><?=Loc::getMessage('AUTO');?></a>
-                                <a href="/moto/" class="border-bottom dropdown-item <?php echo (CSite::InDir('/moto/')) ? "active" : " "; ?>">Moto</a>
-                                <a href="/scooters/" class="dropdown-item <?php echo (CSite::InDir('/scooters/')) ? "active" : " "; ?>">Scooters</a>
+                                <a href="/auto/" class="border-bottom dropdown-item <?php echo (CSite::InDir('/auto/')) ? "active" : " "; ?>">
+                                    <?=Loc::getMessage('AUTO');?>
+                                </a>
+                                <a href="/moto/" class="border-bottom dropdown-item <?php echo (CSite::InDir('/moto/')) ? "active" : " "; ?>">
+                                    <?=Loc::getMessage('moto')?>
+                                </a>
+                                <a href="/scooters/" class="dropdown-item <?php echo (CSite::InDir('/scooters/')) ? "active" : " "; ?>">
+                                    <?=Loc::getMessage('scooters')?>
+                                </a>
                             </div>
                         </div>
                         <div class="d-flex d-lg-none hamburger">
@@ -189,7 +195,10 @@ else
                 <div class="col-6 col-xl-2 order-2 order-xl-3">
                     <a <?=CSite::InDir('/index.php') ? '' : 'href="/"';?> class="ml-auto d-flex justify-content-end logo">
                         <div class="mr-2 mr-lg-2 logo__image">
-                            <img src="<?=SITE_TEMPLATE_PATH?>/assets/img/logo.png" />
+                            <img src="<?=SITE_TEMPLATE_PATH?>/assets/img/logo.png"
+                                 alt="logo-teltan"
+                                 title="logo-teltan"
+                            >
                         </div>
                     </a>
                 </div>
@@ -213,7 +222,7 @@ else
                             <?=Loc::getMessage('other')?>
                         </p>
                         <div class="d-flex flex-column">
-                            <a href="<?=$GLOBALS['arSetting'][SITE_ID]['href'];?>add/fm/" class="btn btn-primary text-uppercase font-weight-bold mb-4">
+                            <a href="/add/fm/" class="btn btn-primary text-uppercase font-weight-bold mb-4">
                                 <?=Loc::getMessage('yourAds')?>
                             </a>
                         </div>
@@ -222,13 +231,11 @@ else
                         <p class="h6 font-weight-bold">
                             <?=Loc::getMessage('realEstate')?>
                         </p>
-
                         <div class="d-flex flex-column">
-                            <a href="<?=$GLOBALS['arSetting'][SITE_ID]['href'];?>add/rent/" class="btn btn-primary text-uppercase font-weight-bold mb-4">
+                            <a href="/add/rent/" class="btn btn-primary text-uppercase font-weight-bold mb-4">
                                 <?=Loc::getMessage('rent')?>
                             </a>
-
-                            <a href="<?=$GLOBALS['arSetting'][SITE_ID]['href'];?>add/buy/" class="btn btn-primary text-uppercase font-weight-bold mb-4">
+                            <a href="/add/buy/" class="btn btn-primary text-uppercase font-weight-bold mb-4">
                                 <?=Loc::getMessage('buy')?>
                             </a>
                         </div>
@@ -238,15 +245,13 @@ else
                             <?=Loc::getMessage('transport')?>
                         </p>
                         <div class="d-flex flex-column">
-                            <a href="<?=$GLOBALS['arSetting'][SITE_ID]['href'];?>add/auto/" class="btn btn-primary text-uppercase font-weight-bold mb-4">
+                            <a href="/add/auto/" class="btn btn-primary text-uppercase font-weight-bold mb-4">
                                 <?=Loc::getMessage('auto')?>
                             </a>
-
-                            <a href="<?=$GLOBALS['arSetting'][SITE_ID]['href'];?>add/moto/" class="btn btn-primary text-uppercase font-weight-bold mb-4">
+                            <a href="/add/moto/" class="btn btn-primary text-uppercase font-weight-bold mb-4">
                                 <?=Loc::getMessage('moto')?>
                             </a>
-
-                            <a href="<?=$GLOBALS['arSetting'][SITE_ID]['href'];?>add/scooter/" class="btn btn-primary text-uppercase font-weight-bold mb-4">
+                            <a href="/add/scooter/" class="btn btn-primary text-uppercase font-weight-bold mb-4">
                                 <?=Loc::getMessage('scooters')?>
                             </a>
                         </div>

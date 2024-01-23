@@ -483,135 +483,103 @@ $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css')
                 </div>
             </div>
         <?php endif;?>
-
-        <?php if (false === 'FLEA'):?>
+        <?php // ОПИСАНИЕ ДЛЯ РАЗДЕЛА FLEA?>
+        <?php if ($arParams['CATEGORY'] === FLEA_ADS_TYPE_CODE):?>
             <div class="mb-4 card text-right">
                 <div class="about-item">
-                    <div class="about-item__characteristics">
-                        <? foreach ($arResult['PROPERTIES'] as $arProp) {
-                            $needle = 'ROP';
-                            $pos = strripos($arProp['CODE'], $needle);
-                            if ($arProp['HINT'] != '' && $arProp['VALUE'] != '' && $pos == 1) {
-                                ?>
-                                <div class="btn characteristics-item"><?= $arProp['HINT'] ?>
-                                    : <? if (is_array($arProp['VALUE'])) {
-
-                                        foreach ($arProp['VALUE'] as $value){
-                                            echo '[';
-                                            echo  ' ' . $value . ' ';
-                                            echo ']';
-                                        };
-
-                                    } elseif($arProp['CODE'] == 'PROP_COLOR') {
-                                        ?>
-                                        <input type="checkbox" class="d-none" id="arrFilter_207_2895927109" value="Y">
-                                        <label class="colour-element" for="arrFilter_207_2895927109" style="
-                                                float: right;
-                                                margin-bottom: auto;background: #<?echo $arProp['VALUE'];?>;"></label>
-                                        <?
-                                    }else{
-                                        echo $arProp['VALUE'];
-                                    } ?></div>
-                            <? } ?>
-                        <? } ?>
-                    </div>
-
-                    <p class="about-item__text">
-                        <?= $arResult['PREVIEW_TEXT']; ?>
-                    </p>
+                    <?php if (!empty($arResult['DESCRIPTION_PROPS'])):?>
+                        <div class="about-item__characteristics">
+                            <?php foreach ($arResult['DESCRIPTION_PROPS'] as $prop):?>
+                                <div class="btn characteristics-item">
+                                    <?=$prop['NAME'].' : '?>
+                                    <?php if (is_array($prop['VALUE'])) {
+                                        echo implode(' / ',$prop['VALUE']);
+                                    } else {
+                                        echo $prop['VALUE'];
+                                    } ?>
+                                </div>
+                            <?php endforeach;?>
+                        </div>
+                    <?php endif;?>
+                    <?php if (!empty($arResult['PREVIEW_TEXT'])):?>
+                        <p class="about-item__text">
+                            <?=$arResult['PREVIEW_TEXT']?>
+                        </p>
+                    <?php endif;?>
                     <div class="d-flex justify-content-between">
                         <div class="viewers">
-                            <span class="mr-3"><? $res = CIBlockElement::GetByID($arResult["ID"]);
-                                if ($ar_res = $res->GetNext())
-                                    echo $ar_res['SHOW_COUNTER'];
-                                ?></span>
+                            <span class="mr-3"><?=$arResult['SHOW_COUNTER']?></span>
                             <i class="icon-visibility"></i>
                         </div>
-
-                        <?
+                        <?php
                         $strDate = getStringDate($arResult['DATE_CREATE']);
                         ?>
-                        <div class="date"><?= ($strDate['MES']) ? GetMessage($strDate['MES']) . ', ' . $strDate['HOURS'] : $strDate['HOURS']; ?></div>
+                        <div class="date"><?=!empty($strDate['MES']) ? Loc::getMessage($strDate['MES']) . ', ' . $strDate['HOURS'] : $strDate['HOURS']; ?></div>
                     </div>
                 </div>
             </div>
         <?php endif;?>
-
-        <?php if (false === 'FLEA'):?>
+        <?php // ОПИСАНИЕ ДЛЯ РАЗДЕЛА AUTO?>
+        <?php if ($arParams['CATEGORY'] === AUTO_ADS_TYPE_CODE):?>
             <div class="mb-5 card mainCardDesktop">
                 <div class="about-auto">
-                    <div class="mb-4 text-right seller-comment">
-                        <? if (!empty($arResult['~PREVIEW_TEXT']) && (int)strlen(trim($arResult['~PREVIEW_TEXT'])) > 0) { ?>
-                            <h4 class="mb-5 font-weight-bold text-uppercase"><?=Loc::getMessage('sellerComment')?></h4>
-
-                            <p>
-                                <?= $arResult['~PREVIEW_TEXT']; ?>
-                            </p>
-                        <? } ?>
-                    </div>
-                    <?
-                    $count = 0;
-                    foreach ($arResult['PROPERTIES'] as $PROPERTY) {
-                        if ($PROPERTY['MULTIPLE'] == 'Y' && $PROPERTY['ID'] != '53' && $PROPERTY['CODE'] != 'PHOTOS' && $PROPERTY['VALUE'] != null) {
-                            $count++;
-                        }
-                    }
-                    if ($count > 0){
-                        ?>
-                        <h5 class="mb-4 text-right font-weight-bolder text-uppercase"><?=Loc::getMessage('equipment')?></h5>
-                        <?
-                    }
-                    unset($count);
-                    ?>
-
-                    <? foreach ($arResult['PROPERTIES'] as $PROPERTY) {
-                        if ($PROPERTY['MULTIPLE'] == 'Y' && $PROPERTY['ID'] != '53' && $PROPERTY['CODE'] != 'PHOTOS' && $PROPERTY['VALUE'] != null && strpos($PROPERTY['CODE'], "_Left") === false) {
-                            ?>
-                            <div class="pb-3 border-top d-flex justify-content-between" data-toggle="collapse"
-                                 href="#collapse<?= $PROPERTY["CODE"] ?>" role="button" aria-expanded="false"
-                                 aria-controls="collapse<?= $PROPERTY["HINT"] ?>">
-                                <span><i class="mr-3 icon-arrow-down-sign-to-navigate-3"></i><?= count($PROPERTY["VALUE"]) ?> אופציות</span>
-                                <span class="font-weight-bold"><?= $PROPERTY["HINT"] ?>    :</span>
+                    <?php if (!empty($arResult['PREVIEW_TEXT'])):?>
+                        <div class="mb-4 text-right seller-comment">
+                            <h4 class="mb-5 font-weight-bold text-uppercase">
+                                <?=Loc::getMessage('sellerComment')?>
+                            </h4>
+                            <p><?=$arResult['PREVIEW_TEXT']?></p>
+                        </div>
+                    <?php endif; ?>
+                    <?php if (!empty($arResult['DESCRIPTION_PROPS'])):?>
+                        <h5 class="mb-4 text-right font-weight-bolder text-uppercase">
+                            <?=Loc::getMessage('equipment')?>
+                        </h5>
+                        <?php foreach ($arResult['DESCRIPTION_PROPS'] as $key => $prop):?>
+                            <div class="pb-3 d-flex justify-content-between <?=$key > 0 ? 'border-top' : ''?>"
+                                 data-toggle="collapse"
+                                 href="#collapse<?=$prop["CODE"]?>"
+                                 role="button"
+                                 aria-expanded="false"
+                                 aria-controls="collapse<?=$prop["CODE"]?>">
+                                <span>
+                                    <i class="mr-3 icon-arrow-down-sign-to-navigate-3"></i>
+                                    <?=is_array($prop['VALUE']) ? count($prop["VALUE"]).'אופציות ' : ''?>
+                                </span>
+                                <span class="font-weight-bold"><?=$prop["NAME"].':'?></span>
                             </div>
-                            <div class="collapse show" id="collapse<?= $PROPERTY["CODE"] ?>">
+                            <div class="collapse show" id="collapse<?=$prop["CODE"]?>">
                                 <div class="row flex-row-reverse text-right">
-                                    <div style="display: none">
-                                        <? $col = 0; ?>
-                                        <? foreach ($PROPERTY['VALUE'] as $item) { ?>
-                                        <? if ($col == 0 || $col == 2 || $col == 5){ ?>
-                                    </div>
-                                    <div class="col-3">
-                                        <p><?= $item ?></p>
-                                        <? } else { ?>
-                                            <p><?= $item ?></p>
-                                        <? } ?>
-                                        <? $col++; ?>
-                                        <? } ?>
-                                    </div>
+                                    <?php if (is_array($prop['VALUE'])):?>
+                                        <div class="col-6">
+                                            <?php foreach ($prop['VALUES'] as $val):?>
+                                                <p><?=$val?></p>
+                                            <?php endforeach;?>
+                                        </div>
+                                    <?php else:?>
+                                        <div class="col-6">
+                                            <p><?=$prop['VALUE']?></p>
+                                        </div>
+                                    <?php endif;?>
                                 </div>
                             </div>
-                        <? }
-                    } ?>
-
-
+                        <?php endforeach; ?>
+                    <?php endif;?>
                     <div class="mt-3 pt-3 border-top d-flex justify-content-between">
                         <div class="viewers">
-                                <span class="mr-2"><? $res = CIBlockElement::GetByID($arResult["ID"]);
-                                    if ($ar_res = $res->GetNext())
-                                        echo $ar_res['SHOW_COUNTER'];
-                                    ?></span>
+                            <span class="mr-2"><?=$arResult['SHOW_COUNTER']?></span>
                             <i class="icon-visibility"></i>
                         </div>
-                        <?
+                        <?php
                         $strDate = getStringDate($arResult['DATE_CREATE']);
                         ?>
-                        <div class="date"><?= ($strDate['MES']) ? GetMessage($strDate['MES']) . ', ' . $strDate['HOURS'] : $strDate['HOURS']; ?></div>
+                        <div class="date"><?=!empty($strDate['MES']) ? Loc::getMessage($strDate['MES']) . ', ' . $strDate['HOURS'] : $strDate['HOURS']; ?></div>
                     </div>
                 </div>
             </div>
         <?php endif;?>
-
-        <?php if (!empty($arResult['DESCRIPTION_PROPS'])):?>
+        <?php // ОПИСАНИЕ ДЛЯ РАЗДЕЛА PROPERTY?>
+        <?php if (!empty($arResult['DESCRIPTION_PROPS']) && $arParams['CATEGORY'] === PROPERTY_ADS_TYPE_CODE):?>
             <p class=" h2 mb-4 subtitle">Description</p>
             <div class="mb-4">
                 <div class="card p-4">

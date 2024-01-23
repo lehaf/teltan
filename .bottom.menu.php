@@ -1,20 +1,19 @@
-<?
-$aMenuLinks = Array(
+<?php
+$aMenuLinks = array(
 
-    Array(
+    array(
         "О сервисе",
         "/about/",
-        Array(),
-        Array(),
+        array(),
+        array(),
         ""
     ),
 
-    Array(
+    array(
         "Информационная",
         "/info/",
-        Array(),
-        Array(),
+        array(),
+        array(),
         ""
     ),
 );
-?>
