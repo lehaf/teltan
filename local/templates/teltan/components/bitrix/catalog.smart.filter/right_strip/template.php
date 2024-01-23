@@ -18,6 +18,7 @@ $this->setFrameMode(true);
 
 $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_ID']);
 
+$this->setViewTarget('filter');
 ?>
 <?php if (!empty($arResult["ITEMS"])):?>
     <div class="p-3 pt-4 pb-4 card text-right filter-select filter" id="filterModalContent">
@@ -635,3 +636,5 @@ $sectionsData = getSectionsForFilter($arParams['IBLOCK_ID'],$arParams['SECTION_I
 <script type="text/javascript">
     let smartFilter = new JCSmartFilter('<?=CUtil::JSEscape($arResult["FORM_ACTION"])?>', '<?=CUtil::JSEscape($arParams["FILTER_VIEW_MODE"])?>', <?=CUtil::PhpToJSObject($arResult["JS_FILTER_PARAMS"])?>);
 </script>
+<?php
+$this->endViewTarget('filter');

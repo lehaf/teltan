@@ -6,6 +6,7 @@ function JCSmartFilter(ajaxURL, viewMode, params)
     this.cacheKey = '';
     this.cache = [];
     this.viewMode = viewMode;
+
     if (params && params.SEF_SET_FILTER_URL)
     {
         this.bindUrlToButton('set_filter', params.SEF_SET_FILTER_URL);
@@ -16,11 +17,23 @@ function JCSmartFilter(ajaxURL, viewMode, params)
     {
         this.bindUrlToButton('del_filter', params.SEF_DEL_FILTER_URL);
     }
+
+}
+
+
+JCSmartFilter.prototype.showLoader = function()
+{
+    $('.preloader').css({"z-index": "1", "opacity": "100", "position": "fixed", "dispaly": "block" });
+};
+
+JCSmartFilter.prototype.hideLoader = function ()
+{
+    $('.preloader').css({"z-index": "0", "opacity": "0", "position": "fixed", "dispaly": "none" });
 }
 
 JCSmartFilter.prototype.keyup = function(input)
 {
-    $('.preloader').css({"z-index": "1", "opacity": "100", "position": "fixed", "dispaly": "block" });
+    this.showLoader();
     if(!!this.timer)
     {
         clearTimeout(this.timer);
@@ -33,6 +46,7 @@ JCSmartFilter.prototype.keyup = function(input)
 
 JCSmartFilter.prototype.click = function(checkbox)
 {
+    this.showLoader();
     if(!!this.timer)
     {
         clearTimeout(this.timer);
@@ -85,6 +99,7 @@ JCSmartFilter.prototype.reload = function(input)
             }
 
             this.curFilterinput = input;
+
             BX.ajax.loadJSON(
                 this.ajaxURL,
                 this.values2post(values),
@@ -157,7 +172,7 @@ JCSmartFilter.prototype.updateItem = function (PID, arItem)
 
 JCSmartFilter.prototype.postHandler = function (result, fromCache)
 {
-    $('.preloader').css({"z-index": "1", "opacity": "100", "position": "fixed", "dispaly": "block" });
+    const _this = this;
     var hrefFILTER, url, curProp;
     var modef = BX('modef');
     var modef_num = BX('modef_num');
@@ -282,8 +297,10 @@ JCSmartFilter.prototype.postHandler = function (result, fromCache)
                         $(this).attr('href' , urlObj.search);
                     }
                 }
-            })
-            $('.preloader').css({"z-index": "0", "opacity": "0", "position": "fixed" ,  "dispaly": "none" });
+            });
+            // reinit lazy-load
+            if (window.ImageDefer) window.ImageDefer.init();
+            _this.hideLoader();
         }
     });
 };
@@ -468,6 +485,15 @@ JCSmartFilter.prototype.selectDropDownItem = function(element, controlId , selec
     this.keyup(BX(controlId));
     $(selector).html($(element).html())
     var wrapContainer = BX.findParent(BX(controlId), {className:"bx_filter_select_container"}, false);
+
+    // Проставляем активность элементам select после ajax
+    const allLiOptions = element.parentNode.parentNode.querySelectorAll('li');
+    if (allLiOptions.length > 0) {
+        allLiOptions.forEach((li) => {
+            if (li.classList.contains('selected')) li.classList.remove('selected');
+        });
+    }
+    if (!element.parentNode.classList.contains('selected')) element.parentNode.classList.add('selected');
 
     var currentOption = wrapContainer.querySelector('[data-role="currentOption"]');
     currentOption.innerHTML = element.innerHTML;

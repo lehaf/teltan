@@ -74,7 +74,7 @@ if (!empty($arParams['IBLOCK_ID'])) {
             'SHOW_COUNTER' => $vipItem->getShowCounter(),
             'DETAIL_PAGE_URL' => \CIBlock::ReplaceDetailUrl($vipItem->getIblock()->getDetailPageUrl(), $itemUrlPatternParams, true, 'E'),
             'PROPERTIES' => [
-                'PRICE' => ['VALUE' => !empty($vipItem->getPrice()) ? $vipItem->getPrice()->getValue() : ''],
+                'PRICE' => ['VALUE' => !empty($vipItem->getPrice()) ? ICON_CURRENCY.' '.floor($vipItem->getPrice()->getValue()) : ''],
                 'LENTA_DATE' => ['VALUE' => !empty($vipItem->getLentaDate()) ? $vipItem->getLentaDate()->getValue() : ''],
             ],
             'TAPE' => !empty($ribbonTypes) && !empty($vipItem->getTypeTape()) ?  $ribbonTypes[$vipItem->getTypeTape()->getValue()] : ''

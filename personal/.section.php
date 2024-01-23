@@ -1,8 +1,9 @@
-<?
+<?php
+
 use Bitrix\Main\Localization\Loc;
-Loc::loadMessages(__FILE__);
+
 $sSectionName = Loc::getMessage('CABINET');
 $arDirProperties = Array(
-    "title" => Loc::getMessage('CABINET')
+    "title" => Loc::getMessage('CABINET'),
+    "robots" => 'noindex, nofollow',
 );
-?>

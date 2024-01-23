@@ -79,7 +79,11 @@ if (!empty($arResult['VIPS']) || !empty($arResult['ITEMS'])):?>
                                                 </svg>
                                             </p>
                                         <?php if (!$USER->IsAuthorized()):?></a><?php endif; ?>
-                                        <div class="price"><?=ICON_CURRENCY;?> <?=number_format($vipItem['PROPERTIES']['PRICE']['VALUE'], 0, '.', ' ');?></div>
+                                        <?php if (!empty($vipItem['PROPERTIES']['PRICE']['VALUE'])):?>
+                                            <div class="price">
+                                                <?=$vipItem['PROPERTIES']['PRICE']['VALUE']?>
+                                            </div>
+                                        <?php endif;?>
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-end">

@@ -20,6 +20,47 @@ if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
             $sectionName = $sectionData['NAME'];
     }
 }
+
+/** Фильтер находися здесь так как по верстке он находится ниже блока с элементами
+ * и фильтрация в таком случае не работает, поэтому было приянто решение реализовать его функционал
+ * с помощью отложенных функций
+ */
+$APPLICATION->IncludeComponent(
+    "bitrix:catalog.smart.filter",
+    "right_strip",
+    array(
+        "COMPONENT_TEMPLATE" => "bootstrap_v5",
+        "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
+        "IBLOCK_ID" => $arParams["IBLOCK_ID"],
+        "SECTION_ID" => $arResult["VARIABLES"]["SECTION_ID"],
+        "SECTION_CODE" => $arResult["VARIABLES"]["SECTION_CODE"],
+        "FILTER_NAME" => "arrFilter",
+        "HIDE_NOT_AVAILABLE" => "N",
+        "TEMPLATE_THEME" => "blue",
+        "FILTER_VIEW_MODE" => "horizontal",
+        "DISPLAY_ELEMENT_COUNT" => "Y",
+        "SEF_MODE" => "N",
+        "CACHE_TYPE" => "A",
+        "CACHE_TIME" => "36000000",
+        "CACHE_GROUPS" => "N",
+        "SAVE_IN_SESSION" => "Y",
+        "INSTANT_RELOAD" => "Y",
+        "PAGER_PARAMS_NAME" => "arrPager",
+        "PRICE_CODE" => array(
+            0 => "BASE",
+        ),
+        "CONVERT_CURRENCY" => "Y",
+        "XML_EXPORT" => "N",
+        "SECTION_TITLE" => "-",
+        "SECTION_DESCRIPTION" => "-",
+        "POPUP_POSITION" => "left",
+        "SEF_RULE" => "/flea/#SECTION_CODE_PATH#/filter/#SMART_FILTER_PATH#/apply/",
+        "SECTION_CODE_PATH" => "",
+        "SMART_FILTER_PATH" => '#SECTION_CODE_PATH#/filter/#SMART_FILTER_PATH#/apply/',
+        "CURRENCY_ID" => "RUB"
+    ),
+    false
+);
 ?>
 <div class="container">
     <div class="preloader">
@@ -306,42 +347,7 @@ if (!empty($arResult["VARIABLES"]["SECTION_ID"])) {
         </div>
         <?php if ($request->get('isAjax') === 'y') die()?>
         <div class="col col-lg-3">
-            <?php $APPLICATION->IncludeComponent(
-                "bitrix:catalog.smart.filter",
-                "right_strip",
-                array(
-                    "COMPONENT_TEMPLATE" => "bootstrap_v5",
-                    "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
-                    "IBLOCK_ID" => $arParams["IBLOCK_ID"],
-                    "SECTION_ID" => $arResult["VARIABLES"]["SECTION_ID"],
-                    "SECTION_CODE" => $arResult["VARIABLES"]["SECTION_CODE"],
-                    "FILTER_NAME" => "arrFilter",
-                    "HIDE_NOT_AVAILABLE" => "N",
-                    "TEMPLATE_THEME" => "blue",
-                    "FILTER_VIEW_MODE" => "horizontal",
-                    "DISPLAY_ELEMENT_COUNT" => "Y",
-                    "SEF_MODE" => "N",
-                    "CACHE_TYPE" => "A",
-                    "CACHE_TIME" => "36000000",
-                    "CACHE_GROUPS" => "N",
-                    "SAVE_IN_SESSION" => "Y",
-                    "INSTANT_RELOAD" => "Y",
-                    "PAGER_PARAMS_NAME" => "arrPager",
-                    "PRICE_CODE" => array(
-                        0 => "BASE",
-                    ),
-                    "CONVERT_CURRENCY" => "Y",
-                    "XML_EXPORT" => "N",
-                    "SECTION_TITLE" => "-",
-                    "SECTION_DESCRIPTION" => "-",
-                    "POPUP_POSITION" => "left",
-                    "SEF_RULE" => "/flea/#SECTION_CODE_PATH#/filter/#SMART_FILTER_PATH#/apply/",
-                    "SECTION_CODE_PATH" => "",
-                    "SMART_FILTER_PATH" => '#SECTION_CODE_PATH#/filter/#SMART_FILTER_PATH#/apply/',
-                    "CURRENCY_ID" => "RUB"
-                ),
-                false
-            );?>
+            <?php $APPLICATION->ShowViewContent('filter');?>
         </div>
     </div>
 </div>

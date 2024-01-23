@@ -682,10 +682,17 @@ window.mapInit = function ()
             // Клик на метку
             map.on('click', 'point', (e) => {
                 if (e.features.length > 0) {
-                    let uniqueFeatures = [];
+                    let vipAds = [];
+                    let commonAds = [];
                     e.features.forEach((feature) => {
-                        uniqueFeatures[feature.id] = feature;
+                        if (feature.properties.isVip == true) {
+                            vipAds[feature.id] = feature;
+                        } else {
+                            commonAds[feature.id] = feature;
+                        }
                     });
+
+                    const uniqueFeatures = vipAds.concat(commonAds);
 
                     if (uniqueFeatures.length > 0) {
                         let description = '';
