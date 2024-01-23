@@ -11,6 +11,9 @@
 /** @var string $componentPath */
 /** @var CBitrixComponent $component */
 $this->setFrameMode(true);
+
+$pixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+$this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
 ?>
 <?php if(!empty($arResult["ITEMS"])):?>
     <div class="d-none d-lg-block">
@@ -29,8 +32,9 @@ $this->setFrameMode(true);
                                     <?=$item['PROPERTIES']['TEXT_BUTTON']['VALUE'];?>
                                 </a>
                             <?php endif;?>
-                            <img src="<?=$item['PREVIEW_PICTURE']['SRC'];?>"
-                                 class="d-block w-100"
+                            <img class="d-block w-100"
+                                 src="<?=$k > 0 ? $pixel : $item['PREVIEW_PICTURE']['SRC']?>"
+                                 data-defer-src="<?=$item['PREVIEW_PICTURE']['SRC']?>"
                                  alt="<?=$item['NAME']?>"
                                  title="<?=$item['NAME']?>"
                             >
