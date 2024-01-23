@@ -63,7 +63,7 @@ $isUserAdsExist = !empty($_GET['user']) && getUserAdsCount($_GET['user']) > 0 ? 
             "webco:owner.ads.list",
             $session->get('view'),
             array(
-                'MAX_PAGE_ELEMENTS' => 5,
+                'MAX_PAGE_ELEMENTS' => 12,
                 'CACHE_TIME' => 360000000,
             )
         ); ?>

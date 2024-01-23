@@ -47,6 +47,7 @@ class UserAdsCounter extends \CBitrixComponent
             'PRICE',
             'VIP_DATE',
             'COLOR_DATE',
+            'TIME_RAISE',
             'LENTA_DATE',
             'TYPE_TAPE',
             'MAP_LAYOUT',
