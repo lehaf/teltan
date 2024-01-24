@@ -14,7 +14,7 @@ $iblocks = [
 ];
 
 if (\Bitrix\Main\Loader::includeModule('iblock')) {
-    $curTime =  date("Y-m-d H:i:s", time());
+    $curTime =  date("d.m.Y H:i:s", time());
     foreach ($iblocks as $iblockId) {
         $iblockClass = \Bitrix\Iblock\Iblock::wakeUp($iblockId)->getEntityDataClass();
         $collection = $iblockClass::getList(array(
