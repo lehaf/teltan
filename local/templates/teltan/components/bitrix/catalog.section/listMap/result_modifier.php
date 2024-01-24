@@ -31,7 +31,22 @@ $mapMarks = [];
 foreach ($ads as $key => $addProperty) {
     $mapLatlnt = !empty($addProperty['~PROPERTY_MAP_LATLNG_VALUE']) ? json_decode($addProperty['~PROPERTY_MAP_LATLNG_VALUE'], true) : [];
     $price = !empty($addProperty['PROPERTY_PRICE_VALUE']) ? '₪ '.$addProperty['PROPERTY_PRICE_VALUE'] : '';
-    $previewImg = !empty($addProperty['PREVIEW_PICTURE']) ? CFile::GetPath($addProperty['PREVIEW_PICTURE']) : '/no-image.svg';
+
+
+    if (!empty($addProperty['PREVIEW_PICTURE'])) {
+        $previewImg = \CFile::ResizeImageGet(
+            $addProperty['PREVIEW_PICTURE'],
+            array(
+                'width' => 100,
+                'height' => 80
+            ),
+            BX_RESIZE_IMAGE_PROPORTIONAL
+        )['src'];
+    } else {
+        $previewImg = '/no-image.svg';
+    }
+
+
     $detailPageUrl = CIBlock::ReplaceDetailUrl(
         $addProperty['DETAIL_PAGE_URL'],
         $addProperty,

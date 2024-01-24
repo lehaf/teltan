@@ -8,6 +8,7 @@ use Bitrix\Main\Localization\Loc;
 
 $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/map/big_map.js');
 $this->addExternalCss(SITE_TEMPLATE_PATH.'/css/map_vip_marker.css');
+$this->addExternalCss(SITE_TEMPLATE_PATH.'/css/map.css');
 ?>
 <div class="cord-container" id="target_container" data-map-marks='<?=$arResult['MAP']?>'>
     <?php if (!empty($arResult['ITEMS'])):?>

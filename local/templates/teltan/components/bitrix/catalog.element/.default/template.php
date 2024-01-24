@@ -21,6 +21,7 @@ $pixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEA
 $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
 $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/slick.js');
 $this->addExternalCss(SITE_TEMPLATE_PATH.'/css/map_vip_marker.css');
+$this->addExternalCss(SITE_TEMPLATE_PATH.'/css/map.css');
 $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/map/map_detail.js');
 $this->addExternalJs(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.js');
 $this->addExternalCss(SITE_TEMPLATE_PATH.'/assets/components/buttons/boost.css');

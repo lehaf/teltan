@@ -19,6 +19,7 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
 if ($arParams['CATEGORY'] === PROPERTY_ADS_TYPE_CODE) {
     $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/map/map_property_section.js');
     $this->addExternalCss(SITE_TEMPLATE_PATH.'/css/map_vip_marker.css');
+    $this->addExternalCss(SITE_TEMPLATE_PATH.'/css/map.css');
 }
 ?>
 <?php // карта для раздела PROPERTY?>

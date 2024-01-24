@@ -41,6 +41,19 @@ foreach ($ads as $addProperty) {
         'E'
     );
 
+    if (!empty($addProperty['PREVIEW_PICTURE'])) {
+        $previewImg = \CFile::ResizeImageGet(
+            $addProperty['PREVIEW_PICTURE'],
+            array(
+                'width' => 100,
+                'height' => 80
+            ),
+            BX_RESIZE_IMAGE_PROPORTIONAL
+        )['src'];
+    } else {
+        $previewImg = '/no-image.svg';
+    }
+
     // Собираем все метки
     $mapMarks[] = [
         'type' => 'Feature',

@@ -158,6 +158,7 @@ $sectionName = $langId === false ? $curSection['NAME'] : $curSection['UF_NAME_'.
                     "webco:sort.panel",
                     "bigmap",
                     array(
+                        'ELEMENTS_EXIST' => $sectionHasAds,
                         'VIEWS' => [
                             'list' => [
                                 'CLASS' => 'icon-sirting_line'

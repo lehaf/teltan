@@ -8,6 +8,7 @@ use Bitrix\Main\Localization\Loc;
 
 $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/map/big_map.js');
 $this->addExternalCss(SITE_TEMPLATE_PATH.'/css/map_vip_marker.css');
+$this->addExternalCss(SITE_TEMPLATE_PATH.'/css/map.css');
 ?>
 <div class="cord-container" id="target_container" data-map-marks='<?=$arResult['MAP']?>'>
     <?php if(!empty($arResult['ITEMS'])):
@@ -167,7 +168,7 @@ $this->addExternalCss(SITE_TEMPLATE_PATH.'/css/map_vip_marker.css');
                     $color = '#FFF5D9';
                 }
                 ?>
-                <div class="mb-4 col<?php if($count <1 and $countNotVip < 1){?> databefore<?php }?>" id="<?=$this->GetEditAreaID($arItem['ID'])?>">
+                <div class="mb-4 tile-card col<?php if($count <1 and $countNotVip < 1){?> databefore<?php }?>" id="<?=$this->GetEditAreaID($arItem['ID'])?>">
                     <?php $countNotVip++?>
                     <div class="card product-card" style="background-color: <?=$color;?>">
                         <div class="image-block">

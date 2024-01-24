@@ -176,7 +176,7 @@ $this->addExternalJs(SITE_TEMPLATE_PATH.'/js/image-defer.min.js');
             $this->AddEditAction($item['ID'], $item['EDIT_LINK'], $item["EDIT_LINK_TEXT"]);
             $this->AddDeleteAction($item['ID'], $item['DELETE_LINK'], $item["DELETE_LINK_TEXT"], array("CONFIRM" => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM')));
             ?>
-            <div class="mb-4 col" id="<?=$this->GetEditAreaID($item['ID'])?>">
+            <div class="mb-4 col tile-card" id="<?=$this->GetEditAreaID($item['ID'])?>">
                 <div class="card product-card auto-product <?=$arParams['IMG_VIEW'] !== 'CONTAINER' ? 'property-product' : ''?>"
                     <?php if (!empty($item['COLOR_DATE'] && strtotime($item['COLOR_DATE']) > time())):?>
                         style="background-color: <?=PROPERTY_VIP_COLOR;?>"
