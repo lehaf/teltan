@@ -37,7 +37,7 @@ if(!$user) LocalRedirect('/');
         <?=$APPLICATION->ShowTitle();?>
     </h2>
 
-    <div class="row">
+    <div class="row full-height">
         <div class="col-12 col-lg-8 col-xl-9">
             <form class="card change-personal-data" id="update_user">
                 <?=bitrix_sessid_post()?>

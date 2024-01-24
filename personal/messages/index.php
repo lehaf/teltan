@@ -20,7 +20,7 @@ if (isset($_GET['id']) && isset($_GET['au']) && isset($_GET['ref'])) {
         ?>
         <div class="container container-mes">
             <h2 class="mb-4 subtitle"><?=$APPLICATION->ShowTitle()?></h2>
-            <div class="row">
+            <div class="row full-height">
                 <div class="col-12 col-lg-8 col-xl-9">
                     <!-- main chat controls -->
                     <div class="d-flex flex-column flex-lg-row justify-content-between align-items-end">
@@ -282,7 +282,7 @@ if (isset($_GET['id']) && isset($_GET['au']) && isset($_GET['ref'])) {
             </h2>
         </div>
         <? $chats = getChatsUser($userId); ?>
-        <div class="row">
+        <div class="row full-height">
             <div class="col-12 col-lg-9 block_chats">
                 <? if (!$chats) {?>
                     <div class="mb-4 card d-flex flex-column flex-lg-row w-100 justify-content-around no-message">

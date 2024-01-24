@@ -14057,3 +14057,11 @@ div.mb-4.tile-card div.product-card div.content-block {
   height: 100%;
   justify-content: space-between;
 }
+
+.full-height {
+  min-height: 68vh;
+}
+
+div.container.full-height {
+  min-height: 74vh;
+}

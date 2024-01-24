@@ -41,7 +41,7 @@ while ($arTypes = $rsData->fetch()) {
 ?>
     <div class="container">
         <h2 class="mb-4 subtitle"><?=$APPLICATION->ShowTitle()?></h2>
-        <div class="row">
+        <div class="row full-height">
             <div id="paketControl" class="col-12 col-lg-8 col-xl-9">
                 <!-- CLASSIC TARIF -->
                 <div class="d-flex justify-content-end select-tarif-nav-box">

@@ -48,8 +48,10 @@ $arTypesRent = $entity_data_class::getList(array(
         'cache_joins' => true
     ]
 ))->fetchAll();
+
+$this->addExternalCss(SITE_TEMPLATE_PATH.'/css/map.css');
 ?>
-    <div class="container">
+    <div class="container full-height">
         <h2 class="mb-5 d-flex justify-content-end subtitle"><?=Loc::getMessage('titleH2Main')?></h2>
         <div class="card">
             <div class="preloader">

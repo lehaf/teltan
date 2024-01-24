@@ -64,7 +64,7 @@ $userActiveRates = getCurUserActiveRates();
 ?>
     <div class="container">
         <h2 class="mb-4 subtitle"><?=$APPLICATION->ShowTitle()?></h2>
-        <div class="row">
+        <div class="row full-height">
             <div class="col-12 col-lg-8 col-xl-9">
                 <div class="wallet-history">
                     <div class="current-balance">

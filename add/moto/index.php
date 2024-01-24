@@ -43,7 +43,7 @@ if ($_GET['EDIT'] == 'Y' && $_GET['ID']) {
 
 $arLink = CIBlockSectionPropertyLink::GetArray(MOTO_IBLOCK_ID, 94);
 ?>
-    <div class="container">
+    <div class="container full-height">
         <h2 class="mb-5 d-flex justify-content-end subtitle t">
             <?= Loc::getMessage('submit your ad'); ?>
         </h2>

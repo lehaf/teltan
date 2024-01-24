@@ -16,7 +16,7 @@ if(!$user)
     <h2 class="mb-4 subtitle">
         <?=$APPLICATION->ShowTitle();?>
     </h2>
-    <div class="row">
+    <div class="row full-height">
         <div class="col-12 col-lg-8 col-xl-9">
             <form class="card change-personal-data" id="change_pass">
                 <?=bitrix_sessid_post()?>
