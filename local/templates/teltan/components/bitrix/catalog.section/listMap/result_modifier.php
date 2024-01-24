@@ -16,12 +16,13 @@ $select = [
     'PROPERTY_VIP_DATE',
     'PREVIEW_PICTURE'
 ];
+
 $filter = [
     "IBLOCK_ID" => PROPERTY_ADS_IBLOCK_ID,
     'IBLOCK_SECTION_ID' => $arParams['SECTION_ID'],
-    '>ACTIVE_TO' => date("Y-m-d H:i:s"),
     'ACTIVE' => 'Y',
 ];
+
 global $arrFilter;
 if (!empty($arrFilter)) $filter = array_merge($filter,$arrFilter);
 $res = CIBlockElement::GetList([], $filter, $select);
