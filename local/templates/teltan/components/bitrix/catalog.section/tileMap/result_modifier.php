@@ -19,7 +19,9 @@ $ads = $propertyClass::getList(array(
         'PREVIEW_PICTURE'
     ],
     'filter' => [
+        "IBLOCK_ID" => PROPERTY_ADS_IBLOCK_ID,
         'IBLOCK_SECTION_ID' => $arParams['SECTION_ID'],
+        '>ACTIVE_TO' => date("Y-m-d H:i:s"),
         'ACTIVE' => 'Y'
     ]
 ))->fetchCollection();
