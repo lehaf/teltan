@@ -1262,6 +1262,17 @@ $arLink = CIBlockSectionPropertyLink::GetArray(SCOOTER_IBLOCK_ID, 90);
                 </div>
             </div>
         </div>
+        <div class="allert alert-confirmation flex-column card">
+            <button type="button" class="close" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="d-flex justify-content-center allert__text"><?=Loc::getMessage('Moderation message')?></div>
+            <div class="d-flex justify-content-center mt-4">
+                <button onclick="window.location.href = '/personal/'" class="btn_confirm btn border-primary text-uppercase font-weight-bold text-primary py-3 px-5">
+                    <?=Loc::getMessage('Go to personal')?>
+                </button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -1678,7 +1689,7 @@ $arLink = CIBlockSectionPropertyLink::GetArray(SCOOTER_IBLOCK_ID, 90);
                 deferred.done(function (data) {
                     $('.preloader').removeClass('preloader-visible');
                     if (data.success == 1) {
-                        window.location.href = '/personal/'
+                        $('.allert').addClass('show');
                     } else {
                         $('.pop-up').addClass('active');
                         $('.pop-up__text').html(data.responseBitrix)

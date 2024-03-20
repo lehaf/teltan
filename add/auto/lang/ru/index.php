@@ -78,3 +78,6 @@ $MESS ['diesel'] = "Diesel";
 $MESS ['electro'] = "Electro";
 $MESS ['hybrid'] = "Hybrid";
 $MESS ['petrol'] = "Petrol";
+
+$MESS ['Moderation message'] = "Спасибо! Ваше объявление отправлено на модерацию.";
+$MESS ['Go to personal'] = "Перейти в личный кабинет";

@@ -55,3 +55,6 @@ $MESS ['Submit your ad'] = "Submit your ad";
 $MESS ['Next step'] = "Next step";
 $MESS ['Prev step'] = "Prev step";
 
+$MESS ['Moderation message'] = "Спасибо! Ваше объявление отправлено на модерацию.";
+$MESS ['Go to personal'] = "Перейти в личный кабинет";
+

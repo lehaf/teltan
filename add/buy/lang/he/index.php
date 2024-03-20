@@ -41,3 +41,6 @@ $MESS ['Call:'] = "שִׂיחָה:";
 $MESS ['Submit your ad'] = "שלח את המודעה שלך";
 $MESS ['Next step'] = "השלב הבא";
 $MESS ['Prev step'] = "שלב קודם";
+
+$MESS ['Moderation message'] = "Спасибо! Ваше объявление отправлено на модерацию.";
+$MESS ['Go to personal'] = "Перейти в личный кабинет";

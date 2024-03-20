@@ -58,4 +58,7 @@ $MESS ['Product Photos'] = "Product Photos";
 $MESS ['DETAILED DESCRIPTION'] = "DETAILED DESCRIPTION";
 $MESS ['Price'] = "Price";
 $MESS ['Description'] = "Description";
+
+$MESS ['Moderation message'] = "Спасибо! Ваше объявление отправлено на модерацию.";
+$MESS ['Go to personal'] = "Перейти в личный кабинет";
 ?>

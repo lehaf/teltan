@@ -68,3 +68,6 @@ $MESS ['photoMain'] = "ראשי";
 $MESS ['setPhotoMain'] = "קבע כראשי";
 $MESS ['deletePhoto'] = "מחק";
 $MESS ['rotatePhoto'] = "סובב";
+
+$MESS ['Moderation message'] = "Спасибо! Ваше объявление отправлено на модерацию.";
+$MESS ['Go to personal'] = "Перейти в личный кабинет";

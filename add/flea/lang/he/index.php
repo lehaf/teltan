@@ -75,3 +75,6 @@ $MESS ['rotatePhoto'] = "סובב";
 // Заголовки полей
 $MESS ['titleLabel'] = "כותרת";
 $MESS ['phoneLabel'] = "טלפון";
+
+$MESS ['Moderation message'] = "Спасибо! Ваше объявление отправлено на модерацию.";
+$MESS ['Go to personal'] = "Перейти в личный кабинет";

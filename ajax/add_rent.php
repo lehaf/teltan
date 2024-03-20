@@ -131,7 +131,7 @@ if ($canUserCreateAds || $_REQUEST['EDIT'] == 'Y') {
             'CODE' => $translit,
             'PROPERTY_VALUES' => $PROP,
             'NAME' => $NAME,
-            'ACTIVE' => 'Y',
+            'ACTIVE' => 'N',
             'PREVIEW_TEXT' => trim($_POST['itemDescription']),
             'DETAIL_TEXT' => trim($_POST['itemDescription']),
         );
@@ -156,7 +156,7 @@ if ($canUserCreateAds || $_REQUEST['EDIT'] == 'Y') {
             'CODE' => $translit,
             'PROPERTY_VALUES' => $PROP,
             'NAME' => $NAME,
-            'ACTIVE' => 'Y',
+            'ACTIVE' => 'N',
             'PREVIEW_TEXT' => trim($_POST['itemDescription']),
             'DETAIL_TEXT' => trim($_POST['itemDescription']),
         );
