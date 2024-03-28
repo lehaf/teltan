@@ -111,6 +111,16 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                     localStorage.setItem('markerData', JSON.stringify(marker))
                     if (locationDataPosition !== null) localStorage.setItem('locationDataPosition', JSON.stringify(locationDataPosition))
                     if (locationDataLatLng !== null) localStorage.setItem('locationDataLatLng', JSON.stringify(locationDataLatLng))
+
+                    if (locationDataLatLng) {
+                        map.flyTo({
+                            center: locationDataLatLng, // координаты метки
+                            zoom: 16, // зум после перемещения
+                            speed: 1, // скорость перемещения (от 0 до 1)
+                            curve: 1, // кривая перемещения (от 0 до 1)
+                            essential: true // указывает, что это важное перемещение и не должно быть прервано другими анимациями
+                        });
+                    }
                 }
             }
 
@@ -133,7 +143,7 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
 
             const obgGeoMap = <?=json_encode($mapArray)?>
 
-            map.on('load', () => {
+            map.on('load', (ep) => {
                 window.mapError = 'Выберите метку на карте!';
                 map.resize();
                 let hoveredStateId = null;
@@ -303,7 +313,7 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
 
                 // После добавления маркера на карту
                 geocoder.on('result',async e => {
-                    const query = e.result.place_name;
+                    const query = geocoder.inputString;
                     let googleCord = await getGoogleCoordinates(query);
 
                     if (marker) marker.remove();  // Удаляем предыдущий маркер
