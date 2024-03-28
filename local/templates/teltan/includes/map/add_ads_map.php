@@ -22,6 +22,29 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
 ?>
 <script>
     $(document).ready(function () {
+
+        async function getGoogleCoordinates(address) {
+            let res = {};
+            const apiKey = 'AIzaSyBlz97ziXcVyIPIduUQh5nsc5WmnbSGPmE'; // Специальный API ключ от google
+            address = encodeURIComponent(address);
+            const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`;
+
+            let data = await fetch(url).then(response => response.json());
+
+            if (data.status === 'OK') {
+                res = {
+                    'lat': data.results[0].geometry.location.lat,
+                    'lon': data.results[0].geometry.location.lng
+                };
+            } else {
+                console.log('Ошибка при получении координат.');
+            }
+
+
+            return res;
+        }
+
+
         // MAPS START
         mapboxgl.accessToken = 'pk.eyJ1Ijoicm9vdHRlc3QxMjMiLCJhIjoiY2w0ZHppeGJzMDczZDNndGc2eWR0M2R5aSJ9.wz6xj8AGc7s6Ivd09tOZrA';
         let mapCoordinate = [34.886226654052734, 31.95340028021316] //default coordinate map
@@ -263,6 +286,8 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                     map.flyTo({center: e.features[0].geometry.coordinates[0][0], zoom: 12});
                 })
 
+                // const address = 'Shira Israeli physiotherapist, Helsinki 11th, Tel Aviv-Yafo';
+                // getGoogleCoordinates(address);
 
                 const geocoder = new MapboxGeocoder({
                     mapboxgl: mapboxgl,
@@ -275,13 +300,17 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                 let markerLong = false;
                 let markerLat = false;
 
+
                 // После добавления маркера на карту
-                geocoder.on('result', e => {
+                geocoder.on('result',async e => {
+                    const query = e.result.place_name;
+                    let googleCord = await getGoogleCoordinates(query);
 
                     if (marker) marker.remove();  // Удаляем предыдущий маркер
 
-                    markerLong = e.result.geometry.coordinates[0];
-                    markerLat = e.result.geometry.coordinates[1];
+                    // Кординаты опрокидываются из гугла
+                    markerLong = googleCord.lon;
+                    markerLat = googleCord.lat;
 
                     marker = new mapboxgl.Marker({
                         draggable: true
