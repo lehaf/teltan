@@ -60,5 +60,5 @@ $MESS ['Price'] = "Price";
 $MESS ['Description'] = "Description";
 
 $MESS ['Moderation message'] = "Спасибо! Ваше объявление отправлено на модерацию.";
-$MESS ['Go to personal'] = "Перейти в личный кабинет";
+$MESS ['Go to personal'] = "OK";
 ?>

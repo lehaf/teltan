@@ -589,9 +589,6 @@ $arLink = CIBlockSectionPropertyLink::GetArray(SIMPLE_ADS_IBLOCK_ID, $_GET['ids'
         </div>
 
         <div class="allert alert-confirmation flex-column card">
-            <button type="button" class="close" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
             <div class="d-flex justify-content-center allert__text"><?=Loc::getMessage('Moderation message')?></div>
             <div class="d-flex justify-content-center mt-4">
                 <button onclick="window.location.href = '/personal/'" class="btn_confirm btn border-primary text-uppercase font-weight-bold text-primary py-3 px-5">
