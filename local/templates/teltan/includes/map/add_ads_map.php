@@ -112,15 +112,7 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                     if (locationDataPosition !== null) localStorage.setItem('locationDataPosition', JSON.stringify(locationDataPosition))
                     if (locationDataLatLng !== null) localStorage.setItem('locationDataLatLng', JSON.stringify(locationDataLatLng))
 
-                    if (locationDataLatLng) {
-                        map.flyTo({
-                            center: locationDataLatLng, // координаты метки
-                            zoom: 16, // зум после перемещения
-                            speed: 1, // скорость перемещения (от 0 до 1)
-                            curve: 1, // кривая перемещения (от 0 до 1)
-                            essential: true // указывает, что это важное перемещение и не должно быть прервано другими анимациями
-                        });
-                    }
+
                 }
             }
 
@@ -344,6 +336,15 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                         let geocoder_point = map.project([markerLong, markerLat]);
                         const features = map.queryRenderedFeatures(geocoder_point);
                         getMapMark(features,geocoder_point,[markerLong, markerLat]);
+                    });
+
+                    // Плавный подкат к метке
+                    map.flyTo({
+                        center: [markerLong, markerLat], // координаты метки
+                        zoom: 16, // зум после перемещения
+                        speed: 1, // скорость перемещения (от 0 до 1)
+                        curve: 1, // кривая перемещения (от 0 до 1)
+                        essential: true // указывает, что это важное перемещение и не должно быть прервано другими анимациями
                     });
                 });
 
