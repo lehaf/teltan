@@ -247,7 +247,9 @@ $isСommercialBuyPage = strpos($curPage,'/property/kommercheskaya/kupit-kom/') !
             <div class="d-flex sub-menu-prop">
                 <!-- отправляет форму с клоном даты  form="sandRequest"-->
                 <button type="#" class="btn btn-primary font-weight-bold submit-btn-search">Найти</button>
-                <button type="#" class="btn bg-white text-primary font-weight-bold border-primary <?=($_GET['view'] != 'maplist')? 'btn-show-map': 'btn-show-catalog'?>"><?=($_GET['view'] != 'maplist')? 'Показать на карте': 'Показать в каталоге'?></button>
+                <button type="#" class="btn bg-white text-primary font-weight-bold border-primary <?=($_GET['view'] != 'maplist')? 'btn-show-map': 'btn-show-catalog'?>">
+                    <?=($_GET['view'] != 'maplist')? 'Показать на карте': 'Показать в каталоге'?>
+                </button>
 
                 <div class="list-filter-options">
                     <div class="showAllTags" data-toggle="modal" data-target="#moreFilterPropertyRent">
