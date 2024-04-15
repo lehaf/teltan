@@ -149,7 +149,9 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                 });
 
                 let dic = {};
+
                 if (regions.length > 0) {
+                    // Добавляем области на карту
                     for (const reg of regions) {
                         let promoteId = {};
                         promoteId[reg.UF_PROMOTE_ID] = "MUN_HE";
@@ -181,6 +183,9 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                                 ]
                             }
                         });
+
+                        // Визуально скрываем область с карты
+                        map.setLayoutProperty(reg.UF_MAP_ID, 'visibility', 'none');
 
                         dic[reg.ID] = null;
                         map.on('mousemove', reg.UF_MAP_ID, (e) => {
@@ -219,6 +224,7 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                     }
                 }
 
+                // Добавляем маленькие раены на карту
                 map.addSource('2_source', {
                     type: 'vector',
                     url: 'mapbox://roottest123.cl4dzsogf01p420r1z1eexmd8-190dy',
@@ -247,6 +253,9 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                         ]
                     }
                 });
+
+                // Визуально скрыть раены с карты
+                map.setLayoutProperty('earthquakess-layer', 'visibility', 'none');
 
 
                 map.on('mousemove', 'earthquakess-layer', (e) => {
@@ -295,12 +304,19 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                     mapboxgl: mapboxgl,
                     language: 'he-HE',
                     accessToken: mapboxgl.accessToken,
-                    marker: false
-                })
+                    marker: false,
+                    autocomplete: false,
+                    fuzzyMatch: false,
+                    externalGeocoder: () => {},
+                });
 
                 let marker;
                 let markerLong = false;
                 let markerLat = false;
+
+                document.querySelectorAll('.mapboxgl-ctrl-result').forEach((result) => {
+                    result.style.display = 'none';
+                });
 
 
                 // После добавления маркера на карту
