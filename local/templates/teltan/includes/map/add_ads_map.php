@@ -172,7 +172,7 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                                 'fill-opacity': [
                                     'case',
                                     ['boolean', ['feature-state', 'hover'], false],
-                                    0.5,
+                                    0, // 0.5 старое значение (скрываем для пльзователя но оставляем слой)
                                     0
                                 ],
                                 'fill-outline-color': [
@@ -184,8 +184,7 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                             }
                         });
 
-                        // Визуально скрываем область с карты
-                        map.setLayoutProperty(reg.UF_MAP_ID, 'visibility', 'none');
+
 
                         dic[reg.ID] = null;
                         map.on('mousemove', reg.UF_MAP_ID, (e) => {
@@ -242,7 +241,7 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                         'fill-opacity': [
                             'case',
                             ['boolean', ['feature-state', 'hover'], false],
-                            0.5,
+                            0, // 0.5 старое значение (скрываем для пльзователя но оставляем слой)
                             0
                         ],
                         'fill-outline-color': [
@@ -253,9 +252,6 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                         ]
                     }
                 });
-
-                // Визуально скрыть раены с карты
-                map.setLayoutProperty('earthquakess-layer', 'visibility', 'none');
 
 
                 map.on('mousemove', 'earthquakess-layer', (e) => {
@@ -305,17 +301,16 @@ if (defined('MAP_REGIONS_HL_ID') && Loader::includeModule("highloadblock")) {
                     language: 'he-HE',
                     accessToken: mapboxgl.accessToken,
                     marker: false,
-                    autocomplete: false,
-                    fuzzyMatch: false,
-                    externalGeocoder: () => {},
+                    autocomplete: false
                 });
 
                 let marker;
                 let markerLong = false;
                 let markerLat = false;
 
-                document.querySelectorAll('.mapboxgl-ctrl-result').forEach((result) => {
-                    result.style.display = 'none';
+
+                geocoder.on('results', e => {
+
                 });
 
 

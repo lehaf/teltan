@@ -169,3 +169,8 @@ body #mainForm .wizard-content .wrapper-model-items{
     justify-content: start !important;
   }
 }
+
+/* Скрываем блок с автозаполнением на карте */
+.mapboxgl-ctrl-geocoder .suggestions {
+  display: none !important;
+}
