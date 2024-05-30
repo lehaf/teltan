@@ -171,7 +171,7 @@ $sectionName = $langId === false ? $curSection['NAME'] : $curSection['UF_NAME_'.
                 );
 
                 if ($request->get('isAjax') === 'y') $APPLICATION->RestartBuffer();
-                if ($detect->isMobile()) $session->set('view', 'tileMap');
+                if ($detect->isMobile()) $session->set('view', 'tile');
                 $APPLICATION->IncludeComponent(
                     "bitrix:catalog.section",
                     $session->get('view').'Map',
