@@ -21,7 +21,7 @@ $filter = [
     "IBLOCK_ID" => PROPERTY_ADS_IBLOCK_ID,
     'IBLOCK_SECTION_ID' => $arParams['SECTION_ID'],
     'ACTIVE' => 'Y',
-    '>DATE_ACTIVE_TO' => date('d.m.Y H:i:s'),
+    '>ACTIVE_TO' => date('d.m.Y H:i:s'),
 ];
 
 global $arrFilter;
