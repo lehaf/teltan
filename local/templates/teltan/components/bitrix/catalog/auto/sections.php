@@ -138,6 +138,7 @@ $APPLICATION->IncludeComponent(
             </div>
             <?php 
             $session = \Bitrix\Main\Application::getInstance()->getSession();
+            if ($session->has('sort')) $secondSort = $session->get('sort');
             $APPLICATION->IncludeComponent(
                 "bitrix:catalog.section",
                 $session->get('view'),
@@ -166,8 +167,8 @@ $APPLICATION->IncludeComponent(
                     "DISPLAY_TOP_PAGER" => "N",    // Выводить над списком
                     "ELEMENT_SORT_FIELD" => $arParams["ELEMENT_SORT_FIELD"],
                     "ELEMENT_SORT_ORDER" => $arParams["ELEMENT_SORT_ORDER"],
-                    "ELEMENT_SORT_FIELD2" => $arParams["ELEMENT_SORT_FIELD2"],
-                    "ELEMENT_SORT_ORDER2" => $arParams["ELEMENT_SORT_ORDER2"],
+                    "ELEMENT_SORT_FIELD2" => $secondSort['SORT'],
+                    "ELEMENT_SORT_ORDER2" => $secondSort['ORDER'],
                     "ENLARGE_PRODUCT" => "STRICT",    // Выделять товары в списке
                     "FILTER_NAME" => "arrFilter",    // Имя массива со значениями фильтра для фильтрации элементов
                     "IBLOCK_ID" => $arParams["IBLOCK_ID"],

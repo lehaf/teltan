@@ -432,6 +432,7 @@ $sectionName = $langId === false ? $curSection['NAME'] : $curSection['UF_NAME_'.
                         );?>
                     </div>
                     <?php
+                    if ($session->has('sort')) $secondSort = $session->get('sort');
                     $APPLICATION->IncludeComponent(
                         "bitrix:catalog.section",
                         $session->get('view'),
@@ -442,8 +443,8 @@ $sectionName = $langId === false ? $curSection['NAME'] : $curSection['UF_NAME_'.
                             "IBLOCK_ID" => $arParams["IBLOCK_ID"],
                             "ELEMENT_SORT_FIELD" => $arParams["ELEMENT_SORT_FIELD"],
                             "ELEMENT_SORT_ORDER" => $arParams["ELEMENT_SORT_ORDER"],
-                            "ELEMENT_SORT_FIELD2" => $arParams["ELEMENT_SORT_FIELD2"],
-                            "ELEMENT_SORT_ORDER2" => $arParams["ELEMENT_SORT_ORDER2"],
+                            "ELEMENT_SORT_FIELD2" => $secondSort['SORT'],
+                            "ELEMENT_SORT_ORDER2" => $secondSort['ORDER'],
                             "PROPERTY_CODE" => ['SHOW_COUNTER'],
                             "PROPERTY_CODE_MOBILE" => $arParams["LIST_PROPERTY_CODE_MOBILE"],
                             "META_KEYWORDS" => $arParams["LIST_META_KEYWORDS"],

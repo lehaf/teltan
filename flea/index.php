@@ -8,10 +8,7 @@ Asset::getInstance()->addCss(SITE_TEMPLATE_PATH . "/css/catalog.css");
 
 $APPLICATION->SetTitle("Барахолка");
 
-$session = \Bitrix\Main\Application::getInstance()->getSession();
-if ($session->has('sort')) $secondSort = $session->get('sort');
-?>
-<?php $APPLICATION->IncludeComponent(
+$APPLICATION->IncludeComponent(
     "bitrix:catalog",
     "flea",
     array(
@@ -56,9 +53,9 @@ if ($session->has('sort')) $secondSort = $session->get('sort');
         "DISPLAY_BOTTOM_PAGER" => "Y",
         "DISPLAY_TOP_PAGER" => "N",
         "ELEMENT_SORT_FIELD" =>"PROPERTY_VIP_FLAG",    // По какому полю сортируем элементы
-        "ELEMENT_SORT_FIELD2" => $secondSort['SORT'],    // Поле для второй сортировки элементов
+        "ELEMENT_SORT_FIELD2" => '',    // Поле для второй сортировки элементов
         "ELEMENT_SORT_ORDER" => "desc,nulls",    // Порядок сортировки элементов
-        "ELEMENT_SORT_ORDER2" => $secondSort['ORDER'],
+        "ELEMENT_SORT_ORDER2" => '',
         "FILTER_FIELD_CODE" => array("", ""),
         "DETAIL_FIELD_CODE" => array(
             0 => "SHOW_COUNTER",

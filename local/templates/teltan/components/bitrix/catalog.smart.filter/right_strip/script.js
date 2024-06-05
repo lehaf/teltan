@@ -300,6 +300,8 @@ JCSmartFilter.prototype.postHandler = function (result, fromCache)
             });
             // reinit lazy-load
             if (window.ImageDefer) window.ImageDefer.init();
+            // reinit sort-panel
+            if (window.SortPanel) window.SortPanel.init();
             _this.hideLoader();
         }
     });

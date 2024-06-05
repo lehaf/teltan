@@ -223,6 +223,7 @@ $APPLICATION->IncludeComponent(
             </div>
             <?php
             $session = \Bitrix\Main\Application::getInstance()->getSession();
+            if ($session->has('sort')) $secondSort = $session->get('sort');
             $APPLICATION->IncludeComponent(
                     "bitrix:catalog.section",
                 $session->get('view'),
@@ -232,8 +233,8 @@ $APPLICATION->IncludeComponent(
                 "IBLOCK_ID" => $arParams["IBLOCK_ID"],
                 "ELEMENT_SORT_FIELD" => $arParams["ELEMENT_SORT_FIELD"],
                 "ELEMENT_SORT_ORDER" => $arParams["ELEMENT_SORT_ORDER"],
-                "ELEMENT_SORT_FIELD2" => $arParams["ELEMENT_SORT_FIELD2"],
-                "ELEMENT_SORT_ORDER2" => $arParams["ELEMENT_SORT_ORDER2"],
+                "ELEMENT_SORT_FIELD2" => $secondSort['SORT'],
+                "ELEMENT_SORT_ORDER2" => $secondSort['ORDER'],
                 "PROPERTY_CODE" => (isset($arParams["LIST_PROPERTY_CODE"]) ? $arParams["LIST_PROPERTY_CODE"] : []),
                 "PROPERTY_CODE_MOBILE" => $arParams["LIST_PROPERTY_CODE_MOBILE"],
                 "META_KEYWORDS" => $arParams["LIST_META_KEYWORDS"],
@@ -287,8 +288,6 @@ $APPLICATION->IncludeComponent(
                 "OFFERS_PROPERTY_CODE" => (isset($arParams["LIST_OFFERS_PROPERTY_CODE"]) ? $arParams["LIST_OFFERS_PROPERTY_CODE"] : []),
                 "OFFERS_SORT_FIELD" => $arParams["OFFERS_SORT_FIELD"],
                 "OFFERS_SORT_ORDER" => $arParams["OFFERS_SORT_ORDER"],
-                "OFFERS_SORT_FIELD2" => $arParams["OFFERS_SORT_FIELD2"],
-                "OFFERS_SORT_ORDER2" => $arParams["OFFERS_SORT_ORDER2"],
                 "OFFERS_LIMIT" => (isset($arParams["LIST_OFFERS_LIMIT"]) ? $arParams["LIST_OFFERS_LIMIT"] : 0),
                 "SEF_URL_TEMPLATES" => $arParams["SEF_URL_TEMPLATES"],
                 "SECTION_ID" => $arResult["VARIABLES"]["SECTION_ID"],

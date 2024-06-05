@@ -10,6 +10,7 @@ const SortPanel = function () {
 
     this.$loader = document.querySelector('div.preloader');
     this.init();
+    window.SortPanel = this;
 }
 
 SortPanel.prototype.init = function () {
