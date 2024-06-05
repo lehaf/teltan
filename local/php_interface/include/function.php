@@ -670,7 +670,7 @@ function getUserAdsCount(int $userId, string $activeItems = 'Y') : int
 
     if ($cache->initCache($cacheTtl, $cacheId, $cachePath)) {
         $count = $cache->getVars();
-    } elseif ($cache->startDataCache()) {
+    } elseif ($cache->startDataCache() && \Bitrix\Main\Loader::includeModule('iblock')) {
         // Начинаем записывать теги
         $taggedCache->startTagCache($cachePath);
         foreach ($iblocks as $iblockId) {
