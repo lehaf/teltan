@@ -2,7 +2,7 @@
 
 /** Деактивируем объявления у которых истек срок активности */
 
-$_SERVER['DOCUMENT_ROOT'] = '/home/bitrix/www';
+$_SERVER['DOCUMENT_ROOT'] = '/var/www/u166558/data/www/bysel.co.il';
 require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_before.php';
 
 $iblocks = [

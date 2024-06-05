@@ -3,7 +3,7 @@
 /** Очищаем вип свойства у объявлений у которых истек VIP */
 /** Этот крон-скрипт необходим что бы кэширование сайта работало максимально оптимально */
 
-$_SERVER['DOCUMENT_ROOT'] = '/home/bitrix/www';
+$_SERVER['DOCUMENT_ROOT'] = '/var/www/u166558/data/www/bysel.co.il';
 require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_before.php';
 
 $iblocks = [
